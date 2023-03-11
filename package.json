@@ -1,0 +1,24 @@
+{
+  "name": "koishi-plugin-tsugu-bangdream-bot",
+  "description": "BanG Dream！少女乐团派对 简体中文与日服 多功能bot",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "license": "MIT",
+  "scripts": {},
+  "keywords": [
+    "chatbot",
+    "koishi",
+    "plugin"
+  ],
+  "peerDependencies": {
+    "koishi": "^4.11.9"
+  },
+  "dependencies": {
+    "request": "^2.88.2"
+  }
+}
