@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "type": "module",
   "files": [
     "lib",
     "dist"
@@ -18,7 +19,12 @@
   "peerDependencies": {
     "koishi": "^4.11.9"
   },
+  "devDependencies": {
+    "@types/request": "^2.48.8",
+    "@types/xml2js": "^0.4.11"
+  },
   "dependencies": {
-    "request": "^2.88.2"
+    "canvas": "^2.11.2",
+    "jimp": "^0.22.7"
   }
 }
