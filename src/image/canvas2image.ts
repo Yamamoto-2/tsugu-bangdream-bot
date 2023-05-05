@@ -1,4 +1,4 @@
-import { createCanvas, loadImage, Canvas } from 'canvas';
+import {loadImage, Canvas } from 'canvas';
 import { Image } from 'canvas';
 
 function canvas2image(canvas: Canvas): Promise<Image> {

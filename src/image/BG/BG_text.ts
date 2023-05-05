@@ -1,5 +1,5 @@
 import { Canvas, registerFont} from 'canvas';
-import { assetsRootPath } from '../../../config';
+import { assetsRootPath } from '../../config';
 import path from 'path';
 
 registerFont(path.join(assetsRootPath, "/Fonts/Orbitron Black.ttf"), { family: 'Orbitron' });

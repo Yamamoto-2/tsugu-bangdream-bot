@@ -1,9 +1,9 @@
-import { createCanvas, loadImage ,Canvas} from 'canvas';
-import {assetsRootPath} from '../../../config';
+import { loadImage, Canvas } from 'canvas';
+import { assetsRootPath } from '../../config';
 import path from 'path';
 
 interface ScatterProps {
-  canvas:Canvas;
+  canvas: Canvas;
   canvasWidth: number;
   canvasHeight: number;
   density: number;
@@ -63,4 +63,4 @@ async function scatterImages({
   return canvas.toDataURL();
 }
 
-export { scatterImages};
+export { scatterImages };

@@ -1,7 +1,7 @@
 import { Canvas, Image, createCanvas } from 'canvas';
-import { drawRoundedRectWithText, drawRoundedRect } from '../utils/image/drawRect';
+import { drawRoundedRectWithText, drawRoundedRect } from '../image/drawRect';
 import { drawText } from './text';
-import { drawDottedLine } from '../utils/image/dottedLine'
+import { drawDottedLine } from '../image/dottedLine'
 
 //表格用默认虚线
 var line: Canvas = drawDottedLine({
@@ -49,10 +49,10 @@ function drawList(key: string, text: string, text2?: string, textSize = 40): Can
 }
 
 //组合表格子程序，使用block当做底，通过最大高度换行，默认高度无上限
-var drawDatablock = async function (all: Array<Image | Canvas>): Promise<Canvas> {
+var drawDatablock = async function (list: Array<Image | Canvas>): Promise<Canvas> {
     var allH = 100
-    for (var i = 0; i < all.length; i++) {
-        allH = allH + all[i].height
+    for (var i = 0; i < list.length; i++) {
+        allH = allH + list[i].height
     }
     var tempcanv = createCanvas(1000, allH)
     var ctx = tempcanv.getContext("2d")
@@ -63,9 +63,9 @@ var drawDatablock = async function (all: Array<Image | Canvas>): Promise<Canvas>
     }), 50, 0)
 
     var allH2 = 50
-    for (var i = 0; i < all.length; i++) {
-        ctx.drawImage(all[i], 0, allH2)
-        allH2 = allH2 + all[i].height
+    for (var i = 0; i < list.length; i++) {
+        ctx.drawImage(list[i], 0, allH2)
+        allH2 = allH2 + list[i].height
     }
 
     return (tempcanv)
