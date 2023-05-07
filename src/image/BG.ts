@@ -4,7 +4,7 @@ import { drawTextOnCanvas } from "./BG/BG_text";
 import { createCanvas, loadImage, Image, Canvas } from "canvas";
 
 interface BGOptions {
-  image: Image;
+  image: Image | Canvas | any;
   text: string;
   width: number;
   height: number;
@@ -61,8 +61,13 @@ async function Spread(image: Image, width: number, height: number, brightness: n
   return canvas.toBuffer();
 }
 
-async function CreateBG(BGOptions: BGOptions): Promise<Canvas> {
-  const { image, text, width, height } = BGOptions;
+async function CreateBG({
+  image,
+  text,
+  width,
+  height,
+
+}: BGOptions): Promise<Canvas> {
 
   //将图片铺满画面，并且增加20亮度
   const BG = await Spread(image, width, height, 20);

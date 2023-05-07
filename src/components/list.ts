@@ -13,7 +13,7 @@ var line: Canvas = drawDottedLine({
     endY: 15,
     radius: 2,
     gap: 10,
-    color: "#f1f1f1"
+    color: "#a8a8a8"
 })
 
 //画表格中的一行

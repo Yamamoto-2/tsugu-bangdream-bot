@@ -31,13 +31,6 @@ function drawText({
     return canvas;
 }
 
-interface WarpTextOptions {
-    text: string;
-    textSize: number;
-    maxWidth: number;
-    lineHeight: number;
-}
-
 function wrapText({
     text,
     textSize,
