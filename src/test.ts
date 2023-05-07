@@ -1,3 +1,4 @@
+import { Context, Schema, h } from 'koishi'
 import { CreateBG } from './image/BG';
 import { assetsRootPath } from './config';
 import path from 'path';
@@ -6,10 +7,12 @@ import { drawList, drawDatablock, line } from './components/list';
 import { callAPIAndCacheResponse } from './api/getApi';
 import { downloadFileAndCache } from './api/getFile';
 import { BestdoriapiPath, Bestdoriurl } from './config';
-import {outputFinalBuffer} from './image/output'
+import { outputFinalBuffer } from './image/output'
+import { Skill } from './types/Skill'
 
-
-async function test() {
+async function test(session) {
+    /*
+    //list测试部分
     var list = []
     var temp = drawList("测试用1测试用1测试用1", '这是第一行\n这是第二行\n第三行1第三行2第三行3第三行4第三行5第三行6第三行7第三行8', '第三行第三行第三行第三行第三行第三行第三行第三行第三行第三行\n第三行第三行第三行第三行')
     list.push(temp)
@@ -27,8 +30,22 @@ async function test() {
     var imageList = []
     imageList.push(listImage)
     imageList.push(listImage)
-    var buffer = outputFinalBuffer(imageList, "Test")
-    return buffer
+    var buffer = await outputFinalBuffer(imageList, "Test")
+    session.send(h.image(buffer,'image/png'));
+    */
+
+    session.send('测试开始')
+    var skills = await callAPIAndCacheResponse(Bestdoriurl + BestdoriapiPath['skills'])
+    for (var i in skills) {
+        console.log(" ")
+        console.log(parseInt(i))
+        var tempskill = new Skill(parseInt(i))
+        await tempskill.init()
+        console.log(tempskill.getSkillDescription()[0])
+        console.log(tempskill.effectType)
+        console.log(tempskill.scoreUpMaxValue)
+    }
+
 }
 
 export { test }

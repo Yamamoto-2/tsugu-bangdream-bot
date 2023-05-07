@@ -15,9 +15,7 @@ export function apply(ctx: Context) {
       session.send('宝塔镇河妖');       
     }
     if(session.content === 'test'){
-        test().then((buffer)=>{
-            session.send(h.image(buffer,'image/png'));
-        })
+        test(session)
     }
   })
 }

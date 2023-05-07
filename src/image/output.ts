@@ -5,6 +5,7 @@ import { assetsRootPath } from '../config';
 import * as path from 'path';
 var defaultBGPath = path.join(assetsRootPath, "/BG/default.png");
 
+//将图片列表从上到下叠在一起输出为一张图片
 var outputFinalCanv = async function (imageList: Array<Image | Canvas>, text: string = 'BanG Dream!', BGimage?: Image | Canvas): Promise<Canvas> {
     BGimage ??= await loadImage(defaultBGPath)
     var allH = 70
@@ -36,6 +37,7 @@ var outputFinalCanv = async function (imageList: Array<Image | Canvas>, text: st
     return (tempcanv)
 }
 
+//输出为二进制流
 var outputFinalBuffer = async function (imageList: Array<Image | Canvas>, text: string = 'BanG Dream!', BGimage?: Image | Canvas): Promise<Buffer> {
     var tempcanv = await outputFinalCanv(imageList, text, BGimage)
     var tempBuffer = tempcanv.toBuffer()

@@ -23,3 +23,11 @@ export const BestdoriapiPath = { //Bestdori网站的列表api路径
 }
 
 export const Bestdoriurl:string = 'https://bestdori.com'; //Bestdori网站的url
+
+export const countryList = {
+    jp:0,
+    en:1,
+    tw:2,
+    cn:3,
+    kr:4
+}

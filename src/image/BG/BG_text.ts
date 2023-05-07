@@ -3,7 +3,7 @@ import { assetsRootPath } from '../../config';
 import path from 'path';
 
 registerFont(path.join(assetsRootPath, "/Fonts/Orbitron Black.ttf"), { family: 'Orbitron' });
-registerFont(path.join(assetsRootPath, "/Fonts/Highnoon-Mincho-One.ttf"), { family: 'Mincho' });
+//registerFont(path.join(assetsRootPath, "/Fonts/Highnoon-Mincho-One.ttf"), { family: 'Mincho' });
 
 interface DrawTextOptions {
   text: string;
@@ -26,7 +26,7 @@ function drawTextOnCanvas(
   const ctx = canvas.getContext('2d');
 
   // 设置字体样式
-  ctx.font = `${fontSize}px Orbitron,Mincho`;
+  ctx.font = `${fontSize}px Orbitron`;
   ctx.textBaseline = 'bottom';
   ctx.strokeStyle = 'white';
 
