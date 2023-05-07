@@ -9,6 +9,7 @@ import { downloadFileAndCache } from './api/getFile';
 import { BestdoriapiPath, Bestdoriurl } from './config';
 import { outputFinalBuffer } from './image/output'
 import { Skill } from './types/Skill'
+import {Card} from './types/Card'
 
 async function test(session) {
     /*
@@ -34,6 +35,8 @@ async function test(session) {
     session.send(h.image(buffer,'image/png'));
     */
 
+    /*
+    //技能测试部分
     session.send('测试开始')
     var skills = await callAPIAndCacheResponse(Bestdoriurl + BestdoriapiPath['skills'])
     for (var i in skills) {
@@ -45,6 +48,13 @@ async function test(session) {
         console.log(tempskill.effectType)
         console.log(tempskill.scoreUpMaxValue)
     }
+    */
+
+    var card = new Card(1330)
+    await card.init()
+    console.log(card.isExit)
+    console.log(card.calcStat())
+    console.log(card.data)
 
 }
 
