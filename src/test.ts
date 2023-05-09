@@ -10,6 +10,7 @@ import { BestdoriapiPath, Bestdoriurl } from './config';
 import { outputFinalBuffer } from './image/output'
 import { Skill } from './types/Skill'
 import {Card} from './types/Card'
+import {Region} from './types/Region'
 
 async function test(session) {
     /*
@@ -50,11 +51,13 @@ async function test(session) {
     }
     */
 
-    var card = new Card(1330)
-    await card.init()
+    var card = new Card(1692)
     console.log(card.isExit)
     console.log(card.calcStat())
-    console.log(card.data)
+    var skill = card.getSkill()
+    console.log(skill.simpleDescription)
+    console.log(card.isReleased(new Region('jp')))
+
 
 }
 

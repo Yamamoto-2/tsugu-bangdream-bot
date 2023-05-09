@@ -1,12 +1,16 @@
 import { callAPIAndCacheResponse } from '../api/getApi'
-import { BestdoriapiPath, Bestdoriurl } from '../config'
+import { Skill } from './Skill'
+import {Region} from './Region'
 
-interface Stat {
+import mainAPI from './_Main'
+
+interface Stat {//综合力
     performance: number,
     technique: number,
     visual: number
 }
-function addStat(stat: Stat, add: Stat): void {
+
+function addStat(stat: Stat, add: Stat): void {//综合力相加函数
     stat.performance += add.performance
     stat.technique += add.technique
     stat.visual += add.visual
@@ -58,13 +62,30 @@ export class Card {
     releasedAt: Array<string | null>;
     skillName: Array<string | null>;
     skillId: number;
+    isInitFull: boolean = false;
+    stat: object;
 
     constructor(cardID: Number) {
         this.cardID = cardID
+        if (mainAPI['cards'][this.cardID.toString()] == undefined) {
+            this.isExit = false;
+            return
+        }
+        this.isExit = true;
+        this.data = mainAPI['cards'][this.cardID.toString()]
+        this.characterId = this.data['characterId']
+        this.rarity = this.data['rarity']
+        this.type = this.data['type']
+        this.attribute = this.data['attribute']
+        this.levelLimit = this.data['levelLimit']
+        this.resourceSetName = this.data['resourceSetName']
+        this.prefix = this.data['prefix']
+        this.releasedAt = this.data['releasedAt']
+        this.skillId = this.data['skillId']
+        this.stat = this.data['stat']
     }
-    async init() {
-        var cardList: object = await callAPIAndCacheResponse(Bestdoriurl + BestdoriapiPath['cards'])
-        if (cardList[this.cardID.toString()] == undefined) {
+    async initFull() {
+        if (mainAPI['cards'][this.cardID.toString()] == undefined) {
             this.isExit = false;
             return
         }
@@ -83,6 +104,8 @@ export class Card {
         this.releasedAt = this.data['releasedAt']
         this.skillName = this.data['skillName']
         this.skillId = this.data['skillId']
+        this.stat = this.data['stat']
+        this.isInitFull = true;
     }
     async getData() {
         var cardData = await callAPIAndCacheResponse('https://bestdori.com/api/cards/' + this.cardID + '.json')
@@ -94,15 +117,20 @@ export class Card {
         if (this.rarity < 3) {
             return false
         }
-        var statData = this.data['stat']
-        if (statData['training']['performance'] == 0 && statData['training']['technique'] == 0 && statData['training']['visual'] == 0) {
+        if (this.stat['training']['performance'] == 0 && this.stat['training']['technique'] == 0 && this.stat['training']['visual'] == 0) {
             return false
         }
         return true
     }
 
     //计算综合力函数
-    calcStat(level: number = this.levelLimit, trainingStatus: boolean = false, limitBreakRank: number = 0, episode1: boolean = true, episode2: boolean = true) {
+    async calcStat(level: number = this.levelLimit, trainingStatus: boolean = false, limitBreakRank: number = 0, episode1: boolean = true, episode2: boolean = true) {
+        if (!this.isInitFull) {
+            //如果不是默认情况(带有level以外的参数)，加载完整数据，其中包含完整综合力数据
+            if (trainingStatus != undefined || limitBreakRank != undefined || episode1 != undefined || episode2 != undefined) {
+                await this.initFull()
+            }
+        }
         const stat: Stat = {
             performance: 0,
             technique: 0,
@@ -112,31 +140,39 @@ export class Card {
         if (level > this.levelLimit) {//等级超过上限,按上限计算
             level = this.levelLimit
         }
-        var statData = this.data['stat']
         if (this.ableToTraining()) {//如果能够进行特训
-            if (level > this.levelLimit - statData['training']['levelLimit']) {//如果等级超过需要特训等级，则默认已经特训
+            if (level > this.levelLimit - this.stat['training']['levelLimit']) {//如果等级超过需要特训等级，则默认已经特训
                 trainingStatus = true
             }
         }
 
-        addStat(stat, statData[level.toString()])//加上等级对应的属性
+        addStat(stat, this.stat[level.toString()])//加上等级对应的属性
 
         if (trainingStatus) {//如果已经特训
-            addStat(stat, statData['training'])
+            addStat(stat, this.stat['training'])
         }
 
         if (episode1) {//如果已经阅读剧情1
-            addStat(stat, statData['episodes'][0])
+            addStat(stat, this.stat['episodes'][0])
         }
-        if (episode2) {//如果已经阅读剧情1
-            addStat(stat, statData['episodes'][1])
+        if (episode2) {//如果已经阅读剧情2
+            addStat(stat, this.stat['episodes'][1])
         }
-        if(limitBreakRank > 0){
-            for(var i = 1;i <= limitBreakRank;i++){
-                addStat(stat,limitBreakRankStat[this.rarity])
+        if (limitBreakRank > 0) {
+            for (var i = 1; i <= limitBreakRank; i++) {
+                addStat(stat, limitBreakRankStat[this.rarity])
             }
         }
         return stat
+    }
+    getSkill(): Skill {
+        return new Skill(this.skillId)
+    }
+    isReleased(region:Region): boolean {
+        if (this.releasedAt[region.regionID] == null) {
+            return false
+        }
+        return true
     }
 
 }

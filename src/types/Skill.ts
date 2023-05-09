@@ -1,7 +1,5 @@
-import { BestdoriapiPath, Bestdoriurl } from '../config'
-import { callAPIAndCacheResponse } from '../api/getApi'
 import { Canvas } from 'canvas'
-const skillAPIUrl = Bestdoriurl + BestdoriapiPath['skills']
+import mainAPI from './_Main'
 
 
 export class Skill {
@@ -17,16 +15,13 @@ export class Skill {
 
     constructor(skillID: number) {
         this.skillID = skillID
-    }
-    async init() {
-        var skillList: object = await callAPIAndCacheResponse(skillAPIUrl)
-        if (skillList[this.skillID.toString()] == undefined) {
+        if (mainAPI["skills"][this.skillID.toString()] == undefined) {
             this.isExit = false;
             return
         }
         this.isExit = true;
         this.skillID = this.skillID;
-        this.data = skillList[this.skillID.toString()]
+        this.data = mainAPI["skills"][this.skillID.toString()]
         this.simpleDescription = this.data['simpleDescription']
         this.description = this.data['description']
         this.duration = this.data['duration']
