@@ -5,7 +5,7 @@ import { Character } from './Character';
 
 export class Band {
     bandID: number;
-    isExit: boolean = false;
+    isExist: boolean = false;
     data: object;
     bandName: Array<string | null>;
     members: Array<Character | null>;
@@ -13,10 +13,10 @@ export class Band {
         this.bandID = bandID
         const bandData = mainAPI['bands'][bandID.toString()]
         if (bandData == undefined) {
-            this.isExit = false;
+            this.isExist = false;
             return
         }
-        this.isExit = true;
+        this.isExist = true;
         this.data = bandData
         this.bandName = this.data['bandName']
         this.getMembers()

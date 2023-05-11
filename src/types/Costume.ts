@@ -4,7 +4,7 @@ import mainAPI from './_Main';
 
 export class Costume {
     costumeId: number;
-    isExit: boolean = false;
+    isExist: boolean = false;
     characterId: number;
     assetBundleName: string;
     description: Array<string | null>;
@@ -13,10 +13,10 @@ export class Costume {
         this.costumeId = costumeId
         const costumeData = mainAPI['costumes'][costumeId.toString()]
         if (costumeData == undefined) {
-            this.isExit = false;
+            this.isExist = false;
             return
         }
-        this.isExit = true;
+        this.isExist = true;
         this.characterId = costumeData['characterId'];
         this.assetBundleName = costumeData['assetBundleName'];
         this.description = costumeData['description'];

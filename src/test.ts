@@ -14,6 +14,7 @@ import {Server} from './types/Server'
 import {Character} from './types/Character'
 import {Band} from './types/Band'
 import{Event} from './types/Event'
+import { Degree } from './types/Drgree';
 
 async function test(session:Session) {
     /*
@@ -56,7 +57,7 @@ async function test(session:Session) {
     /*
     卡牌测试部分
     var card = new Card(1692)
-    console.log(card.isExit)
+    console.log(card.isExist)
     console.log(await card.calcStat())
     var skill = card.getSkill()
     console.log(skill.simpleDescription)
@@ -68,12 +69,18 @@ async function test(session:Session) {
     await chara.initFull()
     console.log(chara)
     */
+    /*
+    //乐队,活动测试部分
     var band = new Band(1)
     console.log(band)
     var event = new Event(207)
     await event.initFull()
     console.log(event)
+    */
 
+    var degree = new Degree(1)
+    console.log(degree)
+    
 }
 
 export { test }

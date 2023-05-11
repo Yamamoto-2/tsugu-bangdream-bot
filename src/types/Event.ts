@@ -3,7 +3,7 @@ import mainAPI from './_Main';
 
 export class Event {
     eventID: number;
-    isExit: boolean = false;
+    isExist: boolean = false;
     isInitFull = false;
     eventType: string;
     eventName: Array<string | null>;
@@ -77,10 +77,10 @@ export class Event {
         this.eventID = eventID
         const eventData = mainAPI['events'][eventID.toString()]
         if (eventData == undefined) {
-            this.isExit = false;
+            this.isExist = false;
             return
         }
-        this.isExit = true;
+        this.isExist = true;
         this.eventType = eventData['eventType'];
         this.eventName = eventData['eventName'];
         this.bannerAssetBundleName = eventData['bannerAssetBundleName'];
@@ -92,7 +92,7 @@ export class Event {
     }
     async initFull() {
         if (mainAPI['events'][this.eventID.toString()] == undefined) {
-            this.isExit = false;
+            this.isExist = false;
             return
         }
         const eventData = await this.getData()

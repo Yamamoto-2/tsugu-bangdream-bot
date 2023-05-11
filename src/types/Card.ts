@@ -46,7 +46,7 @@ const limitBreakRankStat = {//不同稀有度突破一级增加的属性
 
 export class Card {
     cardID: Number;
-    isExit: boolean = false;
+    isExist: boolean = false;
 
     data: object;
     characterId: number;
@@ -69,10 +69,10 @@ export class Card {
         this.cardID = cardID
         const cardData = mainAPI['cards'][cardID.toString()]
         if (cardData == undefined) {
-            this.isExit = false;
+            this.isExist = false;
             return
         }
-        this.isExit = true;
+        this.isExist = true;
         this.data = cardData
         this.characterId = cardData['characterId']
         this.rarity = cardData['rarity']
@@ -87,10 +87,10 @@ export class Card {
     }
     async initFull() {
         if (mainAPI['cards'][this.cardID.toString()] == undefined) {
-            this.isExit = false;
+            this.isExist = false;
             return
         }
-        this.isExit = true;
+        this.isExist = true;
         const cardData = await this.getData()
         this.data = cardData
         this.characterId = cardData['characterId']

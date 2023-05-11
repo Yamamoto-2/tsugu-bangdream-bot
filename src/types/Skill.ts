@@ -4,7 +4,7 @@ import mainAPI from './_Main'
 
 export class Skill {
     skillID: number;
-    isExit: boolean = false;
+    isExist: boolean = false;
     data: object;
     simpleDescription: Array<string | null>;
     description: Array<string | null>;
@@ -16,10 +16,10 @@ export class Skill {
     constructor(skillID: number) {
         this.skillID = skillID
         if (mainAPI["skills"][this.skillID.toString()] == undefined) {
-            this.isExit = false;
+            this.isExist = false;
             return
         }
-        this.isExit = true;
+        this.isExist = true;
         this.skillID = this.skillID;
         this.data = mainAPI["skills"][this.skillID.toString()]
         this.simpleDescription = this.data['simpleDescription']
@@ -37,7 +37,7 @@ export class Skill {
         ]
 
         var tempTypeList: Array<string> = []
-        if (this.isExit == false) {
+        if (this.isExist == false) {
             return 'score'
         }
         if (this.data['activationEffect'] != undefined) {
@@ -51,7 +51,7 @@ export class Skill {
         return findFirstString(tempTypeList, skillTypeList) || 'score'
     }
     getSkillDescription(): Array<string> {//返回完整技能描述，不同等级效果用'/'分割
-        if (this.isExit == false) {
+        if (this.isExist == false) {
             return [null, null, null, null, null]
         }
 
@@ -103,7 +103,7 @@ export class Skill {
         return tempDescription;
     }
     getScoreUpMaxValue(): number {//返回最高加分数值
-        if (this.isExit == false) {
+        if (this.isExist == false) {
             return 0
         }
         if (this.data['activationEffect'] != undefined) {
