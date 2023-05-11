@@ -13,6 +13,7 @@ import {Card} from './types/Card'
 import {Server} from './types/Server'
 import {Character} from './types/Character'
 import {Band} from './types/Band'
+import{Event} from './types/Event'
 
 async function test(session:Session) {
     /*
@@ -69,6 +70,9 @@ async function test(session:Session) {
     */
     var band = new Band(1)
     console.log(band)
+    var event = new Event(207)
+    await event.initFull()
+    console.log(event)
 
 }
 

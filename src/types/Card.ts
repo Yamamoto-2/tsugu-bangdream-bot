@@ -74,16 +74,16 @@ export class Card {
         }
         this.isExit = true;
         this.data = cardData
-        this.characterId = this.data['characterId']
-        this.rarity = this.data['rarity']
-        this.type = this.data['type']
-        this.attribute = this.data['attribute']
-        this.levelLimit = this.data['levelLimit']
-        this.resourceSetName = this.data['resourceSetName']
-        this.prefix = this.data['prefix']
-        this.releasedAt = this.data['releasedAt']
-        this.skillId = this.data['skillId']
-        this.stat = this.data['stat']
+        this.characterId = cardData['characterId']
+        this.rarity = cardData['rarity']
+        this.type = cardData['type']
+        this.attribute = cardData['attribute']
+        this.levelLimit = cardData['levelLimit']
+        this.resourceSetName = cardData['resourceSetName']
+        this.prefix = cardData['prefix']
+        this.releasedAt = cardData['releasedAt']
+        this.skillId = cardData['skillId']
+        this.stat = cardData['stat']
     }
     async initFull() {
         if (mainAPI['cards'][this.cardID.toString()] == undefined) {
@@ -91,21 +91,22 @@ export class Card {
             return
         }
         this.isExit = true;
-        this.data = await this.getData()
-        this.characterId = this.data['characterId']
-        this.rarity = this.data['rarity']
-        this.type = this.data['type']
-        this.attribute = this.data['attribute']
-        this.levelLimit = this.data['levelLimit']
-        this.resourceSetName = this.data['resourceSetName']
-        this.sdResourceName = this.data['sdResourceName']
-        this.costumeId = this.data['costumeId']
-        this.gachaText = this.data['gachaText']
-        this.prefix = this.data['prefix']
-        this.releasedAt = this.data['releasedAt']
-        this.skillName = this.data['skillName']
-        this.skillId = this.data['skillId']
-        this.stat = this.data['stat']
+        const cardData = await this.getData()
+        this.data = cardData
+        this.characterId = cardData['characterId']
+        this.rarity = cardData['rarity']
+        this.type = cardData['type']
+        this.attribute = cardData['attribute']
+        this.levelLimit = cardData['levelLimit']
+        this.resourceSetName = cardData['resourceSetName']
+        this.sdResourceName = cardData['sdResourceName']
+        this.costumeId = cardData['costumeId']
+        this.gachaText = cardData['gachaText']
+        this.prefix = cardData['prefix']
+        this.releasedAt = cardData['releasedAt']
+        this.skillName = cardData['skillName']
+        this.skillId = cardData['skillId']
+        this.stat = cardData['stat']
         this.isInitFull = true;
     }
     async getData() {
@@ -169,8 +170,8 @@ export class Card {
     getSkill(): Skill {
         return new Skill(this.skillId)
     }
-    isReleased(region: Region): boolean {
-        if (this.releasedAt[region.regionID] == null) {
+    isReleased(server: Server): boolean {
+        if (this.releasedAt[server.serverID] == null) {
             return false
         }
         return true
