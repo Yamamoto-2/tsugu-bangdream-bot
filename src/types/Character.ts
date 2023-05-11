@@ -46,8 +46,7 @@ export class Character {
         this.bandId = this.data["bandId"];
     }
     async initFull() {
-        if(mainAPI["characters"][this.characterID.toString()] == undefined) {
-            this.isExist = false;
+        if (this.isExist == false) {
             return
         }
         this.data = await this.getData();

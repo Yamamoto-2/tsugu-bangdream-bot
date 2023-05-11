@@ -86,8 +86,7 @@ export class Card {
         this.stat = cardData['stat']
     }
     async initFull() {
-        if (mainAPI['cards'][this.cardID.toString()] == undefined) {
-            this.isExist = false;
+        if (this.isExist == false) {
             return
         }
         this.isExist = true;

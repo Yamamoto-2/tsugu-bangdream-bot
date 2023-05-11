@@ -69,8 +69,7 @@ export class Gacha {
         this.newCards = gachaData['newCards']
     }
     async initFull(){
-        if (mainAPI['gacha'][this.gachaId.toString()] == undefined) {
-            this.isExist = false;
+        if (this.isExist == false) {
             return
         }
         this.isExist = true;

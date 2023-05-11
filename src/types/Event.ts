@@ -91,8 +91,7 @@ export class Event {
         this.rewardCards = eventData['rewardCards'];
     }
     async initFull() {
-        if (mainAPI['events'][this.eventID.toString()] == undefined) {
-            this.isExist = false;
+        if (this.isExist == false) {
             return
         }
         const eventData = await this.getData()
