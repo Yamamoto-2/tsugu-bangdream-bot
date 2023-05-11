@@ -124,7 +124,7 @@ export class Event {
         this.isInitFull = true;
     }
     async getData() {
-        var eventData = await callAPIAndCacheResponse('https://bestdori.com/api/events/' + this.eventID.toString() + '.json');
+        var eventData = await callAPIAndCacheResponse(`https://bestdori.com/api/events/${this.eventID}.json`);
         return eventData
     }
 }

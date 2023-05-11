@@ -15,6 +15,7 @@ import {Character} from './types/Character'
 import {Band} from './types/Band'
 import{Event} from './types/Event'
 import { Degree } from './types/Drgree';
+import { Gacha } from './types/Gacha';
 
 async function test(session:Session) {
     /*
@@ -78,9 +79,14 @@ async function test(session:Session) {
     console.log(event)
     */
 
+    /*
+    //牌子测试部分
     var degree = new Degree(1)
     console.log(degree)
-    
+*/
+    var gacha = new Gacha(820)
+    await gacha.initFull()
+    console.log(gacha)
 }
 
 export { test }
