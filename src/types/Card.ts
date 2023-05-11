@@ -1,6 +1,6 @@
 import { callAPIAndCacheResponse } from '../api/getApi'
 import { Skill } from './Skill'
-import {Region} from './Region'
+import { Server } from './Server'
 
 import mainAPI from './_Main'
 
@@ -67,12 +67,13 @@ export class Card {
 
     constructor(cardID: Number) {
         this.cardID = cardID
-        if (mainAPI['cards'][this.cardID.toString()] == undefined) {
+        const cardData = mainAPI['cards'][cardID.toString()]
+        if (cardData == undefined) {
             this.isExit = false;
             return
         }
         this.isExit = true;
-        this.data = mainAPI['cards'][this.cardID.toString()]
+        this.data = cardData
         this.characterId = this.data['characterId']
         this.rarity = this.data['rarity']
         this.type = this.data['type']
@@ -168,7 +169,7 @@ export class Card {
     getSkill(): Skill {
         return new Skill(this.skillId)
     }
-    isReleased(region:Region): boolean {
+    isReleased(region: Region): boolean {
         if (this.releasedAt[region.regionID] == null) {
             return false
         }

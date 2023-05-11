@@ -1,4 +1,4 @@
-import { Context, Schema, h } from 'koishi'
+import { Context, Schema, h,Session } from 'koishi'
 import { CreateBG } from './image/BG';
 import { assetsRootPath } from './config';
 import path from 'path';
@@ -10,9 +10,11 @@ import { BestdoriapiPath, Bestdoriurl } from './config';
 import { outputFinalBuffer } from './image/output'
 import { Skill } from './types/Skill'
 import {Card} from './types/Card'
-import {Region} from './types/Region'
+import {Server} from './types/Server'
+import {Character} from './types/Character'
+import {Band} from './types/Band'
 
-async function test(session) {
+async function test(session:Session) {
     /*
     //list测试部分
     var list = []
@@ -50,14 +52,23 @@ async function test(session) {
         console.log(tempskill.scoreUpMaxValue)
     }
     */
-
+    /*
+    卡牌测试部分
     var card = new Card(1692)
     console.log(card.isExit)
-    console.log(card.calcStat())
+    console.log(await card.calcStat())
     var skill = card.getSkill()
     console.log(skill.simpleDescription)
     console.log(card.isReleased(new Region('jp')))
-
+    */
+    /*
+    //角色测试部分
+    var chara = new Character(10)
+    await chara.initFull()
+    console.log(chara)
+    */
+    var band = new Band(1)
+    console.log(band)
 
 }
 

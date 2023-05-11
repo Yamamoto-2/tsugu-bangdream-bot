@@ -1,6 +1,6 @@
 //地区列表，因为有TW而不适用country
 export const regionList:Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['jp','en','tw','cn','kr']
-export class Region {
+export class Server {
     name: 'jp' | 'en' | 'tw' | 'cn' | 'kr'
     regionID: number
     constructor(name?: 'jp' | 'en' | 'tw' | 'cn' | 'kr', regionID?: number) {
