@@ -2,19 +2,19 @@
 export const serverList:Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['jp','en','tw','cn','kr']
 export class Server {
     name: 'jp' | 'en' | 'tw' | 'cn' | 'kr'
-    serverID: number
-    constructor(name?: 'jp' | 'en' | 'tw' | 'cn' | 'kr', serverID?: number) {
+    serverId: number
+    constructor(name?: 'jp' | 'en' | 'tw' | 'cn' | 'kr', serverId?: number) {
         if (name != undefined) {
             this.name = name
-            this.serverID = serverList.indexOf(name)
+            this.serverId = serverList.indexOf(name)
         }
-        else if (serverID != undefined) {
-            this.serverID = serverID
-            this.name = serverList[serverID]
+        else if (serverId != undefined) {
+            this.serverId = serverId
+            this.name = serverList[serverId]
         }
         else {
             this.name = 'jp'
-            this.serverID = serverList.indexOf(name)
+            this.serverId = serverList.indexOf(name)
         }
     }
 }

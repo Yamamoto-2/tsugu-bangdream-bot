@@ -4,14 +4,14 @@ import mainAPI from './_Main';
 import { Character } from './Character';
 
 export class Band {
-    bandID: number;
+    bandId: number;
     isExist: boolean = false;
     data: object;
     bandName: Array<string | null>;
     members: Array<Character | null>;
-    constructor(bandID: number) {
-        this.bandID = bandID
-        const bandData = mainAPI['bands'][bandID.toString()]
+    constructor(bandId: number) {
+        this.bandId = bandId
+        const bandData = mainAPI['bands'][bandId.toString()]
         if (bandData == undefined) {
             this.isExist = false;
             return
@@ -26,7 +26,7 @@ export class Band {
         var characterList = mainAPI['characters']
         for (var characterID in characterList) {
             var character = new Character(parseInt(characterID))
-            if (character.bandId == this.bandID) {
+            if (character.bandId == this.bandId) {
                 members.push(character)
             }
         }

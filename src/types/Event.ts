@@ -2,7 +2,7 @@ import { callAPIAndCacheResponse } from '../api/getApi';
 import mainAPI from './_Main';
 
 export class Event {
-    eventID: number;
+    eventId: number;
     isExist: boolean = false;
     isInitFull = false;
     eventType: string;
@@ -73,9 +73,9 @@ export class Event {
 
 
 
-    constructor(eventID: number) {
-        this.eventID = eventID
-        const eventData = mainAPI['events'][eventID.toString()]
+    constructor(eventId: number) {
+        this.eventId = eventId
+        const eventData = mainAPI['events'][eventId.toString()]
         if (eventData == undefined) {
             this.isExist = false;
             return
@@ -123,7 +123,7 @@ export class Event {
         this.isInitFull = true;
     }
     async getData() {
-        var eventData = await callAPIAndCacheResponse(`https://bestdori.com/api/events/${this.eventID}.json`);
+        var eventData = await callAPIAndCacheResponse(`https://bestdori.com/api/events/${this.eventId}.json`);
         return eventData
     }
 }

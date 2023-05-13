@@ -2,7 +2,7 @@ import mainAPI from './_Main'
 import { callAPIAndCacheResponse } from '../api/getApi'
 
 export class Character {
-    characterID: number;
+    characterId: number;
     data: object;
     characterType: string;
     characterName: Array<string | null>;
@@ -30,14 +30,14 @@ export class Character {
         height: number;
     };
 
-    constructor(characterID: number) {
-        var characterData = mainAPI["characters"][characterID.toString()];
+    constructor(characterId: number) {
+        var characterData = mainAPI["characters"][characterId.toString()];
         if (characterData == undefined) {
             this.isExist = false;
             return
         }
 
-        this.characterID = characterID;
+        this.characterId = characterId;
         this.data = characterData;
         this.characterName = this.data["characterName"];
         this.firstName = this.data["firstName"];
@@ -63,7 +63,7 @@ export class Character {
         this.profile = this.data["profile"];
     }
     async getData() {
-        var cardData = await callAPIAndCacheResponse('https://bestdori.com/api/characters/' + this.characterID + '.json')
+        var cardData = await callAPIAndCacheResponse('https://bestdori.com/api/characters/' + this.characterId + '.json')
         return cardData
     }
 

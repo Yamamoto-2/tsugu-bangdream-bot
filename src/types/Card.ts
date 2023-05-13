@@ -45,7 +45,7 @@ const limitBreakRankStat = {//不同稀有度突破一级增加的属性
 }
 
 export class Card {
-    cardID: Number;
+    cardId: Number;
     isExist: boolean = false;
 
     data: object;
@@ -65,9 +65,9 @@ export class Card {
     isInitFull: boolean = false;
     stat: object;
 
-    constructor(cardID: Number) {
-        this.cardID = cardID
-        const cardData = mainAPI['cards'][cardID.toString()]
+    constructor(cardId: Number) {
+        this.cardId = cardId
+        const cardData = mainAPI['cards'][cardId.toString()]
         if (cardData == undefined) {
             this.isExist = false;
             return
@@ -109,7 +109,7 @@ export class Card {
         this.isInitFull = true;
     }
     async getData() {
-        var cardData = await callAPIAndCacheResponse('https://bestdori.com/api/cards/' + this.cardID + '.json')
+        var cardData = await callAPIAndCacheResponse('https://bestdori.com/api/cards/' + this.cardId + '.json')
         return cardData
     }
 
@@ -170,7 +170,7 @@ export class Card {
         return new Skill(this.skillId)
     }
     isReleased(server: Server): boolean {
-        if (this.releasedAt[server.serverID] == null) {
+        if (this.releasedAt[server.serverId] == null) {
             return false
         }
         return true

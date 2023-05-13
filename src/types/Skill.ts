@@ -3,7 +3,7 @@ import mainAPI from './_Main'
 
 
 export class Skill {
-    skillID: number;
+    skillId: number;
     isExist: boolean = false;
     data: object;
     simpleDescription: Array<string | null>;
@@ -13,15 +13,15 @@ export class Skill {
     //'judge'|'score'|'damage'|'score_continued_note_judge'|'score_over_life'|'score_under_great_half'|'score'
     scoreUpMaxValue: number;
 
-    constructor(skillID: number) {
-        this.skillID = skillID
-        if (mainAPI["skills"][this.skillID.toString()] == undefined) {
+    constructor(skillId: number) {
+        this.skillId = skillId
+        if (mainAPI["skills"][this.skillId.toString()] == undefined) {
             this.isExist = false;
             return
         }
         this.isExist = true;
-        this.skillID = this.skillID;
-        this.data = mainAPI["skills"][this.skillID.toString()]
+        this.skillId = this.skillId;
+        this.data = mainAPI["skills"][this.skillId.toString()]
         this.simpleDescription = this.data['simpleDescription']
         this.description = this.data['description']
         this.duration = this.data['duration']
@@ -66,14 +66,15 @@ export class Skill {
 
         var tempDescription = this.description
         if (this.data['onceEffect'] != undefined) {//如果包含onceEffect(比如恢复)
-            //生成回复数值列表(例如'3/4/5/6/7')
-            var onceEffectValueList: string = "";
+            //生成回复数值列表(例如' 3/4/5/6/7 ')
+            var onceEffectValueList: string = " ";
             this.data['onceEffect']['onceEffectValue'].forEach((value: number, index: number) => {
                 onceEffectValueList += value.toString();
                 if (index !== this.data['onceEffect']['onceEffectValue'].length - 1) {
                     onceEffectValueList += '/';
                 }
             });
+            onceEffectValueList += " ";
 
             tempDescription = tempDescription.map((value) => {
                 if (value == null) {
