@@ -14,6 +14,6 @@ async function loadMainAPI (){
 
 loadMainAPI()
 
-setInterval(loadMainAPI, 1000 * 60 * 5)//5分钟更新一次
+//setInterval(loadMainAPI, 1000 * 60 * 5)//5分钟更新一次
 
 export default mainAPI

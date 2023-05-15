@@ -1,4 +1,4 @@
-import { createCanvas, registerFont, Canvas, CanvasRenderingContext2D } from 'canvas';
+import { createCanvas, registerFont, Image, Canvas, CanvasRenderingContext2D } from 'canvas';
 import { assetsRootPath } from '../config';
 registerFont(assetsRootPath + "/Fonts/default.ttf", { family: "default" })
 
@@ -42,9 +42,8 @@ function wrapText({
     const temp = text.split('\n');
     ctx.textBaseline = 'alphabetic';
     setFontStyle(ctx, textSize, "default");
-    const wrappedLines = [];
 
-    for (var i = 0; i< temp.length; i++) {
+    for (var i = 0; i < temp.length; i++) {
         let temptext = temp[i]
         let a = 0
         for (var n = 0; n < temptext.length; n++) {
@@ -73,8 +72,115 @@ function wrapText({
     };
 }
 
+interface TextWithImagesOptions {
+    textSize?: number;
+    maxWidth: number;
+    lineHeight?: number;
+    content: (string | Canvas | Image)[];
+}
+
+
+
+// 画文字包含图片
+function drawTextWithImages({
+    textSize = 40,
+    maxWidth,
+    lineHeight = textSize * 4 / 3,
+    content
+}: TextWithImagesOptions) {
+    var wrappedTextData = warpTextWithImages({ textSize, maxWidth, lineHeight, content });
+    const canvas = createCanvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
+    const ctx = canvas.getContext('2d');
+    let y = lineHeight / 2 + textSize / 3
+    ctx.textBaseline = 'alphabetic'
+    setFontStyle(ctx, textSize, "default");
+    ctx.fillStyle = '#5b5b5b';
+    var wrappedText = wrappedTextData.wrappedText
+    for (var i = 0; i < wrappedText.length; i++) {
+        let tempX = 0
+        for (var n = 0; n < wrappedText[i].length; n++) {
+            if (typeof wrappedText[i][n] === "string") {
+                ctx.fillText(wrappedText[i][n] as string, tempX, y);
+                tempX += ctx.measureText(wrappedText[i][n] as string).width
+            } else {
+                //等比例缩放图片，至高度与textSize相同
+                let tempImage = wrappedText[i][n] as Canvas | Image
+                let tempWidth = textSize * tempImage.width / tempImage.height//等比例缩放到高度与字体大小相同后，图片宽度
+                ctx.drawImage(tempImage, tempX, y -(textSize / 3) - (textSize / 2) , tempWidth, textSize)
+                tempX += tempWidth
+            }
+            tempX += textSize / 3
+        }
+        y += lineHeight;
+    }
+    return canvas;
+}
+
+// 画文字包含图片 的计算换行
+function warpTextWithImages({
+    textSize = 40,
+    maxWidth,
+    lineHeight = textSize * 4 / 3,
+    content
+}: TextWithImagesOptions) {
+    const canvas = createCanvas(1, 1);
+    const ctx = canvas.getContext('2d');
+    ctx.textBaseline = 'alphabetic';
+    setFontStyle(ctx, textSize, "default");
+    const temp: Array<Array<string | Image | Canvas>> = [[]]//二维数组,每个元素为一行,例如: [[string,Image],[Image,string]]
+    var lineNumber = 0
+    var tempX = 0
+    function newLine() {//新起一行
+        lineNumber++//行数加一
+        tempX = 0//tempX归零
+        temp.push([])//temp增加一行(一个Array)
+    }
+    for (var i = 0; i < content.length; i++) {
+        if (typeof content[i] === "string") {
+            let temptext = content[i] as string
+            if (tempX + ctx.measureText(temptext).width > maxWidth) {
+                //如果string的宽度超过maxWidth,则分割string,并且分割后的string的宽度也超过maxWidth,则分割string
+                for (var n = 0; n < temptext.length; n++) {
+                    if ((maxWidth - tempX) > ctx.measureText(temptext.slice(0, temptext.length - n)).width) {
+                        temp[lineNumber].push(temptext.slice(0, temptext.length - n))
+                        newLine()
+                        temptext = temptext.slice(temptext.length - n , temptext.length)
+                        n = -1
+                    }
+                }
+                //去除多的一行
+                tempX = ctx.measureText( temp[lineNumber-1][0] as string ).width
+                temp.pop()
+                lineNumber--
+            } else {
+                temp[lineNumber].push(temptext)
+                tempX += ctx.measureText(temptext).width
+            }
+        } else if (content[i] instanceof Canvas || content[i] instanceof Image) {
+            //图片等比例放大至高度与字体大小相同
+            let tempImage = content[i] as Image
+            let tempWidth = tempImage.width * (textSize / tempImage.height)
+            if (tempX + tempWidth > maxWidth) {
+                newLine()
+            }
+            temp[lineNumber].push(tempImage)
+            tempX += tempWidth
+        }
+        tempX += textSize / 3
+        if (tempX > maxWidth) {
+            newLine()
+        }
+    }
+    return {
+        numberOfLines: temp.length,
+        wrappedText: temp,
+    };
+}
+
+
+
 var setFontStyle = function (ctx: CanvasRenderingContext2D, textSize: number, font: string) {//设置字体大小
     ctx.font = textSize + 'px ' + font + ",Microsoft Yahei"
 }
 
-export { drawText, wrapText }
+export { drawText, wrapText, drawTextWithImages }
