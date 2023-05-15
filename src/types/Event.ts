@@ -11,7 +11,7 @@ export class Event {
     startAt: Array<number | null>;
     endAt: Array<number | null>;
     attributes: Array<{
-        attribute: string;
+        attribute: "happy"| "cool" | "powerful" | "pure" ;
         percent: number;
     }>;
     characters: Array<{
