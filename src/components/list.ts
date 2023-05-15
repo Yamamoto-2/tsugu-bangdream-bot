@@ -16,8 +16,22 @@ var line: Canvas = drawDottedLine({
     color: "#a8a8a8"
 })
 
+interface ListOptions {
+    key: string;
+    text: string;
+    text2?: string;
+    textSize?: number;
+    lineHeight?: number;
+}
+
 //画表格中的一行
-function drawList(key: string, text: string, text2?: string, textSize = 40, lineHeight = textSize * 1.5): Canvas {
+function drawList({
+    key,
+    text,
+    text2,
+    textSize = 40,
+    lineHeight = textSize * 1.5
+}: ListOptions): Canvas {
     const xmax = 800
     const keyImage = drawRoundedRectWithText({
         text: key,
@@ -47,13 +61,37 @@ function drawList(key: string, text: string, text2?: string, textSize = 40, line
 
 }
 
-function drawListWithImages(key: string, content: Array<string | Canvas | Image>, text2?: string, textSize = 40, lineHeight = textSize * 1.5) {
+interface ListOptions {
+    key: string;
+    content: Array<string | Canvas | Image>;
+    text2?: string;
+    textSize?: number;
+    lineHeight?: number;
+    spacing?: number;
+}
+
+function drawListWithImages(
+    {
+        key,
+        content,
+        text2,
+        textSize = 40,
+        lineHeight = textSize * 1.5,
+        spacing = textSize / 3
+
+    }: ListOptions) {
     const xmax = 800
     const keyImage = drawRoundedRectWithText({
         text: key,
         textSize: 30
     });
-    const textImage = drawTextWithImages({ content: content, maxWidth: xmax, lineHeight, textSize: textSize });
+    const textImage = drawTextWithImages({
+        content,
+        maxWidth: xmax,
+        lineHeight,
+        textSize,
+        spacing
+    });
     var ymax = textImage.height + keyImage.height;
     if (text2) {
         const textImage2 = drawText({ text: text2, maxWidth: xmax - 40, lineHeight: lineHeight * 3 / 4, textSize: textSize * 3 / 4 });

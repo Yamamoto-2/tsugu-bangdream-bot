@@ -77,6 +77,7 @@ interface TextWithImagesOptions {
     maxWidth: number;
     lineHeight?: number;
     content: (string | Canvas | Image)[];
+    spacing?: number;
 }
 
 
@@ -86,7 +87,8 @@ function drawTextWithImages({
     textSize = 40,
     maxWidth,
     lineHeight = textSize * 4 / 3,
-    content
+    content,
+    spacing = textSize / 3
 }: TextWithImagesOptions) {
     var wrappedTextData = warpTextWithImages({ textSize, maxWidth, lineHeight, content });
     const canvas = createCanvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
@@ -109,7 +111,7 @@ function drawTextWithImages({
                 ctx.drawImage(tempImage, tempX, y -(textSize / 3) - (textSize / 2) , tempWidth, textSize)
                 tempX += tempWidth
             }
-            tempX += textSize / 3
+            tempX += spacing
         }
         y += lineHeight;
     }
@@ -121,7 +123,8 @@ function warpTextWithImages({
     textSize = 40,
     maxWidth,
     lineHeight = textSize * 4 / 3,
-    content
+    content,
+    spacing = textSize / 3
 }: TextWithImagesOptions) {
     const canvas = createCanvas(1, 1);
     const ctx = canvas.getContext('2d');
@@ -166,7 +169,7 @@ function warpTextWithImages({
             temp[lineNumber].push(tempImage)
             tempX += tempWidth
         }
-        tempX += textSize / 3
+        tempX += spacing
         if (tempX > maxWidth) {
             newLine()
         }
