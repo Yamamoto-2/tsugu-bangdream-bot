@@ -133,6 +133,7 @@ async function download(
     });
     return promise;
   }
+  return readFileSync(join(filepath, filename));
   console.log(filepath + filename + " 不需下载")
 }
 
