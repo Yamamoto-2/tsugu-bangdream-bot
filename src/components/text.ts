@@ -1,6 +1,7 @@
 import { createCanvas, registerFont, Image, Canvas, CanvasRenderingContext2D } from 'canvas';
 import { assetsRootPath } from '../config';
 registerFont(assetsRootPath + "/Fonts/default.ttf", { family: "default" })
+registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
 
 interface warpTextOptions {
     text: string,
@@ -78,6 +79,8 @@ interface TextWithImagesOptions {
     lineHeight?: number;
     content: (string | Canvas | Image)[];
     spacing?: number;
+    color?: string;
+    font?: "default" | "old"
 }
 
 
@@ -88,16 +91,42 @@ function drawTextWithImages({
     maxWidth,
     lineHeight = textSize * 4 / 3,
     content,
-    spacing = textSize / 3
+    spacing = textSize / 3,
+    color = '#5b5b5b',
+    font = 'default'
 }: TextWithImagesOptions) {
     var wrappedTextData = warpTextWithImages({ textSize, maxWidth, lineHeight, content });
-    const canvas = createCanvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
+    var wrappedText = wrappedTextData.wrappedText
+    var canvas:Canvas
+    //单行文字，宽度为第一行的宽度
+    if(wrappedTextData.numberOfLines == 1){
+        canvas = createCanvas(1, 1);
+        const ctx = canvas.getContext('2d');
+        setFontStyle(ctx, textSize, font);
+        var Width = 0
+        for (var n = 0; n < wrappedText[0].length; n++) {
+            if (typeof wrappedText[0][n] === "string") {
+                Width += ctx.measureText(wrappedText[0][n] as string).width
+            } else {
+                //等比例缩放图片，至高度与textSize相同
+                let tempImage = wrappedText[0][n] as Canvas | Image
+                let tempWidth = textSize * tempImage.width / tempImage.height//等比例缩放到高度与字体大小相同后，图片宽度
+                Width += tempWidth
+            }
+            Width += spacing
+        }
+        canvas = createCanvas(Width, lineHeight);
+    }
+    //多行文字
+    else{
+        canvas = createCanvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
+
+    }
     const ctx = canvas.getContext('2d');
     let y = lineHeight / 2 + textSize / 3
     ctx.textBaseline = 'alphabetic'
-    setFontStyle(ctx, textSize, "default");
-    ctx.fillStyle = '#5b5b5b';
-    var wrappedText = wrappedTextData.wrappedText
+    setFontStyle(ctx, textSize, font);
+    ctx.fillStyle = color;
     for (var i = 0; i < wrappedText.length; i++) {
         let tempX = 0
         for (var n = 0; n < wrappedText[i].length; n++) {
@@ -131,10 +160,10 @@ function warpTextWithImages({
     ctx.textBaseline = 'alphabetic';
     setFontStyle(ctx, textSize, "default");
     const temp: Array<Array<string | Image | Canvas>> = [[]]//二维数组,每个元素为一行,例如: [[string,Image],[Image,string]]
-    var lineNumber = 0
+    var linenumber = 0
     var tempX = 0
     function newLine() {//新起一行
-        lineNumber++//行数加一
+        linenumber++//行数加一
         tempX = 0//tempX归零
         temp.push([])//temp增加一行(一个Array)
     }
@@ -145,18 +174,18 @@ function warpTextWithImages({
                 //如果string的宽度超过maxWidth,则分割string,并且分割后的string的宽度也超过maxWidth,则分割string
                 for (var n = 0; n < temptext.length; n++) {
                     if ((maxWidth - tempX) > ctx.measureText(temptext.slice(0, temptext.length - n)).width) {
-                        temp[lineNumber].push(temptext.slice(0, temptext.length - n))
+                        temp[linenumber].push(temptext.slice(0, temptext.length - n))
                         newLine()
                         temptext = temptext.slice(temptext.length - n , temptext.length)
                         n = -1
                     }
                 }
                 //去除多的一行
-                tempX = ctx.measureText( temp[lineNumber-1][0] as string ).width
+                tempX = ctx.measureText( temp[linenumber-1][0] as string ).width
                 temp.pop()
-                lineNumber--
+                linenumber--
             } else {
-                temp[lineNumber].push(temptext)
+                temp[linenumber].push(temptext)
                 tempX += ctx.measureText(temptext).width
             }
         } else if (content[i] instanceof Canvas || content[i] instanceof Image) {
@@ -166,7 +195,7 @@ function warpTextWithImages({
             if (tempX + tempWidth > maxWidth) {
                 newLine()
             }
-            temp[lineNumber].push(tempImage)
+            temp[linenumber].push(tempImage)
             tempX += tempWidth
         }
         tempX += spacing
@@ -186,4 +215,4 @@ var setFontStyle = function (ctx: CanvasRenderingContext2D, textSize: number, fo
     ctx.font = textSize + 'px ' + font + ",Microsoft Yahei"
 }
 
-export { drawText, wrapText, drawTextWithImages }
+export { drawText, wrapText, drawTextWithImages, setFontStyle }

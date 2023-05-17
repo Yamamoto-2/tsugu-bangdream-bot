@@ -5,8 +5,8 @@ import path from 'path';
 import { loadImage, createCanvas, Canvas, Image } from 'canvas';
 import { drawList, drawDatablock, drawListWithImages, line } from './components/list';
 import { callAPIAndCacheResponse } from './api/getApi';
-import { downloadFileAndCache } from './api/getFile';
-import {drawTextWithImages}from './components/text'
+import { downloadFile } from './api/downloadFile';
+import { drawTextWithImages } from './components/text'
 import { BestdoriapiPath, Bestdoriurl } from './config';
 import { outputFinalBuffer } from './image/output'
 import { Skill } from './types/Skill'
@@ -18,6 +18,7 @@ import { Event } from './types/Event'
 import { Degree } from './types/Drgree';
 import { Gacha } from './types/Gacha';
 import { Song } from './types/Song';
+import {drawCardIcon} from './components/card'
 
 async function test(session: Session) {
     /*
@@ -92,11 +93,11 @@ async function test(session: Session) {
         console.log(song)
     */
 
-    
+    /*
     var list = []
 
-    var buffer1 = await downloadFileAndCache('https://bestdori.com/res/icon/jp.svg')
-    var buffer2 = await downloadFileAndCache('https://bestdori.com/res/icon/cool.svg')
+    var buffer1 = await downloadFile('https://bestdori.com/res/icon/jp.svg')
+    var buffer2 = await downloadFile('https://bestdori.com/res/icon/cool.svg')
     var image1 = await loadImage(buffer1)
     var image2 = await loadImage(buffer2)
     var textarray = []
@@ -133,7 +134,40 @@ async function test(session: Session) {
     var buffer = await outputFinalBuffer(imageList, "Test")
     session.send(h.image(buffer, 'image/png'));
     
+    */
+    var list = []
+    var card = new Card(1330)
+    var tempImage = await drawCardIcon({
+        card: card,
+        trainningStatus:true
+    })
+    list.push(tempImage)
+    var tempImage2 = await drawCardIcon({
+        card: card,
+        trainningStatus:false,
+        skillLevel:5,
+        cardIdVisible:true,
+        limitBreakRank:4,
+        skillTypeVisible:true
+    })
 
+    list.push(tempImage2)
+    var card = new Card(1692)
+    var tempImage3 = await drawCardIcon({
+        card: card,
+        trainningStatus:false,
+        skillLevel:5,
+        cardIdVisible:true,
+        //limitBreakRank:4,
+        skillTypeVisible:true
+    })
+
+    list.push(tempImage3)
+    var listImage = await drawDatablock(list)
+    var imageList = []
+    imageList.push(listImage)
+    var buffer = await outputFinalBuffer(imageList, "Test")
+    session.send(h.image(buffer, 'image/png'));
     console.log("测试完成")
 }
 

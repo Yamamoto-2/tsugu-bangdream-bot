@@ -1,7 +1,10 @@
 import { callAPIAndCacheResponse } from '../api/getApi'
 import { Skill } from './Skill'
-import { Server } from './Server'
-
+import { Character } from './Character'
+import { Server, serverPriority } from './Server'
+import { Image, loadImage } from 'canvas'
+import { downloadFile } from '../api/downloadFile'
+import { downloadFileCache } from '../api/downloadFileCache'
 import mainAPI from './_Main'
 
 interface Stat {//综合力
@@ -16,36 +19,17 @@ function addStat(stat: Stat, add: Stat): void {//综合力相加函数
     stat.visual += add.visual
 }
 
-const limitBreakRankStat = {//不同稀有度突破一级增加的属性
-    1: {
-        performance: 50,
-        technique: 50,
-        visual: 50
-    },
-    2: {
-        performance: 100,
-        technique: 100,
-        visual: 100
-    },
-    3: {
-        performance: 150,
-        technique: 150,
-        visual: 150
-    },
-    4: {
-        performance: 200,
-        technique: 200,
-        visual: 200
-    },
-    5: {
-        performance: 250,
-        technique: 250,
-        visual: 250
+function limitBreakRankStat(rarity: number) {//不同稀有度突破一级增加的属性
+    var tempStat: Stat = {
+        performance: 50 * rarity,
+        technique: 50 * rarity,
+        visual: 50 * rarity
     }
+    return (tempStat)
 }
 
 export class Card {
-    cardId: Number;
+    cardId: number;
     isExist: boolean = false;
 
     data: object;
@@ -64,8 +48,9 @@ export class Card {
     skillId: number;
     isInitFull: boolean = false;
     stat: object;
+    bandId: number;
 
-    constructor(cardId: Number) {
+    constructor(cardId: number) {
         this.cardId = cardId
         const cardData = mainAPI['cards'][cardId.toString()]
         if (cardData == undefined) {
@@ -75,6 +60,7 @@ export class Card {
         this.isExist = true;
         this.data = cardData
         this.characterId = cardData['characterId']
+        this.bandId = new Character(this.characterId).bandId
         this.rarity = cardData['rarity']
         this.type = cardData['type']
         this.attribute = cardData['attribute']
@@ -113,15 +99,26 @@ export class Card {
         return cardData
     }
 
-
-    ableToTraining(): boolean {//判断是否能够进行特训
+    ableToTraining(trainingStatus?: boolean): boolean {//判断是否能够进行特训
         if (this.rarity < 3) {
             return false
         }
-        if (this.stat['training']['performance'] == 0 && this.stat['training']['technique'] == 0 && this.stat['training']['visual'] == 0) {
-            return false
+        if (this.stat['training']['performance'] == 0 && this.stat['training']['technique'] == 0 && this.stat['training']['visual'] == 0) {//如果没有特训数据，因为有levelLimit，所以只能这么写
+            return true
         }
-        return true
+        return trainingStatus ?? true
+    }
+    trainingStatusList(): Array<boolean> {//判断是否能够进行特训
+        var trainingStatusList = []
+        if (this.rarity < 3) {
+            trainingStatusList.push(false)
+            return trainingStatusList
+        }
+        if (this.stat['training']['performance'] == 0 && this.stat['training']['technique'] == 0 && this.stat['training']['visual'] == 0) {//如果没有特训数据，因为有levelLimit，所以只能这么写
+            trainingStatusList.push(true)
+            return trainingStatusList
+        }
+        return [false, true]
     }
 
     //计算综合力函数
@@ -161,7 +158,7 @@ export class Card {
         }
         if (limitBreakRank > 0) {
             for (var i = 1; i <= limitBreakRank; i++) {
-                addStat(stat, limitBreakRankStat[this.rarity])
+                addStat(stat, limitBreakRankStat(this.rarity))
             }
         }
         return stat
@@ -169,11 +166,52 @@ export class Card {
     getSkill(): Skill {
         return new Skill(this.skillId)
     }
-    isReleased(server: Server): boolean {
+    isReleased(server: Server): boolean {//确定是否在该服务器发布
         if (this.releasedAt[server.serverId] == null) {
             return false
         }
         return true
     }
+    getFirstReleasedServer(): Server {//获得确保已经发布了的服务器
+        for (var i = 0; i < serverPriority.length; i++) {
+            let tempSevrer = new Server(serverPriority[i])
+            if (this.isReleased(tempSevrer)) {
+                return tempSevrer
+            }
+        }
+    }
+    getRip(): string {
+        if (this.cardId < 9999) {//确定目录位置，50为一组
+            var cardRessetIdNumber: number = Math.floor(this.cardId / 50)
+            var cardRessetId: string = cardRessetIdNumber.toString()
+            if (cardRessetIdNumber < 10) {
+                cardRessetId = '00' + cardRessetId
+            }
+            else if (cardRessetIdNumber < 100) {
+                cardRessetId = '0' + cardRessetId
+            }
+        }
+        else {
+            cardRessetId = '200'
+        }
+        return ( cardRessetId + '_rip')
+    }
+    async getCardIconImage(trainingStatus: boolean): Promise<Image> {
+        trainingStatus = this.ableToTraining(trainingStatus)
+        const trainingString = trainingStatus ? '_after_training' : '_normal'
+        var tempServer = this.getFirstReleasedServer()
+        var cardIconImage = await downloadFileCache(`https://bestdori.com/assets/${tempServer.serverName}/thumb/chara/card00${this.getRip()}/${this.resourceSetName}${trainingString}.png`)
+        return await loadImage(cardIconImage)
+    }
+    async getCardFullImage(trainingStatus: boolean): Promise<Image> {
+        trainingStatus = this.ableToTraining(trainingStatus)
+        const trainingString = trainingStatus ? '_after_training' : '_normal'
+        var tempServer = this.getFirstReleasedServer()
+        var cardFullImage = await downloadFile(`https://bestdori.com/assets/${tempServer.serverName}/characters/resourceset/res${this.resourceSetName}_rip/card${trainingString}.png`)
+        return await loadImage(cardFullImage)
+    }
 
 }
+
+
+

@@ -9,7 +9,7 @@ export class Skill {
     simpleDescription: Array<string | null>;
     description: Array<string | null>;
     duration: Array<number>;
-    effectType: string;
+    effectTypes: Array<string>;
     //'judge'|'score'|'damage'|'score_continued_note_judge'|'score_over_life'|'score_under_great_half'|'score'
     scoreUpMaxValue: number;
 
@@ -25,20 +25,20 @@ export class Skill {
         this.simpleDescription = this.data['simpleDescription']
         this.description = this.data['description']
         this.duration = this.data['duration']
-        this.effectType = this.getEffectType()
+        this.effectTypes = this.getEffectTypes()
         this.scoreUpMaxValue = this.getScoreUpMaxValue()
     }
     getData() {
         return this.data
     }
-    getEffectType(): string {//返回技能类型，如果存在多个效果，优先级为skillTypeList中排列的顺序
+    getEffectTypes(): Array<string> {//返回技能类型，如果存在多个效果，优先级为skillTypeList中排列的顺序
         const skillTypeList = [
             'judge', 'life', 'damage', 'score_continued_note_judge', 'score_over_life', 'score_under_great_half', 'score'
         ]
 
         var tempTypeList: Array<string> = []
         if (this.isExist == false) {
-            return 'score'
+            return ['score']
         }
         if (this.data['activationEffect'] != undefined) {
             for (var i in this.data['activationEffect']['activateEffectTypes']) {
@@ -48,7 +48,7 @@ export class Skill {
         if (this.data['onceEffect'] != undefined) {
             tempTypeList.push(this.data['onceEffect']['onceEffectType'])
         }
-        return findFirstString(tempTypeList, skillTypeList) || 'score'
+        return tempTypeList
     }
     getSkillDescription(): Array<string> {//返回完整技能描述，不同等级效果用'/'分割
         if (this.isExist == false) {
@@ -109,12 +109,12 @@ export class Skill {
         }
         if (this.data['activationEffect'] != undefined) {
             var numbers: Array<number> = []
-            if(this.data['activationEffect']['unificationActivateEffectValue'] != undefined){
+            if (this.data['activationEffect']['unificationActivateEffectValue'] != undefined) {
                 numbers.push(this.data['activationEffect']['unificationActivateEffectValue'])
             }
             for (var i in this.data['activationEffect']['activateEffectTypes']) {
                 this.data['activationEffect']['activateEffectTypes'][i]['activateEffectValue'].forEach(element => {
-                    if(element != null){
+                    if (element != null) {
                         numbers.push(element)
                     }
                 });
