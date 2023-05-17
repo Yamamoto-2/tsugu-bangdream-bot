@@ -173,10 +173,18 @@ function warpTextWithImages({
             if (tempX + ctx.measureText(temptext).width > maxWidth) {
                 //如果string的宽度超过maxWidth,则分割string,并且分割后的string的宽度也超过maxWidth,则分割string
                 for (var n = 0; n < temptext.length; n++) {
+                    //如果这个字符的宽度加上tempX超过maxWidth,则换行               
                     if ((maxWidth - tempX) > ctx.measureText(temptext.slice(0, temptext.length - n)).width) {
                         temp[linenumber].push(temptext.slice(0, temptext.length - n))
                         newLine()
                         temptext = temptext.slice(temptext.length - n , temptext.length)
+                        n = -1
+                    }
+                    //如果这个字符是回车,则直接换行
+                    else if(temptext[n] == "\n"){
+                        temp[linenumber].push(temptext.slice(0, n))
+                        newLine()
+                        temptext = temptext.slice(n + 1, temptext.length)
                         n = -1
                     }
                 }
