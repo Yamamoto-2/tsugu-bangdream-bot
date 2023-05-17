@@ -1,5 +1,7 @@
 import mainAPI from './_Main'
 import { callAPIAndCacheResponse } from '../api/getApi'
+import { Image, loadImage } from 'canvas'
+import { downloadFileCache } from '../api/downloadFileCache'
 
 export class Character {
     characterId: number;
@@ -65,6 +67,10 @@ export class Character {
     async getData() {
         var cardData = await callAPIAndCacheResponse('https://bestdori.com/api/characters/' + this.characterId + '.json')
         return cardData
+    }
+    async getIcon(): Promise<Image>{
+        const iconBuffer = await downloadFileCache(`https://bestdori.com/res/icon/chara_icon_${this.characterId}.png`)
+        return (await loadImage(iconBuffer))
     }
 
 }

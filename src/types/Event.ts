@@ -1,4 +1,6 @@
 import { callAPIAndCacheResponse } from '../api/getApi';
+import { Image, loadImage } from 'canvas'
+import { downloadFileCache } from '../api/downloadFileCache'
 import mainAPI from './_Main';
 
 export class Event {
@@ -125,5 +127,9 @@ export class Event {
     async getData() {
         var eventData = await callAPIAndCacheResponse(`https://bestdori.com/api/events/${this.eventId}.json`);
         return eventData
+    }
+    async getBannerImage(): Promise<Image>{
+        var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/homebanner_rip/${this.bannerAssetBundleName}.png`)
+        return await loadImage(BannerImageBuffer)
     }
 }

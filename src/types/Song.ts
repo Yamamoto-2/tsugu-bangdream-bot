@@ -1,4 +1,6 @@
 import { callAPIAndCacheResponse } from '../api/getApi'
+import { Image, loadImage } from 'canvas'
+import { downloadFileCache } from '../api/downloadFileCache'
 import mainAPI from './_Main'
 
 interface difficulty {
@@ -114,5 +116,13 @@ export class Song {
     async getData() {
         const songData = await callAPIAndCacheResponse(`https://bestdori.com/api/songs/${this.songId}.json`)
         return songData
+    }
+    getSongRip(): number {
+        return Math.ceil(this.songId / 10) * 10
+    }
+    async getSongJacketImage(): Promise<Image> {
+        var jacketImageName = this.jacketImage[this.jacketImage.length - 1]
+        var jacketImageBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}.png`)
+        return await loadImage(jacketImageBuffer)
     }
 }

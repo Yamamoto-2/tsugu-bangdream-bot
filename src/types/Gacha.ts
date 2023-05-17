@@ -1,5 +1,7 @@
 import { callAPIAndCacheResponse } from '../api/getApi';
 import mainAPI from './_Main';
+import { Image, loadImage } from 'canvas'
+import { downloadFileCache } from '../api/downloadFileCache'
 import {Server} from './Server';
 
 export class Gacha {
@@ -95,6 +97,10 @@ export class Gacha {
     async getData(){
         const gachaData = await callAPIAndCacheResponse(`https://bestdori.com/api/gacha/${this.gachaId}.json`)
         return gachaData
+    }
+    async getBannerImage(): Promise<Image>{
+        var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/homebanner_rip/${this.bannerAssetBundleName}.png`)
+        return await loadImage(BannerImageBuffer)
     }
     
 }
