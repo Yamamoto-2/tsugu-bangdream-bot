@@ -18,7 +18,7 @@ import { Event } from './types/Event'
 import { Degree } from './types/Drgree';
 import { Gacha } from './types/Gacha';
 import { Song } from './types/Song';
-import {drawCardIcon} from './components/card'
+import {drawCardIcon,drawCardIllustration} from './components/card'
 
 async function test(session: Session) {
     /*
@@ -136,7 +136,9 @@ async function test(session: Session) {
     
     */
     var list = []
+        /*
     var card = new Card(1330)
+
     var tempImage = await drawCardIcon({
         card: card,
         trainningStatus:true
@@ -161,8 +163,15 @@ async function test(session: Session) {
         //limitBreakRank:4,
         skillTypeVisible:true
     })
+        list.push(tempImage3)
+    */
+    var card = new Card(1399)
+    var tempImage = await drawCardIllustration({
+        card: card,
+       trainningStatus:true
+    })
+    list.push(tempImage)
 
-    list.push(tempImage3)
     var listImage = await drawDatablock(list)
     var imageList = []
     imageList.push(listImage)

@@ -203,12 +203,12 @@ export class Card {
         var cardIconImage = await downloadFileCache(`https://bestdori.com/assets/${tempServer.serverName}/thumb/chara/card00${this.getRip()}/${this.resourceSetName}${trainingString}.png`)
         return await loadImage(cardIconImage)
     }
-    async getCardFullImage(trainingStatus: boolean): Promise<Image> {
+    async getCardIllustrationImage(trainingStatus: boolean): Promise<Image> {
         trainingStatus = this.ableToTraining(trainingStatus)
         const trainingString = trainingStatus ? '_after_training' : '_normal'
         var tempServer = this.getFirstReleasedServer()
-        var cardFullImage = await downloadFile(`https://bestdori.com/assets/${tempServer.serverName}/characters/resourceset/res${this.resourceSetName}_rip/card${trainingString}.png`)
-        return await loadImage(cardFullImage)
+        var CardIllustrationImage = await downloadFile(`https://bestdori.com/assets/${tempServer.serverName}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`)
+        return await loadImage(CardIllustrationImage)
     }
 
 }

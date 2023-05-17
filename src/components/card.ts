@@ -25,6 +25,20 @@ async function getCardIconFrame(rarity: number, attribute: 'cool' | 'happy' | 'p
     return (await loadImage(imageBuffer))
 }
 
+//根据稀有度与属性，获得插画框
+async function getCardIllustrationFrame(rarity: number, attribute: 'cool' | 'happy' | 'pure' | 'powerful'): Promise<Image> {
+    const baseUrl = 'https://bestdori.com/res/image/frame-'
+    if (rarity == 1) {
+        var imageUrl = baseUrl + '1-' + attribute + '.png'
+
+    }
+    else {
+        var imageUrl = baseUrl + rarity.toString() + '.png'
+    }
+    var imageBuffer = await downloadFileCache(imageUrl)
+    return (await loadImage(imageBuffer))
+}
+
 
 var cardTypeIconList: { [type: string]: Image } = {}
 var starList: { [type: string]: Image } = {}
@@ -53,6 +67,7 @@ interface drawCardIconOptions {
 
 }
 
+//画卡icon
 async function drawCardIcon({
     card,
     trainningStatus,
@@ -94,6 +109,7 @@ async function drawCardIcon({
         var skillTypeIcon = await drawCardIconSkill(skill)
         ctx.drawImage(skillTypeIcon, 180 - skillTypeIcon.width, 142)
     }
+    //获得框
     var Frame = await getCardIconFrame(card.rarity, card.attribute)
     ctx.drawImage(Frame, 0, 0);
     var attributeIcon = await new Attribute(card.attribute).getIcon()
@@ -115,4 +131,39 @@ async function drawCardIcon({
     return canvas
 }
 
-export { drawCardIcon }
+interface drawCardIllustrationOptions {
+    card: Card
+    trainningStatus: boolean,
+}
+//画卡插画
+async function drawCardIllustration({
+    card,
+    trainningStatus,
+}:drawCardIllustrationOptions):Promise<Canvas>{
+    trainningStatus = card.ableToTraining(trainningStatus)
+    var CardIllustrationImage = await card.getCardIllustrationImage(trainningStatus)
+    const canvas = createCanvas(1360,905)
+    var ctx = canvas.getContext("2d")
+    //将cardIllustration等比例缩放至宽度为1334
+    var scale = 1334/CardIllustrationImage.width
+    const illustrationCanvas = createCanvas(1334,879)
+    var illustrationCtx = illustrationCanvas.getContext("2d")
+    var illustrationHeight = CardIllustrationImage.height*scale
+    illustrationCtx.drawImage(CardIllustrationImage,0,(879/2)-(illustrationHeight/2),1334,illustrationHeight)
+    ctx.drawImage(illustrationCanvas,13,13)
+    //获得框
+    var Frame = await getCardIllustrationFrame(card.rarity,card.attribute)
+    ctx.drawImage(Frame,0,0,1360,905)
+    var attributeIcon = await new Attribute(card.attribute).getIcon()
+    ctx.drawImage(attributeIcon, 1203, 7, 150, 150)
+    var bandIcon = await new Band(card.bandId).getIcon()
+    ctx.drawImage(bandIcon, 7, 7, 150, 150)
+
+    var star = starList[trainningStatus ? 'trained' : 'normal']
+    for (var i = 0; i < card.rarity; i++) {//星星数量
+        ctx.drawImage(star, 5, 780 - 100 * i, 110, 110)
+    }
+    return canvas
+}
+
+export { drawCardIcon, drawCardIllustration }
