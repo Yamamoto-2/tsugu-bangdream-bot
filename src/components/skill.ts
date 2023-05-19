@@ -14,7 +14,7 @@ loadImageOnce()
 
 //卡牌Icon右下角的技能描述图标
 async function drawCardIconSkill(skill: Skill): Promise<Canvas> {
-    var stringWithImageArray: Array<Image | string> = []
+    var content: Array<Image | string> = []
     var EffectTypes = skill.getEffectTypes()
     var ScoreUpMaxValue = skill.getScoreUpMaxValue()
     //画数字部分
@@ -26,22 +26,22 @@ async function drawCardIconSkill(skill: Skill): Promise<Canvas> {
         else if (EffectTypes.includes('score_over_life')) {
             skillValue += '/'
         }
-        stringWithImageArray.push(skillValue)
+        content.push(skillValue)
     }
     //图标部分
     EffectTypes.forEach((EffectType, index) => {
         if (EffectType == 'judge') {
-            stringWithImageArray.push(skillIcon.judje)
+            content.push(skillIcon.judje)
         }
         else if (EffectType == 'life') {
-            stringWithImageArray.push(skillIcon.life)
+            content.push(skillIcon.life)
         }
         else if (EffectType == 'damage') {
-            stringWithImageArray.push(skillIcon.damage)
+            content.push(skillIcon.damage)
         }
     })
     var stringWithImage = drawTextWithImages({
-        content: stringWithImageArray,
+        content: content,
         maxWidth: 200,
         textSize: 27,
         lineHeight: 30,

@@ -43,7 +43,7 @@ export class Card {
     costumeId: number;
     gachaText: Array<string | null>;
     prefix: Array<string | null>;
-    releasedAt: Array<string | null>;
+    releasedAt: Array<number | null>;
     skillName: Array<string | null>;
     skillId: number;
     isInitFull: boolean = false;
