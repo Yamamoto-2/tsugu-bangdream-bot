@@ -23,9 +23,9 @@ export class Server {
             this.serverId = serverList.indexOf(serverName)
         }
     }
-    getContentByServer(content: Array<any>): string {
-        if (content[this.serverId] == null) {
-            return content[0]
+    getContentByServer(content: Array<any>): any {
+        if (content[this.serverId] != null) {
+            return content[this.serverId]
         }
         else {
             for (var i = 0; i < serverPriority.length; i++) {
