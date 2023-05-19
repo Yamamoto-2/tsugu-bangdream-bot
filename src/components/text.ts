@@ -144,7 +144,9 @@ function drawTextWithImages({
                 ctx.drawImage(tempImage, tempX, y - (textSize / 3) - (textSize / 2), tempWidth, textSize)
                 tempX += tempWidth
             }
-            tempX += spacing
+            if(tempX!=0){
+                tempX += spacing
+            }
         }
         y += lineHeight;
     }
@@ -163,64 +165,60 @@ function warpTextWithImages({
     const ctx = canvas.getContext('2d');
     ctx.textBaseline = 'alphabetic';
     setFontStyle(ctx, textSize, "default");
-    const temp: Array<Array<string | Image | Canvas>> = [[]]//二维数组,每个元素为一行,例如: [[string,Image],[Image,string]]
-    var linenumber = 0
-    var tempX = 0
+    const temp: Array<Array<string | Image | Canvas>> = [[]]; //二维数组,每个元素为一行,例如: [[string,Image],[Image,string]]
+    let lineNumber = 0;
+    let tempX = 0;
+
     function newLine() {//新起一行
-        linenumber++//行数加一
-        tempX = 0//tempX归零
-        temp.push([])//temp增加一行(一个Array)
+        lineNumber++;//行数加一
+        tempX = 0;//tempX归零
+        temp.push([]);//temp增加一行(一个Array)
     }
-    for (var i = 0; i < content.length; i++) {
+
+    for (let i = 0; i < content.length; i++) {
         if (typeof content[i] === "string") {
-            let temptext = content[i] as string
-            if (tempX + ctx.measureText(temptext).width > maxWidth) {
-                //如果string的宽度超过maxWidth,则分割string,并且分割后的string的宽度也超过maxWidth,则分割string
-                for (var n = 0; n < temptext.length; n++) {
-                    //如果这个字符的宽度加上tempX超过maxWidth,则换行               
-                    if ((maxWidth - tempX) > ctx.measureText(temptext.slice(0, temptext.length - n)).width) {
-                        temp[linenumber].push(temptext.slice(0, temptext.length - n))
-                        newLine()
-                        temptext = temptext.slice(temptext.length - n, temptext.length)
-                        n = -1
-                    }
-                    //如果这个字符是回车,则直接换行
-                    else if (temptext[n] == "\n") {
-                        temp[linenumber].push(temptext.slice(0, n))
-                        newLine()
-                        temptext = temptext.slice(n + 1, temptext.length)
-                        n = -1
-                    }
+            let temptext = content[i] as string;
+            for (let n = 0; n < temptext.length; n++) {
+                if (temptext[n] === "\n") {
+                    temp[lineNumber].push(temptext.slice(0, n));
+                    newLine();
+                    temptext = temptext.slice(n + 1, temptext.length);
+                    n = -1;
+                } else if ((maxWidth - tempX) < ctx.measureText(temptext.slice(0, temptext.length - n)).width) {
+                    temp[lineNumber].push(temptext.slice(0, temptext.length - n));
+                    newLine();
+                    temptext = temptext.slice(temptext.length - n, temptext.length);
+                    n = -1;
                 }
-                //去除多的一行
-                tempX = ctx.measureText(temp[linenumber - 1][0] as string).width
-                temp.pop()
-                linenumber--
-            } else {
-                temp[linenumber].push(temptext)
-                tempX += ctx.measureText(temptext).width
             }
+            temp[lineNumber].push(temptext);
+            tempX += ctx.measureText(temptext).width;
         } else if (content[i] instanceof Canvas || content[i] instanceof Image) {
             //图片等比例放大至高度与字体大小相同
-            let tempImage = content[i] as Image
-            let tempWidth = tempImage.width * (textSize / tempImage.height)
+            let tempImage = content[i] as Image;
+            let tempWidth = tempImage.width * (textSize / tempImage.height);
             if (tempX + tempWidth > maxWidth) {
-                newLine()
+                newLine();
             }
-            temp[linenumber].push(tempImage)
-            tempX += tempWidth
+            temp[lineNumber].push(tempImage);
+            tempX += tempWidth;
         }
-        tempX += spacing
+        tempX += spacing;
         if (tempX > maxWidth) {
-            newLine()
+            newLine();
         }
     }
+
+    // 处理最后一行剩余的文本
+    if (temp[temp.length - 1].length === 0) {
+        temp.pop();
+    }
+
     return {
         numberOfLines: temp.length,
         wrappedText: temp,
     };
 }
-
 
 
 var setFontStyle = function (ctx: CanvasRenderingContext2D, textSize: number, font: string) {//设置字体大小
