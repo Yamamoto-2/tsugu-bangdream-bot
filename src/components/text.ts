@@ -8,6 +8,8 @@ interface warpTextOptions {
     textSize?: number,
     maxWidth: number,
     lineHeight?: number
+    color?: string,
+    font?: "default" | "old"
 }
 
 //画文字,自动换行
@@ -15,15 +17,17 @@ function drawText({
     text,
     textSize = 40,
     maxWidth,
-    lineHeight = textSize * 4 / 3
+    lineHeight = textSize * 4 / 3,
+    color = "#5b5b5b",
+    font = "default"
 }: warpTextOptions): Canvas {
     var wrappedTextData = wrapText({ text, maxWidth, lineHeight, textSize });
     const canvas = createCanvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
     const ctx = canvas.getContext('2d');
     let y = lineHeight / 2 + textSize / 3
     ctx.textBaseline = 'alphabetic'
-    setFontStyle(ctx, textSize, "default");
-    ctx.fillStyle = '#5b5b5b';
+    setFontStyle(ctx, textSize, font);
+    ctx.fillStyle = color;
     var wrappedText = wrappedTextData.wrappedText
     for (var i = 0; i < wrappedText.length; i++) {
         ctx.fillText(wrappedText[i], 0, y);
@@ -97,9 +101,9 @@ function drawTextWithImages({
 }: TextWithImagesOptions) {
     var wrappedTextData = warpTextWithImages({ textSize, maxWidth, lineHeight, content });
     var wrappedText = wrappedTextData.wrappedText
-    var canvas:Canvas
+    var canvas: Canvas
     //单行文字，宽度为第一行的宽度
-    if(wrappedTextData.numberOfLines == 1){
+    if (wrappedTextData.numberOfLines == 1) {
         canvas = createCanvas(1, 1);
         const ctx = canvas.getContext('2d');
         setFontStyle(ctx, textSize, font);
@@ -118,7 +122,7 @@ function drawTextWithImages({
         canvas = createCanvas(Width, lineHeight);
     }
     //多行文字
-    else{
+    else {
         canvas = createCanvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
 
     }
@@ -137,7 +141,7 @@ function drawTextWithImages({
                 //等比例缩放图片，至高度与textSize相同
                 let tempImage = wrappedText[i][n] as Canvas | Image
                 let tempWidth = textSize * tempImage.width / tempImage.height//等比例缩放到高度与字体大小相同后，图片宽度
-                ctx.drawImage(tempImage, tempX, y -(textSize / 3) - (textSize / 2) , tempWidth, textSize)
+                ctx.drawImage(tempImage, tempX, y - (textSize / 3) - (textSize / 2), tempWidth, textSize)
                 tempX += tempWidth
             }
             tempX += spacing
@@ -177,11 +181,11 @@ function warpTextWithImages({
                     if ((maxWidth - tempX) > ctx.measureText(temptext.slice(0, temptext.length - n)).width) {
                         temp[linenumber].push(temptext.slice(0, temptext.length - n))
                         newLine()
-                        temptext = temptext.slice(temptext.length - n , temptext.length)
+                        temptext = temptext.slice(temptext.length - n, temptext.length)
                         n = -1
                     }
                     //如果这个字符是回车,则直接换行
-                    else if(temptext[n] == "\n"){
+                    else if (temptext[n] == "\n") {
                         temp[linenumber].push(temptext.slice(0, n))
                         newLine()
                         temptext = temptext.slice(n + 1, temptext.length)
@@ -189,7 +193,7 @@ function warpTextWithImages({
                     }
                 }
                 //去除多的一行
-                tempX = ctx.measureText( temp[linenumber-1][0] as string ).width
+                tempX = ctx.measureText(temp[linenumber - 1][0] as string).width
                 temp.pop()
                 linenumber--
             } else {
