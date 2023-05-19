@@ -2,6 +2,7 @@ import { Canvas, Image, createCanvas } from 'canvas';
 import { drawRoundedRectWithText, drawRoundedRect } from '../image/drawRect';
 import { drawText, drawTextWithImages } from './text';
 import { drawDottedLine } from '../image/dottedLine'
+import { Server } from '../types/Server'
 
 //表格用默认虚线
 var line: Canvas = drawDottedLine({
@@ -61,7 +62,7 @@ function drawList({
 
 }
 
-interface ListOptions {
+interface ListWithImagesOptions {
     key: string;
     content: Array<string | Canvas | Image>;
     text2?: string;
@@ -79,7 +80,7 @@ function drawListWithImages(
         lineHeight = textSize * 1.5,
         spacing = textSize / 3
 
-    }: ListOptions) {
+    }: ListWithImagesOptions) {
     const xmax = 800
     const keyImage = drawRoundedRectWithText({
         text: key,
@@ -114,6 +115,37 @@ function drawListWithImages(
     }
 }
 
+var defaultserverList: Array<Server> = []
+defaultserverList.push(new Server('jp'))
+defaultserverList.push(new Server('cn'))
+
+//通过服务器列表获得内容，服务器icon开头，每一行为服务器对应内容
+async function drawListByServerList(key: string, content: Array<string|null>, serverList: Array<Server> = defaultserverList) {
+    var tempcontent: Array<string | Image | Canvas> = []
+    //如果只有2个服务器，且内容相同
+    if(serverList.length == 2){
+        if(serverList[0].getContentByServer(content) == serverList[1].getContentByServer(content)){
+            var canvas = drawList({
+                key: key,
+                text: serverList[0].getContentByServer(content)
+            })
+            return canvas
+        }
+    }
+
+    for (let i = 0; i < serverList.length; i++) {
+        const tempServer = serverList[i];
+        tempcontent.push(await tempServer.getIcon())
+        tempcontent.push(tempServer.getContentByServer(content) + '\n')
+    }
+    var canvas = drawListWithImages({
+        key: key,
+        content: tempcontent
+    })
+    return canvas
+}
+
+
 //组合表格子程序，使用block当做底，通过最大高度换行，默认高度无上限
 var drawDatablock = async function (list: Array<Image | Canvas>, BG = true): Promise<Canvas> {
     var allH = 100
@@ -139,4 +171,4 @@ var drawDatablock = async function (list: Array<Image | Canvas>, BG = true): Pro
 
 
 
-export { drawList, drawDatablock, drawListWithImages, line };
+export { drawList, drawDatablock, drawListWithImages, line, drawListByServerList };
