@@ -120,11 +120,11 @@ defaultserverList.push(new Server('jp'))
 defaultserverList.push(new Server('cn'))
 
 //通过服务器列表获得内容，服务器icon开头，每一行为服务器对应内容
-async function drawListByServerList(key: string, content: Array<string|null>, serverList: Array<Server> = defaultserverList) {
+async function drawListByServerList(key: string, content: Array<string | null>, serverList: Array<Server> = defaultserverList) {
     var tempcontent: Array<string | Image | Canvas> = []
     //如果只有2个服务器，且内容相同
-    if(serverList.length == 2){
-        if(serverList[0].getContentByServer(content) == serverList[1].getContentByServer(content)){
+    if (serverList.length == 2) {
+        if (serverList[0].getContentByServer(content) == serverList[1].getContentByServer(content)) {
             var canvas = drawList({
                 key: key,
                 text: serverList[0].getContentByServer(content)
@@ -136,7 +136,12 @@ async function drawListByServerList(key: string, content: Array<string|null>, se
     for (let i = 0; i < serverList.length; i++) {
         const tempServer = serverList[i];
         tempcontent.push(await tempServer.getIcon())
-        tempcontent.push(tempServer.getContentByServer(content) + '\n')
+        if (i == serverList.length - 1) {
+            tempcontent.push(tempServer.getContentByServer(content))
+        }
+        else {
+            tempcontent.push(tempServer.getContentByServer(content) + '\n')
+        }
     }
     var canvas = drawListWithImages({
         key: key,
