@@ -3,11 +3,15 @@ import { CreateBG } from './BG';
 
 import { assetsRootPath } from '../config';
 import * as path from 'path';
-var defaultBGPath = path.join(assetsRootPath, "/BG/default.png");
+var defaultBG:Image
+async function loadImageOnce(){
+    defaultBG = await loadImage(path.join(assetsRootPath, "/BG/default.png"));
+}
+loadImageOnce()
 
 //将图片列表从上到下叠在一起输出为一张图片
 var outputFinalCanv = async function (imageList: Array<Image | Canvas>, text: string = 'BanG Dream!', BGimage?: Image | Canvas): Promise<Canvas> {
-    BGimage ??= await loadImage(defaultBGPath)
+    BGimage ??= defaultBG
     var allH = 70
     var maxW = 0
     for (var i = 0; i < imageList.length; i++) {
