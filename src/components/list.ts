@@ -84,14 +84,14 @@ function drawTips({
     const xmax = 790
     var textImage: Canvas
     if (typeof text == "string") {
-        textImage = drawText({ text, maxWidth: xmax, lineHeight });
+        textImage = drawText({ text,textSize, maxWidth: xmax, lineHeight });
     }
     else if (content != undefined) {
         textImage = drawTextWithImages({
+            textSize,
             content,
             maxWidth: xmax,
             lineHeight,
-            textSize,
             spacing
         });
     }
