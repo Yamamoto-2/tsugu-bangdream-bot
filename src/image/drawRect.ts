@@ -2,6 +2,7 @@ import { createCanvas, Canvas, registerFont } from 'canvas';
 import { assetsRootPath } from '../config';
 import {getTextWidth} from './utils';
 registerFont(assetsRootPath + "/Fonts/default.ttf", { family: "default" })
+registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
 
 interface RoundedRect {
   width: number,
@@ -87,7 +88,7 @@ interface RoundedRectWithText {
 //画圆角矩形并填充文字
 function drawRoundedRectWithText({
   text,
-  font = "default",
+  font = "old",
   textColor = "#ffffff",
   textSize,
   textAlign = "center",
@@ -104,7 +105,7 @@ function drawRoundedRectWithText({
 
   ctx.fillStyle = textColor;
   ctx.textBaseline = "alphabetic";
-  ctx.font = `${textSize}px default`;
+  ctx.font = `${textSize}px old`;
 
   let x = 0, y = 0;
   if (textAlign === "left" || textAlign === "start") {

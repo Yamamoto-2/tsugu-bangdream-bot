@@ -19,7 +19,7 @@ function drawText({
     maxWidth,
     lineHeight = textSize * 4 / 3,
     color = "#5b5b5b",
-    font = "default"
+    font = "old"
 }: warpTextOptions): Canvas {
     var wrappedTextData = wrapText({ text, maxWidth, lineHeight, textSize });
     const canvas = createCanvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
@@ -40,13 +40,14 @@ function wrapText({
     text,
     textSize,
     maxWidth,
-    lineHeight
+    lineHeight,
+    font = "old"
 }: warpTextOptions) {
     const canvas = createCanvas(1, 1);
     const ctx = canvas.getContext('2d');
     const temp = text.split('\n');
     ctx.textBaseline = 'alphabetic';
-    setFontStyle(ctx, textSize, "default");
+    setFontStyle(ctx, textSize, font);
 
     for (var i = 0; i < temp.length; i++) {
         let temptext = temp[i]
@@ -97,7 +98,7 @@ function drawTextWithImages({
     content,
     spacing = textSize / 3,
     color = '#5b5b5b',
-    font = 'default'
+    font = 'old'
 }: TextWithImagesOptions) {
     var wrappedTextData = warpTextWithImages({ textSize, maxWidth, lineHeight, content });
     var wrappedText = wrappedTextData.wrappedText
@@ -159,12 +160,13 @@ function warpTextWithImages({
     maxWidth,
     lineHeight = textSize * 4 / 3,
     content,
-    spacing = textSize / 3
+    spacing = textSize / 3,
+    font = 'old'
 }: TextWithImagesOptions) {
     const canvas = createCanvas(1, 1);
     const ctx = canvas.getContext('2d');
     ctx.textBaseline = 'alphabetic';
-    setFontStyle(ctx, textSize, "default");
+    setFontStyle(ctx, textSize, font);
     const temp: Array<Array<string | Image | Canvas>> = [[]]; //二维数组,每个元素为一行,例如: [[string,Image],[Image,string]]
     let lineNumber = 0;
     let tempX = 0;
