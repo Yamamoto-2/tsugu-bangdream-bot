@@ -37,7 +37,19 @@ export class Band {
         return (await loadImage(iconBuffer))
     }
     async getLogo(): Promise<Image>{
-        const logoBuffer = await downloadFileCache(`https://bestdori.com/assets/cn/band/logo/0${this.bandId}_rip/logoL.png`)
+        const logoBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/band/logo/${formatNumber(this.bandId,3)}_rip/logoL.png`)
         return (await loadImage(logoBuffer))
     }
 }
+
+function formatNumber(num: number,length:number): string {
+    // 将数字转换为字符串
+    const str = num.toString();
+  
+    // 如果字符串长度小于3，前面补0直到长度为3
+    if (str.length < length) {
+      return str.padStart(length, '0');
+    }
+  
+    return str;
+  }
