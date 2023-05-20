@@ -19,107 +19,98 @@ var line: Canvas = drawDottedLine({
 
 interface ListOptions {
     key: string;
-    text: string;
-    text2?: string;
+    text?: string;
+    content?: Array<string | Canvas | Image>
     textSize?: number;
     lineHeight?: number;
+    spacing?: number;
+
 }
 
 //画表格中的一行
 function drawList({
     key,
     text,
-    text2,
+    content,
     textSize = 40,
-    lineHeight = textSize * 1.5
+    lineHeight = textSize * 1.5,
+    spacing = textSize / 3
+
 }: ListOptions): Canvas {
     const xmax = 800
     const keyImage = drawRoundedRectWithText({
         text: key,
         textSize: 30,
     });
-    const textImage = drawText({ text, maxWidth: xmax, lineHeight });
-    var ymax = textImage.height + keyImage.height;
-    if (text2) {
-        const textImage2 = drawText({ text: text2, maxWidth: xmax - 10, lineHeight: lineHeight * 3 / 4, textSize: textSize * 3 / 4 });
-        ymax += textImage2.height;
-        const canvas = createCanvas(1000, ymax);
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(keyImage, 100, 0);
-        ctx.drawImage(textImage, 100, keyImage.height);
-        ctx.fillStyle = '#f1f1f1'
-        ctx.fillRect(100, keyImage.height + textImage.height, xmax, textImage2.height);
-        ctx.drawImage(textImage2, 105, keyImage.height + textImage.height);
-        return canvas;
+
+    var textImage: Canvas
+    if (typeof text == "string") {
+        textImage = drawText({ text, maxWidth: xmax, lineHeight });
+    }
+    else if (content != undefined) {
+        textImage = drawTextWithImages({
+            content,
+            maxWidth: xmax,
+            lineHeight,
+            textSize,
+            spacing
+        });
     }
     else {
-        const canvas = createCanvas(1000, ymax - ((lineHeight - textSize) / 2));
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(keyImage, 100, 0);
-        ctx.drawImage(textImage, 100, keyImage.height);
-        return canvas;
+        textImage = createCanvas(1, 1)
     }
-
+    var ymax = textImage.height + keyImage.height + 10;
+    const canvas = createCanvas(1000, ymax);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(keyImage, 100, 0);
+    ctx.drawImage(textImage, 100, keyImage.height + 10);
+    return canvas;
 }
 
-interface ListWithImagesOptions {
-    key: string;
-    content: Array<string | Canvas | Image>;
-    text2?: string;
+interface tipsOptions {
+    text?: string;
+    content?: Array<string | Canvas | Image>
     textSize?: number;
     lineHeight?: number;
     spacing?: number;
 }
-
-function drawListWithImages(
-    {
-        key,
-        content,
-        text2,
-        textSize = 40,
-        lineHeight = textSize * 1.5,
-        spacing = textSize / 3
-
-    }: ListWithImagesOptions) {
-    const xmax = 800
-    const keyImage = drawRoundedRectWithText({
-        text: key,
-        textSize: 30
-    });
-    const textImage = drawTextWithImages({
-        content,
-        maxWidth: xmax,
-        lineHeight,
-        textSize,
-        spacing
-    });
-    var ymax = textImage.height + keyImage.height;
-    if (text2) {
-        const textImage2 = drawText({ text: text2, maxWidth: xmax - 40, lineHeight: lineHeight * 3 / 4, textSize: textSize * 3 / 4 });
-        ymax += textImage2.height;
-        const canvas = createCanvas(1000, ymax);
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(keyImage, 100, 0);
-        ctx.drawImage(textImage, 100, keyImage.height);
-        ctx.fillStyle = '#f1f1f1'
-        ctx.fillRect(100, keyImage.height + textImage.height, xmax, textImage2.height);
-        ctx.drawImage(textImage2, 120, keyImage.height + textImage.height);
-        return canvas;
+function drawTips({
+    text,
+    content,
+    textSize = 30,
+    lineHeight = textSize * 1.5,
+    spacing = textSize / 3
+}: tipsOptions) {
+    const xmax = 790
+    var textImage: Canvas
+    if (typeof text == "string") {
+        textImage = drawText({ text, maxWidth: xmax, lineHeight });
+    }
+    else if (content != undefined) {
+        textImage = drawTextWithImages({
+            content,
+            maxWidth: xmax,
+            lineHeight,
+            textSize,
+            spacing
+        });
     }
     else {
-        const canvas = createCanvas(1000, ymax - ((lineHeight - textSize) / 2));
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(keyImage, 100, 0);
-        ctx.drawImage(textImage, 100, keyImage.height);
-        return canvas;
+        textImage = createCanvas(1, 1)
     }
+    const canvas = createCanvas(1000, textImage.height + 10);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#f1f1f1'
+    ctx.fillRect(100, 10, 800, textImage.height);
+    ctx.drawImage(textImage, 105, 10);
+    return canvas;
 }
 
 var defaultserverList: Array<Server> = []
 defaultserverList.push(new Server('jp'))
 defaultserverList.push(new Server('cn'))
 
-//通过服务器列表获得内容，服务器icon开头，每一行为服务器对应内容
+//通过服务器列表获得内容，服务器icon开头，每一行为服务器对应内容，默认仅日服与简中服
 async function drawListByServerList(key: string, content: Array<string | null>, serverList: Array<Server> = defaultserverList) {
     var tempcontent: Array<string | Image | Canvas> = []
     //如果只有2个服务器，且内容相同
@@ -143,7 +134,7 @@ async function drawListByServerList(key: string, content: Array<string | null>, 
             tempcontent.push(tempServer.getContentByServer(content) + '\n')
         }
     }
-    var canvas = drawListWithImages({
+    var canvas = drawList({
         key: key,
         content: tempcontent
     })
@@ -176,4 +167,4 @@ var drawDatablock = async function (list: Array<Image | Canvas>, BG = true): Pro
 
 
 
-export { drawList, drawDatablock, drawListWithImages, line, drawListByServerList };
+export { drawList, drawDatablock, line, drawListByServerList, drawTips };
