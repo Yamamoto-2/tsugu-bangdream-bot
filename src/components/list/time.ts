@@ -4,19 +4,18 @@ import { Canvas } from 'canvas'
 
 async function drawTimeInList(
     key: string,
-    timeList: Array<number|null>
+    timeList: Array<number | null>
 ): Promise<Canvas> {
     var formatedTimeList: Array<string> = []
     for (let i = 0; i < timeList.length; i++) {
         const element = timeList[i];
-        if(element == null) {
+        if (element == null) {
             formatedTimeList.push(null)
             continue
         }
         formatedTimeList.push(changeTimefomant(element))
     }
-    console.log(formatedTimeList)
-    var canvas = await drawListByServerList(key, formatedTimeList)
+    var canvas = await drawListByServerList({ key, content: formatedTimeList })
     return canvas
 }
 
