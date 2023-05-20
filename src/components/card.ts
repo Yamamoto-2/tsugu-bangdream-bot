@@ -9,7 +9,20 @@ import { drawCardIconSkill } from './skill'
 import * as path from 'path'
 import { Skill } from '../types/Skill'
 
+var cardTypeIconList: { [type: string]: Image } = {}
+var starList: { [type: string]: Image } = {}
+var limitBreakIcon: Image
 
+async function loadImageOnce() {
+    cardTypeIconList.limited = await loadImage(path.join(assetsRootPath, '/Card/L.png'));
+    cardTypeIconList.dreamfes = await loadImage(path.join(assetsRootPath, '/Card/D.png'));
+    cardTypeIconList.kirafes = await loadImage(path.join(assetsRootPath, '/Card/K.png'));
+    starList.normal = await loadImage(path.join(assetsRootPath, '/Card/star.png'));
+    starList.trained = await loadImage(path.join(assetsRootPath, '/Card/star_trained.png'));
+    limitBreakIcon = await loadImage(path.join(assetsRootPath, '/Card/limitBreakRank.png'));
+}
+
+loadImageOnce()
 
 //根据稀有度与属性，获得图标框
 async function getCardIconFrame(rarity: number, attribute: 'cool' | 'happy' | 'pure' | 'powerful'): Promise<Image> {
@@ -40,20 +53,7 @@ async function getCardIllustrationFrame(rarity: number, attribute: 'cool' | 'hap
 }
 
 
-var cardTypeIconList: { [type: string]: Image } = {}
-var starList: { [type: string]: Image } = {}
-var limitBreakIcon: Image
 
-async function loadImageOnce() {
-    cardTypeIconList.limited = await loadImage(path.join(assetsRootPath, '/Card/L.png'));
-    cardTypeIconList.dreamfes = await loadImage(path.join(assetsRootPath, '/Card/D.png'));
-    cardTypeIconList.kirafes = await loadImage(path.join(assetsRootPath, '/Card/K.png'));
-    starList.normal = await loadImage(path.join(assetsRootPath, '/Card/star.png'));
-    starList.trained = await loadImage(path.join(assetsRootPath, '/Card/star_trained.png'));
-    limitBreakIcon = await loadImage(path.join(assetsRootPath, '/Card/limitBreakRank.png'));
-}
-
-loadImageOnce()
 
 interface drawCardIconOptions {
     card: Card
@@ -134,11 +134,13 @@ async function drawCardIcon({
 interface drawCardIllustrationOptions {
     card: Card
     trainningStatus: boolean,
+    isList?: boolean
 }
 //画卡插画
 async function drawCardIllustration({
     card,
     trainningStatus,
+    isList = false,
 }:drawCardIllustrationOptions):Promise<Canvas>{
     trainningStatus = card.ableToTraining(trainningStatus)
     var CardIllustrationImage = await card.getCardIllustrationImage(trainningStatus)
@@ -163,7 +165,17 @@ async function drawCardIllustration({
     for (var i = 0; i < card.rarity; i++) {//星星数量
         ctx.drawImage(star, 5, 780 - 100 * i, 110, 110)
     }
-    return canvas
+    if(isList){
+        //等比例缩放到宽度为widthMax
+        var scale = 800/1360
+        var tempcanvas = createCanvas(1000,905*scale )
+        var ctx = tempcanvas.getContext("2d")
+        ctx.drawImage(canvas,100,0,800,905*scale)
+        return tempcanvas
+    }
+    else{
+        return canvas
+    }
 }
 
 export { drawCardIcon, drawCardIllustration }

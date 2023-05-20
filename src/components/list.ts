@@ -120,7 +120,7 @@ async function drawListByServerList({
     key,
     content,
     serverList = defaultserverList
-}) {
+}:ListByServerListOptions) {
     var tempcontent: Array<string | Image | Canvas> = []
     //如果只有2个服务器，且内容相同
     if (serverList.length == 2) {

@@ -1,7 +1,7 @@
 import { callAPIAndCacheResponse } from '../api/getApi'
 import { Skill } from './Skill'
 import { Character } from './Character'
-import { Server, serverPriority } from './Server'
+import { Server, getServerByPriority } from './Server'
 import { Image, loadImage } from 'canvas'
 import { downloadFile } from '../api/downloadFile'
 import { downloadFileCache } from '../api/downloadFileCache'
@@ -11,6 +11,18 @@ interface Stat {//综合力
     performance: number,
     technique: number,
     visual: number
+}
+
+const typeName = {
+    'initial': '初始',
+    'permanent': '常驻',
+    'limited': '限定',
+    'birthday': '生日',
+    'event': '活动',
+    'others': '其他',
+    'campaign': '选举',
+    'dreamfes': 'DreamFes',
+    'kirafes': 'KiraFes',
 }
 
 function addStat(stat: Stat, add: Stat): void {//综合力相加函数
@@ -108,7 +120,7 @@ export class Card {
         }
         return trainingStatus ?? true
     }
-    trainingStatusList(): Array<boolean> {//判断是否能够进行特训
+    getTrainingStatusList(): Array<boolean> {//判断是否能够进行特训
         var trainingStatusList = []
         if (this.rarity < 3) {
             trainingStatusList.push(false)
@@ -173,23 +185,13 @@ export class Card {
         return true
     }
     getFirstReleasedServer(): Server {//获得确保已经发布了的服务器
-        for (var i = 0; i < serverPriority.length; i++) {
-            let tempSevrer = new Server(serverPriority[i])
-            if (this.isReleased(tempSevrer)) {
-                return tempSevrer
-            }
-        }
+        return getServerByPriority(this.releasedAt)
     }
     getRip(): string {
         if (this.cardId < 9999) {//确定目录位置，50为一组
             var cardRessetIdNumber: number = Math.floor(this.cardId / 50)
             var cardRessetId: string = cardRessetIdNumber.toString()
-            if (cardRessetIdNumber < 10) {
-                cardRessetId = '00' + cardRessetId
-            }
-            else if (cardRessetIdNumber < 100) {
-                cardRessetId = '0' + cardRessetId
-            }
+            cardRessetId = formatNumber(cardRessetIdNumber, 3)
         }
         else {
             cardRessetId = '200'
@@ -210,8 +212,25 @@ export class Card {
         var CardIllustrationImage = await downloadFile(`https://bestdori.com/assets/${tempServer.serverName}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`)
         return await loadImage(CardIllustrationImage)
     }
-
+    getTypeName (){
+        if(typeName[this.type] == undefined){
+            return typeName[this.type]
+        }
+        return typeName[this.type]
+    }
 }
+
+function formatNumber(num: number,length:number): string {
+    // 将数字转换为字符串
+    const str = num.toString();
+  
+    // 如果字符串长度小于3，前面补0直到长度为3
+    if (str.length < length) {
+      return str.padStart(length, '0');
+    }
+  
+    return str;
+  }
 
 
 

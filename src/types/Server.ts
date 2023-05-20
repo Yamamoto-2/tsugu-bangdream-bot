@@ -1,9 +1,9 @@
-import {downloadFileCache} from '../api/downloadFileCache'
-import {loadImage,Image} from 'canvas'
+import { downloadFileCache } from '../api/downloadFileCache'
+import { loadImage, Image } from 'canvas'
 
 //服务器列表，因为有TW而不适用country
 export const serverList: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['jp', 'en', 'tw', 'cn', 'kr']
-export const serverPriority: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['jp', 'tw', 'cn', 'en', 'kr']
+export const serverPriority: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['cn','jp', 'tw',  'en', 'kr']
 
 
 export class Server {
@@ -24,20 +24,21 @@ export class Server {
         }
     }
     getContentByServer(content: Array<any>): any {
-        if (content[this.serverId] != null) {
-            return content[this.serverId]
-        }
-        else {
-            for (var i = 0; i < serverPriority.length; i++) {
-                if (content[serverList.indexOf(serverPriority[i])] != null) {
-                    return content[serverList.indexOf(serverPriority[i])]
-                }
-            }
-            return content[0]
-        }
+        return content[this.serverId]
     }
-    async getIcon(): Promise<Image>{
+    async getIcon(): Promise<Image> {
         const iconBuffer = await downloadFileCache(`https://bestdori.com/res/icon/${this.serverName}.svg`)
         return (await loadImage(iconBuffer))
     }
 }
+
+export function getServerByPriority(content: Array<any>): Server {
+    for (var i = 0; i < serverPriority.length; i++) {
+        var tempServer = new Server(serverPriority[i])
+        if (tempServer.getContentByServer(content) != null) {
+            return new Server(serverPriority[i])
+        }
+    }
+    return new Server()
+}
+

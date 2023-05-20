@@ -72,5 +72,18 @@ export class Character {
         const iconBuffer = await downloadFileCache(`https://bestdori.com/res/icon/chara_icon_${this.characterId}.png`)
         return (await loadImage(iconBuffer))
     }
+    getCharacterName():Array<string|null>{
+        const characterNameList = []
+        for (let i = 0; i < this.characterName.length; i++) {
+            const element = this.characterName[i];
+            if(this.nickname[i] != null){
+                characterNameList.push(`${this.nickname[i]} (${element})`)
+            }
+            else{
+                characterNameList.push(element)
+            }
+        }
+        return characterNameList
+    }
 
 }

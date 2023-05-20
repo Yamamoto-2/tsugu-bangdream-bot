@@ -4,10 +4,15 @@ import { callAPIAndCacheResponse } from '../api/getApi'
 const mainAPI: object = {}//main对象,用于存放所有api数据,数据来源于Bestdori网站
 
 //加载mainAPI
-async function loadMainAPI() {
+async function loadMainAPI(useCache: boolean = false) {
     const promiseAll = []
     for (const key in BestdoriapiPath) {
-        promiseAll.push(mainAPI[key] = await callAPIAndCacheResponse(Bestdoriurl + BestdoriapiPath[key]))
+        if(useCache){
+            promiseAll.push(mainAPI[key] = await callAPIAndCacheResponse(Bestdoriurl + BestdoriapiPath[key],1/0))
+        }
+        else{
+            promiseAll.push(mainAPI[key] = await callAPIAndCacheResponse(Bestdoriurl + BestdoriapiPath[key]))
+        }
     }
     await Promise.all(promiseAll)
 
@@ -41,8 +46,10 @@ async function loadMainAPI() {
 }
 
 console.log("正在初始化")
-loadMainAPI()
-console.log("初始化完成")
+loadMainAPI(true).then(() => {
+    console.log("初始化完成")
+})
+
 
 //setInterval(loadMainAPI, 1000 * 60 * 5)//5分钟更新一次
 
