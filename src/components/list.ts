@@ -24,7 +24,7 @@ interface ListOptions {
     textSize?: number;
     lineHeight?: number;
     spacing?: number;
-
+    color?: string;
 }
 
 //画表格中的一行
@@ -34,7 +34,8 @@ function drawList({
     content,
     textSize = 40,
     lineHeight = textSize * 1.5,
-    spacing = textSize / 3
+    spacing = textSize / 3,
+    color= '#5b5b5b'
 
 }: ListOptions): Canvas {
     const xmax = 760
@@ -53,7 +54,8 @@ function drawList({
             maxWidth: xmax,
             lineHeight,
             textSize,
-            spacing
+            spacing,
+            color
         });
     }
     else {
