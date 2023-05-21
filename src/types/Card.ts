@@ -7,7 +7,7 @@ import { downloadFile } from '../api/downloadFile'
 import { downloadFileCache } from '../api/downloadFileCache'
 import mainAPI from './_Main'
 
-interface Stat {//综合力
+export interface Stat {//综合力
     performance: number,
     technique: number,
     visual: number
@@ -16,13 +16,13 @@ interface Stat {//综合力
 const typeName = {
     'initial': '初始',
     'permanent': '常驻',
-    'limited': '限定',
-    'birthday': '生日',
+    'limited': '期间限定',
+    'birthday': '生日限定',
     'event': '活动',
     'others': '其他',
     'campaign': '选举',
-    'dreamfes': 'DreamFes',
-    'kirafes': 'KiraFes',
+    'dreamfes': 'DreamFes限定',
+    'kirafes': 'KiraFes限定',
 }
 
 function addStat(stat: Stat, add: Stat): void {//综合力相加函数
@@ -134,7 +134,7 @@ export class Card {
     }
 
     //计算综合力函数
-    async calcStat(level: number = this.levelLimit, trainingStatus: boolean = false, limitBreakRank: number = 0, episode1: boolean = true, episode2: boolean = true) {
+    async calcStat(level?: number, trainingStatus: boolean = false, limitBreakRank: number = 0, episode1: boolean = true, episode2: boolean = true) {
         if (!this.isInitFull) {
             //如果不是默认情况(带有level以外的参数)，加载完整数据，其中包含完整综合力数据
             if (trainingStatus != undefined || limitBreakRank != undefined || episode1 != undefined || episode2 != undefined) {
@@ -147,11 +147,13 @@ export class Card {
             visual: 0
         }
 
-        if (level > this.levelLimit) {//等级超过上限,按上限计算
-            level = this.levelLimit
+        var maxLevel = this.getMaxLevel()
+        level ??= maxLevel//如果没有等级参数，则默认为最大等级
+        if (level > maxLevel) {//等级超过上限,按上限计算
+            level = maxLevel
         }
         if (this.ableToTraining()) {//如果能够进行特训
-            if (level > this.levelLimit - this.stat['training']['levelLimit']) {//如果等级超过需要特训等级，则默认已经特训
+            if (level > this.levelLimit) {//如果等级超过需要特训等级，则默认已经特训
                 trainingStatus = true
             }
         }
@@ -196,7 +198,7 @@ export class Card {
         else {
             cardRessetId = '200'
         }
-        return ( cardRessetId + '_rip')
+        return (cardRessetId + '_rip')
     }
     async getCardIconImage(trainingStatus: boolean): Promise<Image> {
         trainingStatus = this.ableToTraining(trainingStatus)
@@ -212,25 +214,39 @@ export class Card {
         var CardIllustrationImage = await downloadFile(`https://bestdori.com/assets/${tempServer.serverName}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`)
         return await loadImage(CardIllustrationImage)
     }
-    getTypeName (){
-        if(typeName[this.type] == undefined){
+    getTypeName() {
+        if (typeName[this.type] == undefined) {
             return typeName[this.type]
         }
         return typeName[this.type]
     }
+    getMaxLevel(): number {
+        var maxLevel = 0
+        for (const i in this.stat) {
+            if (Object.prototype.hasOwnProperty.call(this.stat, i)) {
+                const element = this.stat[i];
+                if (!isNaN(Number(i))) {
+                    if (Number(i) > maxLevel) {
+                        maxLevel = Number(i)
+                    }
+                }
+            }
+        }
+        return maxLevel
+    }
 }
 
-function formatNumber(num: number,length:number): string {
+function formatNumber(num: number, length: number): string {
     // 将数字转换为字符串
     const str = num.toString();
-  
+
     // 如果字符串长度小于3，前面补0直到长度为3
     if (str.length < length) {
-      return str.padStart(length, '0');
+        return str.padStart(length, '0');
     }
-  
+
     return str;
-  }
+}
 
 
 

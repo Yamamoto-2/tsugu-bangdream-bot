@@ -57,7 +57,7 @@ async function getCardIllustrationFrame(rarity: number, attribute: 'cool' | 'hap
 
 interface drawCardIconOptions {
     card: Card
-    trainningStatus: boolean,
+    trainingStatus: boolean,
     limitBreakRank?: number,
     level?: number,
     cardIdVisible?: boolean,
@@ -70,17 +70,17 @@ interface drawCardIconOptions {
 //画卡icon
 async function drawCardIcon({
     card,
-    trainningStatus,
+    trainingStatus,
     limitBreakRank = 0,
     cardIdVisible = false,
     skillTypeVisible = false,
     cardTypeVisible = true,
     skillLevel
 }: drawCardIconOptions): Promise<Canvas> {
-    trainningStatus = card.ableToTraining(trainningStatus)
+    trainingStatus = card.ableToTraining(trainingStatus)
     const canvas: Canvas = cardIdVisible ? createCanvas(180, 210) : createCanvas(180, 180);
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(await card.getCardIconImage(trainningStatus), 0, 0);
+    ctx.drawImage(await card.getCardIconImage(trainingStatus), 0, 0);
     //如果显示卡牌ID，画面高度为210，在下方显示
     if (cardIdVisible) {
         ctx.textAlign = 'start'
@@ -124,7 +124,7 @@ async function drawCardIcon({
         ctx.textBaseline = 'middle'
         ctx.fillText(limitBreakRank.toString(), 155, 70)
     }
-    var star = starList[trainningStatus ? 'trained' : 'normal']
+    var star = starList[trainingStatus ? 'trained' : 'normal']
     for (var i = 0; i < card.rarity; i++) {//星星数量
         ctx.drawImage(star, 4, 150 - 26 * i, 29, 29)
     }
@@ -133,17 +133,17 @@ async function drawCardIcon({
 
 interface drawCardIllustrationOptions {
     card: Card
-    trainningStatus: boolean,
+    trainingStatus: boolean,
     isList?: boolean
 }
 //画卡插画
 async function drawCardIllustration({
     card,
-    trainningStatus,
+    trainingStatus,
     isList = false,
 }:drawCardIllustrationOptions):Promise<Canvas>{
-    trainningStatus = card.ableToTraining(trainningStatus)
-    var CardIllustrationImage = await card.getCardIllustrationImage(trainningStatus)
+    trainingStatus = card.ableToTraining(trainingStatus)
+    var CardIllustrationImage = await card.getCardIllustrationImage(trainingStatus)
     const canvas = createCanvas(1360,905)
     var ctx = canvas.getContext("2d")
     //将cardIllustration等比例缩放至宽度为1334
@@ -161,7 +161,7 @@ async function drawCardIllustration({
     var bandIcon = await new Band(card.bandId).getIcon()
     ctx.drawImage(bandIcon, 7, 7, 150, 150)
 
-    var star = starList[trainningStatus ? 'trained' : 'normal']
+    var star = starList[trainingStatus ? 'trained' : 'normal']
     for (var i = 0; i < card.rarity; i++) {//星星数量
         ctx.drawImage(star, 5, 780 - 100 * i, 110, 110)
     }
