@@ -199,7 +199,6 @@ function warpTextWithImages({
             //图片等比例放大至高度与字体大小相同
             let tempImage = content[i] as Image;
             let tempWidth = tempImage.width * (textSize / tempImage.height);
-            console.log(tempX + tempWidth)
             if (tempX + tempWidth > maxWidth) {
                 newLine();
             }

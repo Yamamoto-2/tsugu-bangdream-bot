@@ -35,7 +35,7 @@ function drawList({
     textSize = 40,
     lineHeight = textSize * 1.5,
     spacing = textSize / 3,
-    color= '#5b5b5b'
+    color = '#5b5b5b'
 
 }: ListOptions): Canvas {
     const xmax = 760
@@ -122,7 +122,7 @@ async function drawListByServerList({
     key,
     content,
     serverList = defaultserverList
-}:ListByServerListOptions) {
+}: ListByServerListOptions) {
     var tempcontent: Array<string | Image | Canvas> = []
     //如果只有2个服务器，且内容相同
     if (serverList.length == 2) {
@@ -168,6 +168,25 @@ async function drawListByServerList({
     return canvas
 }
 
+function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
+    var maxHeight = 0
+    for (let i = 0; i < imageList.length; i++) {
+        const element = imageList[i];
+        if (element.height > maxHeight) {
+            maxHeight = element.height
+        }
+    }
+    var canvas = createCanvas(1000, maxHeight)
+    var ctx = canvas.getContext('2d')
+    var x = 0
+    for (let i = 0; i < imageList.length; i++) {
+        const element = imageList[i];
+        ctx.drawImage(element, x, 0)
+        x += 760 / imageList.length
+    }
+    return canvas
+}
+
 
 //组合表格子程序，使用block当做底，通过最大高度换行，默认高度无上限
 var drawDatablock = async function (list: Array<Image | Canvas>, BG = true): Promise<Canvas> {
@@ -205,4 +224,4 @@ var drawDatablock = async function (list: Array<Image | Canvas>, BG = true): Pro
 
 
 
-export { drawList, drawDatablock, line, drawListByServerList, drawTips };
+export { drawList, drawListMerge, drawDatablock, line, drawListByServerList, drawTips };
