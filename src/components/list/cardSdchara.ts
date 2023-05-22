@@ -1,6 +1,6 @@
 import { Costume } from "../../types/Costume";
 import { Card } from "../../types/Card";
-import { Canvas } from "canvas";
+import { Canvas,createCanvas } from "canvas";
 import {drawList } from '../list'
 
 async function drawSdcharaInList(card:Card):Promise<Canvas> {
@@ -8,11 +8,23 @@ async function drawSdcharaInList(card:Card):Promise<Canvas> {
     const costume = new Costume(costumeId)
     await costume.initFull()
     var sdcharaImage = await costume.getSdchara()
+    //从高度84开始，把sdCharaImage切成田字形的四分，大小都为400*470
+    var sdcharaImageList:Array<Canvas> = []
+    for (let i = 0; i < 4; i++) {
+        const canvas = createCanvas(400, 470);
+        const context = canvas.getContext('2d');
+        const x = i % 2 === 0 ? 0 : 400;
+        const y = i < 2 ? 84 : 554;
+        
+        context.drawImage(sdcharaImage, x, y, 400, 470, 0, 0, 400, 470);
+        sdcharaImageList.push(canvas);
+      }
     return drawList({
         key: '演出缩略图',
-        content: [sdcharaImage],
-        lineHeight: 600,
-        textSize: 580
+        content: sdcharaImageList,
+        lineHeight: 181,
+        textSize: 180,
+        spacing: 0
     })
 }
 

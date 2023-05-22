@@ -22,7 +22,7 @@ async function drawCardListInList({
 }: CardIconInListOptions) {
     var lineHeight = 200
     var textSize = 180
-    var spacing = 40 / 3
+    var spacing = 39 / 3
     if (cardIdVisible) {
         lineHeight += 30
         textSize += 30

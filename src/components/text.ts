@@ -100,7 +100,7 @@ function drawTextWithImages({
     color = '#5b5b5b',
     font = 'old'
 }: TextWithImagesOptions) {
-    var wrappedTextData = warpTextWithImages({ textSize, maxWidth, lineHeight, content });
+    var wrappedTextData = warpTextWithImages({ textSize, maxWidth, lineHeight, content, spacing });
     var wrappedText = wrappedTextData.wrappedText
     var canvas: Canvas
     //单行文字，宽度为第一行的宽度
@@ -145,7 +145,7 @@ function drawTextWithImages({
                 ctx.drawImage(tempImage, tempX, y - (textSize / 3) - (textSize / 2), tempWidth, textSize)
                 tempX += tempWidth
             }
-            if(tempX!=0){
+            if (tempX != 0) {
                 tempX += spacing
             }
         }
@@ -199,6 +199,7 @@ function warpTextWithImages({
             //图片等比例放大至高度与字体大小相同
             let tempImage = content[i] as Image;
             let tempWidth = tempImage.width * (textSize / tempImage.height);
+            console.log(tempX + tempWidth)
             if (tempX + tempWidth > maxWidth) {
                 newLine();
             }
@@ -206,9 +207,6 @@ function warpTextWithImages({
             tempX += tempWidth;
         }
         tempX += spacing;
-        if (tempX > maxWidth) {
-            newLine();
-        }
     }
 
     // 处理最后一行剩余的文本
