@@ -63,7 +63,7 @@ async function makeRequest(options: RequestOptions, retry = 0) {
           resolve(body);
         });
       } else if (res.statusCode == 304) {
-        console.log(`不需更新${options.url}`)
+        console.log(`不需更新:${options.url}`)
         resolve(null);
         return;
       } else if (!body) {
@@ -133,8 +133,8 @@ async function download(
     });
     return promise;
   }
+  console.log("不需下载:" + filepath + filename )
   return readFileSync(join(filepath, filename));
-  console.log(filepath + filename + " 不需下载")
 }
 
 async function getJson(url: string, ifmodifiedsince = null) {
