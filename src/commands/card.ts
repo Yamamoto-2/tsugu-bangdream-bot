@@ -2,8 +2,8 @@ import { Card } from '../types/Card'
 import { Character } from '../types/Character';
 import { Attribute } from '../types/Attribute';
 import { Skill } from '../types/Skill';
-import { drawList, drawDatablock, line, drawListByServerList, drawTips } from '../components/list';
-import {  drawCardIllustration } from '../components/card';
+import { drawList, drawDatablock, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
+import { drawCardIllustration } from '../components/card';
 import { drawCharacterInList } from '../components/list/character'
 import { drawAttributeInList } from '../components/list/attribute'
 import { drawRarityInList } from '../components/list/rarity'
@@ -12,7 +12,7 @@ import { drawTimeInList } from '../components/list/time';
 import { drawCardPrefixInList } from '../components/list/cardPrefix'
 import { drawCardStatInList } from '../components/list/cardStat'
 import { drawCardListInList } from '../components/list/cardIconList'
-import {drawSdcharaInList} from '../components/list/cardSdchara'
+import { drawSdcharaInList } from '../components/list/cardSdchara'
 import { Image, Canvas, createCanvas } from 'canvas'
 import { Server } from '../types/Server';
 import { drawTitle } from '../components/title';
@@ -35,16 +35,25 @@ async function drawCardDetail(cardId: number, server: Server = new Server("cn"))
         list.push(createCanvas(1000, 30))
     }
 
+    //类型
+    var typeImage = drawList({
+        key: '类型', text: card.getTypeName()
+    })
+
+    //卡牌ID
+    var IdImage = drawList({
+        key: 'ID', text: card.cardId.toString()
+    })
+
+    list.push(drawListMerge([typeImage, IdImage]))
+    list.push(line)
+    
+
     //综合力
     list.push(await drawCardStatInList(card))
     list.push(line)
 
-    //类型
-    list.push(drawList({
-        key: '类型', text: card.getTypeName()
-    }))
-    list.push(line)
-
+    /*
     //角色
     var character = new Character(card.characterId)
     list.push(await drawCharacterInList({ content: [character] }))
@@ -58,7 +67,7 @@ async function drawCardDetail(cardId: number, server: Server = new Server("cn"))
     //稀有度
     list.push(await drawRarityInList({ rarity: card.rarity }))
     list.push(line)
-
+    */
     //技能
     var skill = new Skill(card.skillId)
     list.push(await drawSkillInList({ card: card, content: skill }))
@@ -88,12 +97,6 @@ async function drawCardDetail(cardId: number, server: Server = new Server("cn"))
 
     //演出缩略图
     list.push(await drawSdcharaInList(card))
-    list.push(line)
-
-    //卡牌ID
-    list.push(drawList({
-        key: 'ID', text: card.cardId.toString()
-    }))
 
     //最终输出
     var listImage = await drawDatablock(list)
