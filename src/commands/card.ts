@@ -14,6 +14,7 @@ import { drawCardStatInList } from '../components/list/cardStat'
 import { drawCardListInList } from '../components/list/cardIconList'
 import { drawSdcharaInList } from '../components/list/cardSdchara'
 import { drawEventDatablock } from '../components/dataBlock/event';
+import { drawGachaDatablock } from '../components/dataBlock/gacha'
 import { Image, Canvas, createCanvas } from 'canvas'
 import { Server, defaultserverList } from '../types/Server';
 import { drawTitle } from '../components/title';
@@ -143,7 +144,8 @@ async function drawCardDetail(cardId: number): Promise<Buffer> {
     //相关来源
     var tempEventList = []//用于防止重复
     var tempGachaList = []
-    var eventImageList = []
+    var eventImageList: Array<Canvas | Image> = []
+    var gachaImageList: Array<Canvas | Image> = []
     for (let k = 0; k < defaultserverList.length; k++) {
         var server = defaultserverList[k];
         var sourceOfServer = source[server.serverId]
@@ -162,28 +164,30 @@ async function drawCardDetail(cardId: number): Promise<Buffer> {
                     }
                 }
                 //如果来源包括招募
-                if(i == 'gacha'){
+                if (i == 'gacha') {
                     for (const j in sourceOfServer[i]) {
                         var earlistGacha = getEarlistGachaFromList(sourceOfServer[i], server)
                         var tempEventId = earlistGacha.getEventId()[server.serverId]
-                        if(tempEventId != null){
-                            if(!tempEventList.includes(tempEventId.toString)){//如果不在列表中
+                        if (tempEventId != null) {
+                            if (!tempEventList.includes(tempEventId.toString)) {//如果不在列表中
                                 eventImageList.push(await drawEventDatablock(new Event(tempEventId), `${server.serverNameFull}相关活动`))
                                 tempEventList.push(tempEventId.toString)
                             }
                         }
-                        if(!tempGachaList.includes(j)){
-                            tempGachaList.push(j)
-                            //all.push(await drawDatablock({list:[await earlistGacha.getBannerImage()], BG:false}))
+                        if (!tempGachaList.includes(earlistGacha.gachaId)) {
+                            tempGachaList.push(earlistGacha.gachaId)
+                            gachaImageList.push(await drawGachaDatablock(earlistGacha, `${server.serverNameFull}相关卡池`))
                         }
-
                     }
                 }
             }
         }
     }
-    for(var i = 0; i < eventImageList.length; i++){
+    for (var i = 0; i < eventImageList.length; i++) {
         all.push(eventImageList[i])
+    }
+    for (var i = 0; i < gachaImageList.length; i++) {
+        all.push(gachaImageList[i])
     }
 
 

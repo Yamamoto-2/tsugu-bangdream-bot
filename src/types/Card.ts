@@ -21,8 +21,8 @@ const typeName = {
     'event': '活动',
     'others': '其他',
     'campaign': '选举',
-    'dreamfes': 'DreamFes限定',
-    'kirafes': 'KiraFes限定',
+    'dreamfes': '梦幻Fes限定',
+    'kirafes': '闪光Fes限定',
 }
 
 function addStat(stat: Stat, add: Stat): void {//综合力相加函数

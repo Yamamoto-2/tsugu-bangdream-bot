@@ -5,6 +5,17 @@ import { downloadFileCache } from '../api/downloadFileCache'
 import { Server, serverList } from './Server';
 import { Event } from './Event';
 
+const typeName = {
+    "permanent": "常驻",
+    "special": "特殊",
+    "birthday": "生日限定",
+    "free": "免费",
+    "dreamfes": "梦幻Fes限定",
+    "kirafes": "闪光Fes限定",
+    "limited": "期间限定",
+    "miracle": "奇迹兑换券"
+}
+
 export class Gacha {
     gachaId: number;
     isExist = false
@@ -124,6 +135,12 @@ export class Gacha {
             }
         }
         return eventList
+    }
+    getTypeName() {
+        if (typeName[this.type] == undefined) {
+            return this.type
+        }
+        return typeName[this.type]
     }
 }
 
