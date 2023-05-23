@@ -80,7 +80,7 @@ export class Skill {
                 if (value == null) {
                     return null
                 }
-                return value.replace("{0}", onceEffectValueList)
+                return value.replace(/\{0\}/g, onceEffectValueList)
             })
 
             if (this.data['activationEffect'] != undefined) {//如果同时包含持续时间的效果(比如加分)
@@ -88,7 +88,7 @@ export class Skill {
                     if (value == null) {
                         return null
                     }
-                    return value.replace("{1}", durationList)
+                    return value.replace(/\{1\}/g, durationList)
                 })
             }
         }
@@ -97,7 +97,7 @@ export class Skill {
                 if (value == null) {
                     return null
                 }
-                return value.replace("{0}", durationList)
+                return value.replace(/\{0\}/g, durationList)
             })
         }
 
