@@ -1,14 +1,22 @@
 import { downloadFileCache } from '../api/downloadFileCache'
 import { loadImage, Image } from 'canvas'
+import { defaultserver } from '../config'
 
 //服务器列表，因为有TW而不适用country
 export const serverList: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['jp', 'en', 'tw', 'cn', 'kr']
-export const serverPriority: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['cn','jp', 'tw',  'en', 'kr']
-
+export const serverPriority: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['cn', 'jp', 'tw', 'en', 'kr']
+const serverNameFullList = {
+    jp: '日服',
+    en: '国际服',
+    tw: '台服',
+    cn: '国服',
+    kr: '韩服'
+}
 
 export class Server {
     serverName: 'jp' | 'en' | 'tw' | 'cn' | 'kr'
     serverId: number
+    serverNameFull: string
     constructor(serverName?: 'jp' | 'en' | 'tw' | 'cn' | 'kr', serverId?: number) {
         if (serverName != undefined) {
             this.serverName = serverName
@@ -22,6 +30,7 @@ export class Server {
             this.serverName = 'jp'
             this.serverId = serverList.indexOf(serverName)
         }
+        this.serverNameFull = serverNameFullList[this.serverName]
     }
     getContentByServer(content: Array<any>): any {
         return content[this.serverId]
@@ -41,4 +50,10 @@ export function getServerByPriority(content: Array<any>): Server {
     }
     return new Server()
 }
+
+export const defaultserverList: Array<Server> = []
+for (let i = 0; i < defaultserver.length; i++) {
+    defaultserverList.push(new Server(defaultserver[i]))
+}
+
 

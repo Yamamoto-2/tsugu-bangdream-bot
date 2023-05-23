@@ -24,3 +24,5 @@ export const BestdoriapiPath = { //Bestdori网站的列表api路径
 
 export const Bestdoriurl: string = 'https://bestdori.com'; //Bestdori网站的url
 
+export const defaultserver: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['jp', 'cn']
+
