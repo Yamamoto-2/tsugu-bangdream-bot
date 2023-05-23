@@ -21,9 +21,9 @@ function drawRoundedRect(
     height,
     radius = 25,
     color = "#ffffff",
-    opacity = 1,
+    opacity = 0.9,
     strokeColor = "#bbbbbb",
-    strokeWidth = 2
+    strokeWidth = 0
   }: RoundedRect
 ): Canvas {
   const canvas = createCanvas(width, height);

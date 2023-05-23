@@ -18,7 +18,7 @@ var line: Canvas = drawDottedLine({
 })
 
 interface ListOptions {
-    key: string;
+    key?: string;
     text?: string;
     content?: Array<string | Canvas | Image>
     textSize?: number;
@@ -61,6 +61,9 @@ function drawList({
     else {
         textImage = createCanvas(1, 1)
     }
+    if(key == undefined){
+        return textImage
+    }
     var ymax = textImage.height + keyImage.height + 10;
     const canvas = createCanvas(1000, ymax);
     const ctx = canvas.getContext('2d');
@@ -83,7 +86,7 @@ function drawTips({
     lineHeight = textSize * 1.5,
     spacing = textSize / 3
 }: tipsOptions) {
-    const xmax = 790
+    const xmax = 760
     var textImage: Canvas
     if (typeof text == "string") {
         textImage = drawText({ text, textSize, maxWidth: xmax, lineHeight });
@@ -104,7 +107,7 @@ function drawTips({
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#f1f1f1'
     ctx.fillRect(100, 10, 800, textImage.height);
-    ctx.drawImage(textImage, 105, 10);
+    ctx.drawImage(textImage, 120, 10);
     return canvas;
 }
 
@@ -112,7 +115,7 @@ var defaultserverList: Array<Server> = []
 defaultserverList.push(new Server('jp'))
 defaultserverList.push(new Server('cn'))
 interface ListByServerListOptions {
-    key: string;
+    key?: string;
     content: Array<string | null>
     serverList?: Array<Server>
 }
@@ -168,6 +171,7 @@ async function drawListByServerList({
     return canvas
 }
 
+//横向组合较短list，高度为最高的list，宽度平分
 function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
     var maxHeight = 0
     for (let i = 0; i < imageList.length; i++) {
@@ -187,6 +191,26 @@ function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
     return canvas
 }
 
+//画左侧有竖线的排版，用于画block时展示数据
+function drawListWithLine(textImageList:Array<Canvas|Image>):Canvas{
+    var x = 130
+    var y = 10
+    var height = 0
+    for (let i = 0; i < textImageList.length; i++) {
+        const element = textImageList[i];
+        height += element.height
+    }
+    var canvas = createCanvas(1000, height)
+    var ctx = canvas.getContext('2d')
+    ctx.fillStyle = 'f1f1f1'
+    ctx.fillRect(100, 0, 5, height +20)
+    for (let i = 0; i < textImageList.length; i++) {
+        const element = textImageList[i];
+        ctx.drawImage(element, x, y)
+        y += element.height
+    }
+    return canvas
+}
 
 //组合表格子程序，使用block当做底，通过最大高度换行，默认高度无上限
 var drawDatablock = async function (list: Array<Image | Canvas>, BG = true): Promise<Canvas> {
@@ -224,4 +248,4 @@ var drawDatablock = async function (list: Array<Image | Canvas>, BG = true): Pro
 
 
 
-export { drawList, drawListMerge, drawDatablock, line, drawListByServerList, drawTips };
+export { drawList, drawListMerge, drawDatablock, line, drawListByServerList, drawTips, drawListWithLine };
