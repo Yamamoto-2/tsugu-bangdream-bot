@@ -9,7 +9,7 @@ async function loadImageOnce() {
 }
 loadImageOnce()
 
-function drawTitle(title1: string, title2: string): Canvas {
+export function drawTitle(title1: string, title2: string): Canvas {
     const canvas = createCanvas(1000, 110)
     const ctx = canvas.getContext("2d")
     ctx.drawImage(titleImage, 0, 0)
@@ -20,4 +20,3 @@ function drawTitle(title1: string, title2: string): Canvas {
     return canvas
 }
 
-export { drawTitle }

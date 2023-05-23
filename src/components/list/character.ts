@@ -8,7 +8,7 @@ interface CharacterInListOptions {
     content: Array<Character>
     text?: string
 }
-async function drawCharacterInList({
+export async function drawCharacterInList({
     key,
     content,
     text
@@ -41,5 +41,3 @@ async function drawCharacterInList({
     }
 
 }
-
-export {drawCharacterInList}

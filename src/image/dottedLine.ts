@@ -41,4 +41,3 @@ export function drawDottedLine(options: DrawDottedLineOptions): Canvas {
   return canvas;
 }
 
-export default drawDottedLine;

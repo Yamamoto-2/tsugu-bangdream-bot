@@ -13,7 +13,7 @@ async function loadImageOnce() {
 loadImageOnce()
 
 //卡牌Icon右下角的技能描述图标
-async function drawCardIconSkill(skill: Skill): Promise<Canvas> {
+export async function drawCardIconSkill(skill: Skill): Promise<Canvas> {
     var content: Array<Image | string> = []
     var EffectTypes = skill.getEffectTypes()
     var ScoreUpMaxValue = skill.getScoreUpMaxValue()
@@ -56,5 +56,3 @@ async function drawCardIconSkill(skill: Skill): Promise<Canvas> {
     ctx.drawImage(stringWithImage, 5, 0)
     return canvas
 }
-
-export { drawCardIconSkill }

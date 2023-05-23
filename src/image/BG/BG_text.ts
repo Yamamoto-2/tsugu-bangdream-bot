@@ -19,7 +19,7 @@ interface DrawTextOptions {
   offsetY?: number;
 }
 
-function drawTextOnCanvas(
+export function drawTextOnCanvas(
   canvas: Canvas,
   { text,  fontSize, angle, lineSpacing, letterSpacing, strokeWidth = 1, skewAngle = 0, opacity = 1, scaleX = 1, overflow = 100, offsetY = 0 }: DrawTextOptions
 ) {
@@ -101,5 +101,3 @@ ctx.globalAlpha = 1;
 // 恢复缩放操作
 ctx.scale(1 / scaleX, 1);
 }
-
-export { drawTextOnCanvas };

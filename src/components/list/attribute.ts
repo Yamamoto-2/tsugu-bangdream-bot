@@ -7,7 +7,7 @@ interface AttributeInListOptions {
     content: Array<Attribute>
     text?: string
 }
-async function drawAttributeInList({
+export async function drawAttributeInList({
     key,
     content,
     text
@@ -34,5 +34,3 @@ async function drawAttributeInList({
     }
 
 }
-
-export { drawAttributeInList }

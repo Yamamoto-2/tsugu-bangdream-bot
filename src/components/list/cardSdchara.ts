@@ -3,7 +3,7 @@ import { Card } from "../../types/Card";
 import { Canvas, createCanvas } from "canvas";
 import { drawList } from '../list'
 
-async function drawSdcharaInList(card: Card): Promise<Canvas> {
+export async function drawSdcharaInList(card: Card): Promise<Canvas> {
     const costumeId = card.costumeId
     const costume = new Costume(costumeId)
     await costume.initFull()
@@ -27,5 +27,3 @@ async function drawSdcharaInList(card: Card): Promise<Canvas> {
         spacing: 0
     })
 }
-
-export { drawSdcharaInList }

@@ -12,7 +12,7 @@ interface ScatterProps {
 }
 
 //随机在canvas中散布星星(arisa)
-async function scatterImages({
+export async function scatterImages({
   canvas,
   canvasWidth,
   canvasHeight,
@@ -62,5 +62,3 @@ async function scatterImages({
   // Return base64-encoded PNG image
   return canvas.toDataURL();
 }
-
-export { scatterImages };

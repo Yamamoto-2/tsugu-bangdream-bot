@@ -13,7 +13,7 @@ interface warpTextOptions {
 }
 
 //画文字,自动换行
-function drawText({
+export function drawText({
     text,
     textSize = 40,
     maxWidth,
@@ -45,7 +45,7 @@ function drawText({
     return canvas;
 }
 
-function wrapText({
+export function wrapText({
     text,
     textSize,
     maxWidth,
@@ -100,7 +100,7 @@ interface TextWithImagesOptions {
 
 
 // 画文字包含图片
-function drawTextWithImages({
+export function drawTextWithImages({
     textSize = 40,
     maxWidth,
     lineHeight = textSize * 4 / 3,
@@ -229,8 +229,6 @@ function warpTextWithImages({
 }
 
 
-var setFontStyle = function (ctx: CanvasRenderingContext2D, textSize: number, font: string) {//设置字体大小
+export var setFontStyle = function (ctx: CanvasRenderingContext2D, textSize: number, font: string) {//设置字体大小
     ctx.font = textSize + 'px ' + font + ",Microsoft Yahei"
 }
-
-export { drawText, wrapText, drawTextWithImages, setFontStyle }

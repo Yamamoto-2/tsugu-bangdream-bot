@@ -12,7 +12,7 @@ interface CardIconInListOptions {
     trainingStatus?: boolean;
 }
 
-async function drawCardListInList({
+export async function drawCardListInList({
     key,
     cardList,
     cardIdVisible = true,
@@ -63,5 +63,3 @@ async function drawCardListInList({
         spacing:spacing
     })
 }
-
-export { drawCardListInList }

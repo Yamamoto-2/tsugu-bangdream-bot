@@ -7,7 +7,7 @@ import { drawText } from "../text";
 import { createCanvas, Image, Canvas } from "canvas";
 import { draweventBannerImageCanvas } from './utils'
 
-async function drawEventDatablock(event: Event, topLeftText?: string) {
+export async function drawEventDatablock(event: Event, topLeftText?: string) {
     var list = []
     var eventBannerImage = await event.getBannerImage()
     var eventBannerImageCanvas = draweventBannerImageCanvas(eventBannerImage)
@@ -65,5 +65,3 @@ async function drawEventDatablock(event: Event, topLeftText?: string) {
 
     return (drawDatablock({ list, topLeftText }))
 }
-
-export { drawEventDatablock }

@@ -15,7 +15,7 @@ interface RoundedRect {
 }
 
 // 画圆角矩形
-function drawRoundedRect({
+export function drawRoundedRect({
   width,
   height,
   radius = 25,
@@ -108,7 +108,7 @@ interface RoundedRectWithText {
 }
 
 //画圆角矩形并填充文字
-function drawRoundedRectWithText({
+export function drawRoundedRectWithText({
   text,
   font = "old",
   textColor = "#ffffff",
@@ -146,5 +146,3 @@ function drawRoundedRectWithText({
 
   return canvas;
 }
-
-export { drawRoundedRect, drawRoundedRectWithText };

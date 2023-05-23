@@ -1,7 +1,7 @@
 import {loadImage, Canvas } from 'canvas';
 import { Image } from 'canvas';
 
-function canvas2image(canvas: Canvas): Promise<Image> {
+export function canvas2image(canvas: Canvas): Promise<Image> {
   const buffer: Buffer = canvas.toBuffer('image/png');
   const image: Image = new Image();
   image.src = buffer;
@@ -13,5 +13,3 @@ function canvas2image(canvas: Canvas): Promise<Image> {
     });
   });
 }
-
-export { canvas2image };

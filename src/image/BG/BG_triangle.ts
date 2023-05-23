@@ -10,7 +10,7 @@ interface createBlurredTrianglePatternOptions {
 }
 
 //输入图片，输出带有三角形效果的模糊图片
-async function createBlurredTrianglePattern({
+export async function createBlurredTrianglePattern({
     image,
     blurRadius,
     triangleSize,
@@ -114,5 +114,3 @@ function isInsideEquilateralTriangle(x: number, y: number, px: number, py: numbe
         return py > (px - halfSize) * Math.sqrt(3) && py < triangleHeight + (px - halfSize) * Math.sqrt(3);
     }
 }
-
-export { createBlurredTrianglePattern }

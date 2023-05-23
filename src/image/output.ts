@@ -10,7 +10,7 @@ async function loadImageOnce(){
 loadImageOnce()
 
 //将图片列表从上到下叠在一起输出为一张图片
-var outputFinalCanv = async function (imageList: Array<Image | Canvas>, text: string = 'BanG Dream!', BGimage?: Image | Canvas): Promise<Canvas> {
+export var outputFinalCanv = async function (imageList: Array<Image | Canvas>, text: string = 'BanG Dream!', BGimage?: Image | Canvas): Promise<Canvas> {
     BGimage ??= defaultBG
     var allH = 70
     var maxW = 0
@@ -42,10 +42,8 @@ var outputFinalCanv = async function (imageList: Array<Image | Canvas>, text: st
 }
 
 //输出为二进制流
-var outputFinalBuffer = async function (imageList: Array<Image | Canvas>, text: string = 'BanG Dream!', BGimage?: Image | Canvas): Promise<Buffer> {
+export var outputFinalBuffer = async function (imageList: Array<Image | Canvas>, text: string = 'BanG Dream!', BGimage?: Image | Canvas): Promise<Buffer> {
     var tempcanv = await outputFinalCanv(imageList, text, BGimage)
     var tempBuffer = tempcanv.toBuffer()
     return (tempBuffer)
 }
-
-export { outputFinalCanv, outputFinalBuffer }

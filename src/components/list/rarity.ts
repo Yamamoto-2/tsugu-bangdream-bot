@@ -15,7 +15,7 @@ async function loadImageOnce() {
 }
 loadImageOnce()
 
-async function drawRarityInList({
+export async function drawRarityInList({
     key = "稀有度",
     rarity
 }: RarityInListOptions): Promise<Canvas> {
@@ -38,5 +38,3 @@ async function drawRarityInList({
     })
     return canvas
 }
-
-export { drawRarityInList }

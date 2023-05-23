@@ -8,7 +8,7 @@ interface SkillInListOptions {
     card: Card;
     content: Skill;
 }
-async function drawSkillInList({
+export async function drawSkillInList({
     card,
     content
 }: SkillInListOptions): Promise<Canvas> {
@@ -22,5 +22,3 @@ async function drawSkillInList({
     })
     return drawDatablock({list:[listImage, tipsImage], BG:false})
 }
-
-export { drawSkillInList }

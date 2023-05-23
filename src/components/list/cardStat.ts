@@ -10,7 +10,7 @@ const statConfig = {
     visual: { color: '#fbc74f', name: '形象' },
 }
 
-async function drawCardStatInList(card:Card){
+export async function drawCardStatInList(card:Card){
     const stat = await card.calcStat()
     const statTotal = stat.performance + stat.technique + stat.visual
     const limitBreakstat = limitBreakRankStat(card.rarity)
@@ -57,5 +57,3 @@ async function drawCardStatDivided (stat:Stat,statTotal:number,limitBreakstat:St
     }
     return drawDatablock({list,BG:false})
 }
-
-export {drawCardStatInList}

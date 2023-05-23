@@ -13,7 +13,7 @@ async function loadImageOnce() {
 }
 loadImageOnce()
 
-async function drawCardPrefixInList(card: Card) {
+export async function drawCardPrefixInList(card: Card) {
     const canvas = createCanvas(1000, 155)
     const ctx = canvas.getContext('2d')
     ctx.drawImage(prefixBG, 0, 0)
@@ -40,5 +40,3 @@ async function drawCardPrefixInList(card: Card) {
 
     return canvas
 }
-
-export{drawCardPrefixInList}

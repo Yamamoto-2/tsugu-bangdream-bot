@@ -5,7 +5,7 @@ import { drawDottedLine } from '../image/dottedLine'
 import { Server, getServerByPriority, defaultserverList } from '../types/Server'
 
 //表格用默认虚线
-var line: Canvas = drawDottedLine({
+export const line: Canvas = drawDottedLine({
     width: 1000,
     height: 30,
     startX: 100,
@@ -28,7 +28,7 @@ interface ListOptions {
 }
 
 //画表格中的一行
-function drawList({
+export function drawList({
     key,
     text,
     content,
@@ -79,7 +79,7 @@ interface tipsOptions {
     lineHeight?: number;
     spacing?: number;
 }
-function drawTips({
+export function drawTips({
     text,
     content,
     textSize = 30,
@@ -119,7 +119,7 @@ interface ListByServerListOptions {
 }
 
 //通过服务器列表获得内容，服务器icon开头，每一行为服务器对应内容，默认仅日服与简中服
-async function drawListByServerList({
+export async function drawListByServerList({
     key,
     content,
     serverList = defaultserverList
@@ -175,7 +175,7 @@ async function drawListByServerList({
 }
 
 //横向组合较短list，高度为最高的list，宽度平分
-function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
+export function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
     var maxHeight = 0
     for (let i = 0; i < imageList.length; i++) {
         const element = imageList[i];
@@ -195,7 +195,7 @@ function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
 }
 
 //画左侧有竖线的排版，用于画block时展示数据
-function drawListWithLine(textImageList: Array<Canvas | Image>): Canvas {
+export function drawListWithLine(textImageList: Array<Canvas | Image>): Canvas {
     var x = 130
     var y = 10
     var height = 0
@@ -221,7 +221,7 @@ interface datablockOptions {
     topLeftText?: string
 }
 //组合表格子程序，使用block当做底，通过最大高度换行，默认高度无上限
-var drawDatablock = async function ({
+export var drawDatablock = async function ({
     list,
     BG = true,
     topLeftText
@@ -293,7 +293,3 @@ var drawDatablock = async function ({
 
     return (tempcanv)
 }
-
-
-
-export { drawList, drawListMerge, drawDatablock, line, drawListByServerList, drawTips, drawListWithLine };

@@ -5,7 +5,7 @@ interface timeInListOptions {
     key?: string;
     content: Array<number | null>
 }
-async function drawTimeInList({
+export async function drawTimeInList({
     key,
     content
 }: timeInListOptions
@@ -23,7 +23,7 @@ async function drawTimeInList({
     return canvas
 }
 
-var changeTimefomant = function (timeStamp: number) {//时间戳到年月日 精确到分钟
+export var changeTimefomant = function (timeStamp: number) {//时间戳到年月日 精确到分钟
     var date = new Date(Math.floor(timeStamp / 1000) * 1000)
     var nMinutes: string
     if (date.getMinutes() < 10) {
@@ -36,5 +36,3 @@ var changeTimefomant = function (timeStamp: number) {//时间戳到年月日 精
     var temp = date.getFullYear().toString() + "年" + (date.getMonth() + 1).toString() + "月" + date.getDate().toString() + "日 " + date.getHours().toString() + ":" + nMinutes
     return temp
 }
-
-export { drawTimeInList, changeTimefomant }

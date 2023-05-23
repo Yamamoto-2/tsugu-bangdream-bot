@@ -68,7 +68,7 @@ interface drawCardIconOptions {
 }
 
 //画卡icon
-async function drawCardIcon({
+export async function drawCardIcon({
     card,
     trainingStatus,
     limitBreakRank = 0,
@@ -137,7 +137,7 @@ interface drawCardIllustrationOptions {
     isList?: boolean
 }
 //画卡插画
-async function drawCardIllustration({
+export async function drawCardIllustration({
     card,
     trainingStatus,
     isList = false,
@@ -177,5 +177,3 @@ async function drawCardIllustration({
         return canvas
     }
 }
-
-export { drawCardIcon, drawCardIllustration }

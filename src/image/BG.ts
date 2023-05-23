@@ -61,7 +61,7 @@ async function Spread(image: Image, width: number, height: number, brightness: n
   return canvas.toBuffer();
 }
 
-async function CreateBG({
+export async function CreateBG({
   image,
   text,
   width,
@@ -105,5 +105,3 @@ async function CreateBG({
   })
   return (canvas)
 }
-
-export { CreateBG }
