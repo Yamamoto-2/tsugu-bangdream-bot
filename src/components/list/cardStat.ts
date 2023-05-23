@@ -22,7 +22,7 @@ async function drawCardStatInList(card:Card){
     }))
     list.push(createCanvas(1,5))
     list.push(statImage)
-    return drawDatablock(list,false)
+    return drawDatablock({list,BG:false})
 }
 
 async function drawCardStatDivided (stat:Stat,statTotal:number,limitBreakstat:Stat):Promise<Canvas>{
@@ -55,7 +55,7 @@ async function drawCardStatDivided (stat:Stat,statTotal:number,limitBreakstat:St
             list.push(drawStatLine(key,element,statTotal))
         }
     }
-    return drawDatablock(list,false)
+    return drawDatablock({list,BG:false})
 }
 
 export {drawCardStatInList}

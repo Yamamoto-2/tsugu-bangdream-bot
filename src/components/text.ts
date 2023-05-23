@@ -18,12 +18,21 @@ function drawText({
     textSize = 40,
     maxWidth,
     lineHeight = textSize * 4 / 3,
-    color = "#5b5b5b",
+    color = "#505050",
     font = "old"
 }: warpTextOptions): Canvas {
     var wrappedTextData = wrapText({ text, maxWidth, lineHeight, textSize });
-    const canvas = createCanvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
-    const ctx = canvas.getContext('2d');
+    if (wrappedTextData.numberOfLines == 1) {
+        var canvas = createCanvas(1, 1);
+        var ctx = canvas.getContext('2d');
+        setFontStyle(ctx, textSize, font);
+        var width = maxWidth = ctx.measureText(wrappedTextData.wrappedText[0]).width
+        canvas = createCanvas(width, lineHeight);
+    }
+    else {
+        var canvas = createCanvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
+    }
+    var ctx = canvas.getContext('2d');
     let y = lineHeight / 2 + textSize / 3
     ctx.textBaseline = 'alphabetic'
     setFontStyle(ctx, textSize, font);
@@ -97,7 +106,7 @@ function drawTextWithImages({
     lineHeight = textSize * 4 / 3,
     content,
     spacing = textSize / 3,
-    color = '#5b5b5b',
+    color = '#505050',
     font = 'old'
 }: TextWithImagesOptions) {
     var wrappedTextData = warpTextWithImages({ textSize, maxWidth, lineHeight, content, spacing });

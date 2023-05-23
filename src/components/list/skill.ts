@@ -6,12 +6,10 @@ import {Card} from '../../types/Card'
 
 interface SkillInListOptions {
     card: Card;
-    name?: string;
     content: Skill;
 }
 async function drawSkillInList({
     card,
-    name,
     content
 }: SkillInListOptions): Promise<Canvas> {
     var listImage = await drawListByServerList({
@@ -22,7 +20,7 @@ async function drawSkillInList({
     var tipsImage = drawTips({
         text: server.getContentByServer(content.getSkillDescription())
     })
-    return drawDatablock([listImage, tipsImage], false)
+    return drawDatablock({list:[listImage, tipsImage], BG:false})
 }
 
 export { drawSkillInList }

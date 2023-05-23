@@ -1,36 +1,38 @@
-import { Attribute } from  '../../types/Attribute'
+import { Attribute } from '../../types/Attribute'
 import { drawList } from '../list'
 import { Canvas, Image } from 'canvas'
 
 interface AttributeInListOptions {
     key?: string;
-    content: Attribute
-    present?: number
+    content: Array<Attribute>
+    text?: string
 }
 async function drawAttributeInList({
     key,
     content,
-    present
+    text
 }: AttributeInListOptions): Promise<Canvas> {
     var list: Array<string | Image | Canvas> = []
-    if (present != undefined) {
+    if (content.length == 1 && text == undefined) {
         list.push(await content[0].getIcon())
-        list.push(`+${present}%`)
+        list.push(content[0].name.toUpperCase())
         var canvas = drawList({
-            key: key ?? '属性加成',
+            key: key,
             content: list
         })
         return canvas
     }
-    else{
-        list.push(await content.getIcon())
-        list.push(content.name.toUpperCase())
+    else {
+        list.push(await content[0].getIcon())
+        list.push(text)
         var canvas = drawList({
-            key: key ?? '属性',
-            content: list
+            key: key,
+            content: list,
+            spacing: 0
         })
         return canvas
     }
+
 }
 
-export {drawAttributeInList}
+export { drawAttributeInList }

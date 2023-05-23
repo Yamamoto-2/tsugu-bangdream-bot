@@ -57,6 +57,11 @@ export class Card {
     prefix: Array<string | null>;
     releasedAt: Array<number | null>;
     skillName: Array<string | null>;
+    source: Array<{
+        [type: string]: {
+            [id: string]: object
+        }
+    } | {}>;
     skillId: number;
     isInitFull: boolean = false;
     stat: object;
@@ -102,6 +107,7 @@ export class Card {
         this.prefix = cardData['prefix']
         this.releasedAt = cardData['releasedAt']
         this.skillName = cardData['skillName']
+        this.source = cardData['source']
         this.skillId = cardData['skillId']
         this.stat = cardData['stat']
         this.isInitFull = true;
@@ -216,7 +222,7 @@ export class Card {
     }
     getTypeName() {
         if (typeName[this.type] == undefined) {
-            return typeName[this.type]
+            return this.type
         }
         return typeName[this.type]
     }
@@ -248,6 +254,6 @@ function formatNumber(num: number, length: number): string {
     return str;
 }
 
-export {limitBreakRankStat}
+export { limitBreakRankStat }
 
 

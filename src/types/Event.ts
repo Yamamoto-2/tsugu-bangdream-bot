@@ -1,7 +1,20 @@
 import { callAPIAndCacheResponse } from '../api/getApi';
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
+import { Server, getServerByPriority } from './Server'
 import mainAPI from './_Main';
+import { Attribute } from './Attribute';
+import { Character } from './Character';
+
+const typeName = {
+    "story": "一般活动 (协力)",
+    "versus": "竞演LIVE (对邦)",
+    "live_try": "LIVE试炼 (EX)",
+    "challenge": "挑战LIVE (CP)",
+    "mission_live": "任务LIVE (协力)",
+    "festival": "团队LIVE FES (5v5)",
+    "medley": "组曲LIVE (3组曲)"
+}
 
 export class Event {
     eventId: number;
@@ -13,7 +26,7 @@ export class Event {
     startAt: Array<number | null>;
     endAt: Array<number | null>;
     attributes: Array<{
-        attribute: "happy"| "cool" | "powerful" | "pure" ;
+        attribute: "happy" | "cool" | "powerful" | "pure";
         percent: number;
     }>;
     characters: Array<{
@@ -128,8 +141,50 @@ export class Event {
         var eventData = await callAPIAndCacheResponse(`https://bestdori.com/api/events/${this.eventId}.json`);
         return eventData
     }
-    async getBannerImage(): Promise<Image>{
-        var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/homebanner_rip/${this.bannerAssetBundleName}.png`)
+    async getBannerImage(): Promise<Image> {
+        var server = getServerByPriority(this.startAt)
+        try {
+            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`)
+        } catch (e) {
+            server = new Server('jp')
+            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`)
+        }
         return await loadImage(BannerImageBuffer)
+    }
+    getTypeName() {
+        if (typeName[this.eventType] == undefined) {
+            return this.eventType
+        }
+        return typeName[this.eventType]
+    }
+    getAttributeList() {//反向排序加成，返回{percent:[attribute]}
+        var attribute = this.attributes
+        var attributeList: { [precent: string]: Array<Attribute> } = {}
+        for (const i in attribute) {
+            if (Object.prototype.hasOwnProperty.call(attribute, i)) {
+                const element = attribute[i];
+                var percent = element.percent
+                if (attributeList[percent.toString()] == undefined) {
+                    attributeList[percent.toString()] = []
+                }
+                attributeList[percent.toString()].push(new Attribute(element.attribute))
+            }
+        }
+        return (attributeList)
+    }
+    getCharacterList() {
+        var character = this.characters
+        var characterList: { [precent: string]: Array<Character> } = {}
+        for (const i in character) {
+            if (Object.prototype.hasOwnProperty.call(character, i)) {
+                const element = character[i];
+                var percent = element.percent
+                if (characterList[percent.toString()] == undefined) {
+                    characterList[percent.toString()] = []
+                }
+                characterList[percent.toString()].push(new Character(element.characterId))
+            }
+        }
+        return (characterList)
     }
 }

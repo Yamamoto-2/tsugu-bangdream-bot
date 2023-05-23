@@ -2,7 +2,7 @@ import { Canvas, Image, createCanvas } from 'canvas';
 import { drawRoundedRectWithText, drawRoundedRect } from '../image/drawRect';
 import { drawText, drawTextWithImages } from './text';
 import { drawDottedLine } from '../image/dottedLine'
-import { Server } from '../types/Server'
+import { Server, getServerByPriority, defaultserverList } from '../types/Server'
 
 //表格用默认虚线
 var line: Canvas = drawDottedLine({
@@ -35,7 +35,7 @@ function drawList({
     textSize = 40,
     lineHeight = textSize * 1.5,
     spacing = textSize / 3,
-    color = '#5b5b5b'
+    color = '#505050'
 
 }: ListOptions): Canvas {
     const xmax = 760
@@ -61,7 +61,7 @@ function drawList({
     else {
         textImage = createCanvas(1, 1)
     }
-    if(key == undefined){
+    if (key == undefined) {
         return textImage
     }
     var ymax = textImage.height + keyImage.height + 10;
@@ -111,9 +111,7 @@ function drawTips({
     return canvas;
 }
 
-var defaultserverList: Array<Server> = []
-defaultserverList.push(new Server('jp'))
-defaultserverList.push(new Server('cn'))
+
 interface ListByServerListOptions {
     key?: string;
     content: Array<string | null>
@@ -154,6 +152,11 @@ async function drawListByServerList({
         }
     }
 
+    // 如果没有服务器了，就用其中一个可以的服务器
+    if (serverList.length == 0) {
+        serverList.push(getServerByPriority(content))
+    }
+
     for (let i = 0; i < serverList.length; i++) {
         const tempServer = serverList[i];
         tempcontent.push(await tempServer.getIcon())
@@ -186,13 +189,13 @@ function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
     for (let i = 0; i < imageList.length; i++) {
         const element = imageList[i];
         ctx.drawImage(element, x, 0)
-        x += 760 / imageList.length
+        x += 800 / imageList.length
     }
     return canvas
 }
 
 //画左侧有竖线的排版，用于画block时展示数据
-function drawListWithLine(textImageList:Array<Canvas|Image>):Canvas{
+function drawListWithLine(textImageList: Array<Canvas | Image>): Canvas {
     var x = 130
     var y = 10
     var height = 0
@@ -200,10 +203,10 @@ function drawListWithLine(textImageList:Array<Canvas|Image>):Canvas{
         const element = textImageList[i];
         height += element.height
     }
-    var canvas = createCanvas(1000, height)
+    var canvas = createCanvas(1000, height + 10)
     var ctx = canvas.getContext('2d')
-    ctx.fillStyle = 'f1f1f1'
-    ctx.fillRect(100, 0, 5, height +20)
+    ctx.fillStyle = '#a8a8a8'
+    ctx.fillRect(110, 10, 5, height + 20)
     for (let i = 0; i < textImageList.length; i++) {
         const element = textImageList[i];
         ctx.drawImage(element, x, y)
@@ -212,31 +215,76 @@ function drawListWithLine(textImageList:Array<Canvas|Image>):Canvas{
     return canvas
 }
 
+interface datablockOptions {
+    list: Array<Canvas | Image>
+    BG?: boolean
+    topLeftText?: string
+}
 //组合表格子程序，使用block当做底，通过最大高度换行，默认高度无上限
-var drawDatablock = async function (list: Array<Image | Canvas>, BG = true): Promise<Canvas> {
+var drawDatablock = async function ({
+    list,
+    BG = true,
+    topLeftText
+}: datablockOptions): Promise<Canvas> {
+    const topLeftTextHeight = 70
+    //计算高度
+    var allH = 0
     if (BG) {
-        var allH = 100
+        allH += 100
     }
-    else {
-        var allH = 0
-    }
-
     for (var i = 0; i < list.length; i++) {
         allH = allH + list[i].height
     }
-    var tempcanv = createCanvas(1000, allH)
-    var ctx = tempcanv.getContext("2d")
-    if (BG) {
-        ctx.drawImage(drawRoundedRect({
-            width: 900,
-            height: allH
-        }), 50, 0)
-    }
-    if (BG) {
-        var allH2 = 50
+
+    //创建Canvas
+    if (topLeftText != undefined && BG) {
+        var tempcanv = createCanvas(1000, allH + topLeftTextHeight)
     }
     else {
-        var allH2 = 0
+        var tempcanv = createCanvas(1000, allH)
+    }
+    var ctx = tempcanv.getContext("2d")
+
+    //画背景
+    if (BG) {
+        if (topLeftText != undefined) {
+            //右上角文字
+            ctx.drawImage(drawRoundedRect({//画字底，左下角右下角没有圆角
+                opacity: 1,
+                color: '#ea4e73',
+                width: 380,
+                height: topLeftTextHeight + 5,
+                radius: [25, 25, 0, 0],
+                strokeColor: '#ffffff',
+                strokeWidth: 5
+            }), 50, 0)
+
+            var textImage = drawText({//画字
+                color: '#ffffff',
+                text: topLeftText,
+                maxWidth: 370,
+                lineHeight: topLeftTextHeight - 5
+            })
+            ctx.drawImage(textImage, 240 - (textImage.width / 2), 5)
+            ctx.drawImage(drawRoundedRect({//画总底，左上角没有圆角
+                width: 900,
+                height: allH,
+                radius: [0, 25, 25, 25]
+            }), 50, topLeftTextHeight)
+        }
+        else {
+            ctx.drawImage(drawRoundedRect({//画总底
+                width: 900,
+                height: allH
+            }), 50, 0)
+        }
+    }
+    var allH2 = 0
+    if (BG) {
+        allH2 += 50
+        if (topLeftText != undefined) {
+            allH2 += topLeftTextHeight
+        }
     }
     for (var i = 0; i < list.length; i++) {
         ctx.drawImage(list[i], 0, allH2)

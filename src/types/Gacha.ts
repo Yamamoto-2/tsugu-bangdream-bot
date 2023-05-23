@@ -2,51 +2,52 @@ import { callAPIAndCacheResponse } from '../api/getApi';
 import mainAPI from './_Main';
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
-import {Server} from './Server';
+import { Server, serverList } from './Server';
+import { Event } from './Event';
 
 export class Gacha {
-    gachaId:number;
+    gachaId: number;
     isExist = false
-    data:object;
+    data: object;
     resourceName: string;
     bannerAssetBundleName: string;
     gachaName: Array<string | null>;
     publishedAt: Array<number | null>;
     closedAt: Array<number | null>;
-    type:string;
+    type: string;
     newCards: Array<number | null>;
 
     //other
     details: Array<{
-        [cardId:string] :{
-            rarityIndex:number,
-            weight:number,
-            pickUp:boolean
+        [cardId: string]: {
+            rarityIndex: number,
+            weight: number,
+            pickUp: boolean
         };
     } | null>;
     rates: Array<{
-        [rarity:string]:{
-            rate:number,
-            weightTotal:number
+        [rarity: string]: {
+            rate: number,
+            weightTotal: number
         }
     }>
     paymentMethods: Array<{
-        gachaId:number,
-        paymentType:string,
-        quantity:number,
+        gachaId: number,
+        paymentType: string,
+        quantity: number,
         paymentMethodId: number,
         count: number,
         behavior: string,
         pickup: boolean,
         maxSpinLimit: number,
         costItemQuantity: number,
-        discountType: number    
+        discountType: number
     }>
     description: Array<string | null>;
     annotation: Array<string | null>;
-    gachaPeriod:Array<string | null>;
-    gachaType:string;
-    information:{
+    gachaPeriod: Array<string | null>;
+    gachaType: string;
+    information: {
         description: Array<string | null>,
         term: Array<string | null>,
         newMemberInfo: Array<string | null>,
@@ -70,7 +71,7 @@ export class Gacha {
         this.type = gachaData['type']
         this.newCards = gachaData['newCards']
     }
-    async initFull(){
+    async initFull() {
         if (this.isExist == false) {
             return
         }
@@ -86,7 +87,7 @@ export class Gacha {
 
         //other
         this.details = gachaData['details'];
-        this.rates =  gachaData['rates'];
+        this.rates = gachaData['rates'];
         this.paymentMethods = gachaData['paymentMethods'];
         this.description = gachaData['description'];
         this.annotation = gachaData['annotation'];
@@ -94,13 +95,54 @@ export class Gacha {
         this.gachaType = gachaData['gachaType'];
         this.information = gachaData['information'];
     }
-    async getData(){
+    async getData() {
         const gachaData = await callAPIAndCacheResponse(`https://bestdori.com/api/gacha/${this.gachaId}.json`)
         return gachaData
     }
-    async getBannerImage(): Promise<Image>{
+    async getBannerImage(): Promise<Image> {
         var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/homebanner_rip/${this.bannerAssetBundleName}.png`)
         return await loadImage(BannerImageBuffer)
     }
-    
+    getEventId() {
+        var eventList:Array<number> = []
+        var eventListMain = mainAPI['events']
+        for (let i = 0; i < serverList.length; i++) {
+            const element = serverList[i];
+            var server = new Server(element)
+            var haveEvent = false
+            for(var key in eventListMain){
+                var event = new Event(parseInt(key))
+                //如果gacha发生在活动进行时
+                if(event.startAt[server.serverId] <= this.publishedAt[server.serverId] && event.endAt[server.serverId] >= this.closedAt[server.serverId]){
+                    eventList.push(parseInt(key))
+                    haveEvent = true
+                    break
+                }
+            }
+            if(!haveEvent){
+                eventList.push(null)
+            }
+        }
+        return eventList
+    }
+}
+
+export function getEarlistGachaFromList(gachaList: {[gachaId:string]:{
+    probability: number,
+}},server:Server):Gacha | null{
+    var earlistTime = 1/0 //无穷大
+    var earlistGacha:Gacha
+    for (const gachId in gachaList) {
+        if (Object.prototype.hasOwnProperty.call(gachaList, gachId)) {
+            var gacha = new Gacha(parseInt(gachId))
+            if(gacha.publishedAt[server.serverId] < earlistTime){
+                earlistTime = gacha.publishedAt[server.serverId]
+                earlistGacha = gacha
+            }
+        }
+    }
+    if(earlistTime == 1/0){
+        return null
+    }
+    return earlistGacha
 }
