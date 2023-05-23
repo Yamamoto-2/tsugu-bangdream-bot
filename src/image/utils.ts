@@ -3,7 +3,7 @@ import { assetsRootPath } from '../config';
 registerFont(assetsRootPath + "/Fonts/default.ttf", { family: "default" })
 
 //指定字体，字号，文本，获取文本宽度
-function getTextWidth(text: string, textSize: number,font: string ) {
+export function getTextWidth(text: string, textSize: number,font: string ) {
     const canvas = createCanvas(1, 1);
     const context = canvas.getContext("2d");
     if (!context) {
@@ -15,7 +15,3 @@ function getTextWidth(text: string, textSize: number,font: string ) {
 
     return metrics.width;
 }
-
-
-
-export { getTextWidth };

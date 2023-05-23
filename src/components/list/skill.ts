@@ -5,15 +5,17 @@ import { Canvas } from 'canvas'
 import {Card} from '../../types/Card'
 
 interface SkillInListOptions {
+    key?: string;
     card: Card;
     content: Skill;
 }
 export async function drawSkillInList({
+    key,
     card,
     content
 }: SkillInListOptions): Promise<Canvas> {
     var listImage = await drawListByServerList({
-        key: '技能',
+        key: key,
         content: card.skillName,
     })
     var server = getServerByPriority(content.description)
