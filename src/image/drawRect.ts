@@ -5,44 +5,46 @@ registerFont(assetsRootPath + "/Fonts/default.ttf", { family: "default" })
 registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
 
 interface RoundedRect {
-  width: number,
-  height: number,
-  radius?: number,
-  color?: string,
-  opacity?: number,
-  strokeColor?: string,
-  strokeWidth?: number
+  width: number;
+  height: number;
+  radius?: number | [number, number, number, number];
+  color?: string;
+  opacity?: number;
+  strokeColor?: string;
+  strokeWidth?: number;
 }
 
-//画圆角矩形
-function drawRoundedRect(
-  {
-    width,
-    height,
-    radius = 25,
-    color = "#ffffff",
-    opacity = 0.9,
-    strokeColor = "#bbbbbb",
-    strokeWidth = 0
-  }: RoundedRect
-): Canvas {
+// 画圆角矩形
+function drawRoundedRect({
+  width,
+  height,
+  radius = 25,
+  color = "#ffffff",
+  opacity = 0.9,
+  strokeColor = "#bbbbbb",
+  strokeWidth = 0,
+}: RoundedRect): Canvas {
   const canvas = createCanvas(width, height);
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
+
+  if (typeof radius === "number") {
+    radius = [radius, radius, radius, radius];
+  }
 
   ctx.beginPath();
-  ctx.moveTo(radius, 0);
-  ctx.lineTo(width - radius, 0);
-  ctx.quadraticCurveTo(width, 0, width, radius);
-  ctx.lineTo(width, height - radius);
-  ctx.quadraticCurveTo(width, height, width - radius, height);
-  ctx.lineTo(radius, height);
-  ctx.quadraticCurveTo(0, height, 0, height - radius);
-  ctx.lineTo(0, radius);
-  ctx.quadraticCurveTo(0, 0, radius, 0);
+  ctx.moveTo(radius[0], 0);
+  ctx.lineTo(width - radius[1], 0);
+  ctx.quadraticCurveTo(width, 0, width, radius[1]);
+  ctx.lineTo(width, height - radius[2]);
+  ctx.quadraticCurveTo(width, height, width - radius[2], height);
+  ctx.lineTo(radius[3], height);
+  ctx.quadraticCurveTo(0, height, 0, height - radius[3]);
+  ctx.lineTo(0, radius[0]);
+  ctx.quadraticCurveTo(0, 0, radius[0], 0);
   ctx.closePath();
 
   ctx.globalAlpha = opacity;
-  ctx.fillStyle = color
+  ctx.fillStyle = color;
   ctx.fill();
 
   if (strokeWidth > 0) {
@@ -50,15 +52,35 @@ function drawRoundedRect(
     ctx.strokeStyle = strokeColor;
 
     ctx.beginPath();
-    ctx.moveTo(radius, strokeWidth / 2);
-    ctx.lineTo(width - radius, strokeWidth / 2);
-    ctx.quadraticCurveTo(width - strokeWidth / 2, strokeWidth / 2, width - strokeWidth / 2, radius);
-    ctx.lineTo(width - strokeWidth / 2, height - radius);
-    ctx.quadraticCurveTo(width - strokeWidth / 2, height - strokeWidth / 2, width - radius, height - strokeWidth / 2);
-    ctx.lineTo(radius, height - strokeWidth / 2);
-    ctx.quadraticCurveTo(strokeWidth / 2, height - strokeWidth / 2, strokeWidth / 2, height - radius);
-    ctx.lineTo(strokeWidth / 2, radius);
-    ctx.quadraticCurveTo(strokeWidth / 2, strokeWidth / 2, radius, strokeWidth / 2);
+    ctx.moveTo(radius[0], strokeWidth / 2);
+    ctx.lineTo(width - radius[1], strokeWidth / 2);
+    ctx.quadraticCurveTo(
+      width - strokeWidth / 2,
+      strokeWidth / 2,
+      width - strokeWidth / 2,
+      radius[1]
+    );
+    ctx.lineTo(width - strokeWidth / 2, height - radius[2]);
+    ctx.quadraticCurveTo(
+      width - strokeWidth / 2,
+      height - strokeWidth / 2,
+      width - radius[2],
+      height - strokeWidth / 2
+    );
+    ctx.lineTo(radius[3], height - strokeWidth / 2);
+    ctx.quadraticCurveTo(
+      strokeWidth / 2,
+      height - strokeWidth / 2,
+      strokeWidth / 2,
+      height - radius[3]
+    );
+    ctx.lineTo(strokeWidth / 2, radius[0]);
+    ctx.quadraticCurveTo(
+      strokeWidth / 2,
+      strokeWidth / 2,
+      radius[0],
+      strokeWidth / 2
+    );
     ctx.closePath();
 
     ctx.stroke();
