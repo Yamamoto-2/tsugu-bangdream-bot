@@ -229,19 +229,23 @@ export var drawDatablock = async function ({
     const topLeftTextHeight = 70
     //计算高度
     var allH = 0
+    var maxW = 0
     if (BG) {
         allH += 100
     }
     for (var i = 0; i < list.length; i++) {
         allH = allH + list[i].height
+        if (list[i].width > maxW) {
+            maxW = list[i].width
+        }
     }
 
     //创建Canvas
     if (topLeftText != undefined && BG) {
-        var tempcanv = createCanvas(1000, allH + topLeftTextHeight)
+        var tempcanv = createCanvas(maxW, allH + topLeftTextHeight)
     }
     else {
-        var tempcanv = createCanvas(1000, allH)
+        var tempcanv = createCanvas(maxW, allH)
     }
     var ctx = tempcanv.getContext("2d")
 
@@ -267,14 +271,14 @@ export var drawDatablock = async function ({
             })
             ctx.drawImage(textImage, 240 - (textImage.width / 2), 5)
             ctx.drawImage(drawRoundedRect({//画总底，左上角没有圆角
-                width: 900,
+                width: maxW-100,
                 height: allH,
                 radius: [0, 25, 25, 25]
             }), 50, topLeftTextHeight)
         }
         else {
             ctx.drawImage(drawRoundedRect({//画总底
-                width: 900,
+                width: maxW-100,
                 height: allH
             }), 50, 0)
         }
