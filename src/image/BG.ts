@@ -2,10 +2,12 @@ import { createBlurredTrianglePattern } from "./BG/BG_triangle";
 import { scatterImages } from "./BG/BG_starScatter";
 import { drawTextOnCanvas } from "./BG/BG_text";
 import { createCanvas, loadImage, Image, Canvas } from "canvas";
+import { assetsRootPath } from '../config'
+import * as path from 'path';
 
 interface BGOptions {
-  image: Image | Canvas | any;
-  text: string;
+  image?: Image | Canvas | any;
+  text?: string;
   width: number;
   height: number;
 }
@@ -61,6 +63,45 @@ async function Spread(image: Image, width: number, height: number, brightness: n
   return canvas.toBuffer();
 }
 
+var star: Image[] = [];
+
+var defaultBGTexture: Image;
+async function loadImageOnce() {
+  star.push(await loadImage(path.join(assetsRootPath, "/BG/star1.png")));
+  star.push(await loadImage(path.join(assetsRootPath, "/BG/star2.png")));
+  defaultBGTexture = await loadImage(path.join(assetsRootPath, "/BG/bg_object_big.png"));
+}
+loadImageOnce()
+
+export async function CreateBGEazy({
+  width, height
+}) {
+  const bgColor = '#fef3ef'
+  const canvas: Canvas = createCanvas(width, height);
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, width, height);
+  if (width < 2000) {
+    var ratio = defaultBGTexture.width / width 
+  }
+  else {
+    ratio = 1
+  }
+  //将图片等比例缩放并重复铺满整个画布
+  let x = 0,
+    y = 0;
+  while (y < height) {
+    x = 0 - (Math.random() * defaultBGTexture.width * ratio);
+    while (x < width) {
+      ctx.drawImage(defaultBGTexture, x, y, defaultBGTexture.width * ratio, defaultBGTexture.height * ratio);
+      x += defaultBGTexture.width * ratio;
+    }
+    y += defaultBGTexture.height * ratio;
+  }
+  return (canvas)
+}
+
+
 export async function CreateBG({
   image,
   text,
@@ -68,7 +109,6 @@ export async function CreateBG({
   height,
 
 }: BGOptions): Promise<Canvas> {
-
   //将图片铺满画面，并且增加20亮度
   const BG = await Spread(image, width, height, 20);
   const BGimage = await loadImage(BG);
@@ -81,19 +121,23 @@ export async function CreateBG({
     brightnessDifference: 0.04,
   });
 
+
   //添加随机星星
-  await scatterImages({
-    canvas,
-    canvasWidth: canvas.width,
-    canvasHeight: canvas.height,
-    density: 0.00001,
-    angleRange: 72,
-    sizeRange: [25, 75],
-  })
+  for (let i = 0; i < star.length; i++) {
+    await scatterImages({
+      canvas,
+      image: star[i],
+      canvasWidth: canvas.width,
+      canvasHeight: canvas.height,
+      density: 0.00001,
+      angleRange: 72,
+      sizeRange: [25, 75],
+    })
+  }
 
   //添加背景文字
   drawTextOnCanvas(canvas, {
-    text: text,
+    text: text ??= 'BanG Dream!',
     fontSize: 150,
     angle: 15,
     lineSpacing: 50,

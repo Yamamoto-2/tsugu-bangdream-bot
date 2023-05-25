@@ -29,3 +29,4 @@ export const Bestdoriurl: string = 'https://bestdori.com'; //Bestdori网站的ur
 
 export const defaultserver: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['jp', 'cn']
 
+export const EazyBG = false //是否使用简易背景，这将大幅提高速度

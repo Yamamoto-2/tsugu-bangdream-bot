@@ -191,8 +191,18 @@ async function drawCardDetail(cardId: number): Promise<Buffer> {
     }
 
 
-
-    var buffer = await outputFinalBuffer(all, 'Card', await card.getCardIllustrationImage(true))
+    if(card.rarity < 3){
+    var buffer = await outputFinalBuffer({
+        imageList: all
+    })
+    }else{
+        var buffer = await outputFinalBuffer({
+            imageList: all,
+            useEazyBG: false,
+            BGimage: await card.getCardIllustrationImage(true),
+            text:'Card'
+        })
+    }
     return buffer
 }
 

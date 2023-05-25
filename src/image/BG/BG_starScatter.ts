@@ -1,9 +1,9 @@
-import { loadImage, Canvas } from 'canvas';
-import { assetsRootPath } from '../../config';
-import path from 'path';
+import { Canvas, Image } from 'canvas';
+
 
 interface ScatterProps {
   canvas: Canvas;
+  image:Image;
   canvasWidth: number;
   canvasHeight: number;
   density: number;
@@ -14,6 +14,7 @@ interface ScatterProps {
 //随机在canvas中散布星星(arisa)
 export async function scatterImages({
   canvas,
+  image,
   canvasWidth,
   canvasHeight,
   density,
@@ -23,8 +24,7 @@ export async function scatterImages({
   const ctx = canvas.getContext('2d');
 
   // Load images
-  const image1 = await loadImage(path.join(assetsRootPath, "/BG/star1.png"));
-  const image2 = await loadImage(path.join(assetsRootPath, "/BG/star2.png"));
+
 
   // Calculate number of images to scatter
   const area = canvasWidth * canvasHeight;
@@ -33,7 +33,7 @@ export async function scatterImages({
   // Scatter images randomly
   for (let i = 0; i < numImages; i++) {
     // Randomly select image
-    const image = Math.random() < 0.5 ? image1 : image2;
+
 
     // Randomly select position and size
     const x = Math.random() * canvasWidth;
