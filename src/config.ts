@@ -2,6 +2,9 @@ import * as path from 'path';
 
 export const projectRoot: string = path.resolve(path.dirname(__dirname));
 export const assetsRootPath: string = path.join(projectRoot, '/assets');
+export const configPath: string = path.join(projectRoot, '/config');
+export const fuzzySearchPath = path.join(configPath, '/fuzzy_search_settings.json');
+export const carKeywordPath = path.join(configPath, '/card_keyword.json');
 
 export const cacheRootPath: string = path.join(projectRoot, '/cache');
 export const BestdoriapiPath = { //Bestdori网站的列表api路径
