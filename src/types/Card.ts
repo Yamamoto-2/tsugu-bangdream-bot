@@ -169,13 +169,15 @@ export class Card {
         if (trainingStatus) {//如果已经特训
             addStat(stat, this.stat['training'])
         }
+        if(this.stat['episodes'] != undefined){//如果有剧情
+            if (episode1) {//如果已经阅读剧情1
+                addStat(stat, this.stat['episodes'][0])
+            }
+            if (episode2) {//如果已经阅读剧情2
+                addStat(stat, this.stat['episodes'][1])
+            }
+        }
 
-        if (episode1) {//如果已经阅读剧情1
-            addStat(stat, this.stat['episodes'][0])
-        }
-        if (episode2) {//如果已经阅读剧情2
-            addStat(stat, this.stat['episodes'][1])
-        }
         if (limitBreakRank > 0) {
             for (var i = 1; i <= limitBreakRank; i++) {
                 addStat(stat, limitBreakRankStat(this.rarity))
