@@ -1,11 +1,12 @@
 import { Gacha } from "../../types/Gacha";
-import { drawDatablock, drawListWithLine, drawListByServerList } from "../list";
+import { drawListWithLine, drawListByServerList } from "../list";
+import { drawDatablock } from '../dataBlock'
 import { drawCharacterInList } from '../list/character'
 import { drawAttributeInList } from "../list/attribute";
 import { drawTimeInList } from "../list/time";
 import { drawText } from "../text";
 import { createCanvas, Image, Canvas } from "canvas";
-import{draweventBannerImageCanvas} from './utils'
+import { draweventBannerImageCanvas } from './utils'
 
 export async function drawGachaDatablock(gacha: Gacha, topLeftText?: string) {
     var list = []

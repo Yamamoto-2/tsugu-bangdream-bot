@@ -168,9 +168,9 @@ export async function drawCardIllustration({
     if(isList){
         //等比例缩放到宽度为widthMax
         var scale = 800/1360
-        var tempcanvas = createCanvas(1000,905*scale )
+        var tempcanvas = createCanvas(800,905*scale )
         var ctx = tempcanvas.getContext("2d")
-        ctx.drawImage(canvas,100,0,800,905*scale)
+        ctx.drawImage(canvas,0,0,800,905*scale)
         return tempcanvas
     }
     else{

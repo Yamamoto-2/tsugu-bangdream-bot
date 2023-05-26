@@ -1,16 +1,16 @@
 import { Canvas, Image, createCanvas } from 'canvas';
-import { drawRoundedRectWithText, drawRoundedRect } from '../image/drawRect';
+import { drawRoundedRectWithText } from '../image/drawRect';
 import { drawText, drawTextWithImages } from './text';
 import { drawDottedLine } from '../image/dottedLine'
 import { Server, getServerByPriority, defaultserverList } from '../types/Server'
 
 //表格用默认虚线
 export const line: Canvas = drawDottedLine({
-    width: 1000,
+    width: 800,
     height: 30,
-    startX: 100,
+    startX: 5,
     startY: 15,
-    endX: 900,
+    endX: 795,
     endY: 15,
     radius: 2,
     gap: 10,
@@ -65,10 +65,10 @@ export function drawList({
         return textImage
     }
     var ymax = textImage.height + keyImage.height + 10;
-    const canvas = createCanvas(1000, ymax);
+    const canvas = createCanvas(800, ymax);
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(keyImage, 100, 0);
-    ctx.drawImage(textImage, 120, keyImage.height + 10);
+    ctx.drawImage(keyImage, 0, 0);
+    ctx.drawImage(textImage, 20, keyImage.height + 10);
     return canvas;
 }
 
@@ -103,11 +103,11 @@ export function drawTips({
     else {
         textImage = createCanvas(1, 1)
     }
-    const canvas = createCanvas(1000, textImage.height + 10);
+    const canvas = createCanvas(800, textImage.height + 10);
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#f1f1f1'
-    ctx.fillRect(100, 10, 800, textImage.height);
-    ctx.drawImage(textImage, 120, 10);
+    ctx.fillRect(0, 10, 800, textImage.height);
+    ctx.drawImage(textImage, 20, 10);
     return canvas;
 }
 
@@ -183,7 +183,7 @@ export function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
             maxHeight = element.height
         }
     }
-    var canvas = createCanvas(1000, maxHeight)
+    var canvas = createCanvas(800, maxHeight)
     var ctx = canvas.getContext('2d')
     var x = 0
     for (let i = 0; i < imageList.length; i++) {
@@ -196,17 +196,17 @@ export function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
 
 //画左侧有竖线的排版，用于画block时展示数据
 export function drawListWithLine(textImageList: Array<Canvas | Image>): Canvas {
-    var x = 130
+    var x = 30
     var y = 10
     var height = 0
     for (let i = 0; i < textImageList.length; i++) {
         const element = textImageList[i];
         height += element.height
     }
-    var canvas = createCanvas(1000, height + 10)
+    var canvas = createCanvas(800, height + 10)
     var ctx = canvas.getContext('2d')
     ctx.fillStyle = '#a8a8a8'
-    ctx.fillRect(110, 10, 5, height + 20)
+    ctx.fillRect(10, 10, 5, height + 20)
     for (let i = 0; i < textImageList.length; i++) {
         const element = textImageList[i];
         ctx.drawImage(element, x, y)
@@ -215,85 +215,3 @@ export function drawListWithLine(textImageList: Array<Canvas | Image>): Canvas {
     return canvas
 }
 
-interface datablockOptions {
-    list: Array<Canvas | Image>
-    BG?: boolean
-    topLeftText?: string
-}
-//组合表格子程序，使用block当做底，通过最大高度换行，默认高度无上限
-export var drawDatablock = async function ({
-    list,
-    BG = true,
-    topLeftText
-}: datablockOptions): Promise<Canvas> {
-    const topLeftTextHeight = 70
-    //计算高度
-    var allH = 0
-    var maxW = 0
-    if (BG) {
-        allH += 100
-    }
-    for (var i = 0; i < list.length; i++) {
-        allH = allH + list[i].height
-        if (list[i].width > maxW) {
-            maxW = list[i].width
-        }
-    }
-
-    //创建Canvas
-    if (topLeftText != undefined && BG) {
-        var tempcanv = createCanvas(maxW, allH + topLeftTextHeight)
-    }
-    else {
-        var tempcanv = createCanvas(maxW, allH)
-    }
-    var ctx = tempcanv.getContext("2d")
-
-    //画背景
-    if (BG) {
-        if (topLeftText != undefined) {
-            //右上角文字
-            ctx.drawImage(drawRoundedRect({//画字底，左下角右下角没有圆角
-                opacity: 1,
-                color: '#ea4e73',
-                width: 380,
-                height: topLeftTextHeight + 5,
-                radius: [25, 25, 0, 0],
-                strokeColor: '#ffffff',
-                strokeWidth: 5
-            }), 50, 0)
-
-            var textImage = drawText({//画字
-                color: '#ffffff',
-                text: topLeftText,
-                maxWidth: 370,
-                lineHeight: topLeftTextHeight - 5
-            })
-            ctx.drawImage(textImage, 240 - (textImage.width / 2), 5)
-            ctx.drawImage(drawRoundedRect({//画总底，左上角没有圆角
-                width: maxW-100,
-                height: allH,
-                radius: [0, 25, 25, 25]
-            }), 50, topLeftTextHeight)
-        }
-        else {
-            ctx.drawImage(drawRoundedRect({//画总底
-                width: maxW-100,
-                height: allH
-            }), 50, 0)
-        }
-    }
-    var allH2 = 0
-    if (BG) {
-        allH2 += 50
-        if (topLeftText != undefined) {
-            allH2 += topLeftTextHeight
-        }
-    }
-    for (var i = 0; i < list.length; i++) {
-        ctx.drawImage(list[i], 0, allH2)
-        allH2 = allH2 + list[i].height
-    }
-
-    return (tempcanv)
-}

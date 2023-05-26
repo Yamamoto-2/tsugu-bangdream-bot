@@ -1,8 +1,10 @@
+import {h,Element} from 'koishi'
 import { Card } from '../types/Card'
 import { Character } from '../types/Character';
 import { Attribute } from '../types/Attribute';
 import { Skill } from '../types/Skill';
-import { drawList, drawDatablock, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
+import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
+import {drawDatablock} from '../components/dataBlock'
 import { drawCardIllustration } from '../components/card';
 import { drawCharacterInList } from '../components/list/character'
 import { drawAttributeInList } from '../components/list/attribute'
@@ -22,8 +24,11 @@ import { outputFinalBuffer } from '../image/output'
 import { Event } from '../types/Event';
 import { Gacha, getEarlistGachaFromList } from '../types/Gacha'
 
-async function drawCardDetail(cardId: number): Promise<Buffer> {
+async function drawCardDetail(cardId: number): Promise<Element|string> {
     const card = new Card(cardId)
+    if(!card.isExist){
+        return '错误: 卡牌不存在'
+    }
     await card.initFull()
     var source = card.source
 
@@ -32,7 +37,7 @@ async function drawCardDetail(cardId: number): Promise<Buffer> {
     //标题
     list.push(await drawCardPrefixInList(card))
     var trainingStatusList = card.getTrainingStatusList()
-    list.push(createCanvas(1000, 30))
+    list.push(createCanvas(800, 30))
 
     //插画
     for (let i = 0; i < trainingStatusList.length; i++) {
@@ -42,7 +47,7 @@ async function drawCardDetail(cardId: number): Promise<Buffer> {
             trainingStatus: element,
             isList: true
         }))
-        list.push(createCanvas(1000, 30))
+        list.push(createCanvas(800, 30))
     }
 
     //类型
@@ -204,7 +209,7 @@ async function drawCardDetail(cardId: number): Promise<Buffer> {
         text: 'Card'
     })
 
-    return buffer
+    return h.image(buffer, 'image/png')
 }
 
 export {

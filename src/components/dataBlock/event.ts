@@ -1,5 +1,6 @@
 import { Event } from "../../types/Event";
-import { drawDatablock, drawListWithLine, drawListByServerList } from "../list";
+import { drawListWithLine, drawListByServerList } from "../list";
+import { drawDatablock } from '../dataBlock'
 import { drawCharacterInList } from '../list/character'
 import { drawAttributeInList } from "../list/attribute";
 import { drawTimeInList } from "../list/time";

@@ -1,8 +1,9 @@
 import { Skill } from '../../types/Skill'
 import { getServerByPriority } from '../../types/Server'
-import {  drawDatablock, drawTips,drawListByServerList } from '../list'
+import { drawTips, drawListByServerList } from '../list'
+import { stackImage } from '../utils'
 import { Canvas } from 'canvas'
-import {Card} from '../../types/Card'
+import { Card } from '../../types/Card'
 
 interface SkillInListOptions {
     key?: string;
@@ -22,5 +23,5 @@ export async function drawSkillInList({
     var tipsImage = drawTips({
         text: server.getContentByServer(content.getSkillDescription())
     })
-    return drawDatablock({list:[listImage, tipsImage], BG:false})
+    return stackImage( [listImage, tipsImage])
 }

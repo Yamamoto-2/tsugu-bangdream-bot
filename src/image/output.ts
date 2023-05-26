@@ -31,7 +31,7 @@ export var outputFinalCanv = async function ({ imageList,
             maxW = imageList[i].width
         }
     }
-    var tempcanv = createCanvas(1000, allH)
+    var tempcanv = createCanvas(maxW, allH)
     var ctx = tempcanv.getContext("2d")
 
     if (EazyBG || useEazyBG) {
