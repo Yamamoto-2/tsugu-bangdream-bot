@@ -16,7 +16,7 @@ export const Config: Schema<Config> = Schema.object({
   })
 })
 
-import { commandCard } from './commands/card'
+import { commandCard } from './commands/searchCard'
 
 export function apply(ctx: Context) {
 

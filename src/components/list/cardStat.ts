@@ -32,7 +32,7 @@ async function drawCardStatDivided (stat:Stat,statTotal:number,limitBreakstat:St
         const canvas = createCanvas(1000, 70)
         const ctx = canvas.getContext('2d')
         const textImage = drawText({
-            text: `${statConfig[key].name}: ${value} + (${limitBreakstat[key]})`,
+            text: `${statConfig[key].name}: ${value} + (${limitBreakstat[key] * 4})`,
             maxWidth: widthMax,
             textSize:30,
             lineHeight:30

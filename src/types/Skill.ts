@@ -33,7 +33,7 @@ export class Skill {
     }
     getEffectTypes(): Array<string> {//返回技能类型，如果存在多个效果，优先级为skillTypeList中排列的顺序
         const skillTypeList = [
-            'judge', 'life', 'damage', 'score_continued_note_judge', 'score_over_life', 'score_under_great_half', 'score'
+            'judge', 'life', 'damage',  'score','score_continued_note_judge', 'score_over_life', 'score_under_great_half'
         ]
 
         var tempTypeList: Array<string> = []
@@ -42,12 +42,20 @@ export class Skill {
         }
         if (this.data['activationEffect'] != undefined) {
             for (var i in this.data['activationEffect']['activateEffectTypes']) {
-                tempTypeList.push(i)
+                if(i.includes('score')){//如果包含score，都算作分卡(可能不严谨)
+                    tempTypeList.push('score')
+                }
+                else{
+                    tempTypeList.push(i)
+                }
             }
         }
         if (this.data['onceEffect'] != undefined) {
             tempTypeList.push(this.data['onceEffect']['onceEffectType'])
         }
+        tempTypeList.sort((a, b) => {
+            return skillTypeList.indexOf(a) - skillTypeList.indexOf(b)
+        })
         return tempTypeList
     }
     getSkillDescription(): Array<string> {//返回完整技能描述，不同等级效果用'/'分割
@@ -129,14 +137,4 @@ export class Skill {
 
 
 
-}
-
-//通过输入array和caseArray，返回array中第一个出现caseArray中的元素
-function findFirstString(inputArray: string[], caseArray: string[]): string | undefined {
-    for (const str of caseArray) {
-        if (inputArray.indexOf(str) !== -1) {
-            return str;
-        }
-    }
-    return undefined;
 }

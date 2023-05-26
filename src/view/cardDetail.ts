@@ -190,19 +190,20 @@ async function drawCardDetail(cardId: number): Promise<Buffer> {
         all.push(gachaImageList[i])
     }
 
-
-    if(card.rarity < 3){
-    var buffer = await outputFinalBuffer({
-        imageList: all
-    })
-    }else{
-        var buffer = await outputFinalBuffer({
-            imageList: all,
-            useEazyBG: false,
-            BGimage: await card.getCardIllustrationImage(true),
-            text:'Card'
-        })
+    if (card.rarity < 3) {
+        var BGimage: Image
     }
+    else {
+        var BGimage = await card.getCardIllustrationImage(true)
+    }
+
+    var buffer = await outputFinalBuffer({
+        imageList: all,
+        useEazyBG: false,
+        BGimage,
+        text: 'Card'
+    })
+
     return buffer
 }
 

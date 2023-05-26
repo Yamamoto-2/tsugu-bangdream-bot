@@ -67,6 +67,10 @@ export class Card {
     stat: object;
     bandId: number;
 
+    //other
+    skillType: string;
+    scoreUpMaxValue: number;
+
     constructor(cardId: number) {
         this.cardId = cardId
         const cardData = mainAPI['cards'][cardId.toString()]
@@ -87,13 +91,16 @@ export class Card {
         this.releasedAt = cardData['releasedAt']
         this.skillId = cardData['skillId']
         this.stat = cardData['stat']
+        var skill = new Skill(this.skillId)
+        this.skillType = skill.effectTypes[0]
+        this.scoreUpMaxValue = skill.scoreUpMaxValue
     }
-    async initFull() {
+    async initFull(update: boolean = true) {
         if (this.isExist == false) {
             return
         }
         this.isExist = true;
-        const cardData = await this.getData()
+        const cardData = await this.getData(update)
         this.data = cardData
         this.characterId = cardData['characterId']
         this.rarity = cardData['rarity']
@@ -112,8 +119,9 @@ export class Card {
         this.stat = cardData['stat']
         this.isInitFull = true;
     }
-    async getData() {
-        var cardData = await callAPIAndCacheResponse('https://bestdori.com/api/cards/' + this.cardId + '.json')
+    async getData(update: boolean = true) {
+        var time = update ? 0 : 1 / 0
+        var cardData = await callAPIAndCacheResponse('https://bestdori.com/api/cards/' + this.cardId + '.json', time)
         return cardData
     }
 
@@ -169,7 +177,7 @@ export class Card {
         if (trainingStatus) {//如果已经特训
             addStat(stat, this.stat['training'])
         }
-        if(this.stat['episodes'] != undefined){//如果有剧情
+        if (this.stat['episodes'] != undefined) {//如果有剧情
             if (episode1) {//如果已经阅读剧情1
                 addStat(stat, this.stat['episodes'][0])
             }
