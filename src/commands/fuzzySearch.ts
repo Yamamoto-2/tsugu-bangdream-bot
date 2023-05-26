@@ -66,7 +66,7 @@ export function match(matches: { [key: string]: string[] }, target: any, numberT
       }
     }
   }
-  if (numberTypeKey.length > 0) {
+  if (numberTypeKey.length > 0 && matches['number'] != undefined) {
     for (let i = 0; i < numberTypeKey.length; i++) {
       const key = numberTypeKey[i];
       if (target[key] != undefined) {

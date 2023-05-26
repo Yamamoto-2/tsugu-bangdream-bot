@@ -11,8 +11,7 @@ export async function commandCard(argv: any, text: string) {
     }
     console.log(argv)
     if (isInteger(text)) {
-        var cardDetailbuffer = await drawCardDetail(parseInt(text))
-        return [h.image(cardDetailbuffer, 'image/png')]
+        return await drawCardDetail(parseInt(text))
     }
     var fuzzySearchResult = fuzzySearch(text.split(' '))
     console.log(fuzzySearchResult)
@@ -20,5 +19,5 @@ export async function commandCard(argv: any, text: string) {
         return '错误: 没有有效的关键词'
     }
     return await drawCardList(fuzzySearchResult)
-
+     
 }
