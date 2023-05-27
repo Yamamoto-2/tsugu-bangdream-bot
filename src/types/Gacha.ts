@@ -116,15 +116,14 @@ export class Gacha {
     }
     getEventId() {
         var eventList: Array<number> = []
-        var eventListMain = mainAPI['events']
         for (let i = 0; i < serverList.length; i++) {
             const serverName = serverList[i];
             var server = new Server(serverName)
             var tempEvent = getPresentEvent(server, this.publishedAt[server.serverId])
-            if(tempEvent != null){
+            if (tempEvent != null) {
                 eventList.push(tempEvent.eventId)
             }
-            else{
+            else {
                 eventList.push(null)
             }
         }
@@ -158,4 +157,25 @@ export function getEarlistGachaFromList(gachaList: {
         return null
     }
     return earlistGacha
+}
+
+//获取当前进行中的卡池
+export function getPresentGachaList(server: Server, start: number = Date.now(), end: number = Date.now()): Gacha[] {
+    var gachaList: Array<Gacha> = []
+    var gachaListMain = mainAPI['gacha']
+    
+    for (const gachaId in gachaListMain) {
+        if (Object.prototype.hasOwnProperty.call(gachaListMain, gachaId)) {
+            const gacha = new Gacha(parseInt(gachaId))
+            
+            // 检查活动的发布时间和结束时间是否在指定范围内
+            if (gacha.publishedAt[server.serverId] <= end && gacha.closedAt[server.serverId] >= start) {
+                if (gacha.type !== 'special') {
+                    gachaList.push(gacha)
+                }
+            }
+        }
+    }
+    
+    return gachaList
 }

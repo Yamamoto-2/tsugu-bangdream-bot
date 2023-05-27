@@ -81,10 +81,10 @@ export class Event {
         | null
     >
     eventCharacterParameterBonus?: {//偏科
-        performance: number,
-        technique: number,
-        visual: number
-    }
+        performance?: number,
+        technique?: number,
+        visual?: number
+    } = {}
 
 
 
@@ -135,6 +135,10 @@ export class Event {
         this.aggregateEndAt = eventData['aggregateEndAt'];
         this.exchangeEndAt = eventData['exchangeEndAt'];
         */
+        if(eventData['eventCharacterParameterBonus'] != undefined){
+            this.eventCharacterParameterBonus = eventData['eventCharacterParameterBonus']
+        }
+
         this.isInitFull = true;
     }
     async getData() {
@@ -151,6 +155,11 @@ export class Event {
             var server = new Server('jp')
             var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`)
         //}
+        return await loadImage(BannerImageBuffer)
+    }
+    async getEventBGImage(): Promise<Image> {
+        var server = new Server('jp')
+        var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/event/${this.assetBundleName}/topscreen_rip/bg_eventtop.png`)
         return await loadImage(BannerImageBuffer)
     }
     getTypeName() {

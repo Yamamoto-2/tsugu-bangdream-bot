@@ -17,13 +17,20 @@ export const Config: Schema<Config> = Schema.object({
 })
 
 import { commandCard } from './commands/searchCard'
+import { commandEvent } from './commands/searchEvent'
 
 export function apply(ctx: Context) {
 
   ctx.command("查卡 <word:text>", "查卡")
     .action(async (argv, text) => {
       return await commandCard(argv, text)
-    })
+    }
+  )
+  ctx.command("查活动 <word:text>", "查活动")
+    .action(async (argv, text) => {
+      return await commandEvent(argv, text)
+    }
+  )
 }
 
 

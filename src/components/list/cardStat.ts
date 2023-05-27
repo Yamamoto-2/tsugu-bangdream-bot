@@ -5,7 +5,7 @@ import {stackImage} from '../utils'
 import { drawRoundedRect } from "../../image/drawRect";
 import { Card, Stat, limitBreakRankStat } from "../../types/Card";
 
-const statConfig = {
+export const statConfig = {
     performance: { color: '#f76da1', name: '演出' },
     technique: { color: '#4fb9eb', name: '技巧' },
     visual: { color: '#fbc74f', name: '形象' },
