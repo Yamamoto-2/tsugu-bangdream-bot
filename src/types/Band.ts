@@ -9,9 +9,13 @@ export class Band {
     data: object;
     bandName: Array<string | null>;
     members: Array<Character | null>;
+    hasIcon: boolean = false;
     constructor(bandId: number) {
         this.bandId = bandId
-        const bandData = mainAPI['bands'][bandId.toString()]
+        const bandData = mainAPI['singer'][bandId.toString()]
+        if(mainAPI['bands'][bandId.toString()] != undefined){
+            this.hasIcon = true;
+        }
         if (bandData == undefined) {
             this.isExist = false;
             return

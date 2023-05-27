@@ -3,6 +3,9 @@ import { Card } from '../types/Card'
 import { Character } from '../types/Character';
 import { Attribute } from '../types/Attribute';
 import { Skill } from '../types/Skill';
+import { Gacha, getEarlistGachaFromList } from '../types/Gacha'
+import { Band } from '../types/Band';
+
 import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
 import { drawCardIllustration } from '../components/card';
@@ -15,15 +18,18 @@ import { drawCardPrefixInList } from '../components/list/cardPrefix'
 import { drawCardStatInList } from '../components/list/cardStat'
 import { drawCardListInList } from '../components/list/cardIconList'
 import { drawSdcharaInList } from '../components/list/cardSdchara'
+import { drawBandInList } from '../components/list/band'
+
 import { drawEventDatablock } from '../components/dataBlock/event';
 import { drawGachaDatablock } from '../components/dataBlock/gacha'
+
 import { Image, Canvas, createCanvas } from 'canvas'
 import { Server, defaultserverList } from '../types/Server';
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
 import { Event } from '../types/Event';
-import { Gacha, getEarlistGachaFromList } from '../types/Gacha'
-async function drawCardDetail(cardId: number): Promise<Element | string> {    
+
+async function drawCardDetail(cardId: number): Promise<Element | string> {
     const card = new Card(cardId)
     if (!card.isExist) {
         return '错误: 卡牌不存在'
@@ -68,6 +74,10 @@ async function drawCardDetail(cardId: number): Promise<Element | string> {
     list.push(line)
 
     /*
+    //乐队
+    list.push(await drawBandInList({ key: '乐队', content: [new Band(card.bandId)] }))
+    list.push(line)
+
     //角色
     var character = new Character(card.characterId)
     list.push(await drawCharacterInList({ content: [character] }))
@@ -162,8 +172,8 @@ async function drawCardDetail(cardId: number): Promise<Element | string> {
         if (card.releaseGacha[server.serverId].length != 0) {
             var tempGacha = getEarlistGachaFromList(card.source[server.serverId]['gacha'], server)
             console.log(tempGacha.getEventId())
-            var tempEventId = tempGacha.getEventId()[server.serverId] 
-            if(tempEventId != null){
+            var tempEventId = tempGacha.getEventId()[server.serverId]
+            if (tempEventId != null) {
                 var tempEvent = new Event(tempEventId)
                 if (!tempEventIdList.includes(tempEvent.eventId)) {
                     eventImageList.push(await drawEventDatablock(tempEvent, `${server.serverNameFull}相关活动`))

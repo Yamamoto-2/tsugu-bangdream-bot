@@ -11,6 +11,7 @@ export const BestdoriapiPath = { //Bestdori网站的列表api路径
     'cards': '/api/cards/all.5.json',
     'characters': '/api/characters/main.3.json',
     'bands': '/api/bands/main.1.json',
+    'singer':'/api/bands/all.1.json',
     'skills': '/api/skills/all.10.json',
     'costumes': '/api/costumes/all.5.json',
     'events': '/api/events/all.6.json',
