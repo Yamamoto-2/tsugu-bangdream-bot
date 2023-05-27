@@ -7,7 +7,7 @@ import * as path from 'path'
 var skillIcon: { [skillType: string]: Image } = {}
 async function loadImageOnce() {
     skillIcon.life = await loadImage(path.join(assetsRootPath, '/Skill/life.png'));
-    skillIcon.judje = await loadImage(path.join(assetsRootPath, '/Skill/judje.png'));
+    skillIcon.judge = await loadImage(path.join(assetsRootPath, '/Skill/judge.png'));
     skillIcon.damage = await loadImage(path.join(assetsRootPath, '/Skill/damage.png'));
 }
 loadImageOnce()
@@ -31,7 +31,7 @@ export async function drawCardIconSkill(skill: Skill): Promise<Canvas> {
     //图标部分
     EffectTypes.forEach((EffectType, index) => {
         if (EffectType == 'judge') {
-            content.push(skillIcon.judje)
+            content.push(skillIcon.judge)
         }
         else if (EffectType == 'life') {
             content.push(skillIcon.life)
