@@ -1,11 +1,15 @@
 import { callAPIAndCacheResponse } from '../api/getApi'
 import { Skill } from './Skill'
 import { Character } from './Character'
-import { Server, getServerByPriority } from './Server'
+import { Server, getServerByPriority, serverList } from './Server'
+import { Gacha, getEarlistGachaFromList } from './Gacha'
+import { Event } from './Event'
 import { Image, loadImage } from 'canvas'
 import { downloadFile } from '../api/downloadFile'
 import { downloadFileCache } from '../api/downloadFileCache'
 import mainAPI from './_Main'
+
+var cardDataCache = {}
 
 export interface Stat {//综合力
     performance: number,
@@ -70,6 +74,8 @@ export class Card {
     //other
     skillType: string;
     scoreUpMaxValue: number;
+    releaseGacha: Array<Array<number>>;
+    releaseEvent: Array<Array<number>>;
 
     constructor(cardId: number) {
         this.cardId = cardId
@@ -100,7 +106,13 @@ export class Card {
             return
         }
         this.isExist = true;
-        const cardData = await this.getData(update)
+        if (cardDataCache[this.cardId.toString()] != undefined && !update) {
+            var cardData = cardDataCache[this.cardId.toString()]
+        }
+        else {
+            var cardData = await this.getData(update)
+        }
+        this.isInitFull = true;
         this.data = cardData
         this.characterId = cardData['characterId']
         this.rarity = cardData['rarity']
@@ -113,11 +125,27 @@ export class Card {
         this.gachaText = cardData['gachaText']
         this.prefix = cardData['prefix']
         this.releasedAt = cardData['releasedAt']
-        this.skillName = cardData['skillName']
         this.source = cardData['source']
+        //修复国服releaseAt错误问题,将国服的releaseAt改为卡池或活动的开始时间
+        var CNserver = new Server('cn')
+        this.getSource()
+        if (this.releaseEvent[CNserver.serverId].length != 0) {
+            this.releasedAt[CNserver.serverId] = new Event(this.releaseEvent[CNserver.serverId][0]).startAt[CNserver.serverId]
+        }
+        else if (this.releaseGacha[CNserver.serverId].length != 0) {
+            var earlistGacha = getEarlistGachaFromList(this.source[CNserver.serverId]['gacha'],CNserver)
+            this.releasedAt[CNserver.serverId] = earlistGacha.publishedAt[CNserver.serverId]
+        }
+
+        this.skillName = cardData['skillName']
         this.skillId = cardData['skillId']
         this.stat = cardData['stat']
-        this.isInitFull = true;
+
+
+        //缓存数据
+        if (cardDataCache[this.cardId.toString()] == undefined) {
+            cardDataCache[this.cardId.toString()] = cardData
+        }
     }
     async getData(update: boolean = true) {
         var time = update ? 0 : 1 / 0
@@ -151,9 +179,13 @@ export class Card {
     async calcStat(level?: number, trainingStatus: boolean = false, limitBreakRank: number = 0, episode1: boolean = true, episode2: boolean = true) {
         if (!this.isInitFull) {
             //如果不是默认情况(带有level以外的参数)，加载完整数据，其中包含完整综合力数据
+            /*
             if (trainingStatus != undefined || limitBreakRank != undefined || episode1 != undefined || episode2 != undefined) {
                 await this.initFull()
             }
+            */
+            await this.initFull(false)
+
         }
         const stat: Stat = {
             performance: 0,
@@ -249,6 +281,33 @@ export class Card {
             }
         }
         return maxLevel
+    }
+    async getSource() {
+        if(!this.isInitFull){
+            await this.initFull(false)
+        }
+        var releaseEvent: Array<Array<number>> = []
+        var releaseGacha: Array<Array<number>> = []
+        for (let k = 0; k < serverList.length; k++) {
+
+            const serverName = serverList[k];
+            const server = new Server(serverName)
+            var sourceOfServer = this.source[server.serverId]
+            if (sourceOfServer['event'] != undefined) {
+                releaseEvent.push(Object.keys(sourceOfServer['event']).map(Number))
+            }
+            else {
+                releaseEvent.push([])
+            }
+            if (sourceOfServer['gacha'] != undefined) {
+                releaseGacha.push(Object.keys(sourceOfServer['gacha']).map(Number))
+            }
+            else {
+                releaseGacha.push([])
+            }
+        }
+        this.releaseEvent = releaseEvent
+        this.releaseGacha = releaseGacha
     }
 }
 

@@ -1,10 +1,10 @@
-import {h,Element} from 'koishi'
+import { h, Element } from 'koishi'
 import { Card } from '../types/Card'
 import { Character } from '../types/Character';
 import { Attribute } from '../types/Attribute';
 import { Skill } from '../types/Skill';
 import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
-import {drawDatablock} from '../components/dataBlock'
+import { drawDatablock } from '../components/dataBlock'
 import { drawCardIllustration } from '../components/card';
 import { drawCharacterInList } from '../components/list/character'
 import { drawAttributeInList } from '../components/list/attribute'
@@ -23,10 +23,9 @@ import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
 import { Event } from '../types/Event';
 import { Gacha, getEarlistGachaFromList } from '../types/Gacha'
-
-async function drawCardDetail(cardId: number): Promise<Element|string> {
+async function drawCardDetail(cardId: number): Promise<Element | string> {    
     const card = new Card(cardId)
-    if(!card.isExist){
+    if (!card.isExist) {
         return '错误: 卡牌不存在'
     }
     await card.initFull()
@@ -147,45 +146,35 @@ async function drawCardDetail(cardId: number): Promise<Element|string> {
     all.push(drawTitle('查询', '卡牌'))
     all.push(listImage)
     //相关来源
-    var tempEventList = []//用于防止重复
-    var tempGachaList = []
+    var tempEventIdList = []//用于防止重复
+    var tempGachaIdList = []
     var eventImageList: Array<Canvas | Image> = []
     var gachaImageList: Array<Canvas | Image> = []
     for (let k = 0; k < defaultserverList.length; k++) {
-        var server = defaultserverList[k];
-        var sourceOfServer = source[server.serverId]
-        for (const i in sourceOfServer) {
-            if (Object.prototype.hasOwnProperty.call(sourceOfServer, i)) {
-                //如果来源包括活动
-                if (i == 'event') {
-                    for (const j in sourceOfServer[i]) {
-                        if (Object.prototype.hasOwnProperty.call(sourceOfServer[i], j)) {
-                            console.log(tempEventList)
-                            if (!tempEventList.includes(j)) {//如果不在列表中
-                                tempEventList.push(j)
-                                eventImageList.push(await drawEventDatablock(new Event(parseInt(j)), `${server.serverNameFull}相关活动`))
-                            }
-                        }
-                    }
-                }
-                //如果来源包括招募
-                if (i == 'gacha') {
-                    for (const j in sourceOfServer[i]) {
-                        var earlistGacha = getEarlistGachaFromList(sourceOfServer[i], server)
-                        var tempEventId = earlistGacha.getEventId()[server.serverId]
-                        if (tempEventId != null) {
-                            if (!tempEventList.includes(tempEventId.toString)) {//如果不在列表中
-                                eventImageList.push(await drawEventDatablock(new Event(tempEventId), `${server.serverNameFull}相关活动`))
-                                tempEventList.push(tempEventId.toString)
-                            }
-                        }
-                        if (!tempGachaList.includes(earlistGacha.gachaId)) {
-                            tempGachaList.push(earlistGacha.gachaId)
-                            gachaImageList.push(await drawGachaDatablock(earlistGacha, `${server.serverNameFull}相关卡池`))
-                        }
-                    }
+        let server = defaultserverList[k];
+        if (card.releaseEvent[server.serverId].length != 0) {
+            var tempEvent = new Event(card.releaseEvent[server.serverId][0])
+            if (!tempEventIdList.includes(tempEvent.eventId)) {
+                eventImageList.push(await drawEventDatablock(tempEvent, `${server.serverNameFull}相关活动`))
+                tempEventIdList.push(tempEvent.eventId)
+            }
+        }
+        if (card.releaseGacha[server.serverId].length != 0) {
+            var tempGacha = getEarlistGachaFromList(card.source[server.serverId]['gacha'], server)
+            console.log(tempGacha.getEventId())
+            var tempEventId = tempGacha.getEventId()[server.serverId] 
+            if(tempEventId != null){
+                var tempEvent = new Event(tempEventId)
+                if (!tempEventIdList.includes(tempEvent.eventId)) {
+                    eventImageList.push(await drawEventDatablock(tempEvent, `${server.serverNameFull}相关活动`))
+                    tempEventIdList.push(tempEvent.eventId)
                 }
             }
+            if (!tempGachaIdList.includes(tempGacha.gachaId)) {
+                gachaImageList.push(await drawGachaDatablock(tempGacha, `${server.serverNameFull}相关卡池`))
+                tempGachaIdList.push(tempGacha.gachaId)
+            }
+
         }
     }
     for (var i = 0; i < eventImageList.length; i++) {

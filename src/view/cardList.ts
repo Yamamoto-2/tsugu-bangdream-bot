@@ -11,6 +11,7 @@ import { stackImage } from '../components/utils'
 import { drawRoundedRect } from "../image/drawRect";
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
+import {defaultserverList} from '../types/Server'
 
 
 export async function drawCardList(matches: { [key: string]: string[] }): Promise<Element | string> {
@@ -20,6 +21,17 @@ export async function drawCardList(matches: { [key: string]: string[] }): Promis
     for (let i = 0; i < cardIdList.length; i++) {
         const tempCard = new Card(cardIdList[i]);
         var isMatch = match(matches, tempCard, ['scoreUpMaxValue']);
+        //如果在所有所选服务器列表中都不存在，则不输出
+        var numberOfNotReleasedServer = 0;
+        for(var j = 0; j < defaultserverList.length; j++){
+            var server = defaultserverList[j];
+            if(server.getContentByServer(tempCard.releasedAt) == null){
+                numberOfNotReleasedServer++;
+            }
+        }
+        if(numberOfNotReleasedServer == defaultserverList.length){
+            isMatch = false;
+        }
         if (isMatch) {
             tempCardList.push(tempCard);
         }
@@ -40,12 +52,9 @@ export async function drawCardList(matches: { [key: string]: string[] }): Promis
             attributeList.push(tempCard.attribute);
         }
     }
-    console.log(characterIdList)
-    console.log(attributeList);
     var cardListImage: Canvas;
     //如果角色数量大于5，则颜色作为X轴，角色作为Y轴
     if (characterIdList.length > 5) {
-        console.log(1)
         var tempAttributeImageList: Canvas[] = []//每一个颜色的所有角色的列
         for (let i = 0; i < attributeList.length; i++) {
             const attribute = attributeList[i];
@@ -64,7 +73,6 @@ export async function drawCardList(matches: { [key: string]: string[] }): Promis
         })
     }
     else {
-        console.log(2)
         var tempCardImageList: Canvas[] = []//总列
         for (let i = 0; i < characterIdList.length; i++) {
             const characterId = characterIdList[i];

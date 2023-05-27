@@ -142,13 +142,15 @@ export class Event {
         return eventData
     }
     async getBannerImage(): Promise<Image> {
+        /*
         var server = getServerByPriority(this.startAt)
         try {
             var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`)
         } catch (e) {
-            server = new Server('jp')
+            */
+            var server = new Server('jp')
             var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`)
-        }
+        //}
         return await loadImage(BannerImageBuffer)
     }
     getTypeName() {
@@ -187,4 +189,43 @@ export class Event {
         }
         return (characterList)
     }
+}
+
+//获取当前进行中的活动,如果期间没有活动，则返回上一个刚结束的活动
+export function getPresentEvent(server:Server,time?:number ){
+    if(!time){
+        time = Date.now()
+    }
+    var eventList: Array<number> = []
+    var eventListMain = mainAPI['events']
+    for (var key in eventListMain) {
+        var event = new Event(parseInt(key))
+        //如果在活动进行时
+        if (event.startAt[server.serverId] != null && event.endAt[server.serverId] != null) {
+            if (event.startAt[server.serverId] <= time && event.endAt[server.serverId] >= time) {
+                eventList.push(parseInt(key))
+            }
+        }
+    }
+
+    //如果没有活动进行中，则返回上一个刚结束的活动
+    if(eventList.length == 0){
+        for (var key in eventListMain) {
+            var event = new Event(parseInt(key))
+            //如果在活动进行时
+            if (event.startAt[server.serverId] != null && event.endAt[server.serverId] != null) {
+                if (event.endAt[server.serverId] <= time) {
+                    eventList.push(parseInt(key))
+                }
+            }
+        }
+    }
+
+    //如果没有活动，则返回null
+    if(eventList.length == 0){
+        return null
+    }
+
+    //如果有多个活动，则返回最后一个
+    return new Event(eventList[eventList.length - 1])
 }
