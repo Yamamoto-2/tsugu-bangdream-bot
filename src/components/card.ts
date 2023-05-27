@@ -80,7 +80,7 @@ export async function drawCardIcon({
     trainingStatus = card.ableToTraining(trainingStatus)
     const canvas: Canvas = cardIdVisible ? createCanvas(180, 210) : createCanvas(180, 180);
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(await card.getCardIconImage(trainingStatus), 0, 0);
+    ctx.drawImage(await card.getCardIconImage(trainingStatus), 0, 0, 180, 180);
     //如果显示卡牌ID，画面高度为210，在下方显示
     if (cardIdVisible) {
         ctx.textAlign = 'start'
@@ -141,21 +141,21 @@ export async function drawCardIllustration({
     card,
     trainingStatus,
     isList = false,
-}:drawCardIllustrationOptions):Promise<Canvas>{
+}: drawCardIllustrationOptions): Promise<Canvas> {
     trainingStatus = card.ableToTraining(trainingStatus)
     var CardIllustrationImage = await card.getCardIllustrationImage(trainingStatus)
-    const canvas = createCanvas(1360,905)
+    const canvas = createCanvas(1360, 905)
     var ctx = canvas.getContext("2d")
     //将cardIllustration等比例缩放至宽度为1334
-    var scale = 1334/CardIllustrationImage.width
-    const illustrationCanvas = createCanvas(1334,879)
+    var scale = 1334 / CardIllustrationImage.width
+    const illustrationCanvas = createCanvas(1334, 879)
     var illustrationCtx = illustrationCanvas.getContext("2d")
-    var illustrationHeight = CardIllustrationImage.height*scale
-    illustrationCtx.drawImage(CardIllustrationImage,0,(879/2)-(illustrationHeight/2),1334,illustrationHeight)
-    ctx.drawImage(illustrationCanvas,13,13)
+    var illustrationHeight = CardIllustrationImage.height * scale
+    illustrationCtx.drawImage(CardIllustrationImage, 0, (879 / 2) - (illustrationHeight / 2), 1334, illustrationHeight)
+    ctx.drawImage(illustrationCanvas, 13, 13)
     //获得框
-    var Frame = await getCardIllustrationFrame(card.rarity,card.attribute)
-    ctx.drawImage(Frame,0,0,1360,905)
+    var Frame = await getCardIllustrationFrame(card.rarity, card.attribute)
+    ctx.drawImage(Frame, 0, 0, 1360, 905)
     var attributeIcon = await new Attribute(card.attribute).getIcon()
     ctx.drawImage(attributeIcon, 1203, 7, 150, 150)
     var bandIcon = await new Band(card.bandId).getIcon()
@@ -165,15 +165,15 @@ export async function drawCardIllustration({
     for (var i = 0; i < card.rarity; i++) {//星星数量
         ctx.drawImage(star, 5, 780 - 100 * i, 110, 110)
     }
-    if(isList){
+    if (isList) {
         //等比例缩放到宽度为widthMax
-        var scale = 800/1360
-        var tempcanvas = createCanvas(800,905*scale )
+        var scale = 800 / 1360
+        var tempcanvas = createCanvas(800, 905 * scale)
         var ctx = tempcanvas.getContext("2d")
-        ctx.drawImage(canvas,0,0,800,905*scale)
+        ctx.drawImage(canvas, 0, 0, 800, 905 * scale)
         return tempcanvas
     }
-    else{
+    else {
         return canvas
     }
 }
