@@ -33,7 +33,7 @@ export class Skill {
     }
     getEffectTypes(): Array<string> {//返回技能类型，如果存在多个效果，优先级为skillTypeList中排列的顺序
         const skillTypeList = [
-            'judge', 'life', 'damage',  'score','score_continued_note_judge', 'score_over_life', 'score_under_great_half'
+            'judge', 'life', 'damage',  'score','score_perfect','score_continued_note_judge', 'score_over_life', 'score_under_great_half'
         ]
 
         var tempTypeList: Array<string> = []
@@ -42,8 +42,15 @@ export class Skill {
         }
         if (this.data['activationEffect'] != undefined) {
             for (var i in this.data['activationEffect']['activateEffectTypes']) {
-                if(i.includes('score')){//如果包含score，都算作分卡(可能不严谨)
+                if(i == 'score'){
+                    tempTypeList.push(i)
+                    if(this.data['activationEffect']['activateEffectTypes']['score']['activateCondition'] == 'perfect'){
+                        tempTypeList.push('score_perfect')
+                    }
+                }
+                else if(i.includes('score')){//如果包含score，都算作分卡(可能不严谨)
                     tempTypeList.push('score')
+                    tempTypeList.push(i)
                 }
                 else{
                     tempTypeList.push(i)
@@ -53,6 +60,8 @@ export class Skill {
         if (this.data['onceEffect'] != undefined) {
             tempTypeList.push(this.data['onceEffect']['onceEffectType'])
         }
+        //去除tempTypeList重复
+        tempTypeList = Array.from(new Set(tempTypeList))
         tempTypeList.sort((a, b) => {
             return skillTypeList.indexOf(a) - skillTypeList.indexOf(b)
         })

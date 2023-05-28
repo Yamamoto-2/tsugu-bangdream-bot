@@ -24,7 +24,18 @@ export async function drawCardIconSkill(skill: Skill): Promise<Canvas> {
             skillValue += 'G'
         }
         else if (EffectTypes.includes('score_over_life')) {
-            skillValue += '/'
+            if(EffectTypes.includes('score_under_life')){
+                skillValue += 'L'
+            }
+            else{
+                skillValue += '/'
+            }
+        }
+        else if(EffectTypes.includes('score_under_great_half') || EffectTypes.includes('score_perfect')){
+            skillValue += 'P'
+        }
+        else if(EffectTypes.includes('score_rate_up_with_perfect')){
+            skillValue += '+0.5*P'
         }
         content.push(skillValue)
     }
@@ -42,7 +53,7 @@ export async function drawCardIconSkill(skill: Skill): Promise<Canvas> {
     })
     var stringWithImage = drawTextWithImages({
         content: content,
-        maxWidth: 200,
+        maxWidth: 250,
         textSize: 27,
         lineHeight: 30,
         spacing: 3,

@@ -11,17 +11,36 @@ function loadConfig(): Config {
   return JSON.parse(fileContent);
 }
 
+function extractLvNumber(str: string): number | null {
+  const regex = /^lv(\d+)$/;
+  const match = str.match(regex);
+  if (match && match[1]) {
+    return parseInt(match[1], 10);
+  }
+  return null;
+}
+
 var config: Config = loadConfig();
 //用于模糊搜索
 export function fuzzySearch(keywords: string[]): { [key: string]: string[] } {
 
   const matches: { [key: string]: string[] } = {};
-  for (const keyword of keywords) {
+  for (var keyword of keywords) {
+    //转换为小写
+    keyword = keyword.toLowerCase();
     if (isInteger(keyword)) {
       if (!matches.number) {
         matches.number = [];
       }
       matches.number.push(keyword);
+    }
+    //是否为等级
+    const lvNumber = extractLvNumber(keyword);
+    if (lvNumber) {
+      if (!matches.songLevels) {
+        matches.songLevels = [];
+      }
+      matches.songLevels.push(lvNumber.toString());
     }
     //匹配配置文件
     for (const type in config) {
