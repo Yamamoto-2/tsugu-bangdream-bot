@@ -16,6 +16,8 @@ import { Server, defaultserverList } from '../types/Server';
 import { drawTitle } from '../components/title'
 import { outputFinalBuffer } from '../image/output'
 import { drawDegreeListOfEvent } from '../components/list/degreeList';
+import { Song, getPresentSongList } from '../types/Song'
+import { drawSongListDataBlock } from '../components/dataBlock/songList';
 
 export async function drawEventDetail(eventId: number): Promise<Element | string> {
     const event = new Event(eventId)
@@ -161,6 +163,24 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
     all.push(drawTitle('查询', '活动'))
     all.push(listImage)
 
+    //歌曲
+    for (let i = 0; i < defaultserverList.length; i++) {
+        const server = defaultserverList[i];
+        const songList: Song[] = getPresentSongList(server, event.startAt[server.serverId], event.endAt[server.serverId]);
+        
+        if (songList.length !== 0) {
+          const isDuplicate = all.some((block) => {
+            // 检查当前的songList是否与已存在的块的songList完全相同
+            return JSON.stringify(block.songList) === JSON.stringify(songList);
+          });
+      
+          if (!isDuplicate) {
+            all.push(await drawSongListDataBlock(songList, `${server.serverNameFull}相关歌曲`));
+          }
+        }
+      }
+
+    //卡池
     for (let i = 0; i < gachaList.length; i++) {
         const tempGacha = gachaList[i];
         if (i == 0) {
@@ -190,7 +210,7 @@ export async function getEventGachaAndCardList(event: Event) {
     var gachaIdList = []//用于去重
     for (var i = 0; i < defaultserverList.length; i++) {
         let server = defaultserverList[i]
-        if(server.getContentByServer(event.startAt) == null){
+        if (server.getContentByServer(event.startAt) == null) {
             continue
         }
         let tempGachaList = getPresentGachaList(server, event.startAt[server.serverId], event.endAt[server.serverId])

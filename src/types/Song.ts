@@ -1,7 +1,7 @@
 import { callAPIAndCacheResponse } from '../api/getApi'
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
-import {getServerByPriority} from './Server'
+import {getServerByPriority, Server} from './Server'
 import mainAPI from './_Main'
 
 interface difficulty {
@@ -37,7 +37,8 @@ export class Song {
             scoreB?: number,
             scoreA?: number,
             scoreS?: number,
-            scoreSS?: number
+            scoreSS?: number,
+            publishedAt?: Array<number | null>,
         }
     };
     length: number;
@@ -146,3 +147,27 @@ export class Song {
     }
 }
 
+//获取时间范围内指定服务器推出的新歌
+export function getPresentSongList(server: Server, start: number = Date.now(), end: number = Date.now()): Song[] {
+    var songList: Array<Song> = []
+    var songListMain = mainAPI['songs']
+    
+    for (const songId in songListMain) {
+        if (Object.prototype.hasOwnProperty.call(songListMain, songId)) {
+            const song = new Song(parseInt(songId))
+            // 检查活动的发布时间和结束时间是否在指定范围内
+            if (song.publishedAt[server.serverId] <= end && song.publishedAt[server.serverId] >= start) {
+                songList.push(song)
+            }
+            for(let i in song.difficulty){
+                if(song.difficulty[i].publishedAt != undefined){
+                    if(song.difficulty[i].publishedAt[server.serverId] <= end && song.difficulty[i].publishedAt[server.serverId] >= start){
+                        songList.push(song)
+                    }
+                }
+            }
+        }
+    }
+    
+    return songList
+}
