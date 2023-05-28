@@ -1,7 +1,7 @@
 import { callAPIAndCacheResponse } from '../api/getApi';
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
-import { Server, getServerByPriority } from './Server'
+import { Server, getServerByPriority,defaultserverList} from './Server'
 import mainAPI from './_Main';
 import { Attribute } from './Attribute';
 import { Character } from './Character';
@@ -261,4 +261,18 @@ export function getPresentEvent(server: Server, time?: number) {
 
     //如果有多个活动，则返回最后一个
     return new Event(eventList[eventList.length - 1])
+}
+
+export function sortEventList(tempEventList:Array<Event>){
+    tempEventList.sort((a, b) => {
+        for (var i = 0; i < defaultserverList.length; i++) {
+            var server = defaultserverList[i]
+            if(a.startAt[server.serverId] == null || b.startAt[server.serverId] == null){
+                continue
+            } 
+            if (a.startAt[server.serverId] != b.startAt[server.serverId]) {
+                return a.startAt[server.serverId] - b.startAt[server.serverId]
+            }
+        }
+    })
 }

@@ -12,7 +12,7 @@ import { stackImage, stackImageHorizontal, resizeImage } from '../components/uti
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
 import { defaultserverList } from '../types/Server'
-import { Event } from '../types/Event';
+import { Event, sortEventList } from '../types/Event';
 import { drawCardListInList } from '../components/list/cardIconList';
 import { drawTimeInList, changeTimefomant } from '../components/list/time';
 import { drawText, drawTextWithImages } from '../components/text';
@@ -53,6 +53,7 @@ export async function drawEventList(matches: { [key: string]: string[] }) {
         if (numberOfNotReleasedServer == defaultserverList.length) {
             isMatch = false;
         }
+        
         if (isMatch) {
             tempEventList.push(tempEvent);
         }
@@ -62,14 +63,8 @@ export async function drawEventList(matches: { [key: string]: string[] }) {
     }
 
     //按照开始时间排序
-    tempEventList.sort((a, b) => {
-        for (var i = 0; i < defaultserverList.length; i++) {
-            var server = defaultserverList[i]
-            if (a.startAt[server.serverId] != b.startAt[server.serverId]) {
-                return a.startAt[server.serverId] - b.startAt[server.serverId]
-            }
-        }
-    })
+    sortEventList(tempEventList)
+
     var tempEventImageList: Canvas[] = []
     var eventImageListHorizontal: Canvas[] = []
     var tempH = 0
