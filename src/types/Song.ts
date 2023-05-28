@@ -1,6 +1,7 @@
 import { callAPIAndCacheResponse } from '../api/getApi'
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
+import {getServerByPriority} from './Server'
 import mainAPI from './_Main'
 
 interface difficulty {
@@ -9,6 +10,12 @@ interface difficulty {
     2: "hard",
     3: "expert",
     4: "special"
+}
+
+var tagNameList = {
+    'normal': '原创曲',
+    'anime': '翻唱曲',
+    'extra': 'EXTRA歌曲',
 }
 
 export class Song {
@@ -126,20 +133,16 @@ export class Song {
         return Math.ceil(this.songId / 10) * 10
     }
     async getSongJacketImage(): Promise<Image> {
+        var server = getServerByPriority(this.publishedAt)
         var jacketImageName = this.jacketImage[this.jacketImage.length - 1]
-        var jacketImageBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`)
+        var jacketImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`)
         return await loadImage(jacketImageBuffer)
     }
     getTagName(): string {
-        switch (this.tag) {
-            case 'normal':
-                return '原创曲'
-            case `anime`:
-                return `翻唱曲`
-            case `extra`:
-                return `EXTRA歌曲`
-            default:
-                return this.tag
+        if(this.tag == undefined){
+            return this.tag
         }
+        return tagNameList[this.tag]
     }
 }
+
