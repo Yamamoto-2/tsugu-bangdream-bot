@@ -6,6 +6,8 @@ import mainAPI from './_Main';
 import { Attribute } from './Attribute';
 import { Character } from './Character';
 
+var eventDataCache = {}
+
 const typeName = {
     "story": "一般活动 (协力)",
     "versus": "竞演LIVE (对邦)",
@@ -87,8 +89,8 @@ export class Event {
     } = {}
 
     //以下用于模糊搜索
-    characterId:string[] = []
-    attribute:string[] = []
+    characterId: string[] = []
+    attribute: string[] = []
 
 
 
@@ -109,21 +111,27 @@ export class Event {
         this.characters = eventData['characters'];
         this.rewardCards = eventData['rewardCards'];
         //用于模糊搜索
-        for (let i  = 0; i  < this.characters.length; i ++) {
-            const element = this.characters[i ];
+        for (let i = 0; i < this.characters.length; i++) {
+            const element = this.characters[i];
             this.characterId.push(element.characterId.toString())
         }
-        for(let i = 0; i < this.attributes.length; i++){
+        for (let i = 0; i < this.attributes.length; i++) {
             const element = this.attributes[i];
             this.attribute.push(element.attribute)
         }
-        
+
     }
-    async initFull() {
+    async initFull(update: boolean = true) {
         if (this.isExist == false) {
             return
         }
-        const eventData = await this.getData()
+        if (eventDataCache[this.eventId.toString()] != undefined && !update) {
+            var eventData = eventDataCache[this.eventId.toString()]
+        }
+        else {
+            var eventData = await this.getData(update)
+        }
+        this.isInitFull = true;
         this.eventType = eventData['eventType'];
         this.eventName = eventData['eventName'];
         this.assetBundleName = eventData['assetBundleName'];
@@ -149,14 +157,15 @@ export class Event {
         this.aggregateEndAt = eventData['aggregateEndAt'];
         this.exchangeEndAt = eventData['exchangeEndAt'];
         */
-        if(eventData['eventCharacterParameterBonus'] != undefined){
+        if (eventData['eventCharacterParameterBonus'] != undefined) {
             this.eventCharacterParameterBonus = eventData['eventCharacterParameterBonus']
         }
 
-        this.isInitFull = true;
+
     }
-    async getData() {
-        var eventData = await callAPIAndCacheResponse(`https://bestdori.com/api/events/${this.eventId}.json`);
+    async getData(update: boolean = true) {
+        var time = update ? 0 : 1 / 0
+        var eventData = await callAPIAndCacheResponse(`https://bestdori.com/api/events/${this.eventId}.json`, time);
         return eventData
     }
     async getBannerImage(): Promise<Image> {
@@ -166,8 +175,8 @@ export class Event {
             var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`)
         } catch (e) {
             */
-            var server = new Server('jp')
-            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`)
+        var server = new Server('jp')
+        var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`)
         //}
         return await loadImage(BannerImageBuffer)
     }
@@ -215,8 +224,8 @@ export class Event {
 }
 
 //获取当前进行中的活动,如果期间没有活动，则返回上一个刚结束的活动
-export function getPresentEvent(server:Server,time?:number ){
-    if(!time){
+export function getPresentEvent(server: Server, time?: number) {
+    if (!time) {
         time = Date.now()
     }
     var eventList: Array<number> = []
@@ -225,14 +234,15 @@ export function getPresentEvent(server:Server,time?:number ){
         var event = new Event(parseInt(key))
         //如果在活动进行时
         if (event.startAt[server.serverId] != null && event.endAt[server.serverId] != null) {
-            if (event.startAt[server.serverId] <= time && event.endAt[server.serverId] >= time) {
+            if (event.startAt[server.serverId] - 1000 * 60 * 60 * 24 <= time && event.endAt[server.serverId] >= time) {
+                //提前一天
                 eventList.push(parseInt(key))
             }
         }
     }
 
     //如果没有活动进行中，则返回上一个刚结束的活动
-    if(eventList.length == 0){
+    if (eventList.length == 0) {
         for (var key in eventListMain) {
             var event = new Event(parseInt(key))
             //如果在活动进行时
@@ -245,7 +255,7 @@ export function getPresentEvent(server:Server,time?:number ){
     }
 
     //如果没有活动，则返回null
-    if(eventList.length == 0){
+    if (eventList.length == 0) {
         return null
     }
 

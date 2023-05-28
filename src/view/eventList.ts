@@ -18,6 +18,7 @@ import { drawTimeInList, changeTimefomant } from '../components/list/time';
 import { drawText, drawTextWithImages } from '../components/text';
 import { getEventGachaAndCardList } from './eventDetail'
 import { drawDottedLine } from '../image/dottedLine'
+import { statConfig } from '../components/list/cardStat'
 
 const maxHeight = 7000
 
@@ -75,7 +76,7 @@ export async function drawEventList(matches: { [key: string]: string[] }) {
     for (var i = 0; i < tempEventList.length; i++) {
         var tempImage = await drawEventInList(tempEventList[i])
         tempH += tempImage.height
-        if(tempH > maxHeight){
+        if (tempH > maxHeight) {
             tempEventImageList.pop()
             eventImageListHorizontal.push(stackImage(tempEventImageList))
             eventImageListHorizontal.push(line2)
@@ -84,13 +85,14 @@ export async function drawEventList(matches: { [key: string]: string[] }) {
         }
         tempEventImageList.push(tempImage)
         tempEventImageList.push(line)
-        if(i == tempEventList.length - 1 && eventImageListHorizontal.length == 0){
+        if (i == tempEventList.length - 1) {
+            tempEventImageList.pop()
             eventImageListHorizontal.push(stackImage(tempEventImageList))
+            eventImageListHorizontal.push(line2)
         }
     }
-    if(eventImageListHorizontal.length > 1){
-        eventImageListHorizontal.pop()
-    }
+    eventImageListHorizontal.pop()
+
     var eventListImage = await drawDatablockHorizontal({
         list: eventImageListHorizontal
     })
@@ -102,11 +104,11 @@ export async function drawEventList(matches: { [key: string]: string[] }) {
         imageList: all,
         useEazyBG: true
     })
-    console.log(defaultserverList)
     return h.image(buffer, 'image/png')
 }
 
 async function drawEventInList(event: Event): Promise<Canvas> {
+    await event.initFull(false)
     var textSize = 25 * 3 / 4;
     var content = []
     //活动类型
@@ -134,6 +136,24 @@ async function drawEventInList(event: Event): Promise<Canvas> {
             content.push(await characterList[precent][i].getIcon())
         }
         content.push(`+${precent}% `)
+    }
+
+    //偏科，如果有的话
+    if (Object.keys(event.eventCharacterParameterBonus).length != 0) {
+        var statText = ''
+        for (const i in event.eventCharacterParameterBonus) {
+            if (i == 'eventId') {
+                continue
+            }
+            if (Object.prototype.hasOwnProperty.call(event.eventCharacterParameterBonus, i)) {
+                const element = event.eventCharacterParameterBonus[i];
+                if (element == 0) {
+                    continue
+                }
+                statText += ` ${statConfig[i].name} +${element}%`
+            }
+        }
+        content.push(statText)
     }
 
     var textImage = drawTextWithImages({
