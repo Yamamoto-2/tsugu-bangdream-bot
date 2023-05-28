@@ -20,6 +20,9 @@ export async function drawCardList(matches: { [key: string]: string[] }): Promis
     var cardIdList: Array<number> = Object.keys(mainAPI['cards']).map(Number);//所有卡牌ID列表
     for (let i = 0; i < cardIdList.length; i++) {
         const tempCard = new Card(cardIdList[i]);
+        if (tempCard.type == 'others'){
+            continue;
+        }
         var isMatch = match(matches, tempCard, ['scoreUpMaxValue']);
         //如果在所有所选服务器列表中都不存在，则不输出
         var numberOfNotReleasedServer = 0;
