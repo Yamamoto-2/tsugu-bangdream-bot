@@ -10,20 +10,34 @@ import { drawSongInList } from '../components/list/song';
 import { drawDottedLine } from '../image/dottedLine';
 import { stackImage } from '../components/utils';
 
-const maxHeight = 7000
+const maxHeight = 6000
 
 // 紧凑化虚线分割
-const line2 = drawDottedLine({
+const line = drawDottedLine({
     width: 800,
     height: 10,
     startX: 5,
-    startY: 15,
+    startY: 5,
     endX: 795,
-    endY: 15,
+    endY: 5,
     radius: 2,
     gap: 10,
     color: "#a8a8a8"
 })
+
+//表格用默认竖向虚线
+const line2: Canvas = drawDottedLine({
+    width: 30,
+    height: 6000,
+    startX: 10,
+    startY: 0,
+    endX: 15,
+    endY: 5990,
+    radius: 2,
+    gap: 10,
+    color: "#a8a8a8"
+})
+
 
 export async function drawSongList(matches: { [key: string]: string[] }) {
     // 计算歌曲模糊搜索结果
@@ -55,7 +69,7 @@ export async function drawSongList(matches: { [key: string]: string[] }) {
             tempH = tempImage.height
         }
         tempSongImageList.push(tempImage)
-        tempSongImageList.push(line2)
+        tempSongImageList.push(line)
         if (i == tempSongList.length - 1) {
             tempSongImageList.pop()
             songImageListHorizontal.push(stackImage(tempSongImageList))

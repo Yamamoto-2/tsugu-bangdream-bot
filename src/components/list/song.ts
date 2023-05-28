@@ -27,7 +27,7 @@ export async function drawSongInList(song: Song): Promise<Canvas> {
     })
     var tempcanv = createCanvas(800, 75)
     var ctx = tempcanv.getContext("2d")
-    ctx.drawImage(songImage, 45, 5, 65, 65)
+    ctx.drawImage(songImage, 50, 5, 65, 65)
     ctx.textAlign = "start"
     ctx.textBaseline = "middle"
     setFontStyle(ctx, 23, "old")
@@ -37,7 +37,7 @@ export async function drawSongInList(song: Song): Promise<Canvas> {
         ctx.drawImage(await drawDifficulity(i, song.difficulty[i].playLevel), 800 - 55 * Object.keys(song.difficulty).length + 55 * i, 7.5, 60, 60)
     }
     ctx.fillText(song.songId.toString(), 0, 17.5)
-    ctx.drawImage(songName, 116, 0)
-    ctx.drawImage(bandName, 116, 34.5)
+    ctx.drawImage(songName, 120, 0)
+    ctx.drawImage(bandName, 120, 34.5)
     return tempcanv
 }
