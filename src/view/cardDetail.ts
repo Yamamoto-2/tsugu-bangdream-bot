@@ -171,7 +171,6 @@ async function drawCardDetail(cardId: number): Promise<Element | string> {
         }
         if (card.releaseGacha[server.serverId].length != 0) {
             var tempGacha = getEarlistGachaFromList(card.source[server.serverId]['gacha'], server)
-            console.log(tempGacha.getEventId())
             var tempEventId = tempGacha.getEventId()[server.serverId]
             if (tempEventId != null) {
                 var tempEvent = new Event(tempEventId)

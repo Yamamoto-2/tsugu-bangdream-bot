@@ -226,6 +226,9 @@ export async function getEventGachaAndCardList(event: Event) {
     for (var i = 0; i < gachaList.length; i++) {
         var tempGacha = gachaList[i]
         var tempCardList = tempGacha.newCards
+        if(tempCardList.length > 10){
+            continue
+        }
         for (var j = 0; j < tempCardList.length; j++) {
             var tempCard = tempCardList[j]
             if (gachaCardIdList.indexOf(tempCard) == -1) {

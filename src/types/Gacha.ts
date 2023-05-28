@@ -190,8 +190,10 @@ export function getPresentGachaList(server: Server, start: number = Date.now(), 
                 if (gacha.type == 'special') {
                     continue
                 }
-                if(gacha.gachaName[new Server('jp').serverId].includes('初心者限定')){
-                    continue
+                if(gacha.gachaName[new Server('jp').serverId]!=null){
+                    if(gacha.gachaName[new Server('jp').serverId].includes('初心者限定')){
+                        continue
+                    }
                 }
                 gachaList.push(gacha)
             }
