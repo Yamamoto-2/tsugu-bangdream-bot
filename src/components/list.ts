@@ -3,6 +3,7 @@ import { drawRoundedRectWithText } from '../image/drawRect';
 import { drawText, drawTextWithImages } from './text';
 import { drawDottedLine } from '../image/dottedLine'
 import { Server, getServerByPriority, defaultserverList } from '../types/Server'
+import { stackImageHorizontal } from './utils';
 
 //表格用默认虚线
 export const line: Canvas = drawDottedLine({
@@ -59,10 +60,10 @@ export function drawList({
         });
     }
     else {
-        textImage = createCanvas(1, 1)
+        textImage = createCanvas(0, 0)
     }
     if (key == undefined) {
-        return textImage
+        return stackImageHorizontal([createCanvas(20,1),textImage])
     }
     var ymax = textImage.height + keyImage.height + 10;
     const canvas = createCanvas(800, ymax);
