@@ -1,5 +1,7 @@
-import { BestdoriapiPath, Bestdoriurl } from '../config'
+import { BestdoriapiPath, Bestdoriurl,configPath } from '../config'
 import { callAPIAndCacheResponse } from '../api/getApi'
+import {readJSON} from '../utils'
+import * as path from 'path'
 
 const mainAPI: object = {}//main对象,用于存放所有api数据,数据来源于Bestdori网站
 
@@ -15,39 +17,18 @@ async function loadMainAPI(useCache: boolean = false) {
         }
     }
     await Promise.all(promiseAll)
-
-    //对events进行排序，顺序输出到eventsKeys
-    const eventKeys: Array<string> = Object.keys(mainAPI['events'])
-    eventKeys.sort(function (tempa, tempb) {
-        var a = parseInt(tempa)
-        var b = parseInt(tempb)
-        if (a == 119 && b > 106) {
-            return (-1)
-        }
-        if (a == 138 && b == 137) {
-            return (-1)
-        }
-        if (mainAPI['events'][a]["startAt"][3] != null && mainAPI['events'][b]["startAt"][3] != null) {
-            if (mainAPI['events'][a]["startAt"][3] > mainAPI['events'][b]["startAt"][3]) {
-                return (1)
-            }
-            else { return (-1) }
-        }
-        else {
-            if (mainAPI['events'][a]["startAt"][0] > mainAPI['events'][b]["startAt"][0]) {
-                return (1)
-            }
-            else { return (-1) }
-        }
+    
+    var cardsCNfix = readJSON(path.join(configPath,'cardsCNfix.json'))
+    for(var key in cardsCNfix){
+        mainAPI['cards'][key] = cardsCNfix[key]
     }
-    )
-    mainAPI['eventsKeys'] = eventKeys
     
 }
 
 console.log("正在初始化")
 loadMainAPI(true).then(() => {
     console.log("初始化完成")
+    //loadMainAPI()
 })
 
 
