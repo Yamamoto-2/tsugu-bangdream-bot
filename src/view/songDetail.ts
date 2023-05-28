@@ -1,73 +1,42 @@
-import { h, Element, Context } from 'koishi'
-import { Song } from "../types/Song";
-import mainAPI from "../types/_Main"
-import { match } from "../commands/fuzzySearch"
-import { Canvas, createCanvas, Image, loadImage } from "canvas"
-import { stackImage, stackImageHorizontal, resizeImage } from '../components/utils'
-import { drawTitle } from '../components/title';
+import { h, Element } from 'koishi'
+import { Event } from '../types/Event';
+import { Card } from '../types/Card'
+import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
+import { drawDatablock } from '../components/dataBlock'
+import { drawGachaDatablock } from '../components/dataBlock/gacha'
+import { Image, Canvas, createCanvas } from 'canvas'
+import { drawBannerImageCanvas } from '../components/dataBlock/utils'
+import { drawTimeInList } from '../components/list/time';
+import { drawAttributeInList } from '../components/list/attribute'
+import { drawCharacterInList } from '../components/list/character'
+import { statConfig } from '../components/list/cardStat'
+import { drawCardListInList } from '../components/list/cardIconList'
+import { getPresentGachaList, Gacha } from '../types/Gacha'
+import { Server, defaultserverList } from '../types/Server';
+import { drawTitle } from '../components/title'
 import { outputFinalBuffer } from '../image/output'
-import { defaultserverList } from '../types/Server'
-import { drawText, drawTextWithImages } from "../components/text";
-import { drawListWithLine, line } from "../components/list";
-import { drawDatablock } from "../components/dataBlock";
-import { drawRoundedRect } from '../image/drawRect';
-import { createContext } from 'vm';
-import { Band } from '../types/Band';
-import { defaultserver } from '../config';
+import { drawDegreeListOfEvent } from '../components/list/degreeList';
+import { Song, getPresentSongList } from '../types/Song'
+import { drawSongListDataBlock } from '../components/dataBlock/songList';
+import { drawSongDataBlock } from '../components/dataBlock/song';
 
-async function drawSongInList(song: Song): Promise<Canvas> {
+export async function drawSongDetail(song: Song): Promise<Element | string> {
+    if(song.isExist == false){
+        return '错误: 歌曲不存在'
+    }
     await song.initFull()
-    var content = []
-
-    const blockWidth = 800
-    const blockHeight = 480
-    const songJacketImage = resizeImage({
-        image: await song.getSongJacketImage(),
-        widthMax: 420,
-        heightMax: 420
+    var list: Array<Image | Canvas> = [] 
+    var songDataBlockImage = await drawSongDataBlock(song)
+    list.push(songDataBlockImage)
+    
+    //创建最终输出数组
+    var listImage = await drawDatablock({ list })
+    var all = []
+    all.push(drawTitle('查询', '歌曲'))
+    all.push(listImage)
+    var buffer = await outputFinalBuffer({
+        imageList: all,
+        useEazyBG: true
     })
-
-    var lineCanvas = createCanvas(500, 4)
-    var linectx = lineCanvas.getContext('2d')
-    linectx.fillStyle = "#a3a3a3"
-    linectx.fillRect(0, 2, 500, 2)
-
-    var canvas = createCanvas(blockWidth, blockHeight)
-    var ctx = canvas.getContext('2d')
-
-    // 绘制边框
-    ctx.drawImage(drawRoundedRect({
-        width: 900,
-        height: 480,
-        strokeWidth: 2
-    }), 0, 0)
-
-    // 绘制封面
-    ctx.drawImage(songJacketImage, 30, 30)
-
-    // 歌曲名
-    ctx.drawImage(drawText({
-        text: song.musicTitle[defaultserverList[0].serverId].replace('_', ' '),
-        textSize: 24,
-        maxWidth: 500
-    }), 480, 40)
-
-    ctx.drawImage(lineCanvas, 480, 65)
-
-    // 歌曲id
-    content.push(`ID: ${song.songId}\n`)
-
-    // 乐队名
-    content.push(`${new Band(song.bandId).bandName[defaultserverList[0].serverId]}\n`)
-
-    // 类型 (翻唱还是原创)
-    content.push(`${song.getTagName()}\n`)
-
-    ctx.drawImage(drawTextWithImages({
-        content: content,
-        textSize: 18,
-        maxWidth: 500
-    }), 480, 70)
-
-    return canvas
+    return h.image(buffer, 'image/png')
 }

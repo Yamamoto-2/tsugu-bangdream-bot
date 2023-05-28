@@ -1,11 +1,16 @@
 import { drawSongList } from "../view/songList"
 import { fuzzySearch } from "./fuzzySearch"
+import { isInteger } from "./utils"
+import { drawSongDetail } from "../view/songDetail"
+import { Song } from "../types/Song"
 
 export async function commandSong(argv: any, text: string) {
     if (!text) {
         return '错误: 请输入关键词或卡片ID'
     }
-
+    if (isInteger(text)) {
+        return await drawSongDetail(new Song(parseInt(text)))
+    }
     var fuzzySearchResult = fuzzySearch(text.split(' '))
     console.log(fuzzySearchResult)
     if (Object.keys(fuzzySearchResult).length == 0) {
