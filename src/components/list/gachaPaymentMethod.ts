@@ -5,12 +5,6 @@ import { Server } from '../../types/Server'
 import { Item } from '../../types/Item'
 import { stackImage } from '../utils'
 
-var paymentMethodName = {
-    "free_star": { "icon": "star", "name": "免费星石" },
-    "paid_star": { "icon": "star", "name": "付费星石" },
-    "normal_ticket": { "icon": "gachaTicket1", "name": "招募券" },
-    "fes_fixed_4_star_ticket": { "icon": "gachaTicket10000", "name": "FES礼包招募券" },
-}
 var behaviorName = {
     "normal": "",
     "over_the_3_star_once": "必中★3+",
