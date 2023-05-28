@@ -97,8 +97,6 @@ interface TextWithImagesOptions {
     font?: "default" | "old"
 }
 
-
-
 // 画文字包含图片
 export function drawTextWithImages({
     textSize = 40,
@@ -111,6 +109,7 @@ export function drawTextWithImages({
 }: TextWithImagesOptions) {
     var wrappedTextData = warpTextWithImages({ textSize, maxWidth, lineHeight, content, spacing });
     var wrappedText = wrappedTextData.wrappedText
+    console.log(wrappedText)
     var canvas: Canvas
     //单行文字，宽度为第一行的宽度
     if (wrappedTextData.numberOfLines == 1) {
@@ -176,36 +175,52 @@ function warpTextWithImages({
     const ctx = canvas.getContext('2d');
     ctx.textBaseline = 'alphabetic';
     setFontStyle(ctx, textSize, font);
-    const temp: Array<Array<string | Image | Canvas>> = [[]]; //二维数组,每个元素为一行,例如: [[string,Image],[Image,string]]
+    const temp: Array<Array<string | Image | Canvas>> = [[]];
     let lineNumber = 0;
     let tempX = 0;
 
-    function newLine() {//新起一行
-        lineNumber++;//行数加一
-        tempX = 0;//tempX归零
-        temp.push([]);//temp增加一行(一个Array)
+    function newLine() {
+        lineNumber++;
+        tempX = 0;
+        temp.push([]);
     }
 
     for (let i = 0; i < content.length; i++) {
         if (typeof content[i] === "string") {
             let temptext = content[i] as string;
-            for (let n = 0; n < temptext.length; n++) {
-                if (temptext[n] === "\n") {
-                    temp[lineNumber].push(temptext.slice(0, n));
+            while (temptext.length > 0) {
+                const lineBreakIndex = temptext.indexOf("\n");
+                if (lineBreakIndex !== -1) {
+                    const substring = temptext.slice(0, lineBreakIndex);
+                    temp[lineNumber].push(substring);
                     newLine();
-                    temptext = temptext.slice(n + 1, temptext.length);
-                    n = -1;
-                } else if ((maxWidth - tempX) < ctx.measureText(temptext.slice(0, temptext.length - n)).width) {
-                    temp[lineNumber].push(temptext.slice(0, temptext.length - n));
+                    temptext = temptext.slice(lineBreakIndex + 1);
+                    continue;
+                }
+
+                const remainingWidth = maxWidth - tempX;
+                const measuredWidth = ctx.measureText(temptext).width;
+                if (remainingWidth >= measuredWidth) {
+                    temp[lineNumber].push(temptext);
+                    tempX += measuredWidth;
+                    break;
+                } else {
+                    let splitIndex = 0;
+                    for (let j = temptext.length - 1; j >= 0; j--) {
+                        const substr = temptext.slice(0, j);
+                        const substrWidth = ctx.measureText(substr).width;
+                        if (substrWidth <= remainingWidth) {
+                            splitIndex = j;
+                            break;
+                        }
+                    }
+                    const substring = temptext.slice(0, splitIndex);
+                    temp[lineNumber].push(substring);
                     newLine();
-                    temptext = temptext.slice(temptext.length - n, temptext.length);
-                    n = -1;
+                    temptext = temptext.slice(splitIndex);
                 }
             }
-            temp[lineNumber].push(temptext);
-            tempX += ctx.measureText(temptext).width;
         } else if (content[i] instanceof Canvas || content[i] instanceof Image) {
-            //图片等比例放大至高度与字体大小相同
             let tempImage = content[i] as Image;
             let tempWidth = tempImage.width * (textSize / tempImage.height);
             if (tempX + tempWidth > maxWidth) {
@@ -217,7 +232,6 @@ function warpTextWithImages({
         tempX += spacing;
     }
 
-    // 处理最后一行剩余的文本
     if (temp[temp.length - 1].length === 0) {
         temp.pop();
     }
@@ -227,7 +241,6 @@ function warpTextWithImages({
         wrappedText: temp,
     };
 }
-
 
 export var setFontStyle = function (ctx: CanvasRenderingContext2D, textSize: number, font: string) {//设置字体大小
     ctx.font = textSize + 'px ' + font + ",Microsoft Yahei"
