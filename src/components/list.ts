@@ -143,22 +143,11 @@ export async function drawListByServerList({
         return undefined;
     }
 
-    // 移除是content内容是null的服务器
-    for (let i = serverList.length - 1; i >= 0; i--) {
-        const tempServer = serverList[i];
-        if (tempServer.getContentByServer(content) === null) {
-            // 移除
-            removeElement(serverList, i);
-        }
-    }
-
-    // 如果没有服务器了，就用其中一个可以的服务器
-    if (serverList.length == 0) {
-        serverList.push(getServerByPriority(content))
-    }
-
     for (let i = 0; i < serverList.length; i++) {
         const tempServer = serverList[i];
+        if(tempServer.getContentByServer(content) == null){
+            continue
+        } 
         tempcontent.push(await tempServer.getIcon())
         if (i == serverList.length - 1) {
             tempcontent.push(tempServer.getContentByServer(content))
