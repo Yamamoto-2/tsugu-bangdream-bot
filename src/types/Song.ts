@@ -122,7 +122,19 @@ export class Song {
     }
     async getSongJacketImage(): Promise<Image> {
         var jacketImageName = this.jacketImage[this.jacketImage.length - 1]
-        var jacketImageBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}.png`)
+        var jacketImageBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`)
         return await loadImage(jacketImageBuffer)
+    }
+    getTagName(): string {
+        switch (this.tag) {
+            case 'normal':
+                return '原创曲'
+            case `anime`:
+                return `翻唱曲`
+            case `extra`:
+                return `EXTRA歌曲`
+            default:
+                return this.tag
+        }
     }
 }
