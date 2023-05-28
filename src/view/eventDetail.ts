@@ -5,7 +5,7 @@ import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '.
 import { drawDatablock } from '../components/dataBlock'
 import { drawGachaDatablock } from '../components/dataBlock/gacha'
 import { Image, Canvas, createCanvas } from 'canvas'
-import { draweventBannerImageCanvas } from '../components/dataBlock/utils'
+import { drawBannerImageCanvas } from '../components/dataBlock/utils'
 import { drawTimeInList } from '../components/list/time';
 import { drawAttributeInList } from '../components/list/attribute'
 import { drawCharacterInList } from '../components/list/character'
@@ -15,11 +15,10 @@ import { getPresentGachaList, Gacha } from '../types/Gacha'
 import { Server, defaultserverList } from '../types/Server';
 import { drawTitle } from '../components/title'
 import { outputFinalBuffer } from '../image/output'
-import { Degree } from '../types/Degree'
 import { drawDegreeListOfEvent } from '../components/list/degreeList';
 
-export async function drawEventDetail(cardId: number): Promise<Element | string> {
-    const event = new Event(cardId)
+export async function drawEventDetail(eventId: number): Promise<Element | string> {
+    const event = new Event(eventId)
     if (!event.isExist) {
         return '错误: 卡牌不存在'
     }
@@ -28,7 +27,7 @@ export async function drawEventDetail(cardId: number): Promise<Element | string>
 
     //bannner
     var eventBannerImage = await event.getBannerImage()
-    var eventBannerImageCanvas = draweventBannerImageCanvas(eventBannerImage)
+    var eventBannerImageCanvas = drawBannerImageCanvas(eventBannerImage)
     list.push(eventBannerImageCanvas)
     list.push(createCanvas(800, 30))
 
@@ -188,18 +187,21 @@ export async function drawEventDetail(cardId: number): Promise<Element | string>
 
 export async function getEventGachaAndCardList(event: Event) {
     var gachaList: Gacha[] = []
+    var gachaIdList = []//用于去重
     for (var i = 0; i < defaultserverList.length; i++) {
         let server = defaultserverList[i]
-        if (event.startAt[server.serverId] == null) {
+        if(server.getContentByServer(event.startAt) == null){
             continue
         }
         let tempGachaList = getPresentGachaList(server, event.startAt[server.serverId], event.endAt[server.serverId])
         for (var j = 0; j < tempGachaList.length; j++) {
-            if (gachaList.indexOf(tempGachaList[j]) == -1) {
+            if (gachaIdList.indexOf(tempGachaList[j].gachaId) == -1) {
                 gachaList.push(tempGachaList[j])
+                gachaIdList.push(tempGachaList[j].gachaId)
             }
         }
     }
+
     var gachaCardIdList: number[] = []
     for (var i = 0; i < gachaList.length; i++) {
         var tempGacha = gachaList[i]
