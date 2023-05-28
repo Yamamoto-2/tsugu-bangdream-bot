@@ -6,12 +6,12 @@ import { drawAttributeInList } from "../list/attribute";
 import { drawTimeInList } from "../list/time";
 import { drawText } from "../text";
 import { createCanvas, Image, Canvas } from "canvas";
-import { draweventBannerImageCanvas } from './utils'
+import { drawBannerImageCanvas } from './utils'
 
 export async function drawGachaDatablock(gacha: Gacha, topLeftText?: string) {
     var list = []
     var gachaBannerImage = await gacha.getBannerImage()
-    var gachaBannerImageCanvas = draweventBannerImageCanvas(gachaBannerImage)
+    var gachaBannerImageCanvas = drawBannerImageCanvas(gachaBannerImage)
     list.push(gachaBannerImageCanvas)
 
     var textImageList: Array<Canvas> = []

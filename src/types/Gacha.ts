@@ -2,7 +2,7 @@ import { callAPIAndCacheResponse } from '../api/getApi';
 import mainAPI from './_Main';
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
-import { Server, serverList } from './Server';
+import { Server, getServerByPriority, serverList } from './Server';
 import { Event, getPresentEvent } from './Event';
 
 const typeName = {
@@ -43,6 +43,7 @@ export class Gacha {
         }
     }>
     paymentMethods: Array<{
+        paymentMethod: string,
         gachaId: number,
         paymentType: string,
         quantity: number,
@@ -52,7 +53,8 @@ export class Gacha {
         pickup: boolean,
         maxSpinLimit: number,
         costItemQuantity: number,
-        discountType: number
+        discountType: number,
+        ticketId:number
     }>
     description: Array<string | null>;
     annotation: Array<string | null>;
@@ -111,8 +113,23 @@ export class Gacha {
         return gachaData
     }
     async getBannerImage(): Promise<Image> {
-        var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/homebanner_rip/${this.bannerAssetBundleName}.png`)
-        return await loadImage(BannerImageBuffer)
+        try{
+            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/homebanner_rip/${this.bannerAssetBundleName}.png`,false)
+            return await loadImage(BannerImageBuffer)
+        }
+        catch(e){
+            return(this.getGachaLogo())
+        }
+    }
+    async getGachaBGImage():Promise<Image>{
+        var server = getServerByPriority(this.publishedAt)
+        var BGImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/gacha/screen/${this.resourceName}_rip/bg.png`)
+        return await loadImage(BGImageBuffer)
+    }
+    async getGachaLogo():Promise<Image>{
+        var server = getServerByPriority(this.publishedAt)
+        var LogoImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/gacha/screen/${this.resourceName}_rip/logo.png`)
+        return await loadImage(LogoImageBuffer)
     }
     getEventId() {
         var eventList: Array<number> = []
@@ -170,9 +187,13 @@ export function getPresentGachaList(server: Server, start: number = Date.now(), 
             
             // 检查活动的发布时间和结束时间是否在指定范围内
             if (gacha.publishedAt[server.serverId] <= end && gacha.closedAt[server.serverId] >= start) {
-                if (gacha.type !== 'special') {
-                    gachaList.push(gacha)
+                if (gacha.type == 'special') {
+                    continue
                 }
+                if(gacha.gachaName[new Server('jp').serverId].includes('初心者限定')){
+                    continue
+                }
+                gachaList.push(gacha)
             }
         }
     }

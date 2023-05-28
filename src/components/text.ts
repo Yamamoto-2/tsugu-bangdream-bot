@@ -109,7 +109,6 @@ export function drawTextWithImages({
 }: TextWithImagesOptions) {
     var wrappedTextData = warpTextWithImages({ textSize, maxWidth, lineHeight, content, spacing });
     var wrappedText = wrappedTextData.wrappedText
-    console.log(wrappedText)
     var canvas: Canvas
     //单行文字，宽度为第一行的宽度
     if (wrappedTextData.numberOfLines == 1) {
