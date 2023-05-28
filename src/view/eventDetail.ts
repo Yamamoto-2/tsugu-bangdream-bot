@@ -15,6 +15,8 @@ import { getPresentGachaList, Gacha } from '../types/Gacha'
 import { Server, defaultserverList } from '../types/Server';
 import { drawTitle } from '../components/title'
 import { outputFinalBuffer } from '../image/output'
+import { Degree } from '../types/Degree'
+import { drawDegreeListOfEvent } from '../components/list/degreeList';
 
 export async function drawEventDetail(cardId: number): Promise<Element | string> {
     const event = new Event(cardId)
@@ -101,7 +103,7 @@ export async function drawEventDetail(cardId: number): Promise<Element | string>
     if (Object.keys(event.eventCharacterParameterBonus).length != 0) {
         var statText = ''
         for (const i in event.eventCharacterParameterBonus) {
-            if(i == 'eventId'){
+            if (i == 'eventId') {
                 continue
             }
             if (Object.prototype.hasOwnProperty.call(event.eventCharacterParameterBonus, i)) {
@@ -118,6 +120,10 @@ export async function drawEventDetail(cardId: number): Promise<Element | string>
         }))
         list.push(line)
     }
+
+    //牌子
+    list.push(await drawDegreeListOfEvent(event))
+    list.push(line)
 
     //奖励卡牌
     var rewardCardList: Card[] = []
@@ -180,14 +186,14 @@ export async function drawEventDetail(cardId: number): Promise<Element | string>
 
 }
 
-export async function getEventGachaAndCardList(event:Event){
+export async function getEventGachaAndCardList(event: Event) {
     var gachaList: Gacha[] = []
     for (var i = 0; i < defaultserverList.length; i++) {
         let server = defaultserverList[i]
-        if(event.startAt[server.serverId] == null){
+        if (event.startAt[server.serverId] == null) {
             continue
         }
-        let tempGachaList = getPresentGachaList(server, event.startAt[server.serverId],event.endAt[server.serverId])
+        let tempGachaList = getPresentGachaList(server, event.startAt[server.serverId], event.endAt[server.serverId])
         for (var j = 0; j < tempGachaList.length; j++) {
             if (gachaList.indexOf(tempGachaList[j]) == -1) {
                 gachaList.push(tempGachaList[j])
@@ -213,5 +219,5 @@ export async function getEventGachaAndCardList(event:Event){
     gachaCardList.sort((a, b) => {
         return a.rarity - b.rarity
     })
-    return {gachaCardList,gachaList}
+    return { gachaCardList, gachaList }
 }
