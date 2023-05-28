@@ -62,6 +62,8 @@ export class Song {
         arranger: string,
     }
     howToGet: Array<string | null>
+    //用于模糊搜索
+    songLevels:string[] = []
 
     constructor(songId: number) {
         this.songId = songId
@@ -82,6 +84,9 @@ export class Song {
         this.length = songData['length']
         this.notes = songData['notes']
         this.bpm = songData['bpm']
+        for(let i in this.difficulty){
+            this.songLevels.push(this.difficulty[i].playLevel.toString())
+        }
     }
     async initFull() {
         if (this.isExist == false) {
