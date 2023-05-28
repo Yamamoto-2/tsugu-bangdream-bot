@@ -4,7 +4,7 @@ import { defaultserver } from '../config'
 
 //服务器列表，因为有TW而不适用country
 export const serverList: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['jp', 'en', 'tw', 'cn', 'kr']
-export const serverPriority: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['cn', 'jp', 'tw', 'en', 'kr']
+import { serverPriority } from '../config'
 const serverNameFullList = {
     jp: '日服',
     en: '国际服',
