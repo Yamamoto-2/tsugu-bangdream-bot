@@ -4,28 +4,29 @@ import { drawCardIcon } from '../card'
 import { Card } from '../../types/Card'
 
 interface CardIconInListOptions {
-    key: string;
+    key?: string;
     cardList: Array<Card>;
     cardIdVisible?: boolean;
     skillTypeVisible?: boolean;
     cardTypeVisible?: boolean;
     trainingStatus?: boolean;
+    lineHeight?: number;
 }
 
 export async function drawCardListInList({
     key,
     cardList,
-    cardIdVisible = true,
+    cardIdVisible = false,
     skillTypeVisible = true,
     cardTypeVisible = true,
-    trainingStatus
+    trainingStatus,
+    lineHeight = 200
 }: CardIconInListOptions) {
-    var lineHeight = 200
-    var textSize = 180
-    var spacing = 39 / 3
+    var textSize = lineHeight / 200 * 180
+    var spacing = lineHeight / 200 * 13
     if (cardIdVisible) {
-        lineHeight += 30
-        textSize += 30
+        textSize / 180 * 30
+        lineHeight / 200 * 230
     }
     var list: Array<Canvas> = []
     for (let i = 0; i < cardList.length; i++) {
@@ -56,10 +57,10 @@ export async function drawCardListInList({
         }
     }
     return drawList({
-        key:key,
-        content:list,
-        textSize:textSize,
-        lineHeight:lineHeight,
-        spacing:spacing
+        key: key,
+        content: list,
+        textSize: textSize,
+        lineHeight: lineHeight,
+        spacing: spacing
     })
 }

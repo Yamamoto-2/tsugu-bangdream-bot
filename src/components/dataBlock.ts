@@ -104,7 +104,7 @@ export var drawDatablockHorizontal = async function ({
     var allW = 0;
     var maxH = 0;
     if (BG) {
-        allW += 100;
+        allW += 200;
     }
     for (var i = 0; i < list.length; i++) {
         allW += list[i].width;
@@ -148,13 +148,13 @@ export var drawDatablockHorizontal = async function ({
             ctx.restore();
 
             ctx.drawImage(drawRoundedRect({
-                width: allW,
+                width: allW-100,
                 height: maxH + 100,
                 radius: [25, 0, 25, 25]
             }), topLeftTextHeight, 50);
         } else {
             ctx.drawImage(drawRoundedRect({
-                width: allW,
+                width: allW - 100,
                 height: maxH + 100
             }), 50, 0);
         }
@@ -162,7 +162,7 @@ export var drawDatablockHorizontal = async function ({
 
     var allW2 = 0;
     if (BG) {
-        allW2 += 50;
+        allW2 += 100;
         if (topLeftText !== undefined) {
             allW2 += topLeftTextHeight;
         }

@@ -86,6 +86,10 @@ export class Event {
         visual?: number
     } = {}
 
+    //以下用于模糊搜索
+    characterId:string[] = []
+    attribute:string[] = []
+
 
 
     constructor(eventId: number) {
@@ -104,6 +108,16 @@ export class Event {
         this.attributes = eventData['attributes'];
         this.characters = eventData['characters'];
         this.rewardCards = eventData['rewardCards'];
+        //用于模糊搜索
+        for (let i  = 0; i  < this.characters.length; i ++) {
+            const element = this.characters[i ];
+            this.characterId.push(element.characterId.toString())
+        }
+        for(let i = 0; i < this.attributes.length; i++){
+            const element = this.attributes[i];
+            this.attribute.push(element.attribute)
+        }
+        
     }
     async initFull() {
         if (this.isExist == false) {

@@ -75,7 +75,7 @@ export async function drawEventDetail(cardId: number): Promise<Element | string>
             const element = attributeList[i];
             list.push(await drawAttributeInList({
                 content: element,
-                text: ` + ${i}%`
+                text: ` +${i}%`
             }))
         }
     }
@@ -91,7 +91,7 @@ export async function drawEventDetail(cardId: number): Promise<Element | string>
             const element = characterList[i];
             list.push(await drawCharacterInList({
                 content: element,
-                text: ` + ${i}%`
+                text: ` +${i}%`
             }))
         }
     }
@@ -101,6 +101,9 @@ export async function drawEventDetail(cardId: number): Promise<Element | string>
     if (Object.keys(event.eventCharacterParameterBonus).length != 0) {
         var statText = ''
         for (const i in event.eventCharacterParameterBonus) {
+            if(i == 'eventId'){
+                continue
+            }
             if (Object.prototype.hasOwnProperty.call(event.eventCharacterParameterBonus, i)) {
                 const element = event.eventCharacterParameterBonus[i];
                 if (element == 0) {
@@ -133,32 +136,11 @@ export async function drawEventDetail(cardId: number): Promise<Element | string>
     list.push(line)
 
     //活动期间卡池卡牌
-    var gachaList: Gacha[] = []
-    for (var i = 0; i < defaultserverList.length; i++) {
-        let server = defaultserverList[i]
-        let tempGachaList = getPresentGachaList(server, event.startAt[server.serverId],event.endAt[server.serverId])
-        for (var j = 0; j < tempGachaList.length; j++) {
-            if (gachaList.indexOf(tempGachaList[j]) == -1) {
-                gachaList.push(tempGachaList[j])
-            }
-        }
-    }
-    var gachaCardIdList: number[] = []
-    for (var i = 0; i < gachaList.length; i++) {
-        var tempGacha = gachaList[i]
-        var tempCardList = tempGacha.newCards
-        for (var j = 0; j < tempCardList.length; j++) {
-            var tempCard = tempCardList[j]
-            if (gachaCardIdList.indexOf(tempCard) == -1) {
-                gachaCardIdList.push(tempCard)
-            }
-        }
-    }
-    var gachaCardList: Card[] = []
-    for (var i = 0; i < gachaCardIdList.length; i++) {
-        var tempCardId = gachaCardIdList[i]
-        gachaCardList.push(new Card(tempCardId))
-    }
+
+    var EventGachaAndCardList = await getEventGachaAndCardList(event)
+    var gachaList = EventGachaAndCardList.gachaList
+    var gachaCardList = EventGachaAndCardList.gachaCardList
+
     list.push(await drawCardListInList({
         key: '活动期间卡池卡牌',
         cardList: gachaCardList,
@@ -167,11 +149,6 @@ export async function drawEventDetail(cardId: number): Promise<Element | string>
         cardTypeVisible: true,
         trainingStatus: false
     }))
-    list.push(line)
-
-
-
-
 
     //创建最终输出数组
     var listImage = await drawDatablock({ list })
@@ -201,4 +178,40 @@ export async function drawEventDetail(cardId: number): Promise<Element | string>
 
     return h.image(buffer, 'image/png')
 
+}
+
+export async function getEventGachaAndCardList(event:Event){
+    var gachaList: Gacha[] = []
+    for (var i = 0; i < defaultserverList.length; i++) {
+        let server = defaultserverList[i]
+        if(event.startAt[server.serverId] == null){
+            continue
+        }
+        let tempGachaList = getPresentGachaList(server, event.startAt[server.serverId],event.endAt[server.serverId])
+        for (var j = 0; j < tempGachaList.length; j++) {
+            if (gachaList.indexOf(tempGachaList[j]) == -1) {
+                gachaList.push(tempGachaList[j])
+            }
+        }
+    }
+    var gachaCardIdList: number[] = []
+    for (var i = 0; i < gachaList.length; i++) {
+        var tempGacha = gachaList[i]
+        var tempCardList = tempGacha.newCards
+        for (var j = 0; j < tempCardList.length; j++) {
+            var tempCard = tempCardList[j]
+            if (gachaCardIdList.indexOf(tempCard) == -1) {
+                gachaCardIdList.push(tempCard)
+            }
+        }
+    }
+    var gachaCardList: Card[] = []
+    for (var i = 0; i < gachaCardIdList.length; i++) {
+        var tempCardId = gachaCardIdList[i]
+        gachaCardList.push(new Card(tempCardId))
+    }
+    gachaCardList.sort((a, b) => {
+        return a.rarity - b.rarity
+    })
+    return {gachaCardList,gachaList}
 }

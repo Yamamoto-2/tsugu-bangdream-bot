@@ -11,7 +11,7 @@ const attributeColor = {
 export class Attribute {
     name: 'cool' | 'happy' | 'pure' | 'powerful'
     color: string
-    constructor(name: 'cool' | 'happy' | 'pure' | 'powerful') {
+    constructor(name:string) {
         this.name = name
         this.color = attributeColor[name]
     }

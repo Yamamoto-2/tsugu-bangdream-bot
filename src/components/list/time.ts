@@ -23,7 +23,10 @@ export async function drawTimeInList({
     return canvas
 }
 
-export var changeTimefomant = function (timeStamp: number) {//时间戳到年月日 精确到分钟
+export var changeTimefomant = function (timeStamp: number | null) {//时间戳到年月日 精确到分钟
+    if(timeStamp == null){
+        return '?'
+    }
     var date = new Date(Math.floor(timeStamp / 1000) * 1000)
     var nMinutes: string
     if (date.getMinutes() < 10) {

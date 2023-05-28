@@ -29,17 +29,41 @@ export function fuzzySearch(keywords: string[]): { [key: string]: string[] } {
       for (const key in typeConfig) {
         const values = typeConfig[key];
         for (const value of values) {
-          if (value == keyword) {
-            if (!matches[type]) {
-              matches[type] = [];
+          //如果是字符串，直接匹配
+          if (typeof value == 'string') {
+            if (value == keyword) {
+              if (!matches[type]) {
+                matches[type] = [];
+              }
+              matches[type].push(key);
+              continue;
             }
-            matches[type].push(key);
+          }
+          //如果是数组，匹配数组中的每一项
+          if (Array.isArray(value)) {
+            if (value.includes(keyword)) {
+              if (!matches[type]) {
+                matches[type] = [];
+              }
+              matches[type].push(key);
+              continue;
+            }
+          }
+          //如果是对象，匹配对象的每一个key
+          if(typeof value == 'object'){
+            if (Object.keys(value).includes(keyword)) {
+              if (!matches[type]) {
+                matches[type] = [];
+              }
+              matches[type].push(key);
+              continue;
+            }
           }
         }
+
       }
     }
   }
-
   return matches;
 }
 
