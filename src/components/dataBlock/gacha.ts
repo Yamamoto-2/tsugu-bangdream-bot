@@ -1,5 +1,5 @@
 import { Gacha } from "../../types/Gacha";
-import { drawListWithLine, drawListByServerList } from "../list";
+import { drawListWithLine, drawListByServerList, drawList } from "../list";
 import { drawDatablock } from '../dataBlock'
 import { drawCharacterInList } from '../list/character'
 import { drawAttributeInList } from "../list/attribute";
@@ -23,9 +23,8 @@ export async function drawGachaDatablock(gacha: Gacha, topLeftText?: string) {
     */
 
     //卡池类型与ID
-    textImageList.push(drawText({
-        text: `${gacha.getTypeName()}   ID: ${gacha.gachaId}`,
-        maxWidth: 800
+    textImageList.push(drawList({
+        text: `${gacha.getTypeName()}   ID: ${gacha.gachaId}`
     }))
 
     /*

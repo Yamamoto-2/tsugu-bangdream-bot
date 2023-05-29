@@ -1,5 +1,5 @@
 import { Event } from "../../types/Event";
-import { drawListWithLine, drawListByServerList } from "../list";
+import { drawListWithLine, drawListByServerList, drawList } from "../list";
 import { drawDatablock } from '../dataBlock'
 import { drawCharacterInList } from '../list/character'
 import { drawAttributeInList } from "../list/attribute";
@@ -23,9 +23,8 @@ export async function drawEventDatablock(event: Event, topLeftText?: string) {
     */
 
     //活动类型与ID
-    textImageList.push(drawText({
-        text: `${event.getTypeName()}   ID: ${event.eventId}`,
-        maxWidth: 800
+    textImageList.push(drawList({
+        text: `${event.getTypeName()}   ID: ${event.eventId}`
     }))
 
 

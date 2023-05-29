@@ -22,7 +22,7 @@ const line = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawSongDataBlock(song: Song,text?:string) {
+export async function drawSongDataBlock(song: Song, text?: string) {
     var server = getServerByPriority(song.publishedAt)
     var songJacketImage = await song.getSongJacketImage()
     // 缩放封面
@@ -38,23 +38,23 @@ export async function drawSongDataBlock(song: Song,text?:string) {
     var songNameImage = drawText({
         text: songName,
         textSize: 40,
-        maxWidth: 265
+        maxWidth: 365
     })
     // 绘制歌曲信息
     var songDetail = `${bandName}\n${songTipsName}\nID:${song.songId}`
-    if(text != undefined){
+    if (text != undefined) {
         songDetail = `${songDetail}\n${text}`
     }
     var songDetailImage = drawText({
         text: songDetail,
         textSize: 30,
-        maxWidth: 265
+        maxWidth: 365
     })
     var difficultyImage = drawDifficulityList(song, 60, 10)
-    var list = [songNameImage,line,songDetailImage]
+    var list = [songNameImage, line, songDetailImage, createCanvas(1, 60)]
     var rightCanvas = stackImage(list)
-    var canvas = stackImageHorizontal([songJacketCanvas,createCanvas(35,1), rightCanvas])
+    var canvas = stackImageHorizontal([songJacketCanvas, createCanvas(35, 1), rightCanvas])
     var ctx = canvas.getContext("2d")
     ctx.drawImage(difficultyImage, 435, canvas.height - difficultyImage.height)
-    return canvas
+    return (drawDatablock({ list: [canvas] }))
 }

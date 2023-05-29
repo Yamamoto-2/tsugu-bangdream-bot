@@ -65,9 +65,9 @@ export class Song {
         quantity: number,
     }>
     detail: {
-        lyricist: string,
-        composer: string,
-        arranger: string,
+        lyricist: string[],
+        composer: string[],
+        arranger: string[],
     }
     howToGet: Array<string | null>
     //用于模糊搜索

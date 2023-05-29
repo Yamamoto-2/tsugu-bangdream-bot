@@ -177,7 +177,7 @@ export function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
 
 //画左侧有竖线的排版，用于画block时展示数据
 export function drawListWithLine(textImageList: Array<Canvas | Image>): Canvas {
-    var x = 30
+    var x = 10
     var y = 10
     var height = 0
     for (let i = 0; i < textImageList.length; i++) {

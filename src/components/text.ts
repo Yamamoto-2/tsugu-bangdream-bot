@@ -185,6 +185,9 @@ function warpTextWithImages({
     }
 
     for (let i = 0; i < content.length; i++) {
+        if(content[i] == undefined || content[i] == null){
+            content[i] = "?"
+        }
         if (typeof content[i] === "string") {
             let temptext = content[i] as string;
             while (temptext.length > 0) {
