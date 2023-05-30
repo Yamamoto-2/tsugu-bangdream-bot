@@ -1,6 +1,6 @@
 import { Canvas, createCanvas } from "canvas"
 import { Band } from "../../types/Band"
-import { defaultserverList,getServerByPriority } from "../../types/Server"
+import { defaultserverList, getServerByPriority } from "../../types/Server"
 import { Song } from "../../types/Song"
 import { drawText, setFontStyle } from "../text"
 import { resizeImage } from "../utils"
@@ -33,7 +33,7 @@ export async function drawSongInList(song: Song): Promise<Canvas> {
     var IDImage = drawText({
         text: song.songId.toString(),
         textSize: 23,
-        lineHeight:37.5,
+        lineHeight: 37.5,
         maxWidth: 800
     })
     ctx.drawImage(IDImage, 0, 0)
@@ -41,13 +41,13 @@ export async function drawSongInList(song: Song): Promise<Canvas> {
     var songNameAndBandName = drawText({
         text: `${server.getContentByServer(song.musicTitle)}\n${server.getContentByServer(new Band(bandId).bandName)}`,
         textSize: 23,
-        lineHeight:37.5,
+        lineHeight: 37.5,
         maxWidth: 800
     })
     ctx.drawImage(songNameAndBandName, 120, 0)
 
     //难度
     var difficultyImage = drawDifficulityList(song, 45, 10)
-    ctx.drawImage(difficultyImage, 800-difficultyImage.width, 7.5)
+    ctx.drawImage(difficultyImage, 800 - difficultyImage.width, 75 / 2 - difficultyImage.height / 2)
     return tempcanv
 }

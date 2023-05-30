@@ -103,6 +103,7 @@ export async function drawGachaDetail(gachaId: number): Promise<Element | string
     }
     //如果pickUp卡牌数量不为0
     if (pickUpCardList.length != 0) {
+        list.push(line)
         list.push(await drawCardListInList({
             key: 'PickUp',
             cardList: pickUpCardList,
@@ -111,7 +112,6 @@ export async function drawGachaDetail(gachaId: number): Promise<Element | string
             cardTypeVisible: true,
             skillTypeVisible: true,
         }))
-        list.push(line)
     }
 
 
