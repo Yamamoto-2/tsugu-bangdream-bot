@@ -5,7 +5,7 @@ import { match } from "../commands/fuzzySearch"
 import { Canvas, createCanvas, Image, loadImage } from "canvas"
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
-import { drawDatablock, drawDatablockHorizontal } from "../components/dataBlock";
+import {  drawDatablockHorizontal } from "../components/dataBlock";
 import { drawSongInList } from '../components/list/song';
 import { drawDottedLine } from '../image/dottedLine';
 import { stackImage } from '../components/utils';

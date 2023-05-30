@@ -1,21 +1,18 @@
 import { h, Element } from 'koishi'
 import { Card } from "../types/Card";
-import { Attribute } from "../types/Attribute";
-import { Character } from "../types/Character";
 import mainAPI from "../types/_Main"
 import { match } from "../commands/fuzzySearch"
 import { Canvas, createCanvas, Image, loadImage } from "canvas"
-import { drawCardIcon } from "../components/card"
-import { drawDatablock, drawDatablockHorizontal } from '../components/dataBlock';
-import { drawListWithLine, line } from '../components/list';
+import { drawDatablockHorizontal } from '../components/dataBlock';
+import { line } from '../components/list';
 import { stackImage, stackImageHorizontal, resizeImage } from '../components/utils'
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
 import { defaultserverList } from '../types/Server'
 import { Event, sortEventList } from '../types/Event';
 import { drawCardListInList } from '../components/list/cardIconList';
-import { drawTimeInList, changeTimefomant } from '../components/list/time';
-import { drawText, drawTextWithImages } from '../components/text';
+import { changeTimefomant } from '../components/list/time';
+import { drawTextWithImages } from '../components/text';
 import { getEventGachaAndCardList } from './eventDetail'
 import { drawDottedLine } from '../image/dottedLine'
 import { statConfig } from '../components/list/cardStat'
@@ -53,7 +50,7 @@ export async function drawEventList(matches: { [key: string]: string[] }) {
         if (numberOfNotReleasedServer == defaultserverList.length) {
             isMatch = false;
         }
-        
+
         if (isMatch) {
             tempEventList.push(tempEvent);
         }

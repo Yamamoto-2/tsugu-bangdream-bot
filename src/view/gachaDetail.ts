@@ -1,22 +1,16 @@
 import { h, Element } from 'koishi'
-import { Event, getPresentEvent } from '../types/Event';
+import { getPresentEvent } from '../types/Event';
 import { Card } from '../types/Card'
 import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
-import { drawGachaDatablock } from '../components/dataBlock/gacha'
 import { Image, Canvas, createCanvas } from 'canvas'
 import { drawBannerImageCanvas } from '../components/dataBlock/utils'
 import { drawTimeInList } from '../components/list/time';
-import { drawAttributeInList } from '../components/list/attribute'
-import { drawCharacterInList } from '../components/list/character'
-import { statConfig } from '../components/list/cardStat'
 import { drawCardListInList } from '../components/list/cardIconList'
-import { getPresentGachaList, Gacha } from '../types/Gacha'
+import { Gacha } from '../types/Gacha'
 import { Server, defaultserverList, getServerByPriority } from '../types/Server';
 import { drawTitle } from '../components/title'
 import { outputFinalBuffer } from '../image/output'
-import { Degree } from '../types/Degree'
-import { drawDegreeListOfEvent } from '../components/list/degreeList';
 import { drawEventDatablock } from '../components/dataBlock/event';
 import { drawGashaPaymentMethodInList } from '../components/list/gachaPaymentMethod';
 import { drawGachaRateInList } from '../components/list/gachaRate';

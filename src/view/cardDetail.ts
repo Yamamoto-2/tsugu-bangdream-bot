@@ -1,28 +1,18 @@
 import { h, Element } from 'koishi'
 import { Card } from '../types/Card'
-import { Character } from '../types/Character';
-import { Attribute } from '../types/Attribute';
 import { Skill } from '../types/Skill';
-import { Gacha, getEarlistGachaFromList } from '../types/Gacha'
-import { Band } from '../types/Band';
-
+import { getEarlistGachaFromList } from '../types/Gacha'
 import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
 import { drawCardIllustration } from '../components/card';
-import { drawCharacterInList } from '../components/list/character'
-import { drawAttributeInList } from '../components/list/attribute'
-import { drawRarityInList } from '../components/list/rarity'
 import { drawSkillInList } from '../components/list/skill'
 import { drawTimeInList } from '../components/list/time';
 import { drawCardPrefixInList } from '../components/list/cardPrefix'
 import { drawCardStatInList } from '../components/list/cardStat'
 import { drawCardListInList } from '../components/list/cardIconList'
 import { drawSdcharaInList } from '../components/list/cardSdchara'
-import { drawBandInList } from '../components/list/band'
-
 import { drawEventDatablock } from '../components/dataBlock/event';
 import { drawGachaDatablock } from '../components/dataBlock/gacha'
-
 import { Image, Canvas, createCanvas } from 'canvas'
 import { Server, defaultserverList } from '../types/Server';
 import { drawTitle } from '../components/title';

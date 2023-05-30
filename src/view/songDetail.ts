@@ -1,23 +1,13 @@
 import { h, Element } from 'koishi'
-import { Event, getPresentEvent } from '../types/Event';
-import { Card } from '../types/Card'
+import {  getPresentEvent } from '../types/Event';
 import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
-import { drawGachaDatablock } from '../components/dataBlock/gacha'
-import { Image, Canvas, createCanvas } from 'canvas'
-import { drawBannerImageCanvas } from '../components/dataBlock/utils'
+import { Image, Canvas } from 'canvas'
 import { drawTimeInList } from '../components/list/time';
-import { drawAttributeInList } from '../components/list/attribute'
-import { drawCharacterInList } from '../components/list/character'
-import { statConfig } from '../components/list/cardStat'
-import { drawCardListInList } from '../components/list/cardIconList'
-import { getPresentGachaList, Gacha } from '../types/Gacha'
 import { Server, defaultserverList } from '../types/Server';
 import { drawTitle } from '../components/title'
 import { outputFinalBuffer } from '../image/output'
-import { drawDegreeListOfEvent } from '../components/list/degreeList';
-import { Song, getPresentSongList } from '../types/Song'
-import { drawSongListDataBlock } from '../components/dataBlock/songList';
+import { Song} from '../types/Song'
 import { drawSongDataBlock } from '../components/dataBlock/song';
 import { Band } from '../types/Band';
 import { drawEventDatablock } from '../components/dataBlock/event';
