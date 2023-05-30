@@ -4,27 +4,22 @@ import { download } from './downloader';
 import { Buffer } from 'buffer'
 import * as fs from 'fs'
 
+const errUrl: string[] = [];
 
 async function downloadFile(url: string, IgnoreErr: boolean = true): Promise<Buffer> {
-  if(!IgnoreErr){
+  try {
+    if (errUrl.includes(url)) {
+      throw new Error("downloadFile: errUrl.includes(url)");
+    }
     const cacheDir = path.join(cacheRootPath, path.dirname(url).replace(/^[^/]+:\/\/[^/]+\//, ''));
     const data = await download(url, cacheDir, path.basename(url), false);
-    if (data instanceof Buffer) return data as Buffer;
-    else throw new Error("downloadFile: data is not Buffer");
-  }
-  else{
-    try {
-      const cacheDir = path.join(cacheRootPath, path.dirname(url).replace(/^[^/]+:\/\/[^/]+\//, ''));
-      const data = await download(url, cacheDir, path.basename(url), false);
-      if (data instanceof Buffer) return data as Buffer;
-      else throw new Error("downloadFile: data is not Buffer");
+    return data as Buffer;
+  } catch (e) {
+    errUrl.push(url);
+    if (url.includes('.png') && IgnoreErr) {
+      return fs.readFileSync(path.join(assetsRootPath, 'err.png'));
     }
-    catch (e) {
-      console.log(e)
-      if (url.includes('.png')) {
-        return (await fs.readFileSync(path.join(assetsRootPath, 'err.png')))
-      }
-    }
+    throw e; // Rethrow the error if it is not related to handling the error case
   }
 }
 
