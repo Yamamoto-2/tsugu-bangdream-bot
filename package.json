@@ -25,6 +25,9 @@
   },
   "dependencies": {
     "canvas": "^2.11.2",
-    "jimp": "^0.22.7"
+    "chart.js": "^3.9.1",
+    "chartjs-node-canvas": "^4.1.6",
+    "jimp": "^0.22.7",
+    "request": "^2.88.2"
   }
 }
