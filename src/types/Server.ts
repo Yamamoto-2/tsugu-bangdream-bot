@@ -1,17 +1,11 @@
 import { downloadFileCache } from '../api/downloadFileCache'
 import { loadImage, Image } from 'canvas'
-import { defaultserver } from '../config'
+import { defaultserver, serverNameFullList } from '../config'
 
 //服务器列表，因为有TW而不适用country
 export const serverList: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['jp', 'en', 'tw', 'cn', 'kr']
 import { serverPriority } from '../config'
-const serverNameFullList = {
-    jp: '日服',
-    en: '国际服',
-    tw: '台服',
-    cn: '国服',
-    kr: '韩服'
-}
+
 
 export class Server {
     serverName: 'jp' | 'en' | 'tw' | 'cn' | 'kr'

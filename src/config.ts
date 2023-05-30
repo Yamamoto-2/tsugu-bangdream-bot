@@ -34,3 +34,11 @@ export const defaultserver: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['cn', 'jp
 export const EazyBG = true //是否使用简易背景，这将大幅提高速度
 
 export const serverPriority: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['cn', 'jp', 'tw', 'en', 'kr']
+
+export const serverNameFullList = {
+    jp: '日服',
+    en: '国际服',
+    tw: '台服',
+    cn: '国服',
+    kr: '韩服'
+}
