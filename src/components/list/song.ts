@@ -4,31 +4,19 @@ import { defaultserverList, getServerByPriority } from "../../types/Server"
 import { Song } from "../../types/Song"
 import { drawText, setFontStyle } from "../text"
 import { resizeImage } from "../utils"
-import { drawDifficulityList } from "./difficulty"
+import { drawDifficulityList, drawDifficulity } from "./difficulty"
 
-export async function drawSongInList(song: Song): Promise<Canvas> {
+export async function drawSongInList(song: Song, difficulty?: number, text?: string): Promise<Canvas> {
     var server = getServerByPriority(song.publishedAt)
     var songImage = resizeImage({
         image: await song.getSongJacketImage(),
         widthMax: 80,
         heightMax: 80
     })
-    var songName = drawText({
-        text: server.getContentByServer(song.musicTitle),
-        textSize: 26,
-        maxWidth: 800
-    })
-    var bandId = song.bandId
-    var bandName = drawText({
-        text: server.getContentByServer(new Band(bandId).bandName),
-        textSize: 26,
-        maxWidth: 800
-    })
-    var tempcanv = createCanvas(800, 75)
-    var ctx = tempcanv.getContext("2d")
+
+    var canvas = createCanvas(800, 75)
+    var ctx = canvas.getContext("2d")
     ctx.drawImage(songImage, 50, 5, 65, 65)
-
-
     //id
     var IDImage = drawText({
         text: song.songId.toString(),
@@ -38,16 +26,30 @@ export async function drawSongInList(song: Song): Promise<Canvas> {
     })
     ctx.drawImage(IDImage, 0, 0)
     //曲名与乐队名
-    var songNameAndBandName = drawText({
-        text: `${server.getContentByServer(song.musicTitle)}\n${server.getContentByServer(new Band(bandId).bandName)}`,
+    var fullText = `${server.getContentByServer(song.musicTitle)}`
+    if (!text) {
+        //如果没有传入text参数，使用乐队名
+        fullText += `\n${server.getContentByServer(new Band(song.bandId).bandName)}`
+    }
+    else {
+        //如果传入了text参数，使用text参数代替乐队名
+        fullText += `\n${text}`
+    }
+    var textImage = drawText({
+        text: fullText,
         textSize: 23,
         lineHeight: 37.5,
         maxWidth: 800
     })
-    ctx.drawImage(songNameAndBandName, 120, 0)
+    ctx.drawImage(textImage, 120, 0)
 
     //难度
-    var difficultyImage = drawDifficulityList(song, 45, 10)
+    if (difficulty == undefined) {
+        var difficultyImage = drawDifficulityList(song, 45, 10)
+    }
+    else {
+        var difficultyImage = drawDifficulity(difficulty, song.difficulty[difficulty].playLevel, 45)
+    }
     ctx.drawImage(difficultyImage, 800 - difficultyImage.width, 75 / 2 - difficultyImage.height / 2)
-    return tempcanv
+    return canvas
 }

@@ -21,6 +21,7 @@ import { drawSongListDataBlock } from '../components/dataBlock/songList';
 import { drawSongDataBlock } from '../components/dataBlock/song';
 import { Band } from '../types/Band';
 import { drawEventDatablock } from '../components/dataBlock/event';
+import { drawSongMetaListDataBlock } from '../components/dataBlock/songMetaList'
 
 export async function drawSongDetail(song: Song): Promise<Element | string> {
     if (song.isExist == false) {
@@ -109,7 +110,7 @@ export async function drawSongDetail(song: Song): Promise<Element | string> {
     list.push(line)
 
     //special难度发布时间
-    if(song.difficulty['4']?.publishedAt != undefined ){
+    if (song.difficulty['4']?.publishedAt != undefined) {
         list.push(await drawTimeInList({
             key: 'special难度发布时间',
             content: song.difficulty['4'].publishedAt
@@ -126,22 +127,26 @@ export async function drawSongDetail(song: Song): Promise<Element | string> {
     all.push(songDataBlockImage)
 
     all.push(listImage)
+
+    //歌曲meta数据
+    var ferverStatusList = [true, false]
+    for (let j = 0; j < ferverStatusList.length; j++) {
+        const feverStatus = ferverStatusList[j];
+        var songMetaListDataBlockImage = await drawSongMetaListDataBlock(feverStatus, song, `${feverStatus ? 'Fever' : '无Fever'}`)
+        all.push(songMetaListDataBlockImage)
+    }
+
     //相关活动
     var eventIdList = []//防止重复
-    for(var i = 0; i < defaultserverList.length; i++){
+    for (var i = 0; i < defaultserverList.length; i++) {
         var server = defaultserverList[i]
-        var event = getPresentEvent(server,server.getContentByServer(song.publishedAt))
-        if(event != undefined && eventIdList.indexOf(event.eventId) == -1){
+        var event = getPresentEvent(server, server.getContentByServer(song.publishedAt))
+        if (event != undefined && eventIdList.indexOf(event.eventId) == -1) {
             eventIdList.push(event.eventId)
-            var eventDatablockImage = await drawEventDatablock(event,`${server.serverNameFull}相关活动`)
+            var eventDatablockImage = await drawEventDatablock(event, `${server.serverNameFull}相关活动`)
             all.push(eventDatablockImage)
         }
     }
-
-
-
-
-    
 
     var buffer = await outputFinalBuffer({
         imageList: all,
