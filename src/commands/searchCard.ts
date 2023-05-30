@@ -5,7 +5,6 @@ import { isInteger } from './utils'
 import { fuzzySearch } from './fuzzySearch'
 
 export async function commandCard(argv: any, text: string) {
-    console.log(`text: ${text}`)
     if (!text) {
         return '错误: 请输入关键词或卡片ID'
     }

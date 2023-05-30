@@ -4,7 +4,6 @@ import {drawEventDetail} from '../view/eventDetail'
 import {drawEventList} from '../view/eventList'
 
 export async function commandEvent(argv: any, text: string) {
-    console.log(`text: ${text}`)
     if (!text) {
         return '错误: 请输入关键词或活动ID'
     }

@@ -3,7 +3,6 @@ import { Server, getServerByPriority } from "../types/Server"
 import { Canvas, createCanvas, Image } from 'canvas'
 
 export async function drawDegree(degree: Degree, server: Server): Promise<Canvas> {
-    console.log(degree.degreeId)
     //如果服务器没有这个牌子，换一个有这个牌子的服务器
     if (server.getContentByServer(degree.degreeName) == null) {
         server = getServerByPriority(degree.degreeName)
