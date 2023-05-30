@@ -1,7 +1,7 @@
 import { callAPIAndCacheResponse } from '../api/getApi';
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
-import { Server, getServerByPriority,defaultserverList} from './Server'
+import { Server, getServerByPriority, defaultserverList } from './Server'
 import mainAPI from './_Main';
 import { Attribute } from './Attribute';
 import { Character } from './Character';
@@ -169,16 +169,15 @@ export class Event {
         return eventData
     }
     async getBannerImage(): Promise<Image> {
-        /*
         var server = getServerByPriority(this.startAt)
         try {
-            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`)
+            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`, false)
+            return await loadImage(BannerImageBuffer)
         } catch (e) {
-            */
-        var server = new Server('jp')
-        var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`)
-        //}
-        return await loadImage(BannerImageBuffer)
+            var server = new Server('jp')
+            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`)
+            return await loadImage(BannerImageBuffer)
+        }
     }
     async getEventBGImage(): Promise<Image> {
         var server = new Server('jp')
@@ -263,13 +262,13 @@ export function getPresentEvent(server: Server, time?: number) {
     return new Event(eventList[eventList.length - 1])
 }
 
-export function sortEventList(tempEventList:Array<Event>){
+export function sortEventList(tempEventList: Array<Event>) {
     tempEventList.sort((a, b) => {
         for (var i = 0; i < defaultserverList.length; i++) {
             var server = defaultserverList[i]
-            if(a.startAt[server.serverId] == null || b.startAt[server.serverId] == null){
+            if (a.startAt[server.serverId] == null || b.startAt[server.serverId] == null) {
                 continue
-            } 
+            }
             if (a.startAt[server.serverId] != b.startAt[server.serverId]) {
                 return a.startAt[server.serverId] - b.startAt[server.serverId]
             }

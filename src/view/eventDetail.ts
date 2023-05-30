@@ -226,21 +226,38 @@ export async function getEventGachaAndCardList(event: Event) {
     for (var i = 0; i < gachaList.length; i++) {
         var tempGacha = gachaList[i]
         var tempCardList = tempGacha.newCards
-        if(tempCardList.length > 10){
+        var rarity2CardNum = 0
+        //检查是否有超过5张稀有度2的卡牌，发布了太多2星卡的卡池会被跳过
+        for(var j = 0;j < tempCardList.length;j++){
+            let tempCard = new Card(tempCardList[j])
+            if(tempCard.rarity == 2){
+                rarity2CardNum++
+            }
+        }
+        if(rarity2CardNum > 4){
             continue
         }
         for (var j = 0; j < tempCardList.length; j++) {
-            var tempCard = tempCardList[j]
-            if (gachaCardIdList.indexOf(tempCard) == -1) {
-                gachaCardIdList.push(tempCard)
+            var tempCardId= tempCardList[j]
+            if (gachaCardIdList.indexOf(tempCardId) == -1) {
+                gachaCardIdList.push(tempCardId)
             }
         }
     }
     var gachaCardList: Card[] = []
     for (var i = 0; i < gachaCardIdList.length; i++) {
         var tempCardId = gachaCardIdList[i]
-        gachaCardList.push(new Card(tempCardId))
+        var tempCard = new Card(tempCardId)
+        for(var j = 0;j < defaultserverList.length;j++){
+            let server = defaultserverList[j]
+            //如果卡牌的发布时间不在活动期间内，则不显示
+            if(server.getContentByServer(tempCard.releasedAt) <  server.getContentByServer(event.startAt) || server.getContentByServer(tempCard.releasedAt) > server.getContentByServer(event.endAt)){
+                continue
+            }
+        }
+        gachaCardList.push(tempCard)
     }
+    
     gachaCardList.sort((a, b) => {
         return a.rarity - b.rarity
     })
