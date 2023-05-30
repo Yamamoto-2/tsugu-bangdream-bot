@@ -5,7 +5,7 @@ const cache: { [url: string]: Buffer } = {};
 async function downloadFileCache(url: string,IgnoreErr = true): Promise<Buffer> {
     if (cache[url]) {
         // 如果已经有缓存，则直接返回缓存数据
-        console.log(`已有缓存:${url}`)
+        //console.log(`已有缓存:${url}`)
         return cache[url];
     }
     // 下载文件

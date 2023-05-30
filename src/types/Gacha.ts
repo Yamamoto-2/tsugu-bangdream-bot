@@ -164,6 +164,9 @@ export function getEarlistGachaFromList(gachaList: {
     for (const gachId in gachaList) {
         if (Object.prototype.hasOwnProperty.call(gachaList, gachId)) {
             var gacha = new Gacha(parseInt(gachId))
+            if(!gacha.isExist){
+                continue
+            }
             if (gacha.publishedAt[server.serverId] < earlistTime) {
                 earlistTime = gacha.publishedAt[server.serverId]
                 earlistGacha = gacha
@@ -185,7 +188,12 @@ export function getPresentGachaList(server: Server, start: number = Date.now(), 
         if (Object.prototype.hasOwnProperty.call(gachaListMain, gachaId)) {
             const gacha = new Gacha(parseInt(gachaId))
             
-            // 检查活动的发布时间和结束时间是否在指定范围内
+            // 检查卡池持续时间是否与start和end有交集
+
+
+
+
+
             if (gacha.publishedAt[server.serverId] <= end && gacha.closedAt[server.serverId] >= start) {
                 if (gacha.type == 'special') {
                     continue
