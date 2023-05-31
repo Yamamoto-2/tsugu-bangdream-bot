@@ -1,11 +1,15 @@
-import {cacheRootPath} from '../config';
+import { cacheRootPath } from '../config';
 import * as path from 'path';
+
 
 export function getCacheDirectory(url: string): string {
     const urlObj = new URL(url);
-    const cacheDir = path.join(cacheRootPath, urlObj.host, urlObj.pathname);
+    let cacheDir = path.join( urlObj.host, urlObj.pathname, urlObj.search);
 
-    return cacheDir;
+    // 处理非法字符
+    cacheDir = sanitizeDirectoryName(cacheDir);
+
+    return path.join(cacheRootPath, cacheDir);
 }
 
 export function getFileNameFromUrl(url: string): string {
@@ -25,4 +29,11 @@ export function getFileNameFromUrl(url: string): string {
     }
 
     return fileName;
+}
+
+function sanitizeDirectoryName(dirName: string): string {
+    const illegalChars = /[/?<>:*|"]/g; // 定义非法字符的正则表达式
+    const replacementChar = '_'; // 替代非法字符的字符
+
+    return dirName.replace(illegalChars, replacementChar);
 }
