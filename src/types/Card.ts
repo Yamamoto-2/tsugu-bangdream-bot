@@ -2,7 +2,7 @@ import { callAPIAndCacheResponse } from '../api/getApi'
 import { Skill } from './Skill'
 import { Character } from './Character'
 import { Server, getServerByPriority, serverList } from './Server'
-import { Gacha, getEarlistGachaFromList } from './Gacha'
+import { Gacha } from './Gacha'
 import { Event } from './Event'
 import { Image, loadImage } from 'canvas'
 import { downloadFile } from '../api/downloadFile'
@@ -133,7 +133,7 @@ export class Card {
             this.releasedAt[CNserver.serverId] = new Event(this.releaseEvent[CNserver.serverId][0]).startAt[CNserver.serverId]
         }
         else if (this.releaseGacha[CNserver.serverId].length != 0) {
-            var earlistGacha = getEarlistGachaFromList(this.source[CNserver.serverId]['gacha'],CNserver)
+            var earlistGacha = new Gacha(this.releaseGacha[CNserver.serverId][0])
             this.releasedAt[CNserver.serverId] = earlistGacha.publishedAt[CNserver.serverId]
         }
 
@@ -283,7 +283,7 @@ export class Card {
         return maxLevel
     }
     async getSource() {
-        if(!this.isInitFull){
+        if (!this.isInitFull) {
             await this.initFull(false)
         }
         var releaseEvent: Array<Array<number>> = []

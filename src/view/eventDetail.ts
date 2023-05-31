@@ -142,11 +142,47 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
     }))
     list.push(line)
 
-    //活动期间卡池卡牌
 
-    var EventGachaAndCardList = await getEventGachaAndCardList(event)
-    var gachaList = EventGachaAndCardList.gachaList
-    var gachaCardList = EventGachaAndCardList.gachaCardList
+    //创建最终输出数组
+    var listImage = await drawDatablock({ list })
+    var all = []
+    all.push(drawTitle('查询', '活动'))
+    all.push(listImage)
+
+    var gachaCardList:Card[]= []
+    var gachaCardIdList:number[] = []//用于去重
+    var gachaImageList:Canvas[] = []
+    var gachaIdList:number[] = []//用于去重
+    //活动期间卡池卡牌
+    for (var i = 0; i < defaultserverList.length; i++) {
+        var server = defaultserverList[i]
+        var EventGachaAndCardList = await getEventGachaAndCardList(event, server)
+        var tempGachaList = EventGachaAndCardList.gachaList
+        var tempGachaCardList = EventGachaAndCardList.gachaCardList
+        for (let i = 0; i < tempGachaList.length; i++) {
+            const tempGacha = tempGachaList[i];
+            if (gachaIdList.indexOf(tempGacha.gachaId) != -1) {
+                continue
+            }
+            if (i == 0) {
+                gachaImageList.push(await drawGachaDatablock(tempGacha, `${server.serverNameFull}相关卡池`))
+            }
+            else {
+                gachaImageList.push(await drawGachaDatablock(tempGacha))
+            }
+            gachaIdList.push(tempGacha.gachaId)
+        }
+        for (let i = 0; i < tempGachaCardList.length; i++) {
+            const tempCard = tempGachaCardList[i];
+            if (gachaCardIdList.indexOf(tempCard.cardId) != -1) {
+                continue
+            }
+            gachaCardIdList.push(tempCard.cardId)
+            gachaCardList.push(tempCard)
+        }
+    }
+
+
 
     list.push(await drawCardListInList({
         key: '活动期间卡池卡牌',
@@ -157,39 +193,28 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
         trainingStatus: false
     }))
 
-    //创建最终输出数组
-    var listImage = await drawDatablock({ list })
-    var all = []
-    all.push(drawTitle('查询', '活动'))
-    all.push(listImage)
+
 
     //歌曲
     for (let i = 0; i < defaultserverList.length; i++) {
         const server = defaultserverList[i];
         const songList: Song[] = getPresentSongList(server, event.startAt[server.serverId], event.endAt[server.serverId]);
-        
+
         if (songList.length !== 0) {
-          const isDuplicate = all.some((block) => {
-            // 检查当前的songList是否与已存在的块的songList完全相同
-            return JSON.stringify(block.songList) === JSON.stringify(songList);
-          });
-      
-          if (!isDuplicate) {
-            all.push(await drawSongListDataBlock(songList, `${server.serverNameFull}相关歌曲`));
-          }
+            const isDuplicate = all.some((block) => {
+                // 检查当前的songList是否与已存在的块的songList完全相同
+                return JSON.stringify(block.songList) === JSON.stringify(songList);
+            });
+
+            if (!isDuplicate) {
+                all.push(await drawSongListDataBlock(songList, `${server.serverNameFull}相关歌曲`));
+            }
         }
-      }
+    }
 
     //卡池
-    for (let i = 0; i < gachaList.length; i++) {
-        const tempGacha = gachaList[i];
-        if (i == 0) {
-            all.push(await drawGachaDatablock(tempGacha, '相关卡池'))
-        }
-        else {
-            all.push(await drawGachaDatablock(tempGacha))
-
-        }
+    for (let i = 0; i < gachaImageList.length; i++) {
+        all.push(gachaImageList[i])
     }
 
     var BGimage = await event.getEventBGImage()
@@ -205,40 +230,36 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
 
 }
 
-export async function getEventGachaAndCardList(event: Event) {
+export async function getEventGachaAndCardList(event: Event, server: Server) {
     var gachaList: Gacha[] = []
     var gachaIdList = []//用于去重
-    for (var i = 0; i < defaultserverList.length; i++) {
-        let server = defaultserverList[i]
-        if (server.getContentByServer(event.startAt) == null) {
-            continue
-        }
-        let tempGachaList = getPresentGachaList(server, event.startAt[server.serverId], event.endAt[server.serverId])
-        for (var j = 0; j < tempGachaList.length; j++) {
-            if (gachaIdList.indexOf(tempGachaList[j].gachaId) == -1) {
-                gachaList.push(tempGachaList[j])
-                gachaIdList.push(tempGachaList[j].gachaId)
-            }
+    if (server.getContentByServer(event.startAt) == null) {
+        return { gachaCardList: [], gachaList: [] }
+    }
+    let tempGachaList = getPresentGachaList(server, event.startAt[server.serverId], event.endAt[server.serverId])
+    for (var j = 0; j < tempGachaList.length; j++) {
+        if (gachaIdList.indexOf(tempGachaList[j].gachaId) == -1) {
+            gachaList.push(tempGachaList[j])
+            gachaIdList.push(tempGachaList[j].gachaId)
         }
     }
-
     var gachaCardIdList: number[] = []
     for (var i = 0; i < gachaList.length; i++) {
         var tempGacha = gachaList[i]
         var tempCardList = tempGacha.newCards
         var rarity2CardNum = 0
         //检查是否有超过5张稀有度2的卡牌，发布了太多2星卡的卡池会被跳过
-        for(var j = 0;j < tempCardList.length;j++){
+        for (var j = 0; j < tempCardList.length; j++) {
             let tempCard = new Card(tempCardList[j])
-            if(tempCard.rarity == 2){
+            if (tempCard.rarity == 2) {
                 rarity2CardNum++
             }
         }
-        if(rarity2CardNum > 4){
+        if (rarity2CardNum > 4) {
             continue
         }
         for (var j = 0; j < tempCardList.length; j++) {
-            var tempCardId= tempCardList[j]
+            var tempCardId = tempCardList[j]
             if (gachaCardIdList.indexOf(tempCardId) == -1) {
                 gachaCardIdList.push(tempCardId)
             }
@@ -248,16 +269,13 @@ export async function getEventGachaAndCardList(event: Event) {
     for (var i = 0; i < gachaCardIdList.length; i++) {
         var tempCardId = gachaCardIdList[i]
         var tempCard = new Card(tempCardId)
-        for(var j = 0;j < defaultserverList.length;j++){
-            let server = defaultserverList[j]
-            //如果卡牌的发布时间不在活动期间内，则不显示
-            if(server.getContentByServer(tempCard.releasedAt) <  server.getContentByServer(event.startAt) || server.getContentByServer(tempCard.releasedAt) > server.getContentByServer(event.endAt)){
-                continue
-            }
+        //如果卡牌的发布时间不在活动期间内，则不显示
+        if (server.getContentByServer(tempCard.releasedAt) < server.getContentByServer(event.startAt) || server.getContentByServer(tempCard.releasedAt) > server.getContentByServer(event.endAt)) {
+            continue
         }
         gachaCardList.push(tempCard)
     }
-    
+
     gachaCardList.sort((a, b) => {
         return a.rarity - b.rarity
     })

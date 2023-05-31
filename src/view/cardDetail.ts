@@ -1,7 +1,6 @@
 import { h, Element } from 'koishi'
 import { Card } from '../types/Card'
 import { Skill } from '../types/Skill';
-import { getEarlistGachaFromList } from '../types/Gacha'
 import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
 import { drawCardIllustration } from '../components/card';
@@ -18,6 +17,7 @@ import { Server, defaultserverList } from '../types/Server';
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
 import { Event } from '../types/Event';
+import { Gacha } from '../types/Gacha';
 
 async function drawCardDetail(cardId: number): Promise<Element | string> {
     const card = new Card(cardId)
@@ -160,7 +160,7 @@ async function drawCardDetail(cardId: number): Promise<Element | string> {
             }
         }
         if (card.releaseGacha[server.serverId].length != 0) {
-            var tempGacha = getEarlistGachaFromList(card.source[server.serverId]['gacha'], server)
+            var tempGacha = new Gacha(card.releaseGacha[server.serverId][0])
             var tempEventId = tempGacha.getEventId()[server.serverId]
             if (tempEventId != null) {
                 var tempEvent = new Event(tempEventId)

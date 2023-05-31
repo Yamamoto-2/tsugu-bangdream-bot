@@ -158,11 +158,30 @@ async function drawEventInList(event: Event): Promise<Canvas> {
         heightMax: 100
     })
     var imageUp = stackImageHorizontal([eventBannerImage, createCanvas(20, 1), textImage])
-    var cardList = (await getEventGachaAndCardList(event)).gachaCardList
+
+    //活动期间卡池卡牌
+    var cardList: Card[] = []
+    var cardIdList: number[] = []//用于去重
+    for (var i = 0; i < defaultserverList.length; i++) {
+        var server = defaultserverList[i]
+        var EventGachaAndCardList = await getEventGachaAndCardList(event, server)
+        var tempGachaCardList = EventGachaAndCardList.gachaCardList
+        for (let i = 0; i < tempGachaCardList.length; i++) {
+            const tempCard = tempGachaCardList[i];
+            if (cardIdList.indexOf(tempCard.cardId) != -1) {
+                continue
+            }
+            cardIdList.push(tempCard.cardId)
+            cardList.push(tempCard)
+        }
+    }
     var rewardCards = event.rewardCards
     for (var i = 0; i < rewardCards.length; i++) {
         cardList.push(new Card(rewardCards[i]))
     }
+    cardList.sort((a, b) => {
+        return b.rarity - a.rarity
+    })
     var imageDown = await drawCardListInList({
         cardList: cardList,
         lineHeight: 120,
