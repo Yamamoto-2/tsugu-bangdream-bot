@@ -1,8 +1,9 @@
 import * as path from 'path';
-import { cacheRootPath, assetsRootPath } from '../config';
+import { assetsRootPath } from '../config';
+import { getCacheDirectory, getFileNameFromUrl } from './utils';
 import { download } from './downloader';
-import { Buffer } from 'buffer'
-import * as fs from 'fs'
+import { Buffer } from 'buffer';
+import * as fs from 'fs';
 
 const errUrl: string[] = [];
 
@@ -11,8 +12,9 @@ async function downloadFile(url: string, IgnoreErr: boolean = true): Promise<Buf
     if (errUrl.includes(url)) {
       throw new Error("downloadFile: errUrl.includes(url)");
     }
-    const cacheDir = path.join(cacheRootPath, path.dirname(url).replace(/^[^/]+:\/\/[^/]+\//, ''));
-    const data = await download(url, cacheDir, path.basename(url), false);
+    const cacheDir = getCacheDirectory(url);
+    const fileName = getFileNameFromUrl(url);
+    const data = await download(url, cacheDir, fileName, false);
     return data as Buffer;
   } catch (e) {
     errUrl.push(url);
@@ -23,4 +25,4 @@ async function downloadFile(url: string, IgnoreErr: boolean = true): Promise<Buf
   }
 }
 
-export { downloadFile }
+export { downloadFile };
