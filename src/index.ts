@@ -40,9 +40,9 @@ export function apply(ctx: Context) {
     .action(async (argv, text) => {
       return await commandGacha(argv, text)
     })
-  ctx.command("ycx <cutoff:number> [server] [eventId]", "ycx")
-    .action(async (argv, cutoff, server, eventId) => {
-      return await commandYcx(argv, cutoff, server, eventId)
+  ctx.command("ycx <tier:number> [serverName] [eventId:number]", "ycx")
+    .action(async (argv, tier, serverName, eventId) => {
+      return await commandYcx(argv, tier, serverName, eventId)
     })
 
 

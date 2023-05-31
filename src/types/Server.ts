@@ -11,7 +11,12 @@ export class Server {
     serverName: 'jp' | 'en' | 'tw' | 'cn' | 'kr'
     serverId: number
     serverNameFull: string
-    constructor(serverName?: 'jp' | 'en' | 'tw' | 'cn' | 'kr', serverId?: number) {
+    isExist = false
+    constructor(serverName?: string, serverId?: number) {
+        if(serverList.indexOf(serverName) == -1 && serverName != undefined){
+            return
+        }
+        this.isExist = true
         if (serverName != undefined) {
             this.serverName = serverName
             this.serverId = serverList.indexOf(serverName)
