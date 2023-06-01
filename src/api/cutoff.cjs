@@ -1,12 +1,16 @@
 
 var predict= function(cutoff,start_ts,end_ts,rate){
+    /*
     if (cutoff.length <= 5)
         return {ep:0}
+        */
     var data = []
     for(var i = 0;i<cutoff.length;i++){
+        /*
         if(cutoff[i]["time"] - start_ts < 43200000 || end_ts - cutoff[i].time < 86400000){
             continue//小于12小时不收集
         }
+        */
         var percent = (cutoff[i]["time"]-start_ts)/(end_ts - start_ts)
         data.push({percent:percent,ep:cutoff[i]["ep"]})
     }

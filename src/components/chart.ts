@@ -3,48 +3,43 @@ import { assetsRootPath } from '../config';
 import { registerFont, loadImage } from 'canvas';
 registerFont(assetsRootPath + "/Fonts/default.ttf", { family: "default" })
 registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
+var width = 800
+var height = 600
 const chartJSNodeCanvas = new ChartJSNodeCanvas({
-    width: 800,
-    height: 600,
-    chartCallback: (ChartJS) => {
-        ChartJS.defaults.global.defaultFontFamily = "old";
+    width, height, chartCallback: (ChartJS) => {
+        ChartJS.defaults.font.family = 'old';
     }
 });
-
-
-export async function drawCutoffChart(data: object, start: number, end: number) {
-
+export const colorList = ['rgba(254, 65, 111,', 'rgba(179, 49, 255,', 'rgba(64, 87, 227,', "rgba(68, 197, 39,", "rgba(0, 132, 255,", "rgba(255, 255, 81,"]
+export async function drawTimeLineChart(data: object, start: number, end: number) {
+    for(var i = 0; i < data['datasets'].length; i++){
+        console.log(data['datasets'][i]['data'])
+    }
     var options = {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    callback: (value) => value
-                }
-            }],
-            xAxes: [{
-                type: 'time',
-                time: {
-                    unit: 'day',
+        plugins: {
+            legend: {
+                labels: {
+                    font: {
+                        size: 20,
+                    },
                 },
-                display: true,
-                ticks: {
-                    min: start,
-                    max: end,
-                    major: {
-                        fontStyle: 'bold',
-                        fontColor: '#FF0000'
-                    }
-
-                }
-            }]
+            }
         },
+        x: {
+            type: 'time',
+            time:{
+                unit: 'day'
+            },
+            min: start,
+            max: end,
+        }
+
     }
     const configuration = {
-        type: 'line',
-        data: data,
-        options: options
+            type: 'line',
+            data: data,
+            options: options
+        }
+    const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+        return await loadImage(image);
     }
-    const image = await chartJSNodeCanvas.renderToBuffer(configuration as any);
-    return await loadImage(image);
-}
