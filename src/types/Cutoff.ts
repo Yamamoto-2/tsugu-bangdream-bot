@@ -93,14 +93,14 @@ export class Cutoff {
         this.predictEP = Math.floor(result.ep)
         return this.predictEP
     }
-    getChartData(): { x: number, y: number }[] {
+    getChartData(): { x: Date, y: number }[] {
         if (this.isExist == false) {
             return
         }
-        var chartData: { x: number, y: number }[] = []
+        var chartData: { x: Date, y: number }[] = []
         for (let i = 0; i < this.cutoffs.length; i++) {
             const element = this.cutoffs[i];
-            chartData.push({ x: element.time , y: element.ep })
+            chartData.push({ x: new Date(element.time) , y: element.ep })
         }
         return chartData
     }

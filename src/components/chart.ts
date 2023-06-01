@@ -11,7 +11,7 @@ const chartJSNodeCanvas = new ChartJSNodeCanvas({
     }
 });
 export const colorList = ['rgba(254, 65, 111,', 'rgba(179, 49, 255,', 'rgba(64, 87, 227,', "rgba(68, 197, 39,", "rgba(0, 132, 255,", "rgba(255, 255, 81,"]
-export async function drawTimeLineChart(data: object, start: number, end: number) {
+export async function drawTimeLineChart(data: object, start: Date, end: Date) {
     for(var i = 0; i < data['datasets'].length; i++){
         console.log(data['datasets'][i]['data'])
     }

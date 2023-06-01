@@ -22,7 +22,7 @@ export async function drawCutoffChart(cutoff: Cutoff) {
                 label: "预测线",
                 borderColor: [`${colorList[0]} 1)`],
                 backgroundColor: [`${colorList[0]} 1)`],
-                data: [{ x: cutoff.startAt, y: cutoff.predictEP }, { x: cutoff.endAt, y: cutoff.predictEP }],
+                data: [{ x: new Date(cutoff.startAt), y: cutoff.predictEP }, { x: new Date(cutoff.endAt), y: cutoff.predictEP }],
                 borderWidth: 5,
                 borderDash: [20, 10],
                 fill: false,
@@ -37,7 +37,7 @@ export async function drawCutoffChart(cutoff: Cutoff) {
             label: "当前时间",
             borderColor: [`${colorList[0]} 1)`],
             backgroundColor: [`${colorList[0]} 1)`],
-            data: [{ x: time, y: 0 }],
+            data: [{ x: new Date(time), y: 0 }],
             fill: false,
             pointRadius: 10,
             pointHoverRadius: 15,
@@ -45,11 +45,9 @@ export async function drawCutoffChart(cutoff: Cutoff) {
         })
         
     }
-
-
     var data = {
         datasets: datasets
     }
-    var chart = await drawTimeLineChart(data, cutoff.startAt, cutoff.endAt)
+    var chart = await drawTimeLineChart(data, new Date(cutoff.startAt), new Date(cutoff.endAt))
     return chart
 }
