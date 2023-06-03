@@ -165,11 +165,14 @@ export function getPresentGachaList(server: Server, start: number = Date.now(), 
 
             // 检查卡池持续时间是否与start和end有交集
             if (gacha.publishedAt[server.serverId] <= end && gacha.closedAt[server.serverId] >= start) {
-                if (gacha.type == 'special') {
+                if (gacha.type == 'special' || gacha.type == 'free') {
                     continue
                 }
                 if (gacha.gachaName[new Server('jp').serverId] != null) {
-                    if (gacha.gachaName[new Server('jp').serverId].includes('初心者限定')) {
+                    if (gacha.gachaName[new Server('jp').serverId].includes('初心者限定')) {//跳过新手限定卡池
+                        continue
+                    }
+                    if (gacha.gachaName[new Server('jp').serverId].includes('カムバック')) {//跳过回归卡池
                         continue
                     }
                 }
