@@ -1,7 +1,9 @@
 import { callAPIAndCacheResponse } from '../api/getApi';
 import { Bestdoriurl } from '../config';
 import { Server, getServerByPriority, defaultserverList } from './Server'
-
+import { Card, addStat, Stat } from './Card'
+import { AreaItem } from './AreaItem';
+import { Event } from './Event';
 
 /*
 - mode=0 只从缓存取，无需等待队列立即返回缓存数据
@@ -43,7 +45,7 @@ export class Player {
                 exp: number;
                 createdAt: string;
                 addExp: number;
-                trainingStatus: string;
+                trainingStatus: 'not_doing' | 'done';
                 duplicateCount: number;
                 illust: string;
                 skillExp: number;
@@ -215,19 +217,27 @@ export class Player {
                 }
             }
         };
-    }
 
-    constructor(playerId: number, server: Server, cache: boolean = false) {
+        //其他
+        //卡牌列表
+        cardList: Card[];
+
+    }
+    server: Server;
+    constructor(playerId: number, server: Server) {
         this.playerId = playerId;
-        var cacheTime = cache ? 1/0 : 0;
-        try{
-            var playerData = callAPIAndCacheResponse(`${Bestdoriurl}/api/player/${server.serverName}/${playerId}`, cacheTime);
+        this.server = server;
+    }
+    async initFull(cache: boolean = false) {
+        var cacheTime = cache ? 1 / 0 : 0;
+        try {
+            var playerData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/player/${this.server.serverName}/${this.playerId}?mode=2`, cacheTime);
         }
-        catch{
+        catch {
             this.isExist = false;
             return
         }
-        if(playerData['data']['profile'] == null){
+        if (playerData['data']['profile'] == null) {
             this.isExist = false;
             return
         }
@@ -235,6 +245,112 @@ export class Player {
         this.cache = playerData['data']['cache'];
         this.time = playerData['data']['time'];
         this.profile = playerData['data']['profile'];
+        //卡牌列表
+        this.profile.cardList = []
+        for (let i = 0; i < this.profile.mainDeckUserSituations.entries.length; i++) {
+            const cardData = this.profile.mainDeckUserSituations.entries[i];
+            var card = new Card(cardData.situationId)
+            this.profile.cardList.push(card)
+        }
     }
+    async calcStat(event?: Event): Promise<Stat> {
+        if (this.profile.publishTotalDeckPowerFlg == false) {
+            return ({
+                performance: 0,
+                technique: 0,
+                visual: 0,
+            })
+        }
+        var cardDataList = this.profile.mainDeckUserSituations.entries
+        //计算卡牌本身属性
+        var cardStatList = []
+        var cardStat: Stat = {//所有卡牌的属性总和
+            performance: 0,
+            technique: 0,
+            visual: 0,
+        }
 
+
+        for (let i = 0; i < cardDataList.length; i++) {
+            const cardData = cardDataList[i];
+            var card = new Card(cardData.situationId)
+            var trainingStatus = cardData.trainingStatus === 'done' ? true : false
+            var tempStat = await card.calcStat(cardData.level, trainingStatus, cardData.limitBreakRank, false, false)
+            console.log(tempStat)
+            addStat(cardStat, tempStat)
+            cardStatList.push(tempStat)
+        }
+        //计算区域道具属性
+        var extraStat: Stat = {//所有卡牌的额外属性总和
+            performance: 0,
+            technique: 0,
+            visual: 0,
+        }
+        var areaItemList = this.profile.enabledUserAreaItems.entries
+        for (let i = 0; i < areaItemList.length; i++) {
+            const element = areaItemList[i];
+            const areaItem = new AreaItem(element.areaItemCategory)
+            const areaItemLevel = element.level
+            for (let j = 0; j < cardStatList.length; j++) {
+                const cardStat = cardStatList[j];
+                const card = this.profile.cardList[j]
+                var tempStat = areaItem.calcStat(card, areaItemLevel, cardStat, this.server)
+                addStat(extraStat, tempStat)
+            }
+        }
+        var eventStat: Stat = {//所有卡牌的额外属性总和
+            performance: 0,
+            technique: 0,
+            visual: 0,
+        }
+        if (event != undefined) {
+            for (let i = 0; i < cardStatList.length; i++) {
+
+                const cardStat = cardStatList[i];
+                const card = this.profile.cardList[i]
+                var isCharacter = false
+                var isAttribute = false
+                for(let j = 0;i<event.characters.length;j++){
+                    const characterPercent = event.characters[j]
+                    if(card.characterId == characterPercent.characterId){
+                        let tempStat= {
+                            performance: cardStat.performance*characterPercent.percent/100,
+                            technique: cardStat.technique*characterPercent.percent/100,
+                            visual: cardStat.visual*characterPercent.percent/100,
+                        }
+                        addStat(eventStat,tempStat)
+                        isCharacter = true
+                    }
+                }
+                for (let j = 0; j < event.attributes.length; j++) {
+                    const attributePercent = event.attributes[j];
+                    if(card.attribute == attributePercent.attribute){
+                        let tempStat= {
+                            performance: cardStat.performance*attributePercent.percent/100,
+                            technique: cardStat.technique*attributePercent.percent/100,
+                            visual: cardStat.visual*attributePercent.percent/100,
+                        }
+                        addStat(eventStat,tempStat)
+                        isAttribute = true
+                    }
+                }
+                if(isCharacter && isAttribute && event.eventAttributeAndCharacterBonus != undefined){
+                    if(event.eventAttributeAndCharacterBonus.parameterPercent != 0){
+                        let tempStat= {
+                            performance: cardStat.performance*event.eventAttributeAndCharacterBonus.parameterPercent/100,
+                            technique: cardStat.technique*event.eventAttributeAndCharacterBonus.parameterPercent/100,
+                            visual: cardStat.visual*event.eventAttributeAndCharacterBonus.parameterPercent/100,
+                        }
+                        addStat(eventStat,tempStat)
+                    }
+                }
+
+
+            }
+            addStat(extraStat,eventStat)
+        }
+        //相加
+        addStat(cardStat, extraStat)
+        return cardStat
+    }
 }

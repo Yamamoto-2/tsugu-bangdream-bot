@@ -29,7 +29,7 @@ const typeName = {
     'kirafes': '闪光Fes限定',
 }
 
-function addStat(stat: Stat, add: Stat): void {//综合力相加函数
+export function addStat(stat: Stat, add: Stat): void {//综合力相加函数
     stat.performance += add.performance
     stat.technique += add.technique
     stat.visual += add.visual
