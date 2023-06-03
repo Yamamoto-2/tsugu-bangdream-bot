@@ -22,6 +22,10 @@ async function loadMainAPI(useCache: boolean = false) {
     for(var key in cardsCNfix){
         mainAPI['cards'][key] = cardsCNfix[key]
     }
+    var skillCNfix = readJSON(path.join(configPath,'skillsCNfix.json'))
+    for(var key in skillCNfix){
+        mainAPI['skills'][key] = skillCNfix[key]
+    }
     
 }
 
