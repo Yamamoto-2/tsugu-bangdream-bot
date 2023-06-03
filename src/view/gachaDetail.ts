@@ -135,12 +135,9 @@ export async function drawGachaDetail(gachaId: number): Promise<Element | string
     for (let i = 0; i < eventImageList.length; i++) {
         all.push(eventImageList[i])
     }
-    var BGimage = await gacha.getGachaBGImage()
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEazyBG: false,
-        BGimage,
-        text: 'Gacha'
+        useEazyBG: true
     })
     return h.image(buffer, 'image/png')
 }
