@@ -1,6 +1,7 @@
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import { assetsRootPath } from '../config';
 import { registerFont, loadImage } from 'canvas';
+import 'chartjs-adapter-moment';
 registerFont(assetsRootPath + "/Fonts/default.ttf", { family: "default" })
 registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
 var width = 800
@@ -25,15 +26,16 @@ export async function drawTimeLineChart(data: object, start: Date, end: Date) {
                 },
             }
         },
-        x: {
-            type: 'time',
-            time:{
-                unit: 'day'
-            },
-            min: start,
-            max: end,
+        scales:{
+            x: {
+                type: 'time',
+                time:{
+                    unit: 'day'
+                },
+                min: start,
+                max: end,
+            }
         }
-
     }
     const configuration = {
             type: 'line',

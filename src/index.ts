@@ -21,8 +21,13 @@ import { commandEvent } from './commands/searchEvent'
 import { commandSong } from './commands/searchSong'
 import { commandGacha } from './commands/searchGacha'
 import { commandYcx } from './commands/ycx'
+import { commandSearchPlayer } from './commands/searchPlayer'
 
 export function apply(ctx: Context) {
+  ctx.command('查玩家 <playerId:number> <serverName:text>', '查询玩家')
+    .action(async (argv, playerId, serverName) => {
+      commandSearchPlayer(argv, playerId, serverName)
+    })
 
   ctx.command("查卡 <word:text>", "查卡")
     .action(async (argv, text) => {
@@ -40,10 +45,14 @@ export function apply(ctx: Context) {
     .action(async (argv, text) => {
       return await commandGacha(argv, text)
     })
+
   ctx.command("ycx <tier:number> [serverName] [eventId:number]", "ycx")
     .action(async (argv, tier, serverName, eventId) => {
       return await commandYcx(argv, tier, serverName, eventId)
     })
+
+
+
 
 
 }

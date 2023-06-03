@@ -42,8 +42,8 @@ export class Cutoff {
         }
         this.tier = tier
         this.isExist = true;
-        this.startAt = server.getContentByServer(event.startAt) as number
-        this.endAt = server.getContentByServer(event.endAt) as number
+        this.startAt = parseInt(server.getContentByServer(event.startAt))
+        this.endAt = parseInt(server.getContentByServer(event.endAt))
     }
     async initFull() {
         const cutoffData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/tracker/data?server=${this.server.serverId}&event=${this.eventId}&tier=${this.tier}`)
@@ -98,9 +98,10 @@ export class Cutoff {
             return
         }
         var chartData: { x: Date, y: number }[] = []
+        chartData.push({ x: new Date(this.startAt), y: 0 })
         for (let i = 0; i < this.cutoffs.length; i++) {
             const element = this.cutoffs[i];
-            chartData.push({ x: new Date(element.time) , y: element.ep })
+            chartData.push({ x: new Date(element.time), y: element.ep })
         }
         return chartData
     }
