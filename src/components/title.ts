@@ -10,7 +10,7 @@ async function loadImageOnce() {
 loadImageOnce()
 
 export function drawTitle(title1: string, title2: string): Canvas {
-    const canvas = createCanvas(1000, 110)
+    const canvas = createCanvas(titleImage.width, titleImage.height)
     const ctx = canvas.getContext("2d")
     ctx.drawImage(titleImage, 0, 0)
     var text1 = drawText({ text: title1, maxWidth: 900, lineHeight: 50, textSize: 30, color: '#ffffff', font: 'old' })
