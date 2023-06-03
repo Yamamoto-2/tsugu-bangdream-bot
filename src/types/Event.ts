@@ -91,6 +91,7 @@ export class Event {
     //以下用于模糊搜索
     characterId: string[] = []
     attribute: string[] = []
+    bandId: string[] = []
 
 
 
@@ -119,7 +120,17 @@ export class Event {
             const element = this.attributes[i];
             this.attribute.push(element.attribute)
         }
-
+        //如果所有character来自同一个band，则bandId为该bandId
+        let isSameBand = true
+        for(var i = 0;i<this.characters.length;i++){
+            if(new Character(this.characters[i].characterId).bandId != new Character(this.characters[0].characterId).bandId){
+                isSameBand = false
+                break
+            }
+        }
+        if(isSameBand){
+            this.bandId.push(new Character(this.characters[0].characterId).bandId.toString())
+        }
     }
     async initFull(update: boolean = true) {
         if (this.isExist == false) {
