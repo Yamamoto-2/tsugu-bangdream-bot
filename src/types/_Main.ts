@@ -18,11 +18,11 @@ async function loadMainAPI(useCache: boolean = false) {
     }
     await Promise.all(promiseAll)
     
-    var cardsCNfix = readJSON(path.join(configPath,'cardsCNfix.json'))
+    var cardsCNfix = await readJSON(path.join(configPath,'cardsCNfix.json'))
     for(var key in cardsCNfix){
         mainAPI['cards'][key] = cardsCNfix[key]
     }
-    var skillCNfix = readJSON(path.join(configPath,'skillsCNfix.json'))
+    var skillCNfix = await readJSON(path.join(configPath,'skillsCNfix.json'))
     for(var key in skillCNfix){
         mainAPI['skills'][key] = skillCNfix[key]
     }

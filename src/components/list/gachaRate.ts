@@ -9,6 +9,9 @@ export async function drawGachaRateInList(gacha: Gacha, server: Server): Promise
     var list = []
     var times = 0
     for (var i in rates) {
+        if(rates[i].rate == 0) {
+            continue
+        }
         let key = undefined
         if (times == 0) {
             key = '概率分布'
