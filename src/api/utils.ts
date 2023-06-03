@@ -4,8 +4,12 @@ import * as path from 'path';
 
 export function getCacheDirectory(url: string): string {
     const urlObj = new URL(url);
-    let cacheDir = path.join( urlObj.host, urlObj.pathname, urlObj.search);
-
+    var pathname = urlObj.pathname;
+    // 如果结尾是文件名，去掉文件名
+    if (path.basename(pathname).indexOf('.') != -1) {
+        pathname = path.dirname(pathname);
+    }
+    var cacheDir = path.join(urlObj.host, pathname, urlObj.search);
     // 处理非法字符
     cacheDir = sanitizeDirectoryName(cacheDir);
 

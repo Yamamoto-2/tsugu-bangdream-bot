@@ -2,9 +2,9 @@ import { callAPIAndCacheResponse } from '../api/getApi';
 import { downloadFile } from '../api/downloadFile';
 import { Bestdoriurl } from '../config';
 import mainAPI from './_Main';
-import {getServerByPriority } from './Server';
+import {Server, getServerByPriority } from './Server';
 import { Image, loadImage} from 'canvas';
-import { Stat } from './Card';
+import { Card, Stat } from './Card';
 
 
 export class AreaItem {
@@ -36,4 +36,23 @@ export class AreaItem {
         this.targetAttributes = areaItemData['targetAttributes'];
         this.targetBandIds = areaItemData['targetBandIds'];
     }
+    calcStat(card:Card,areaItemLevel:number,cardSTat:Stat,server:Server):Stat{
+        var emptyStat:Stat = {//空综合力变量
+            performance:0,
+            technique:0,
+            visual:0
+        }
+        if(this.targetAttributes.includes(card.attribute) && this.targetBandIds.includes(card.bandId)){
+            var finalStat = {
+                performance: server.getContentByServer(this.performance[areaItemLevel])*cardSTat.performance/100,
+                technique:server.getContentByServer(this.technique[areaItemLevel])*cardSTat.technique/100,
+                visual:server.getContentByServer(this.visual[areaItemLevel])*cardSTat.visual/100
+            }
+            return finalStat
+        }
+        else{
+            return emptyStat
+        }
+    }
+
 }
