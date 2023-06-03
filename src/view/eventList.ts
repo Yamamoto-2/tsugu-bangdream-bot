@@ -179,9 +179,6 @@ async function drawEventInList(event: Event): Promise<Canvas> {
     for (var i = 0; i < rewardCards.length; i++) {
         cardList.push(new Card(rewardCards[i]))
     }
-    cardList.sort((a, b) => {
-        return b.rarity - a.rarity
-    })
     var imageDown = await drawCardListInList({
         cardList: cardList,
         lineHeight: 120,

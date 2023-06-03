@@ -22,6 +22,24 @@ export async function drawCardListInList({
     trainingStatus,
     lineHeight = 200
 }: CardIconInListOptions) {
+    //cardList排序，稀有度高的在前面，其中cardId低的在前面
+    var typeList = ['kirafes','dreamfes','limited','birthday']//用于排序
+    cardList.sort((a, b) => {
+        if (a.rarity == b.rarity) {
+            if(typeList.includes(a.type) && !typeList.includes(b.type)){
+                return -1
+            }
+            else if(!typeList.includes(a.type) && typeList.includes(b.type)){
+                return 1
+            }
+            else if(typeList.indexOf(a.type) != -1 && typeList.indexOf(b.type) != -1){
+                return typeList.indexOf(a.type) - typeList.indexOf(b.type)
+            }
+            
+            return a.cardId - b.cardId
+        }
+        return b.rarity - a.rarity
+    })
     var textSize = lineHeight / 200 * 180
     var spacing = lineHeight / 200 * 13
     if (cardIdVisible) {
