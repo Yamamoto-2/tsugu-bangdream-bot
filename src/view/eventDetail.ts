@@ -22,7 +22,7 @@ import { drawSongListDataBlock } from '../components/dataBlock/songList';
 export async function drawEventDetail(eventId: number): Promise<Element | string> {
     const event = new Event(eventId)
     if (!event.isExist) {
-        return '错误: 卡牌不存在'
+        return '错误: 活动不存在'
     }
     await event.initFull()
     var list: Array<Image | Canvas> = []
@@ -144,10 +144,10 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
 
 
     //创建最终输出数组
-    var listImage = await drawDatablock({ list })
+
     var all = []
     all.push(drawTitle('查询', '活动'))
-    all.push(listImage)
+
 
     var gachaCardList:Card[]= []
     var gachaCardIdList:number[] = []//用于去重
@@ -156,6 +156,9 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
     //活动期间卡池卡牌
     for (var i = 0; i < defaultserverList.length; i++) {
         var server = defaultserverList[i]
+        if(server.getContentByServer(event.startAt) == null){
+            continue
+        }
         var EventGachaAndCardList = await getEventGachaAndCardList(event, server)
         var tempGachaList = EventGachaAndCardList.gachaList
         var tempGachaCardList = EventGachaAndCardList.gachaCardList
@@ -193,11 +196,15 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
         trainingStatus: false
     }))
 
-
-
+    var listImage = await drawDatablock({ list })
+    all.push(listImage)
+    
     //歌曲
     for (let i = 0; i < defaultserverList.length; i++) {
         const server = defaultserverList[i];
+        if(server.getContentByServer(event.startAt) == null){
+            continue
+        }
         const songList: Song[] = getPresentSongList(server, event.startAt[server.serverId], event.endAt[server.serverId]);
 
         if (songList.length !== 0) {
