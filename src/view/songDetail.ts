@@ -130,6 +130,9 @@ export async function drawSongDetail(song: Song): Promise<Element | string> {
     var eventIdList = []//防止重复
     for (var i = 0; i < defaultserverList.length; i++) {
         var server = defaultserverList[i]
+        if (server.getContentByServer(song.publishedAt) == null) {
+            continue
+        }
         var event = getPresentEvent(server, server.getContentByServer(song.publishedAt))
         if (event != undefined && eventIdList.indexOf(event.eventId) == -1) {
             eventIdList.push(event.eventId)

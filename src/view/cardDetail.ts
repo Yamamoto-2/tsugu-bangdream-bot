@@ -98,6 +98,9 @@ async function drawCardDetail(cardId: number): Promise<Element | string> {
     for (let j = 0; j < defaultserverList.length; j++) {
         var releaseFromGacha = false
         var server = defaultserverList[j];
+        if (server.getContentByServer(card.releasedAt) == null) {
+            continue
+        }
         var sourceOfServer = source[server.serverId]
         for (const i in sourceOfServer) {
             if (Object.prototype.hasOwnProperty.call(sourceOfServer, i)) {
