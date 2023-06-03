@@ -114,17 +114,20 @@ export class Card {
         }
         this.isInitFull = true;
         this.data = cardData
+        /*
         this.characterId = cardData['characterId']
         this.rarity = cardData['rarity']
         this.type = cardData['type']
         this.attribute = cardData['attribute']
         this.levelLimit = cardData['levelLimit']
         this.resourceSetName = cardData['resourceSetName']
+        this.prefix = cardData['prefix']
+        this.releasedAt = cardData['releasedAt']
+        */
         this.sdResourceName = cardData['sdResourceName']
         this.costumeId = cardData['costumeId']
         this.gachaText = cardData['gachaText']
-        this.prefix = cardData['prefix']
-        this.releasedAt = cardData['releasedAt']
+
         this.source = cardData['source']
         //修复国服releaseAt错误问题,将国服的releaseAt改为卡池或活动的开始时间
         var CNserver = new Server('cn')
