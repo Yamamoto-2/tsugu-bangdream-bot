@@ -4,7 +4,7 @@ import { assetsRootPath, EazyBG } from '../config';
 import * as path from 'path';
 var BGDefaultImage: Image
 async function loadImageOnce() {
-    BGDefaultImage = await loadImage(path.join(assetsRootPath, "/BG/default.png"));
+    BGDefaultImage = await loadImage(path.join(assetsRootPath, "/BG/live.png"));
 }
 loadImageOnce()
 
