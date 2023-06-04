@@ -127,7 +127,7 @@ export function drawTextWithImages({
             }
             Width += spacing
         }
-        canvas = createCanvas(Width, lineHeight);
+        canvas = createCanvas(Width - spacing, lineHeight);
     }
     //多行文字
     else {
