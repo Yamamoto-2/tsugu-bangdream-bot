@@ -141,7 +141,7 @@ export async function CreateBG({
     fontSize: 150,
     angle: 15,
     lineSpacing: 50,
-    letterSpacing: 50,
+    letterSpacing: 100,
     strokeWidth: 3,
     skewAngle: -12,
     opacity: 0.5,
