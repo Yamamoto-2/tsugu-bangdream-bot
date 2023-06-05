@@ -3,56 +3,36 @@ import { loadImage, Image } from 'canvas'
 import { defaultserver, serverNameFullList } from '../config'
 
 //服务器列表，因为有TW而不适用country
-export const serverList: Array<'jp' | 'en' | 'tw' | 'cn' | 'kr'> = ['jp', 'en', 'tw', 'cn', 'kr']
+export const serverList: Array<Server> = [0, 1, 2, 3, 4]
 import { serverPriority } from '../config'
 
+export enum Server {
+    jp, en, tw, cn, kr
+}
 
-export class Server {
-    serverName: 'jp' | 'en' | 'tw' | 'cn' | 'kr'
-    serverId: number
-    serverNameFull: string
-    isExist = false
-    constructor(serverName?: string, serverId?: number) {
-        if(serverList.indexOf(serverName) == -1 && serverName != undefined){
-            return
-        }
-        this.isExist = true
-        if (serverName != undefined) {
-            this.serverName = serverName
-            this.serverId = serverList.indexOf(serverName)
-        }
-        else if (serverId != undefined) {
-            this.serverId = serverId
-            this.serverName = serverList[serverId]
-        }
-        else {
-            this.serverName = 'jp'
-            this.serverId = serverList.indexOf(serverName)
-        }
-        this.serverNameFull = serverNameFullList[this.serverName]
-    }
-    getContentByServer(content: Array<any>): any {
-        return content[this.serverId]
-    }
-    async getIcon(): Promise<Image> {
-        const iconBuffer = await downloadFileCache(`https://bestdori.com/res/icon/${this.serverName}.svg`)
-        return (await loadImage(iconBuffer))
-    }
+export function getServerByName(name: string): Server {
+    // 根据服务器名获取对应服务器
+    const server: Server = Server[name as keyof typeof Server];
+    return server
+}
+
+export async function getIcon(server: Server): Promise<Image> {
+    const iconBuffer = await downloadFileCache(`https://bestdori.com/res/icon/${server.toString()}.svg`)
+    return (await loadImage(iconBuffer))
 }
 
 export function getServerByPriority(content: Array<any>): Server {
-    for (var i = 0; i < serverPriority.length; i++) {
-        var tempServer = new Server(serverPriority[i])
-        if (tempServer.getContentByServer(content) != null) {
-            return new Server(serverPriority[i])
+    for (let i = 0; i < serverPriority.length; i++) {
+        const tempServer = serverPriority[i]
+        if (content[tempServer] != null) {
+            return tempServer
         }
     }
-    return new Server()
 }
 
 export const defaultserverList: Array<Server> = []
 for (let i = 0; i < defaultserver.length; i++) {
-    defaultserverList.push(new Server(defaultserver[i]))
+    defaultserverList.push(defaultserver[i])
 }
 
 

@@ -122,13 +122,13 @@ export class Event {
         }
         //如果所有character来自同一个band，则bandId为该bandId
         let isSameBand = true
-        for(var i = 0;i<this.characters.length;i++){
-            if(new Character(this.characters[i].characterId).bandId != new Character(this.characters[0].characterId).bandId){
+        for (var i = 0; i < this.characters.length; i++) {
+            if (new Character(this.characters[i].characterId).bandId != new Character(this.characters[0].characterId).bandId) {
                 isSameBand = false
                 break
             }
         }
-        if(isSameBand){
+        if (isSameBand) {
             this.bandId.push(new Character(this.characters[0].characterId).bandId.toString())
         }
     }
@@ -182,17 +182,17 @@ export class Event {
     async getBannerImage(): Promise<Image> {
         var server = getServerByPriority(this.startAt)
         try {
-            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`, false)
+            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/homebanner_rip/${this.bannerAssetBundleName}.png`, false)
             return await loadImage(BannerImageBuffer)
         } catch (e) {
-            var server = new Server('jp')
-            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/homebanner_rip/${this.bannerAssetBundleName}.png`)
+            var server = Server.jp
+            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/homebanner_rip/${this.bannerAssetBundleName}.png`)
             return await loadImage(BannerImageBuffer)
         }
     }
     async getEventBGImage(): Promise<Image> {
-        var server = new Server('jp')
-        var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/event/${this.assetBundleName}/topscreen_rip/bg_eventtop.png`)
+        var server = Server.jp
+        var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/event/${this.assetBundleName}/topscreen_rip/bg_eventtop.png`)
         return await loadImage(BannerImageBuffer)
     }
     getTypeName() {
@@ -243,8 +243,8 @@ export function getPresentEvent(server: Server, time?: number) {
     for (var key in eventListMain) {
         var event = new Event(parseInt(key))
         //如果在活动进行时
-        if (event.startAt[server.serverId] != null && event.endAt[server.serverId] != null) {
-            if (event.startAt[server.serverId] - 1000 * 60 * 60 * 24 <= time && event.endAt[server.serverId] >= time) {
+        if (event.startAt[server] != null && event.endAt[server] != null) {
+            if (event.startAt[server] - 1000 * 60 * 60 * 24 <= time && event.endAt[server] >= time) {
                 //提前一天
                 eventList.push(parseInt(key))
             }
@@ -256,8 +256,8 @@ export function getPresentEvent(server: Server, time?: number) {
         for (var key in eventListMain) {
             var event = new Event(parseInt(key))
             //如果在活动进行时
-            if (event.startAt[server.serverId] != null && event.endAt[server.serverId] != null) {
-                if (event.endAt[server.serverId] <= time) {
+            if (event.startAt[server] != null && event.endAt[server] != null) {
+                if (event.endAt[server] <= time) {
                     eventList.push(parseInt(key))
                 }
             }
@@ -277,11 +277,11 @@ export function sortEventList(tempEventList: Array<Event>) {
     tempEventList.sort((a, b) => {
         for (var i = 0; i < defaultserverList.length; i++) {
             var server = defaultserverList[i]
-            if (a.startAt[server.serverId] == null || b.startAt[server.serverId] == null) {
+            if (a.startAt[server] == null || b.startAt[server] == null) {
                 continue
             }
-            if (a.startAt[server.serverId] != b.startAt[server.serverId]) {
-                return a.startAt[server.serverId] - b.startAt[server.serverId]
+            if (a.startAt[server] != b.startAt[server]) {
+                return a.startAt[server] - b.startAt[server]
             }
         }
     })

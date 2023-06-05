@@ -123,20 +123,19 @@ export class Gacha {
     }
     async getGachaBGImage(): Promise<Image> {
         var server = getServerByPriority(this.publishedAt)
-        var BGImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/gacha/screen/${this.resourceName}_rip/bg.png`)
+        var BGImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/gacha/screen/${this.resourceName}_rip/bg.png`)
         return await loadImage(BGImageBuffer)
     }
     async getGachaLogo(): Promise<Image> {
         var server = getServerByPriority(this.publishedAt)
-        var LogoImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/gacha/screen/${this.resourceName}_rip/logo.png`)
+        var LogoImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/gacha/screen/${this.resourceName}_rip/logo.png`)
         return await loadImage(LogoImageBuffer)
     }
     getEventId() {
         var eventList: Array<number> = []
         for (let i = 0; i < serverList.length; i++) {
-            const serverName = serverList[i];
-            var server = new Server(serverName)
-            var tempEvent = getPresentEvent(server, this.publishedAt[server.serverId])
+            var server = serverList[i]
+            var tempEvent = getPresentEvent(server, this.publishedAt[server])
             if (tempEvent != null) {
                 eventList.push(tempEvent.eventId)
             }
@@ -164,15 +163,15 @@ export function getPresentGachaList(server: Server, start: number = Date.now(), 
             const gacha = new Gacha(parseInt(gachaId))
 
             // 检查卡池持续时间是否与start和end有交集
-            if (gacha.publishedAt[server.serverId] <= end && gacha.closedAt[server.serverId] >= start) {
+            if (gacha.publishedAt[server] <= end && gacha.closedAt[server] >= start) {
                 if (gacha.type == 'special' || gacha.type == 'free') {
                     continue
                 }
-                if (gacha.gachaName[new Server('jp').serverId] != null) {
-                    if (gacha.gachaName[new Server('jp').serverId].includes('初心者限定')) {//跳过新手限定卡池
+                if (gacha.gachaName[Server.jp] != null) {
+                    if (gacha.gachaName[Server.jp].includes('初心者限定')) {//跳过新手限定卡池
                         continue
                     }
-                    if (gacha.gachaName[new Server('jp').serverId].includes('カムバック')) {//跳过回归卡池
+                    if (gacha.gachaName[Server.jp].includes('カムバック')) {//跳过回归卡池
                         continue
                     }
                 }

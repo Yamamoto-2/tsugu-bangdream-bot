@@ -1,23 +1,23 @@
-import {drawCutoffListOfEvent} from '../view/cutoffListOfEvent'
-import { Server,defaultserverList } from '../types/Server';
-import {getPresentEvent} from '../types/Event'
+import { drawCutoffListOfEvent } from '../view/cutoffListOfEvent'
+import { Server, defaultserverList, getServerByName } from '../types/Server';
+import { getPresentEvent } from '../types/Event'
 
 export async function commandYcxAll(argv: any, serverName: string, eventId: number) {
 
-    if(!serverName){
-        serverName = defaultserverList[0].serverName
+    if (!serverName) {
+        serverName = defaultserverList[0].toString()
     }
-    else{
-        let tempServer =  new Server(serverName)
-        if(!tempServer.isExist){
+    else {
+        let tempServer = getServerByName(serverName)
+        if (!tempServer) {
             return '请输入正确的服务器'
         }
     }
-    var server = new Server(serverName)
+    var server = getServerByName(serverName)
     console.log(server)
-    if(!eventId){
+    if (!eventId) {
         eventId = getPresentEvent(server).eventId
     }
-    return(drawCutoffListOfEvent(eventId,server))
+    return (drawCutoffListOfEvent(eventId, server))
 
 }

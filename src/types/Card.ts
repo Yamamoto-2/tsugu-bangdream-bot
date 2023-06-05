@@ -130,14 +130,14 @@ export class Card {
 
         this.source = cardData['source']
         //修复国服releaseAt错误问题,将国服的releaseAt改为卡池或活动的开始时间
-        var CNserver = new Server('cn')
+        var Cnserver = Server.cn
         this.getSource()
-        if (this.releaseEvent[CNserver.serverId].length != 0) {
-            this.releasedAt[CNserver.serverId] = new Event(this.releaseEvent[CNserver.serverId][0]).startAt[CNserver.serverId]
+        if (this.releaseEvent[Cnserver].length != 0) {
+            this.releasedAt[Cnserver] = new Event(this.releaseEvent[Cnserver][0]).startAt[Cnserver]
         }
-        else if (this.releaseGacha[CNserver.serverId].length != 0) {
-            var earlistGacha = new Gacha(this.releaseGacha[CNserver.serverId][0])
-            this.releasedAt[CNserver.serverId] = earlistGacha.publishedAt[CNserver.serverId]
+        else if (this.releaseGacha[Cnserver].length != 0) {
+            var earlistGacha = new Gacha(this.releaseGacha[Cnserver][0])
+            this.releasedAt[Cnserver] = earlistGacha.publishedAt[Cnserver]
         }
 
         this.skillName = cardData['skillName']
@@ -232,7 +232,7 @@ export class Card {
         return new Skill(this.skillId)
     }
     isReleased(server: Server): boolean {//确定是否在该服务器发布
-        if (this.releasedAt[server.serverId] == null) {
+        if (this.releasedAt[server] == null) {
             return false
         }
         return true
@@ -255,21 +255,21 @@ export class Card {
         trainingStatus = this.ableToTraining(trainingStatus)
         const trainingString = trainingStatus ? '_after_training' : '_normal'
         var tempServer = this.getFirstReleasedServer()
-        var cardIconImage = await downloadFileCache(`https://bestdori.com/assets/${tempServer.serverName}/thumb/chara/card00${this.getRip()}/${this.resourceSetName}${trainingString}.png`)
+        var cardIconImage = await downloadFileCache(`https://bestdori.com/assets/${tempServer.toString()}/thumb/chara/card00${this.getRip()}/${this.resourceSetName}${trainingString}.png`)
         return await loadImage(cardIconImage)
     }
     async getCardIllustrationImage(trainingStatus: boolean): Promise<Image> {
         trainingStatus = this.ableToTraining(trainingStatus)
         const trainingString = trainingStatus ? '_after_training' : '_normal'
         var tempServer = this.getFirstReleasedServer()
-        var CardIllustrationImage = await downloadFile(`https://bestdori.com/assets/${tempServer.serverName}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`)
+        var CardIllustrationImage = await downloadFile(`https://bestdori.com/assets/${tempServer.toString()}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`)
         return await loadImage(CardIllustrationImage)
     }
     async getCardTrimImage(trainingStatus: boolean): Promise<Image> {
         trainingStatus = this.ableToTraining(trainingStatus)
         const trainingString = trainingStatus ? '_after_training' : '_normal'
         var tempServer = this.getFirstReleasedServer()
-        var CardIllustrationImage = await downloadFile(`https://bestdori.com/assets/${tempServer.serverName}/characters/resourceset/${this.resourceSetName}_rip/trim${trainingString}.png`)
+        var CardIllustrationImage = await downloadFile(`https://bestdori.com/assets/${tempServer.toString()}/characters/resourceset/${this.resourceSetName}_rip/trim${trainingString}.png`)
         return await loadImage(CardIllustrationImage)
     }
     getTypeName() {
@@ -299,10 +299,8 @@ export class Card {
         var releaseEvent: Array<Array<number>> = []
         var releaseGacha: Array<Array<number>> = []
         for (let k = 0; k < serverList.length; k++) {
-
-            const serverName = serverList[k];
-            const server = new Server(serverName)
-            var sourceOfServer = this.source[server.serverId]
+            const server = <Server>serverList[k]
+            var sourceOfServer = this.source[server]
             if (sourceOfServer['event'] != undefined) {
                 releaseEvent.push(Object.keys(sourceOfServer['event']).map(Number))
             }

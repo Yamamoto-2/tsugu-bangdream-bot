@@ -36,17 +36,17 @@ export class Cutoff {
         this.eventId = eventId
         this.server = server
         //如果该档线不在该服的档线列表中，直接返回
-        if (!tierListOfServer[server.serverName].includes(tier)) {
+        if (!tierListOfServer[server.toString()].includes(tier)) {
             this.isExist = false;
             return
         }
         this.tier = tier
         this.isExist = true;
-        this.startAt = parseInt(server.getContentByServer(event.startAt))
-        this.endAt = parseInt(server.getContentByServer(event.endAt))
+        this.startAt = event.startAt[server]
+        this.endAt = event.endAt[server]
     }
     async initFull() {
-        const cutoffData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/tracker/data?server=${this.server.serverId}&event=${this.eventId}&tier=${this.tier}`)
+        const cutoffData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`)
         if (cutoffData == undefined) {
             this.isExist = false;
             return
@@ -65,9 +65,9 @@ export class Cutoff {
             this.latestCutoff = this.cutoffs[this.cutoffs.length - 1]
         }
         //rate
-        var rateDataList = mainAPI['rates'] as [{ server: number, type: string, tier: number, rate: number }]
-        var rateData = rateDataList.find((element) => {
-            return element.server == this.server.serverId && element.type == this.eventType && element.tier == this.tier
+        let rateDataList = mainAPI['rates'] as [{ server: number, type: string, tier: number, rate: number }]
+        let rateData = rateDataList.find((element) => {
+            return element.server == this.server && element.type == this.eventType && element.tier == this.tier
         }
         )
         if (rateData == undefined) {
@@ -82,9 +82,9 @@ export class Cutoff {
             return
         }
         const event = new Event(this.eventId)
-        var start_ts = Math.floor(this.server.getContentByServer(event.startAt) / 1000)
-        var end_ts = Math.floor(this.server.getContentByServer(event.endAt) / 1000)
-        var cutoff_ts: { time: number, ep: number }[] = []
+        let start_ts = Math.floor(event.startAt[this.server] / 1000)
+        let end_ts = Math.floor(event.endAt[this.server] / 1000)
+        let cutoff_ts: { time: number, ep: number }[] = []
         for (let i = 0; i < this.cutoffs.length; i++) {
             const element = this.cutoffs[i];
             cutoff_ts.push({ time: Math.floor(element.time / 1000), ep: element.ep })
@@ -103,7 +103,7 @@ export class Cutoff {
         if (this.isExist == false) {
             return
         }
-        var chartData: { x: Date, y: number }[] = []
+        let chartData: { x: Date, y: number }[] = []
         if (setStartToZero) {
             chartData.push({ x: new Date(0), y: 0 })
         }

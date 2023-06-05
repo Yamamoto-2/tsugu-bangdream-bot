@@ -233,7 +233,7 @@ export class Player {
     async initFull(cache: boolean = false) {
         var cacheTime = cache ? 1 / 0 : 0;
         try {
-            var playerData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/player/${this.server.serverName}/${this.playerId}?mode=2`, cacheTime);
+            var playerData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/player/${this.server.toString()}/${this.playerId}?mode=2`, cacheTime);
         }
         catch {
             this.isExist = false;

@@ -1,7 +1,7 @@
 import { callAPIAndCacheResponse } from '../api/getApi'
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
-import { getServerByPriority, Server,defaultserverList } from './Server'
+import { getServerByPriority, Server, defaultserverList } from './Server'
 import mainAPI from './_Main'
 
 interface difficulty {
@@ -161,7 +161,7 @@ export class Song {
     async getSongJacketImage(): Promise<Image> {
         var server = getServerByPriority(this.publishedAt)
         var jacketImageName = this.jacketImage[this.jacketImage.length - 1]
-        var jacketImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.serverName}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`)
+        var jacketImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`)
         return await loadImage(jacketImageBuffer)
     }
     getTagName(): string {
@@ -208,12 +208,12 @@ export function getPresentSongList(server: Server, start: number = Date.now(), e
         if (Object.prototype.hasOwnProperty.call(songListMain, songId)) {
             const song = new Song(parseInt(songId))
             // 检查活动的发布时间和结束时间是否在指定范围内
-            if (song.publishedAt[server.serverId] <= end && song.publishedAt[server.serverId] >= start) {
+            if (song.publishedAt[server] <= end && song.publishedAt[server] >= start) {
                 songList.push(song)
             }
             for (let i in song.difficulty) {
                 if (song.difficulty[i].publishedAt != undefined) {
-                    if (song.difficulty[i].publishedAt[server.serverId] <= end && song.difficulty[i].publishedAt[server.serverId] >= start) {
+                    if (song.difficulty[i].publishedAt[server] <= end && song.difficulty[i].publishedAt[server] >= start) {
                         songList.push(song)
                     }
                 }
@@ -229,14 +229,14 @@ export interface songInRank {
     meta: number,
     rank: number
 }
-export function getMetaRanking(Fever: boolean,server:Server): songInRank[] {
+export function getMetaRanking(Fever: boolean, server: Server): songInRank[] {
     var songIdList = Object.keys(mainAPI['meta'])
     var songRankList: songInRank[] = []
     for (let i = 0; i < songIdList.length; i++) {
         const songId = songIdList[i];
         var song = new Song(parseInt(songId))
         //如果在所选服务器都没有发布，则跳过
-        if (song.publishedAt[server.serverId] == null) {
+        if (song.publishedAt[server] == null) {
             continue
         }
         //如果没有meta数据，则跳过
@@ -251,7 +251,7 @@ export function getMetaRanking(Fever: boolean,server:Server): songInRank[] {
                 songId: song.songId,
                 difficulty: difficulty,
                 meta: meta,
-                rank:0
+                rank: 0
             })
         }
     }
