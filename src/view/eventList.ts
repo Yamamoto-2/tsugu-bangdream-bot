@@ -8,7 +8,7 @@ import { line } from '../components/list';
 import { stackImage, stackImageHorizontal, resizeImage } from '../components/utils'
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
-import { defaultserverList } from '../types/Server'
+import { defaultserverList, getIcon } from '../types/Server'
 import { Event, sortEventList } from '../types/Event';
 import { drawCardListInList } from '../components/list/cardIconList';
 import { changeTimefomant } from '../components/list/time';
@@ -43,7 +43,7 @@ export async function drawEventList(matches: { [key: string]: string[] }) {
         var numberOfNotReleasedServer = 0;
         for (var j = 0; j < defaultserverList.length; j++) {
             var server = defaultserverList[j];
-            if (server.getContentByServer(tempEvent.startAt) == null) {
+            if (tempEvent.startAt[server] == null) {
                 numberOfNotReleasedServer++;
             }
         }
@@ -109,7 +109,7 @@ async function drawEventInList(event: Event): Promise<Canvas> {
     var numberOfServer = Math.min(defaultserverList.length, 2)
     for (var i = 0; i < numberOfServer; i++) {
         let server = defaultserverList[i]
-        content.push(await server.getIcon(), `${changeTimefomant(event.startAt[server.serverId])} - ${changeTimefomant(event.endAt[server.serverId])}\n`)
+        content.push(await getIcon(server), `${changeTimefomant(event.startAt[server])} - ${changeTimefomant(event.endAt[server])}\n`)
     }
     //活动加成
     //属性

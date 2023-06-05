@@ -72,24 +72,6 @@ export function apply(ctx: Context) {
     .action(async (argv, serverName, eventId) => {
       return await commandYcxAll(argv, serverName, eventId)
     })
-  ctx.command("test")
-    .action(async ({ session }) => {
-      const foo = {
-        qq: "12345678",
-        server_mode: "jp",
-        car: true,
-        server_list: [
-          {
-            status: BindingStatus.Waiting,
-            tempID: 114514,
-            account: "10000033"
-          }
-        ]
-      }
-      await upsertPlayerBinding(ctx.database, foo)
-      console.log(await getPlayerBinding(ctx.database, "123458"))
-    })
-
 }
 
 

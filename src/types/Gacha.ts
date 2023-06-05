@@ -123,12 +123,12 @@ export class Gacha {
     }
     async getGachaBGImage(): Promise<Image> {
         var server = getServerByPriority(this.publishedAt)
-        var BGImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/gacha/screen/${this.resourceName}_rip/bg.png`)
+        var BGImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/bg.png`)
         return await loadImage(BGImageBuffer)
     }
     async getGachaLogo(): Promise<Image> {
         var server = getServerByPriority(this.publishedAt)
-        var LogoImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/gacha/screen/${this.resourceName}_rip/logo.png`)
+        var LogoImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/logo.png`)
         return await loadImage(LogoImageBuffer)
     }
     getEventId() {

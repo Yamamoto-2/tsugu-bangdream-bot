@@ -57,13 +57,13 @@ export class Item {
         }
         server = getServerByPriority(this.name)
         if (this.typeName == 'material') {
-            var itemImage = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/thumb/material_rip/${this.typeName}${formatNumber(this.resourceId, 3)}.png`)
+            var itemImage = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/thumb/material_rip/${this.typeName}${formatNumber(this.resourceId, 3)}.png`)
         }
         else if (this.typeName == 'star') {
-            var itemImage = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/thumb/common_rip/star.png`)
+            var itemImage = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/thumb/common_rip/star.png`)
         }
         else {
-            var itemImage = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/thumb/common_rip/${this.typeName}${this.resourceId}.png`)
+            var itemImage = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/thumb/common_rip/${this.typeName}${this.resourceId}.png`)
         }
         return await loadImage(itemImage)
     }

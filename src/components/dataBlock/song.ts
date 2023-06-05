@@ -30,8 +30,8 @@ export async function drawSongDataBlock(song: Song, text?: string) {
         image: songJacketImage,
         widthMax: 400
     })
-    var songName = server.getContentByServer(song.musicTitle)
-    var bandName = server.getContentByServer(new Band(song.bandId).bandName)
+    var songName = song.musicTitle[server]
+    var bandName = new Band(song.bandId).bandName[server]
     var songTipsName = song.getTagName()
 
     // 绘制歌曲名

@@ -26,10 +26,10 @@ export async function drawSongInList(song: Song, difficulty?: number, text?: str
     })
     ctx.drawImage(IDImage, 0, 0)
     //曲名与乐队名
-    var fullText = `${server.getContentByServer(song.musicTitle)}`
+    var fullText = `${song.musicTitle[server]}`
     if (!text) {
         //如果没有传入text参数，使用乐队名
-        fullText += `\n${server.getContentByServer(new Band(song.bandId).bandName)}`
+        fullText += `\n${new Band(song.bandId).bandName[server]}`
     }
     else {
         //如果传入了text参数，使用text参数代替乐队名

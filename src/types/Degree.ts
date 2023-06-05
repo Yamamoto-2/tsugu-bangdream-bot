@@ -30,7 +30,7 @@ export class Degree {
         this.degreeName = degreeData['degreeName'];
     }
     async getDegreeImage(server: Server): Promise<Image> {
-        var degreeImage = await downloadFile(`https://bestdori.com/assets/${server.toString()}/thumb/degree_rip/${this.baseImageName[server]}.png`)
+        var degreeImage = await downloadFile(`https://bestdori.com/assets/${Server[server]}/thumb/degree_rip/${this.baseImageName[server]}.png`)
         return loadImage(degreeImage)
     }
     async getDegreeFrame(server: Server): Promise<Image | Canvas> {
@@ -38,7 +38,7 @@ export class Degree {
         if (frameName == "none_none") {//这个为空底图
             return (createCanvas(1, 1))
         }
-        var degreeFrame = await downloadFileCache("https://bestdori.com/assets/" + server.toString() + "/thumb/degree_rip/" + frameName + ".png")
+        var degreeFrame = await downloadFileCache("https://bestdori.com/assets/" + Server[server] + "/thumb/degree_rip/" + frameName + ".png")
         return loadImage(degreeFrame)
     }
     async getDegreeIcon(server: Server): Promise<Image | Canvas> {
@@ -46,7 +46,7 @@ export class Degree {
         if (iconName == "none_none") {//这个为空底图
             return (createCanvas(1, 1))
         }
-        var degreeIcon = await downloadFileCache("https://bestdori.com/assets/" + server.toString() + "/thumb/degree_rip/" + iconName + ".png")
+        var degreeIcon = await downloadFileCache("https://bestdori.com/assets/" + Server[server] + "/thumb/degree_rip/" + iconName + ".png")
         return loadImage(degreeIcon)
     }
 }

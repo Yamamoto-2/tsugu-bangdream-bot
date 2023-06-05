@@ -2,7 +2,7 @@ import { Canvas, Image, createCanvas } from 'canvas';
 import { drawRoundedRectWithText } from '../image/drawRect';
 import { drawText, drawTextWithImages } from './text';
 import { drawDottedLine } from '../image/dottedLine'
-import { Server, getServerByPriority, defaultserverList } from '../types/Server'
+import { Server, getServerByPriority, defaultserverList, getIcon } from '../types/Server'
 import { stackImageHorizontal } from './utils';
 
 //表格用默认虚线
@@ -128,10 +128,10 @@ export async function drawListByServerList({
     var tempcontent: Array<string | Image | Canvas> = []
     //如果只有2个服务器，且内容相同
     if (serverList.length == 2) {
-        if (serverList[0].getContentByServer(content) == serverList[1].getContentByServer(content)) {
+        if (content[serverList[0]] == content[serverList[1]]) {
             var canvas = drawList({
                 key: key,
-                text: serverList[0].getContentByServer(content)
+                text: content[serverList[0]]
             })
             return canvas
         }
@@ -139,18 +139,18 @@ export async function drawListByServerList({
 
     for (let i = 0; i < serverList.length; i++) {
         const tempServer = serverList[i];
-        if (tempServer.getContentByServer(content) == null) {
+        if (content[tempServer] == null) {
             continue
         }
-        tempcontent.push(await tempServer.getIcon())
-        tempcontent.push(tempServer.getContentByServer(content))
+        tempcontent.push(await getIcon(tempServer))
+        tempcontent.push(content[tempServer])
         tempcontent.push('\n')
 
     }
-    if(tempcontent.length == 0){
+    if (tempcontent.length == 0) {
         const tempServer = getServerByPriority(content)
-        tempcontent.push(await tempServer.getIcon())
-        tempcontent.push(tempServer.getContentByServer(content))
+        tempcontent.push(await getIcon(tempServer))
+        tempcontent.push(content[tempServer])
         tempcontent.push('\n')
     }
     tempcontent.pop()
@@ -182,7 +182,7 @@ export function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
 }
 
 //横向组合image/canvas array，居中，超过宽度则换行
-export function drawImageListCenter(imageList: Array<Canvas | Image>,maxWidth = 800): Canvas {
+export function drawImageListCenter(imageList: Array<Canvas | Image>, maxWidth = 800): Canvas {
     interface imageLine {
         imageList: Array<Canvas | Image>,
         width: number,
@@ -203,13 +203,13 @@ export function drawImageListCenter(imageList: Array<Canvas | Image>,maxWidth = 
         tempHeight = 0
         tempImageList = []
     }
-    if(imageList.length == 0){
-        return createCanvas(1,10)
+    if (imageList.length == 0) {
+        return createCanvas(1, 10)
     }
     //遍历imageList，计算每一行的宽度，高度，imageList
     for (let i = 0; i < imageList.length; i++) {
         const element = imageList[i];
-        if(element.width > maxWidth){
+        if (element.width > maxWidth) {
             newLine()
             tempImageList.push(element)
             continue
@@ -223,7 +223,7 @@ export function drawImageListCenter(imageList: Array<Canvas | Image>,maxWidth = 
         }
         tempImageList.push(element)
     }
-    if(tempImageList.length > 0){//最后一行
+    if (tempImageList.length > 0) {//最后一行
         newLine()
     }
     //计算总高度，生成canvas

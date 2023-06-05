@@ -36,7 +36,7 @@ export class Cutoff {
         this.eventId = eventId
         this.server = server
         //如果该档线不在该服的档线列表中，直接返回
-        if (!tierListOfServer[server.toString()].includes(tier)) {
+        if (!tierListOfServer[Server[server]].includes(tier)) {
             this.isExist = false;
             return
         }

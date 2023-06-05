@@ -11,7 +11,7 @@ export async function commandSearchPlayer(argv: any, playerId: number, serverNam
     }
     console.log(argv)
     var server = getServerByName(serverName)
-    if (!server) {
+    if (server == undefined) {
         return '错误: 服务器不存在'
     }
     if (isInteger(playerId)) {

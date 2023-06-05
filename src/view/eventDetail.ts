@@ -18,6 +18,7 @@ import { outputFinalBuffer } from '../image/output'
 import { drawDegreeListOfEvent } from '../components/list/degreeList';
 import { Song, getPresentSongList } from '../types/Song'
 import { drawSongListDataBlock } from '../components/dataBlock/songList';
+import { serverNameFullList } from '../config';
 
 export async function drawEventDetail(eventId: number): Promise<Element | string> {
     const event = new Event(eventId)
@@ -149,14 +150,14 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
     all.push(drawTitle('查询', '活动'))
 
 
-    var gachaCardList:Card[]= []
-    var gachaCardIdList:number[] = []//用于去重
-    var gachaImageList:Canvas[] = []
-    var gachaIdList:number[] = []//用于去重
+    var gachaCardList: Card[] = []
+    var gachaCardIdList: number[] = []//用于去重
+    var gachaImageList: Canvas[] = []
+    var gachaIdList: number[] = []//用于去重
     //活动期间卡池卡牌
     for (var i = 0; i < defaultserverList.length; i++) {
         var server = defaultserverList[i]
-        if(server.getContentByServer(event.startAt) == null){
+        if (event.startAt[server] == null) {
             continue
         }
         var EventGachaAndCardList = await getEventGachaAndCardList(event, server)
@@ -168,7 +169,7 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
                 continue
             }
             if (i == 0) {
-                gachaImageList.push(await drawGachaDatablock(tempGacha, `${server.serverNameFull}相关卡池`))
+                gachaImageList.push(await drawGachaDatablock(tempGacha, `${serverNameFullList[server]}相关卡池`))
             }
             else {
                 gachaImageList.push(await drawGachaDatablock(tempGacha))
@@ -198,14 +199,14 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
 
     var listImage = await drawDatablock({ list })
     all.push(listImage)
-    
+
     //歌曲
     for (let i = 0; i < defaultserverList.length; i++) {
         const server = defaultserverList[i];
-        if(server.getContentByServer(event.startAt) == null){
+        if (event.startAt[server] == null) {
             continue
         }
-        const songList: Song[] = getPresentSongList(server, event.startAt[server.serverId], event.endAt[server.serverId]);
+        const songList: Song[] = getPresentSongList(server, event.startAt[server], event.endAt[server]);
 
         if (songList.length !== 0) {
             const isDuplicate = all.some((block) => {
@@ -214,7 +215,7 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
             });
 
             if (!isDuplicate) {
-                all.push(await drawSongListDataBlock(songList, `${server.serverNameFull}相关歌曲`));
+                all.push(await drawSongListDataBlock(songList, `${serverNameFullList[server]}相关歌曲`));
             }
         }
     }
@@ -240,10 +241,10 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
 export async function getEventGachaAndCardList(event: Event, server: Server) {
     var gachaList: Gacha[] = []
     var gachaIdList = []//用于去重
-    if (server.getContentByServer(event.startAt) == null) {
+    if (event.startAt[server] == null) {
         return { gachaCardList: [], gachaList: [] }
     }
-    let tempGachaList = getPresentGachaList(server, event.startAt[server.serverId], event.endAt[server.serverId])
+    let tempGachaList = getPresentGachaList(server, event.startAt[server], event.endAt[server])
     for (var j = 0; j < tempGachaList.length; j++) {
         if (gachaIdList.indexOf(tempGachaList[j].gachaId) == -1) {
             gachaList.push(tempGachaList[j])
@@ -279,7 +280,7 @@ export async function getEventGachaAndCardList(event: Event, server: Server) {
         var tempCardId = gachaCardIdList[i]
         var tempCard = new Card(tempCardId)
         //如果卡牌的发布时间不在活动期间内，则不显示
-        if (server.getContentByServer(tempCard.releasedAt) < server.getContentByServer(event.startAt) || server.getContentByServer(tempCard.releasedAt) > server.getContentByServer(event.endAt)) {
+        if (tempCard.releasedAt[server] < event.startAt[server] || tempCard.releasedAt[server] > event.endAt[server]) {
             continue
         }
         gachaCardList.push(tempCard)

@@ -36,7 +36,7 @@ export async function drawGashaPaymentMethodInList(gacha: Gacha) {
         if (item.isExist) {
             methodDescription.push(await item.getItemImage())
             if (item.typeName == 'star') {
-                methodDescription.push(item.name[new Server('cn').serverId])
+                methodDescription.push(item.name[Server.cn])
             }
             methodDescription.push(`x${costItemQuantity}`)
         }

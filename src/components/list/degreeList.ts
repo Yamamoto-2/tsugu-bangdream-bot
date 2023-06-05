@@ -26,7 +26,7 @@ export async function drawDegreeListInList({
     return drawList({
         key: key,
         content: list,
-        textSize:50
+        textSize: 50
     })
 }
 
@@ -35,10 +35,10 @@ export async function drawDegreeListOfEvent(event: Event): Promise<Canvas> {
     var list = []
     var tempDegreeList = []
     var server = getServerByPriority(event.rankingRewards)
-    var rewards = server.getContentByServer(event.rankingRewards)
-    for (var i = 0; i < rewards.length; i++) {
-        if (rewards[i].rewardType == "degree") {
-            tempDegreeList.push(new Degree(rewards[i].rewardId))
+    let rankingRewards = event.rankingRewards[server]
+    for (var i = 0; i < rankingRewards.length; i++) {
+        if (rankingRewards[i].rewardType == "degree") {
+            tempDegreeList.push(new Degree(rankingRewards[i].rewardId))
         }
     }
     list.push(await drawDegreeListInList({
@@ -47,22 +47,22 @@ export async function drawDegreeListOfEvent(event: Event): Promise<Canvas> {
         server: server
     }))
     if (event.eventType == "versus" || event.eventType == "challenge" || event.eventType == "medley") {
-        var rewards = server.getContentByServer(event.musics)
-        for (var i = 0; i < rewards.length; i++) {
-            var tempDegreeList = []
-            for (var n = 0; n < rewards[i].musicRankingRewards.length; n++) {
-                if (rewards[i].musicRankingRewards[n].resourceType == "degree") {
-                    tempDegreeList.push(new Degree(rewards[i].musicRankingRewards[n].resourceId))
-                }
-            }
-            list.push(await drawDegreeListInList({
-                degreeList: tempDegreeList,
-                server: server
-            }))
-            if (event.eventType == "medley") {
-                break
-            }
-        }
+        // let rewards = event.musics[i]
+        // for (var i = 0; i < rewards.length; i++) {
+        //     var tempDegreeList = []
+        //     for (var n = 0; n < rewards[i].musicRankingRewards.length; n++) {
+        //         if (rewards[i].musicRankingRewards[n].resourceType == "degree") {
+        //             tempDegreeList.push(new Degree(rewards[i].musicRankingRewards[n].resourceId))
+        //         }
+        //     }
+        //     list.push(await drawDegreeListInList({
+        //         degreeList: tempDegreeList,
+        //         server: server
+        //     }))
+        //     if (event.eventType == "medley") {
+        //         break
+        //     }
+        // }
 
     }
     else if (event.eventType == "live_try") {

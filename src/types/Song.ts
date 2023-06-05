@@ -161,7 +161,7 @@ export class Song {
     async getSongJacketImage(): Promise<Image> {
         var server = getServerByPriority(this.publishedAt)
         var jacketImageName = this.jacketImage[this.jacketImage.length - 1]
-        var jacketImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`)
+        var jacketImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`)
         return await loadImage(jacketImageBuffer)
     }
     getTagName(): string {

@@ -7,6 +7,7 @@ import { drawDegree } from '../degree';
 import { Degree } from '../../types/Degree';
 import { Card } from '../../types/Card';
 import { drawTitle } from '../title';
+import { getIcon } from '../../types/Server';
 
 export async function drawPlayerDetailBlockWithIllust(player: Player): Promise<Canvas> {
     var list: Array<Canvas | Image> = []
@@ -46,15 +47,15 @@ export async function drawPlayerDetailBlockWithIllust(player: Player): Promise<C
     list.push(drawImageListCenter([introductionText]))
     list.push(createCanvas(1, 25))
     //玩家ID与服务器
-    let userId:string
-    if(player.profile.publishUserIdFlg){
+    let userId: string
+    if (player.profile.publishUserIdFlg) {
         userId = player.profile.userId.toString()
     }
-    else{
+    else {
         userId = 'ID未公开'
     }
     var idText = drawTextWithImages({
-        content: [await player.server.getIcon(),userId ],
+        content: [await getIcon(player.server), userId],
         maxWidth: 800,
         textSize: 35
     })
@@ -62,11 +63,11 @@ export async function drawPlayerDetailBlockWithIllust(player: Player): Promise<C
     var dataBlock = await drawDatablock({ list })
     //获取玩家首页卡面插画
     const userIllustData = player.profile.userIllust
-    const illustCard  = new Card(userIllustData.cardId)
+    const illustCard = new Card(userIllustData.cardId)
     var illust = await illustCard.getCardTrimImage(userIllustData.trainingStatus)
     //最终绘图
     var titleImage = drawTitle('查询', '玩家信息')
-    var canvas = createCanvas(1000, 900 + dataBlock.height )
+    var canvas = createCanvas(1000, 900 + dataBlock.height)
     var ctx = canvas.getContext('2d')
     ctx.drawImage(illust, 0, 0, 1000, 1000)
     ctx.drawImage(titleImage, 0, 0)

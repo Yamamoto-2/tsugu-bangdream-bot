@@ -2,8 +2,8 @@ import { callAPIAndCacheResponse } from '../api/getApi';
 import { downloadFile } from '../api/downloadFile';
 import { Bestdoriurl } from '../config';
 import mainAPI from './_Main';
-import {getServerByPriority } from './Server';
-import { Image, loadImage} from 'canvas';
+import { Server, getServerByPriority } from './Server';
+import { Image, loadImage } from 'canvas';
 
 export class Costume {
     costumeId: number;
@@ -12,9 +12,9 @@ export class Costume {
     assetBundleName: string;
     description: Array<string | null>;
     publishedAt: Array<number | null>;
-    data:Object;
-    cards:Array<number>;
-    sdResourceName:string;
+    data: Object;
+    cards: Array<number>;
+    sdResourceName: string;
     constructor(costumeId: number) {
         this.costumeId = costumeId
         const costumeData = mainAPI['costumes'][costumeId.toString()]
@@ -42,7 +42,7 @@ export class Costume {
     }
     async getSdchara(): Promise<Image> {
         var server = getServerByPriority(this.publishedAt)
-        var Buffer = await downloadFile(`${Bestdoriurl}/assets/${server.serverName}/characters/livesd/${this.sdResourceName}_rip/sdchara.png`)
+        var Buffer = await downloadFile(`${Bestdoriurl}/assets/${Server[server]}/characters/livesd/${this.sdResourceName}_rip/sdchara.png`)
         return await loadImage(Buffer)
     }
 }

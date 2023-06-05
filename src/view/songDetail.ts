@@ -1,5 +1,5 @@
 import { h, Element } from 'koishi'
-import {  getPresentEvent } from '../types/Event';
+import { getPresentEvent } from '../types/Event';
 import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
 import { Image, Canvas } from 'canvas'
@@ -7,11 +7,12 @@ import { drawTimeInList } from '../components/list/time';
 import { Server, defaultserverList } from '../types/Server';
 import { drawTitle } from '../components/title'
 import { outputFinalBuffer } from '../image/output'
-import { Song} from '../types/Song'
+import { Song } from '../types/Song'
 import { drawSongDataBlock } from '../components/dataBlock/song';
 import { Band } from '../types/Band';
 import { drawEventDatablock } from '../components/dataBlock/event';
 import { drawSongMetaListDataBlock } from '../components/dataBlock/songMetaList'
+import { serverNameFullList } from '../config';
 
 export async function drawSongDetail(song: Song): Promise<Element | string> {
     if (song.isExist == false) {
@@ -130,13 +131,13 @@ export async function drawSongDetail(song: Song): Promise<Element | string> {
     var eventIdList = []//防止重复
     for (var i = 0; i < defaultserverList.length; i++) {
         var server = defaultserverList[i]
-        if (server.getContentByServer(song.publishedAt) == null) {
+        if (song.publishedAt[server] == null) {
             continue
         }
-        var event = getPresentEvent(server, server.getContentByServer(song.publishedAt))
+        var event = getPresentEvent(server, song.publishedAt[server])
         if (event != undefined && eventIdList.indexOf(event.eventId) == -1) {
             eventIdList.push(event.eventId)
-            var eventDatablockImage = await drawEventDatablock(event, `${server.serverNameFull}相关活动`)
+            var eventDatablockImage = await drawEventDatablock(event, `${serverNameFullList[server]}相关活动`)
             all.push(eventDatablockImage)
         }
     }

@@ -4,6 +4,7 @@ import { drawDatablock } from '../dataBlock'
 import { Image, Canvas, createCanvas } from "canvas"
 import { drawDottedLine } from '../../image/dottedLine'
 import { Server, defaultserverList } from "../../types/Server"
+import { serverNameFullList } from "../../config"
 
 // 紧凑化虚线分割
 const line = drawDottedLine({
@@ -22,19 +23,19 @@ export async function drawSongMetaListDataBlock(Fever: boolean, song: Song, topL
     var metaRanking = {}
     for (let i = 0; i < defaultserverList.length; i++) {
         const server = defaultserverList[i];
-        metaRanking[server.serverId] = {}
-        metaRanking[server.serverId].data = getMetaRanking(Fever, server)
-        metaRanking[server.serverId].maxMeta = metaRanking[server.serverId].data[0].meta
+        metaRanking[server] = {}
+        metaRanking[server].data = getMetaRanking(Fever, server)
+        metaRanking[server].maxMeta = metaRanking[server].data[0].meta
     }
     var list: Array<Image | Canvas> = []
 
     var songMetaRanking = {}
     for (let i = 0; i < defaultserverList.length; i++) {
         const server = defaultserverList[i];
-        songMetaRanking[server.serverId] = {}
-        let tempMetaRanking = metaRanking[server.serverId].data
+        songMetaRanking[server] = {}
+        let tempMetaRanking = metaRanking[server].data
         //过滤出所有属于这首歌的数据
-        songMetaRanking[server.serverId].data = tempMetaRanking.filter((value: songInRank) => {
+        songMetaRanking[server].data = tempMetaRanking.filter((value: songInRank) => {
             return value.songId == song.songId
         })
     }
@@ -42,12 +43,12 @@ export async function drawSongMetaListDataBlock(Fever: boolean, song: Song, topL
         var difficultyId = parseInt(difficulty)
         var text = ''
         for (let i = 0; i < defaultserverList.length; i++) {
-            var tempSongMetaRanking = songMetaRanking[defaultserverList[i].serverId].data
+            var tempSongMetaRanking = songMetaRanking[defaultserverList[i]].data
             for (let j = 0; j < tempSongMetaRanking.length; j++) {
                 if (tempSongMetaRanking[j].difficulty == difficultyId) {
-                    var precent = tempSongMetaRanking[j].meta / metaRanking[defaultserverList[i].serverId].maxMeta * 100
+                    var precent = tempSongMetaRanking[j].meta / metaRanking[defaultserverList[i]].maxMeta * 100
                     precent = Math.round(precent * 100) / 100
-                    text += `${defaultserverList[i].serverNameFull}: ${precent}% #${tempSongMetaRanking[j].rank} `
+                    text += `${serverNameFullList[defaultserverList[i]]}: ${precent}% #${tempSongMetaRanking[j].rank} `
                 }
             }
         }

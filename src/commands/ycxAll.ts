@@ -9,7 +9,7 @@ export async function commandYcxAll(argv: any, serverName: string, eventId: numb
     }
     else {
         let tempServer = getServerByName(serverName)
-        if (!tempServer) {
+        if (tempServer == undefined) {
             return '请输入正确的服务器'
         }
     }

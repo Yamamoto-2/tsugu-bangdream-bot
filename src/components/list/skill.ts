@@ -21,7 +21,7 @@ export async function drawSkillInList({
     })
     var server = getServerByPriority(content.description)
     var tipsImage = drawTips({
-        text: server.getContentByServer(content.getSkillDescription())
+        text: content.getSkillDescription()[server]
     })
-    return stackImage( [listImage, tipsImage])
+    return stackImage([listImage, tipsImage])
 }

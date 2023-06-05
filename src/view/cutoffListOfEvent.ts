@@ -10,6 +10,7 @@ import { drawTitle } from '../components/title'
 import { outputFinalBuffer } from '../image/output'
 import { Cutoff, tierListOfServer } from "../types/Cutoff";
 import { drawCutoffChart } from '../components/chart/cutoffChat'
+import { serverNameFullList } from '../config';
 
 var statusName = {
     'not_start': '未开始',
@@ -28,10 +29,10 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server): Pr
     //状态
     var time = new Date().getTime()
     var status = ''
-    if (time < server.getContentByServer(event.startAt)) {
+    if (time < event.startAt[server]) {
         status = 'not_start'
     }
-    else if (time > server.getContentByServer(event.endAt)) {
+    else if (time > event.endAt[server]) {
         status = 'ended'
     }
     else {
@@ -44,7 +45,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server): Pr
     list.push(line)
 
     //初始化档线列表
-    var tierList = tierListOfServer[server.serverName]
+    var tierList = tierListOfServer[Server[server]]
     var cutoffList: Array<Cutoff> = []
     for (var i in tierList) {
         var tempCutoff = new Cutoff(eventId, server, tierList[i])
@@ -58,7 +59,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server): Pr
     for (var i in cutoffList) {
         const cutoff = cutoffList[i]
         let cutoffContent: string[] = []
-        if (status == 'in_progress'){
+        if (status == 'in_progress') {
             let predictText: string
             if (cutoff.predictEP == null || cutoff.predictEP == 0) {
                 predictText = '?'
@@ -90,7 +91,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server): Pr
     //创建最终输出数组
     var listImage = await drawDatablock({ list })
     var all = []
-    all.push(drawTitle('档线列表', `${server.serverNameFull}`))
+    all.push(drawTitle('档线列表', `${serverNameFullList[server]}`))
     all.push(listImage)
     var buffer = await outputFinalBuffer({
         imageList: all,

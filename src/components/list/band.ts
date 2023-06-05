@@ -19,7 +19,7 @@ export async function drawBandInList({
         if (content[0].hasIcon) {
             list.push(await content[0].getIcon())
         }
-        list.push(server.getContentByServer(content[0].bandName))
+        list.push(content[0].bandName[server])
         var canvas = drawList({
             key: key,
             content: list
@@ -33,7 +33,7 @@ export async function drawBandInList({
                 list.push(await band.getIcon())
             }
             else {
-                list.push(server.getContentByServer(band.bandName))
+                list.push(band.bandName[server])
             }
         }
         if (text != undefined) {

@@ -182,17 +182,17 @@ export class Event {
     async getBannerImage(): Promise<Image> {
         var server = getServerByPriority(this.startAt)
         try {
-            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/homebanner_rip/${this.bannerAssetBundleName}.png`, false)
+            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/homebanner_rip/${this.bannerAssetBundleName}.png`, false)
             return await loadImage(BannerImageBuffer)
         } catch (e) {
             var server = Server.jp
-            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/homebanner_rip/${this.bannerAssetBundleName}.png`)
+            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/homebanner_rip/${this.bannerAssetBundleName}.png`)
             return await loadImage(BannerImageBuffer)
         }
     }
     async getEventBGImage(): Promise<Image> {
         var server = Server.jp
-        var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${server.toString()}/event/${this.assetBundleName}/topscreen_rip/bg_eventtop.png`)
+        var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/event/${this.assetBundleName}/topscreen_rip/bg_eventtop.png`)
         return await loadImage(BannerImageBuffer)
     }
     getTypeName() {

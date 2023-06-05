@@ -5,11 +5,11 @@ import { stackImage } from '../utils'
 import { Canvas } from 'canvas'
 
 export async function drawGachaRateInList(gacha: Gacha, server: Server): Promise<Canvas> {
-    var rates = server.getContentByServer(gacha.rates)
+    var rates = gacha.rates[server]
     var list = []
     var times = 0
     for (var i in rates) {
-        if(rates[i].rate == 0) {
+        if (rates[i].rate == 0) {
             continue
         }
         let key = undefined
@@ -24,6 +24,6 @@ export async function drawGachaRateInList(gacha: Gacha, server: Server): Promise
         }))
         times++
     }
-    return(stackImage(list))
+    return (stackImage(list))
 }
 

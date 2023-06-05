@@ -1,5 +1,5 @@
 import { Character } from '../../types/Character'
-import { Server,getServerByPriority } from '../../types/Server'
+import { Server, getServerByPriority } from '../../types/Server'
 import { drawList } from '../list'
 import { Canvas, Image } from 'canvas'
 
@@ -17,14 +17,14 @@ export async function drawCharacterInList({
     var list: Array<string | Image | Canvas> = []
     if (content.length == 1 && text == undefined) {
         list.push(await content[0].getIcon())
-        list.push(server.getContentByServer(content[0].getCharacterName()))
+        list.push(content[0].getCharacterName()[server])
         var canvas = drawList({
             key: key,
             content: list
         })
         return canvas
     }
-    else{
+    else {
         for (let i = 0; i < content.length; i++) {
             const character = content[i];
             list.push(await character.getIcon())

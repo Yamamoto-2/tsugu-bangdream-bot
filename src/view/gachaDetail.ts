@@ -14,6 +14,7 @@ import { outputFinalBuffer } from '../image/output'
 import { drawEventDatablock } from '../components/dataBlock/event';
 import { drawGashaPaymentMethodInList } from '../components/list/gachaPaymentMethod';
 import { drawGachaRateInList } from '../components/list/gachaRate';
+import { serverNameFullList } from '../config';
 
 export async function drawGachaDetail(gachaId: number): Promise<Element | string> {
     const gacha = new Gacha(gachaId)
@@ -82,9 +83,9 @@ export async function drawGachaDetail(gachaId: number): Promise<Element | string
 
     //卡池pickUp
     var pickUpCardIdList = []
-    var details = server.getContentByServer(gacha.details)
+    var details = gacha.details[server]
     for (var cardId in details) {
-        if (details[cardId].pickup == true) {
+        if (details[cardId].pickUp == true) {
             pickUpCardIdList.push(parseInt(cardId))
         }
     }
@@ -122,13 +123,13 @@ export async function drawGachaDetail(gachaId: number): Promise<Element | string
 
     for (let k = 0; k < defaultserverList.length; k++) {
         let server = defaultserverList[k]
-        if (server.getContentByServer(gacha.publishedAt) == null) {
+        if (gacha.publishedAt[server] == null) {
             continue
         }
-        var relatedEvent = getPresentEvent(server, server.getContentByServer(gacha.publishedAt))
+        var relatedEvent = getPresentEvent(server, gacha.publishedAt[server])
         if (relatedEvent != null && !tempEventIdList.includes(relatedEvent.eventId)) {
             tempEventIdList.push(relatedEvent.eventId)
-            eventImageList.push(await drawEventDatablock(relatedEvent, `${server.serverNameFull}相关活动`))
+            eventImageList.push(await drawEventDatablock(relatedEvent, `${serverNameFullList[server]}相关活动`))
         }
     }
 

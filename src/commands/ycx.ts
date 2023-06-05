@@ -11,7 +11,7 @@ export async function commandYcx(argv: any, tier: number, serverName: string, ev
     }
     else {
         let tempServer = getServerByName(serverName)
-        if (!tempServer) {
+        if (tempServer == undefined) {
             return '请输入正确的服务器'
         }
     }
