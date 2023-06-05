@@ -39,6 +39,7 @@ export async function drawDegreeListOfEvent(event: Event): Promise<Canvas> {
     for (let i = 0; i < rankingRewards.length; i++) {
         if (rankingRewards[i].rewardType == "degree") {
             tempDegreeList.push(new Degree(rankingRewards[i].rewardId))
+            if (tempDegreeList.length >= 3) break
         }
     }
     list.push(await drawDegreeListInList({
@@ -53,6 +54,7 @@ export async function drawDegreeListOfEvent(event: Event): Promise<Canvas> {
             for (let n = 0; n < rewards[i].musicRankingRewards.length; n++) {
                 if (rewards[i].musicRankingRewards[n].resourceType == "degree") {
                     tempDegreeList.push(new Degree(rewards[i].musicRankingRewards[n].resourceId))
+                    if (tempDegreeList.length >= 3) break
                 }
             }
             list.push(await drawDegreeListInList({
@@ -72,6 +74,7 @@ export async function drawDegreeListOfEvent(event: Event): Promise<Canvas> {
         for (let j in rewards) {
             if (rewards[j]["resourceType"] == "degree") {
                 tempDegreeList.push(new Degree(rewards[j]["resourceId"]))
+                if (tempDegreeList.length >= 3) break
             }
         }
         list.push(await drawDegreeListInList({
