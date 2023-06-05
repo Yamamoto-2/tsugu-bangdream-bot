@@ -10,7 +10,7 @@ import { changeTimefomant } from '../components/list/time';
 import { drawTimeInList } from '../components/list/time';
 import { drawAttributeInList } from '../components/list/attribute'
 import { drawCharacterInList } from '../components/list/character'
-import { statConfig } from '../components/list/cardStat'
+import { statConfig } from '../components/list/stat'
 import { drawCardListInList } from '../components/list/cardIconList'
 import { getPresentGachaList, Gacha } from '../types/Gacha'
 import { Server, defaultserverList } from '../types/Server';

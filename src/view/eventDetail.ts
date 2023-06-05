@@ -9,7 +9,7 @@ import { drawBannerImageCanvas } from '../components/dataBlock/utils'
 import { drawTimeInList } from '../components/list/time';
 import { drawAttributeInList } from '../components/list/attribute'
 import { drawCharacterInList } from '../components/list/character'
-import { statConfig } from '../components/list/cardStat'
+import { statConfig } from '../components/list/stat'
 import { drawCardListInList } from '../components/list/cardIconList'
 import { getPresentGachaList, Gacha } from '../types/Gacha'
 import { Server, defaultserverList } from '../types/Server';
@@ -254,17 +254,19 @@ export async function getEventGachaAndCardList(event: Event, server: Server) {
     for (var i = 0; i < gachaList.length; i++) {
         var tempGacha = gachaList[i]
         var tempCardList = tempGacha.newCards
+        /*
+        //检查是否有超过7张稀有度2的卡牌，发布了太多2星卡的卡池会被跳过
         var rarity2CardNum = 0
-        //检查是否有超过5张稀有度2的卡牌，发布了太多2星卡的卡池会被跳过
         for (var j = 0; j < tempCardList.length; j++) {
             let tempCard = new Card(tempCardList[j])
             if (tempCard.rarity == 2) {
                 rarity2CardNum++
             }
         }
-        if (rarity2CardNum > 4) {
+        if (rarity2CardNum > 6) {
             continue
         }
+        */
         for (var j = 0; j < tempCardList.length; j++) {
             var tempCardId = tempCardList[j]
             if (gachaCardIdList.indexOf(tempCardId) == -1) {

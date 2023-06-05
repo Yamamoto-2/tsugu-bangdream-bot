@@ -15,7 +15,7 @@ import { changeTimefomant } from '../components/list/time';
 import { drawTextWithImages } from '../components/text';
 import { getEventGachaAndCardList } from './eventDetail'
 import { drawDottedLine } from '../image/dottedLine'
-import { statConfig } from '../components/list/cardStat'
+import { statConfig } from '../components/list/stat'
 
 const maxHeight = 7000
 
