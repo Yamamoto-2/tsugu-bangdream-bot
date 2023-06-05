@@ -33,14 +33,14 @@ export function apply(ctx: Context) {
   // 创建玩家绑定数据库
   ctx.model.extend('tsugu_player_data',
     {
-      id: 'unsigned',
-      qq: 'string',
-      server_mode: 'string',
+      qq: 'unsigned',
+      server_mode: 'unsigned',
       car: 'boolean',
       server_list: 'json'
-    }, {
-    autoInc: true
-  })
+    },
+    {
+      primary: 'qq'
+    })
 
   ctx.command('查玩家 <playerId:number> <serverName:text>', '查询玩家')
     .action(async (argv, playerId, serverName) => {

@@ -1,9 +1,9 @@
 import { Database } from "koishi"
+import { Server } from "../types/Server"
 
 export interface PlayerBinding {
-    id?: number,
-    qq: string,
-    server_mode: string,
+    qq: number,
+    server_mode: Server,
     car: boolean,
     server_list: ServerBindingInfo[]
 }
@@ -18,10 +18,8 @@ export enum BindingStatus {
 
 const tsugu_table_name = 'tsugu_player_data'
 
-export async function getPlayerBinding(db: Database, qqId: string): Promise<Partial<PlayerBinding>> {
-    const [result] = await db.get(tsugu_table_name, {
-        qq: qqId
-    })
+export async function getPlayerBinding(db: Database, qqId: number): Promise<Partial<PlayerBinding>> {
+    const [result] = await db.get(tsugu_table_name, qqId)
     // 如果未能找到对应的结果将返回undefined
     return result
 }
