@@ -1,11 +1,16 @@
+import { createCanvas } from "canvas";
 import { Cutoff } from "../../types/Cutoff";
 import { drawTimeLineChart, getColor } from "../chart";
 
 
-export async function drawCutoffChart(cutoffList: Cutoff[],setStartToZero = false) {
+export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = false) {
     //setStartToZero:是否将开始时间设置为0
     var datasets = []
     var time = new Date().getTime()
+    if (cutoffList.length == 0) {
+        return (createCanvas(1, 1))
+    }
+    var onlyOne = cutoffList.length == 1
     for (let i = 0; i < cutoffList.length; i++) {
         const cutoff = cutoffList[i];
         const tempColor = getColor(i)
@@ -17,16 +22,16 @@ export async function drawCutoffChart(cutoffList: Cutoff[],setStartToZero = fals
             backgroundColor: [`${tempColor} 0.2)`],
             pointBackgroundColor: `${tempColor} 1)`,
             pointBorderColor: `${tempColor} 1)`,
-            fill: true
+            fill: onlyOne
         })
-    
+
         if (time < cutoff.endAt) {
             if (cutoff.predictEP != null && cutoff.predictEP != 0) {
                 let data = []
-                if(setStartToZero){
+                if (setStartToZero) {
                     data = [{ x: new Date(0), y: cutoff.predictEP }, { x: new Date(cutoff.endAt - cutoff.startAt), y: cutoff.predictEP }]
                 }
-                else{
+                else {
                     data = [{ x: new Date(cutoff.startAt), y: cutoff.predictEP }, { x: new Date(cutoff.endAt), y: cutoff.predictEP }]
                 }
                 datasets.push({
@@ -40,13 +45,13 @@ export async function drawCutoffChart(cutoffList: Cutoff[],setStartToZero = fals
                     pointRadius: 0,
                     pointHoverRadius: 0,
                 })
-    
-    
+
+
             }
-    
+
         }
     }
-    if(!setStartToZero){
+    if (!setStartToZero) {
         if (time < cutoffList[0].endAt) {
             datasets.push({
                 label: "当前时间",
@@ -64,19 +69,18 @@ export async function drawCutoffChart(cutoffList: Cutoff[],setStartToZero = fals
     var data = {
         datasets: datasets
     }
-    if(setStartToZero){
+    if (setStartToZero) {
         let longestTime = 0
         for (let i = 0; i < cutoffList.length; i++) {
             const cutoff = cutoffList[i];
-            if(cutoff.endAt - cutoff.startAt > longestTime){
+            if (cutoff.endAt - cutoff.startAt > longestTime) {
                 longestTime = cutoff.endAt - cutoff.startAt
             }
         }
-        return await drawTimeLineChart(data, new Date(0), new Date(longestTime),setStartToZero)
+        return await drawTimeLineChart({ data, start: new Date(0), end: new Date(longestTime), setStartToZero })
     }
-    else{
-        return await drawTimeLineChart(data, new Date(cutoffList[0].startAt), new Date(cutoffList[0].endAt),setStartToZero)
+    else {
+        return await drawTimeLineChart({ data, start: new Date(cutoffList[0].startAt), end: new Date(cutoffList[0].endAt), setStartToZero})
+    }
 
-    }
- 
 }

@@ -22,6 +22,7 @@ import { commandSong } from './commands/searchSong'
 import { commandGacha } from './commands/searchGacha'
 import { commandYcx } from './commands/ycx'
 import { commandSearchPlayer } from './commands/searchPlayer'
+import { commandYcxAll } from './commands/ycxAll'
 
 export function apply(ctx: Context) {
   ctx.command('查玩家 <playerId:number> <serverName:text>', '查询玩家')
@@ -50,6 +51,11 @@ export function apply(ctx: Context) {
     .action(async (argv, tier, serverName, eventId) => {
       return await commandYcx(argv, tier, serverName, eventId)
     })
+  ctx.command("ycxall [serverName] [eventId:number]", "ycxall")
+    .action(async (argv, serverName, eventId) => {
+      return await commandYcxAll(argv, serverName, eventId)
+    })
+
 
 
 
