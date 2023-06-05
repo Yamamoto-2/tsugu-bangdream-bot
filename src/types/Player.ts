@@ -256,7 +256,7 @@ export class Player {
         }
         //插画
         this.profile.userIllust = this.getUserIllust()
-        
+
         //修复新旧API难度信息不兼容问题
         if (this.profile.userMusicClearInfoMap == undefined) {
             const difficultyNameList = ['easy', 'normal', 'hard', 'expert', 'special'] //难度名称
@@ -272,19 +272,22 @@ export class Player {
             if (this.profile['clearedMusicCountMap']?.['entries'] != undefined) {
                 for (let i = 0; i < difficultyNameList.length; i++) {
                     const difficultyName = difficultyNameList[i];
-                    this.profile.userMusicClearInfoMap.entries[difficultyName]['clearedMusicCount'] = this.profile['clearedMusicCountMap']['entries'][difficultyName]
+                    const number = this.profile['clearedMusicCountMap']['entries'][difficultyName] || 0
+                    this.profile.userMusicClearInfoMap.entries[difficultyName]['clearedMusicCount'] = number
                 }
             }
             if (this.profile['fullComboMusicCountMap']?.['entries'] != undefined) {
                 for (let i = 0; i < difficultyNameList.length; i++) {
                     const difficultyName = difficultyNameList[i];
-                    this.profile.userMusicClearInfoMap.entries[difficultyName]['fullComboMusicCount'] = this.profile['fullComboMusicCountMap']['entries'][difficultyName]
+                    const number = this.profile['fullComboMusicCountMap']['entries'][difficultyName] || 0
+                    this.profile.userMusicClearInfoMap.entries[difficultyName]['fullComboMusicCount'] = number
                 }
             }
             if (this.profile['allPerfectMusicCountMap']?.['entries'] != undefined) {
                 for (let i = 0; i < difficultyNameList.length; i++) {
                     const difficultyName = difficultyNameList[i];
-                    this.profile.userMusicClearInfoMap.entries[difficultyName]['allPerfectMusicCount'] = this.profile['allPerfectMusicCountMap']['entries'][difficultyName]
+                    const number = this.profile['allPerfectMusicCountMap']['entries'][difficultyName] || 0
+                    this.profile.userMusicClearInfoMap.entries[difficultyName]['allPerfectMusicCount'] = number
                 }
             }
         }
