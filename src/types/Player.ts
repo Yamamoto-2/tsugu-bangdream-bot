@@ -256,6 +256,39 @@ export class Player {
         }
         //插画
         this.profile.userIllust = this.getUserIllust()
+        
+        //修复新旧API难度信息不兼容问题
+        if (this.profile.userMusicClearInfoMap == undefined) {
+            const difficultyNameList = ['easy', 'normal', 'hard', 'expert', 'special'] //难度名称
+            this.profile.userMusicClearInfoMap = { entries: {} }
+            for (let i = 0; i < difficultyNameList.length; i++) {
+                const difficultyName = difficultyNameList[i];
+                this.profile.userMusicClearInfoMap.entries[difficultyName] = {
+                    clearedMusicCount: 0,
+                    fullComboMusicCount: 0,
+                    allPerfectMusicCount: 0,
+                }
+            }
+            if (this.profile['clearedMusicCountMap']?.['entries'] != undefined) {
+                for (let i = 0; i < difficultyNameList.length; i++) {
+                    const difficultyName = difficultyNameList[i];
+                    this.profile.userMusicClearInfoMap.entries[difficultyName]['clearedMusicCount'] = this.profile['clearedMusicCountMap']['entries'][difficultyName]
+                }
+            }
+            if (this.profile['fullComboMusicCountMap']?.['entries'] != undefined) {
+                for (let i = 0; i < difficultyNameList.length; i++) {
+                    const difficultyName = difficultyNameList[i];
+                    this.profile.userMusicClearInfoMap.entries[difficultyName]['fullComboMusicCount'] = this.profile['fullComboMusicCountMap']['entries'][difficultyName]
+                }
+            }
+            if (this.profile['allPerfectMusicCountMap']?.['entries'] != undefined) {
+                for (let i = 0; i < difficultyNameList.length; i++) {
+                    const difficultyName = difficultyNameList[i];
+                    this.profile.userMusicClearInfoMap.entries[difficultyName]['allPerfectMusicCount'] = this.profile['allPerfectMusicCountMap']['entries'][difficultyName]
+                }
+            }
+        }
+
     }
     async calcStat(event?: Event): Promise<Stat> {
         if (this.profile.publishTotalDeckPowerFlg == false) {
@@ -356,7 +389,7 @@ export class Player {
         cardStat.performance = Math.floor(cardStat.performance)
         cardStat.technique = Math.floor(cardStat.technique)
         cardStat.visual = Math.floor(cardStat.visual)
-        
+
         return cardStat
     }
     calcHSR(): number {
