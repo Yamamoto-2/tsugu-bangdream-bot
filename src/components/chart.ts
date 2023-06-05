@@ -11,9 +11,24 @@ const chartJSNodeCanvas = new ChartJSNodeCanvas({
         ChartJS.defaults.font.family = 'old';
     }
 });
-export const colorList = ['rgba(254, 65, 111,', 'rgba(179, 49, 255,', 'rgba(64, 87, 227,', "rgba(68, 197, 39,", "rgba(0, 132, 255,", "rgba(255, 255, 81,"]
-export async function drawTimeLineChart(data: object, start: Date, end: Date) {
-    for(var i = 0; i < data['datasets'].length; i++){
+const colorList = ['rgba(254, 65, 111,', 'rgba(179, 49, 255,', 'rgba(64, 87, 227,', "rgba(68, 197, 39,", "rgba(0, 132, 255,", "rgba(255, 255, 81,"]
+function randomRGB(){
+    return Math.floor(Math.random()*255)
+}
+export function getColor(i:number){
+    let tempColor:string
+    if(colorList[i] == undefined){
+        tempColor = `rgba(${randomRGB()}, ${randomRGB()}, ${randomRGB()},`
+    }
+    else{
+        tempColor = colorList[i]
+    }
+    return tempColor
+}
+
+
+export async function drawTimeLineChart(data: object, start: Date, end: Date,setStartToZero = false) {
+    for (var i = 0; i < data['datasets'].length; i++) {
         console.log(data['datasets'][i]['data'])
     }
     var options = {
@@ -26,22 +41,26 @@ export async function drawTimeLineChart(data: object, start: Date, end: Date) {
                 },
             }
         },
-        scales:{
+        scales: {
             x: {
                 type: 'time',
-                time:{
+                time: {
                     unit: 'day'
                 },
                 min: start,
                 max: end,
+                display: !setStartToZero
+            },
+            y: {
+                min: 0
             }
         }
     }
     const configuration = {
-            type: 'line',
-            data: data,
-            options: options
-        }
-    const image = await chartJSNodeCanvas.renderToBuffer(configuration);
-        return await loadImage(image);
+        type: 'line',
+        data: data,
+        options: options
     }
+    const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+    return await loadImage(image);
+}

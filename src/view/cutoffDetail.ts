@@ -108,14 +108,15 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
         list.push(line)
     }
     list.pop()
+    list.push(createCanvas(800, 50))
 
     //折线图
-    list.push(await drawCutoffChart(cutoff))
+    list.push(await drawCutoffChart([cutoff]))
 
     //创建最终输出数组
     var listImage = await drawDatablock({ list })
     var all = []
-    all.push(drawTitle('查询', '活动'))
+    all.push(drawTitle('预测线', `${server.serverNameFull} ${cutoff.tier}档线`))
     all.push(listImage)
     var buffer = await outputFinalBuffer({
         imageList: all,

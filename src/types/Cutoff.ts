@@ -89,19 +89,37 @@ export class Cutoff {
             const element = this.cutoffs[i];
             cutoff_ts.push({ time: Math.floor(element.time / 1000), ep: element.ep })
         }
-        var result = predict(cutoff_ts, start_ts, end_ts, this.rate)
+        try {
+            var result = predict(cutoff_ts, start_ts, end_ts, this.rate)
+        } catch {
+            this.predictEP = 0
+            return this.predictEP
+        }
         this.predictEP = Math.floor(result.ep)
         return this.predictEP
     }
-    getChartData(): { x: Date, y: number }[] {
+    getChartData(setStartToZero = false): { x: Date, y: number }[] {
+        //setStartToZero:是否将开始时间设置为0
         if (this.isExist == false) {
             return
         }
         var chartData: { x: Date, y: number }[] = []
-        chartData.push({ x: new Date(this.startAt), y: 0 })
+        if (setStartToZero) {
+            chartData.push({ x: new Date(0), y: 0 })
+        }
+        else {
+            chartData.push({ x: new Date(this.startAt), y: 0 })
+
+        }
         for (let i = 0; i < this.cutoffs.length; i++) {
             const element = this.cutoffs[i];
-            chartData.push({ x: new Date(element.time), y: element.ep })
+            if (setStartToZero) {
+                chartData.push({ x: new Date(element.time - this.startAt), y: element.ep - this.cutoffs[0].ep })
+            }
+            else {
+                chartData.push({ x: new Date(element.time), y: element.ep })
+
+            }
         }
         return chartData
     }
