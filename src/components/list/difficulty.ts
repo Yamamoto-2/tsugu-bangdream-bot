@@ -2,7 +2,8 @@ import { createCanvas, Canvas } from "canvas"
 import { Song } from "../../types/Song"
 import { drawText } from "../text"
 
-const difficultyColor = ["#8eb4fd", "#a6f692", "#fbdf8c", "#ff898b", "#f383cb"] //画难度时使用的配色
+export const difficultyColorList = ["#8eb4fd", "#a6f692", "#fbdf8c", "#ff898b", "#f383cb"] //画难度时使用的配色
+export const difficultyNameList = ['easy', 'normal', 'hard', 'expert', 'special'] //难度名称
 
 export function drawDifficulityList(song: Song, imageHeight: number = 60, spacing: number = 10): Canvas {
     var difficultyCount = Object.keys(song.difficulty).length
@@ -18,8 +19,8 @@ export function drawDifficulityList(song: Song, imageHeight: number = 60, spacin
 export function drawDifficulity(difficultyType: number, playLevel: number, imageHeight: number) {
     var tempcanv = createCanvas(imageHeight, imageHeight)
     var ctx = tempcanv.getContext("2d")
-    if (difficultyColor[difficultyType] != undefined) {
-        ctx.fillStyle = difficultyColor[difficultyType]
+    if (difficultyColorList[difficultyType] != undefined) {
+        ctx.fillStyle = difficultyColorList[difficultyType]
     }
     else {
         ctx.fillStyle = "#f1f1f1"
