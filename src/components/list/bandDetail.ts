@@ -41,7 +41,7 @@ async function drawBandDetailsInList(BandDetailsInListOptions: drawBandDetailsIn
         content: bandAndContentList,
         spacing: 0,
         lineHeight: bandAndContentList?.[0].height,
-        textSize:bandAndContentList?.[0].height
+        textSize: bandAndContentList?.[0].height
     })
     return bandAndContentListImage
 
@@ -60,13 +60,24 @@ export async function drawPlayerBandRankInList(player: Player, key?: string): Pr
     }
     return drawBandDetailsInList(BandDetails, key)
 }
+
+var bandIDlist = {//乐队对应的stageChallenge编号
+    "1":1,
+    "2":2,
+    "3":5,
+    "4":3,
+    "5":4,
+    "21":6,
+    "18":7,
+}
+
 //画玩家信息内stage challenge等级
 export async function drawPlayerStageChallengeRankInList(player: Player, key?: string): Promise<Canvas> {
     const stageChallengeAchievementConditionsMap = player.profile.stageChallengeAchievementConditionsMap.entries;
 
     const BandDetails = {};
     for (const band in mainAPI['bands']) {
-        const level = stageChallengeAchievementConditionsMap?.[band] || 0;
+        const level = stageChallengeAchievementConditionsMap?.[bandIDlist[band]] || 0;
         BandDetails[band] = [starList.normal, level.toString()];
     }
     return drawBandDetailsInList(BandDetails, key);
