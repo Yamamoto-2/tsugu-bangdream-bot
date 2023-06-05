@@ -10,7 +10,7 @@ interface RarityInListOptions {
     text?: string
 }
 
-var starList: { [type: string]: Image } = {}
+export let starList: { [type: string]: Image } = {}
 async function loadImageOnce() {
     starList.normal = await loadImage(path.join(assetsRootPath, '/Card/star.png'));
     starList.trained = await loadImage(path.join(assetsRootPath, '/Card/star_trained.png'));
