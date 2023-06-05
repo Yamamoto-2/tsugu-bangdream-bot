@@ -7,7 +7,7 @@ import { drawCardIllustration } from '../components/card';
 import { drawSkillInList } from '../components/list/skill'
 import { drawTimeInList } from '../components/list/time';
 import { drawCardPrefixInList } from '../components/list/cardPrefix'
-import { drawCardStatInList } from '../components/list/cardStat'
+import { drawCardStatInList } from '../components/list/stat'
 import { drawCardListInList } from '../components/list/cardIconList'
 import { drawSdcharaInList } from '../components/list/cardSdchara'
 import { drawEventDatablock } from '../components/dataBlock/event';

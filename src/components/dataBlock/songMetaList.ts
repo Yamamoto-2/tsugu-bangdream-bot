@@ -38,7 +38,6 @@ export async function drawSongMetaListDataBlock(Fever: boolean, song: Song, topL
             return value.songId == song.songId
         })
     }
-    console.log(songMetaRanking)
     for (var difficulty in song.difficulty) {
         var difficultyId = parseInt(difficulty)
         var text = ''

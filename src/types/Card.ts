@@ -265,6 +265,13 @@ export class Card {
         var CardIllustrationImage = await downloadFile(`https://bestdori.com/assets/${tempServer.serverName}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`)
         return await loadImage(CardIllustrationImage)
     }
+    async getCardTrimImage(trainingStatus: boolean): Promise<Image> {
+        trainingStatus = this.ableToTraining(trainingStatus)
+        const trainingString = trainingStatus ? '_after_training' : '_normal'
+        var tempServer = this.getFirstReleasedServer()
+        var CardIllustrationImage = await downloadFile(`https://bestdori.com/assets/${tempServer.serverName}/characters/resourceset/${this.resourceSetName}_rip/trim${trainingString}.png`)
+        return await loadImage(CardIllustrationImage)
+    }
     getTypeName() {
         if (typeName[this.type] == undefined) {
             return this.type

@@ -47,7 +47,7 @@ export class Player {
                 addExp: number;
                 trainingStatus: 'not_doing' | 'done';
                 duplicateCount: number;
-                illust: string;
+                illust: 'after_training' | 'normal';
                 skillExp: number;
                 skillLevel: number;
                 userAppendParameter: {
@@ -156,8 +156,8 @@ export class Player {
         userProfileSituation: {
             userId: string;
             situationId: number;
-            illust: string;
-            viewProfileSituationStatus: string;
+            illust: 'after_training' | 'normal';
+            viewProfileSituationStatus: 'deck_leader' | 'profile_situation';
         };
         userProfileDegreeMap: {
             entries: {
@@ -221,6 +221,8 @@ export class Player {
         //其他
         //卡牌列表
         cardList: Card[];
+        //插画
+        userIllust: { cardId: number, trainingStatus: boolean };
 
     }
     server: Server;
@@ -252,6 +254,8 @@ export class Player {
             var card = new Card(cardData.situationId)
             this.profile.cardList.push(card)
         }
+        //插画
+        this.profile.userIllust = this.getUserIllust()
     }
     async calcStat(event?: Event): Promise<Stat> {
         if (this.profile.publishTotalDeckPowerFlg == false) {
@@ -261,22 +265,19 @@ export class Player {
                 visual: 0,
             })
         }
-        var cardDataList = this.profile.mainDeckUserSituations.entries
         //计算卡牌本身属性
+        var cardDataList = this.profile.mainDeckUserSituations.entries
         var cardStatList = []
         var cardStat: Stat = {//所有卡牌的属性总和
             performance: 0,
             technique: 0,
             visual: 0,
         }
-
-
         for (let i = 0; i < cardDataList.length; i++) {
             const cardData = cardDataList[i];
             var card = new Card(cardData.situationId)
             var trainingStatus = cardData.trainingStatus === 'done' ? true : false
             var tempStat = await card.calcStat(cardData.level, trainingStatus, cardData.limitBreakRank, false, false)
-            console.log(tempStat)
             addStat(cardStat, tempStat)
             cardStatList.push(tempStat)
         }
@@ -310,47 +311,87 @@ export class Player {
                 const card = this.profile.cardList[i]
                 var isCharacter = false
                 var isAttribute = false
-                for(let j = 0;i<event.characters.length;j++){
+                for (let j = 0; i < event.characters.length; j++) {
                     const characterPercent = event.characters[j]
-                    if(card.characterId == characterPercent.characterId){
-                        let tempStat= {
-                            performance: cardStat.performance*characterPercent.percent/100,
-                            technique: cardStat.technique*characterPercent.percent/100,
-                            visual: cardStat.visual*characterPercent.percent/100,
+                    if (card.characterId == characterPercent.characterId) {
+                        let tempStat = {
+                            performance: cardStat.performance * characterPercent.percent / 100,
+                            technique: cardStat.technique * characterPercent.percent / 100,
+                            visual: cardStat.visual * characterPercent.percent / 100,
                         }
-                        addStat(eventStat,tempStat)
+                        addStat(eventStat, tempStat)
                         isCharacter = true
                     }
                 }
                 for (let j = 0; j < event.attributes.length; j++) {
                     const attributePercent = event.attributes[j];
-                    if(card.attribute == attributePercent.attribute){
-                        let tempStat= {
-                            performance: cardStat.performance*attributePercent.percent/100,
-                            technique: cardStat.technique*attributePercent.percent/100,
-                            visual: cardStat.visual*attributePercent.percent/100,
+                    if (card.attribute == attributePercent.attribute) {
+                        let tempStat = {
+                            performance: cardStat.performance * attributePercent.percent / 100,
+                            technique: cardStat.technique * attributePercent.percent / 100,
+                            visual: cardStat.visual * attributePercent.percent / 100,
                         }
-                        addStat(eventStat,tempStat)
+                        addStat(eventStat, tempStat)
                         isAttribute = true
                     }
                 }
-                if(isCharacter && isAttribute && event.eventAttributeAndCharacterBonus != undefined){
-                    if(event.eventAttributeAndCharacterBonus.parameterPercent != 0){
-                        let tempStat= {
-                            performance: cardStat.performance*event.eventAttributeAndCharacterBonus.parameterPercent/100,
-                            technique: cardStat.technique*event.eventAttributeAndCharacterBonus.parameterPercent/100,
-                            visual: cardStat.visual*event.eventAttributeAndCharacterBonus.parameterPercent/100,
+                if (isCharacter && isAttribute && event.eventAttributeAndCharacterBonus != undefined) {
+                    if (event.eventAttributeAndCharacterBonus.parameterPercent != 0) {
+                        let tempStat = {
+                            performance: cardStat.performance * event.eventAttributeAndCharacterBonus.parameterPercent / 100,
+                            technique: cardStat.technique * event.eventAttributeAndCharacterBonus.parameterPercent / 100,
+                            visual: cardStat.visual * event.eventAttributeAndCharacterBonus.parameterPercent / 100,
                         }
-                        addStat(eventStat,tempStat)
+                        addStat(eventStat, tempStat)
                     }
                 }
 
 
             }
-            addStat(extraStat,eventStat)
+            addStat(extraStat, eventStat)
         }
         //相加
         addStat(cardStat, extraStat)
+        //将cardStat所有参数向下取整
+        cardStat.performance = Math.floor(cardStat.performance)
+        cardStat.technique = Math.floor(cardStat.technique)
+        cardStat.visual = Math.floor(cardStat.visual)
+        
         return cardStat
+    }
+    calcHSR(): number {
+        var hsr = 0
+        var userHighScoreRating = this.profile.userHighScoreRating
+        for (const i in userHighScoreRating) {
+            if (Object.prototype.hasOwnProperty.call(userHighScoreRating, i)) {
+                const userBandHighScoreRating = userHighScoreRating[i].entries;
+                for (let j = 0; j < userBandHighScoreRating.length; j++) {
+                    const element = userBandHighScoreRating[j];
+                    hsr += element.rating
+                }
+            }
+        }
+        return hsr
+    }
+    getUserIllust(): { cardId: number, trainingStatus: boolean } {
+        let illustCardId: number
+        let trainingStatus: boolean
+        let viewProfileSituationStatus: string
+        if (Object.keys(this.profile.userProfileSituation).length != 0) {
+            viewProfileSituationStatus = this.profile.userProfileSituation.viewProfileSituationStatus
+        }
+        else {
+            viewProfileSituationStatus = 'deck_leader'
+        }
+        if (viewProfileSituationStatus == 'deck_leader') {
+            illustCardId = this.profile.mainDeckUserSituations.entries[0].situationId
+            trainingStatus = this.profile.mainDeckUserSituations.entries[0].illust === 'after_training' ? true : false
+        }
+        else {
+            illustCardId = this.profile.userProfileSituation.situationId
+            trainingStatus = this.profile.userProfileSituation.illust === 'after_training' ? true : false
+        }
+        var illustCard = new Card(illustCardId)
+        return { cardId: illustCardId, trainingStatus: trainingStatus }
     }
 }

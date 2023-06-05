@@ -26,7 +26,7 @@ import { commandSearchPlayer } from './commands/searchPlayer'
 export function apply(ctx: Context) {
   ctx.command('查玩家 <playerId:number> <serverName:text>', '查询玩家')
     .action(async (argv, playerId, serverName) => {
-      commandSearchPlayer(argv, playerId, serverName)
+      return await commandSearchPlayer(argv, playerId, serverName)
     })
 
   ctx.command("查卡 <word:text>", "查卡")
