@@ -63,7 +63,7 @@ export function drawList({
         textImage = createCanvas(0, 0)
     }
     if (key == undefined) {
-        return stackImageHorizontal([createCanvas(20,1),textImage])
+        return stackImageHorizontal([createCanvas(20, 1), textImage])
     }
     var ymax = textImage.height + keyImage.height + 10;
     const canvas = createCanvas(800, ymax);
@@ -139,13 +139,19 @@ export async function drawListByServerList({
 
     for (let i = 0; i < serverList.length; i++) {
         const tempServer = serverList[i];
-        if(tempServer.getContentByServer(content) == null){
+        if (tempServer.getContentByServer(content) == null) {
             continue
-        } 
+        }
         tempcontent.push(await tempServer.getIcon())
         tempcontent.push(tempServer.getContentByServer(content))
         tempcontent.push('\n')
-        
+
+    }
+    if(tempcontent.length == 0){
+        const tempServer = getServerByPriority(content)
+        tempcontent.push(await tempServer.getIcon())
+        tempcontent.push(tempServer.getContentByServer(content))
+        tempcontent.push('\n')
     }
     tempcontent.pop()
     var canvas = drawList({
@@ -171,6 +177,75 @@ export function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
         const element = imageList[i];
         ctx.drawImage(element, x, 0)
         x += 800 / imageList.length
+    }
+    return canvas
+}
+
+//横向组合image/canvas array，居中，超过宽度则换行
+export function drawImageListCenter(imageList: Array<Canvas | Image>,maxWidth = 800): Canvas {
+    interface imageLine {
+        imageList: Array<Canvas | Image>,
+        width: number,
+        height: number
+    }
+    var lineList: Array<imageLine> = []
+    let tempWidth = 0
+    let tempHeight = 0
+    let tempImageList: Array<Canvas | Image> = []
+    //换行函数
+    function newLine() {
+        lineList.push({
+            imageList: tempImageList,
+            width: tempWidth,
+            height: tempHeight
+        })
+        tempWidth = 0
+        tempHeight = 0
+        tempImageList = []
+    }
+    if(imageList.length == 0){
+        return createCanvas(1,10)
+    }
+    //遍历imageList，计算每一行的宽度，高度，imageList
+    for (let i = 0; i < imageList.length; i++) {
+        const element = imageList[i];
+        if(element.width > maxWidth){
+            newLine()
+            tempImageList.push(element)
+            continue
+        }
+        if (tempWidth + element.width > maxWidth) {
+            newLine()
+        }
+        tempWidth += element.width
+        if (element.height > tempHeight) {
+            tempHeight = element.height
+        }
+        tempImageList.push(element)
+    }
+    if(tempImageList.length > 0){//最后一行
+        newLine()
+    }
+    //计算总高度，生成canvas
+    var Height = 0
+    for (let i = 0; i < lineList.length; i++) {
+        const element = lineList[i];
+        Height += element.height
+    }
+    var canvas = createCanvas(800, Height)
+    var ctx = canvas.getContext('2d')
+    //画每一行
+    const middleWidth = 800 / 2
+    var y = 0
+    for (let i = 0; i < lineList.length; i++) {
+        const element = lineList[i];
+        var x = middleWidth - element.width / 2
+        for (let j = 0; j < element.imageList.length; j++) {
+            const image = element.imageList[j];
+            ctx.drawImage(image, x, y)
+            x += image.width
+        }
+        y += element.height
     }
     return canvas
 }
