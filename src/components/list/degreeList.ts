@@ -33,10 +33,10 @@ export async function drawDegreeListInList({
 export async function drawDegreeListOfEvent(event: Event): Promise<Canvas> {
     event.initFull(false)
     var list = []
-    var tempDegreeList = []
+    let tempDegreeList = []
     var server = getServerByPriority(event.rankingRewards)
     let rankingRewards = event.rankingRewards[server]
-    for (var i = 0; i < rankingRewards.length; i++) {
+    for (let i = 0; i < rankingRewards.length; i++) {
         if (rankingRewards[i].rewardType == "degree") {
             tempDegreeList.push(new Degree(rankingRewards[i].rewardId))
         }
@@ -47,29 +47,29 @@ export async function drawDegreeListOfEvent(event: Event): Promise<Canvas> {
         server: server
     }))
     if (event.eventType == "versus" || event.eventType == "challenge" || event.eventType == "medley") {
-        // let rewards = event.musics[i]
-        // for (var i = 0; i < rewards.length; i++) {
-        //     var tempDegreeList = []
-        //     for (var n = 0; n < rewards[i].musicRankingRewards.length; n++) {
-        //         if (rewards[i].musicRankingRewards[n].resourceType == "degree") {
-        //             tempDegreeList.push(new Degree(rewards[i].musicRankingRewards[n].resourceId))
-        //         }
-        //     }
-        //     list.push(await drawDegreeListInList({
-        //         degreeList: tempDegreeList,
-        //         server: server
-        //     }))
-        //     if (event.eventType == "medley") {
-        //         break
-        //     }
-        // }
+        const rewards = event.musics[server]
+        for (let i = 0; i < rewards.length; i++) {
+            let tempDegreeList = []
+            for (let n = 0; n < rewards[i].musicRankingRewards.length; n++) {
+                if (rewards[i].musicRankingRewards[n].resourceType == "degree") {
+                    tempDegreeList.push(new Degree(rewards[i].musicRankingRewards[n].resourceId))
+                }
+            }
+            list.push(await drawDegreeListInList({
+                degreeList: tempDegreeList,
+                server: server
+            }))
+            if (event.eventType == "medley") {
+                break
+            }
+        }
 
     }
     else if (event.eventType == "live_try") {
-        var tempDegreeList = []
-        var data = await event.getData()
-        var rewards = data["masterLiveTryLevelRewardDifficultyMap"][0]["entries"]["normal"]["entries"]
-        for (var j in rewards) {
+        let tempDegreeList = []
+        let data = await event.getData()
+        let rewards = data["masterLiveTryLevelRewardDifficultyMap"][0]["entries"]["normal"]["entries"]
+        for (let j in rewards) {
             if (rewards[j]["resourceType"] == "degree") {
                 tempDegreeList.push(new Degree(rewards[j]["resourceId"]))
             }

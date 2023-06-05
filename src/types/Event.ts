@@ -41,7 +41,16 @@ export class Event {
     }
     musics?: Array<
         Array<
-            { musicID: number }
+            {
+                musicID: number,
+                musicRankingRewards?: Array<{
+                    fromRank: number,
+                    toRank: number,
+                    resourceType: string,
+                    resourceId: number,
+                    quantity: number
+                }>
+            }
         >
         | null>
     rewardCards: Array<number>
