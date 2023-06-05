@@ -46,8 +46,15 @@ export async function drawPlayerDetailBlockWithIllust(player: Player): Promise<C
     list.push(drawImageListCenter([introductionText]))
     list.push(createCanvas(1, 25))
     //玩家ID与服务器
+    let userId:string
+    if(player.profile.publishUserIdFlg){
+        userId = player.profile.userId.toString()
+    }
+    else{
+        userId = 'ID未公开'
+    }
     var idText = drawTextWithImages({
-        content: [await player.server.getIcon(), player.profile.userId.toString()],
+        content: [await player.server.getIcon(),userId ],
         maxWidth: 800,
         textSize: 35
     })
