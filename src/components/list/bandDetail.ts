@@ -62,7 +62,7 @@ export async function drawPlayerBandRankInList(player: Player, key?: string): Pr
 }
 //画玩家信息内stage challenge等级
 export async function drawPlayerStageChallengeRankInList(player: Player, key?: string): Promise<Canvas> {
-    const stageChallengeAchievementConditionsMap = player.profile.stageChallengeAchievementConditionsMap;
+    const stageChallengeAchievementConditionsMap = player.profile.stageChallengeAchievementConditionsMap.entries;
 
     const BandDetails = {};
     for (const band in mainAPI['bands']) {
