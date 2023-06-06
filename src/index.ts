@@ -1,4 +1,4 @@
-import { Context, Schema, h, Session } from 'koishi'
+import { Context, Schema, h, Session, Command } from 'koishi'
 import { commandCard } from './commands/searchCard'
 import { commandEvent } from './commands/searchEvent'
 import { commandSong } from './commands/searchSong'
@@ -7,12 +7,16 @@ import { commandYcx } from './commands/ycx'
 import { commandSearchPlayer } from './commands/searchPlayer'
 import { commandYcxAll } from './commands/ycxAll'
 import { BindingStatus, PlayerBinding, getPlayerBinding, upsertPlayerBinding } from './db/PlayerBinding'
+import { commandGroupSetting } from './commands/groupSetting'
 
 export const name = 'tsugu-bangdream-bot'
 
 declare module 'koishi' {
   interface Tables {
     tsugu_player_data: PlayerBinding
+  }
+  interface Channel {
+    tsugu_gacha: boolean
   }
 }
 export interface Config {
@@ -33,13 +37,22 @@ export function apply(ctx: Context) {
   // 创建玩家绑定数据库
   ctx.model.extend('tsugu_player_data',
     {
-      qq: 'unsigned',
+      id: 'unsigned',
+      user_id: 'unsigned',
+      platform: 'string',
       server_mode: 'unsigned',
+      default_server: 'list',
       car: 'boolean',
       server_list: 'json'
     },
     {
-      primary: 'qq'
+      autoInc: true
+    })
+
+  // 扩展 channel 表存储群聊中的开关
+  ctx.model.extend("channel",
+    {
+      tsugu_gacha: { type: 'boolean', initial: true }
     })
 
   ctx.command('查玩家 <playerId:number> <serverName:text>', '查询玩家')
@@ -71,6 +84,24 @@ export function apply(ctx: Context) {
   ctx.command("ycxall [serverName] [eventId:number]", "ycxall")
     .action(async (argv, serverName, eventId) => {
       return await commandYcxAll(argv, serverName, eventId)
+    })
+
+  ctx.command("抽卡 <word:text>")
+    .channelFields(["tsugu_gacha"])
+    .action(async ({ session }, text) => {
+      const roles = session?.author.roles
+      if (roles.includes('admin') || roles.includes('owner')) {
+        switch (text) {
+          case "on":
+          case "开启":
+            session.channel.tsugu_gacha = true
+            return h.at(session.uid) + "关闭成功"
+          case "off":
+          case "关闭":
+            session.channel.tsugu_gacha = false
+            return h.at(session.uid) + "开启成功"
+        }
+      }
     })
 }
 
