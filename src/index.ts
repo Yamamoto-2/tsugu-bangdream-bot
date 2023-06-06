@@ -1,4 +1,4 @@
-import { Context, Schema, h, Session, Command } from 'koishi'
+import { Context, Schema, h, Session, Command, User } from 'koishi'
 import { commandCard } from './commands/searchCard'
 import { commandEvent } from './commands/searchEvent'
 import { commandSong } from './commands/searchSong'
@@ -6,14 +6,22 @@ import { commandGacha } from './commands/searchGacha'
 import { commandYcx } from './commands/ycx'
 import { commandSearchPlayer } from './commands/searchPlayer'
 import { commandYcxAll } from './commands/ycxAll'
-import { BindingStatus, PlayerBinding, getPlayerBinding, upsertPlayerBinding } from './db/PlayerBinding'
+import { PlayerBinding } from './db/PlayerBinding'
 import { commandGroupSetting } from './commands/groupSetting'
+import { commandBindPlayer } from './commands/bindPlayer'
+import { Server } from './types/Server'
+import { defaultserver } from './config'
 
 export const name = 'tsugu-bangdream-bot'
 
 declare module 'koishi' {
-  interface Tables {
-    tsugu_player_data: PlayerBinding
+  interface User {
+    tsugu_user_id: string,
+    tsugu_platform: string,
+    tsugu_server_mode: Server,
+    tsugu_default_server: Server[],
+    tsugu_car: boolean,
+    tsugu_server_list: Server[]
   }
   interface Channel {
     tsugu_gacha: boolean
@@ -34,30 +42,35 @@ export const Config: Schema<Config> = Schema.object({
 })
 
 export function apply(ctx: Context) {
-  // 创建玩家绑定数据库
-  ctx.model.extend('tsugu_player_data',
+  // 扩展 user 表存储玩家绑定数据
+  ctx.model.extend('user',
     {
-      id: 'unsigned',
-      user_id: 'unsigned',
-      platform: 'string',
-      server_mode: 'unsigned',
-      default_server: 'list',
-      car: 'boolean',
-      server_list: 'json'
+      tsugu_user_id: 'string',
+      tsugu_platform: 'string',
+      tsugu_server_mode: { type: 'unsigned', initial: defaultserver[0] },
+      tsugu_default_server: { type: 'list', initial: defaultserver },
+      tsugu_car: { type: 'boolean', initial: true },
+      tsugu_server_list: { type: 'list', initial: [0, 0, 0, 0, 0] }
     },
     {
       autoInc: true
     })
 
-  // 扩展 channel 表存储群聊中的开关
+  // 扩展 channel 表存储群聊中的查卡开关
   ctx.model.extend("channel",
     {
       tsugu_gacha: { type: 'boolean', initial: true }
     })
 
+
   ctx.command('查玩家 <playerId:number> <serverName:text>', '查询玩家')
     .action(async (argv, playerId, serverName) => {
       return await commandSearchPlayer(argv, playerId, serverName)
+    })
+  ctx.command('绑定玩家 [serverName:text]')
+    .userFields(['tsugu_user_id', 'tsugu_platform', 'tsugu_server_mode', 'tsugu_default_server', 'tsugu_car', 'tsugu_server_list'])
+    .action(async ({ session }, serverName) => {
+      return await commandBindPlayer(session, serverName)
     })
 
   ctx.command("查卡 <word:text>", "查卡")

@@ -27,6 +27,7 @@ export const BestdoriapiPath = { //Bestdori网站的列表api路径
     'rates': '/api/tracker/rates.json',
     'items': '/api/misc/itemtexts.2.json'
 }
+export const bindingPlayerPromptWaitingTime: number = 5 * 60 * 10000
 
 export const Bestdoriurl: string = 'https://bestdori.com'; //Bestdori网站的url
 
