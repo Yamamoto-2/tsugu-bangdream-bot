@@ -12,7 +12,16 @@ export enum Server {
 
 export function getServerByName(name: string): Server {
     // 根据服务器名获取对应服务器
-    const server: Server = Server[name as keyof typeof Server];
+    let server: Server
+    server = Server[name as keyof typeof Server];
+    if (server == undefined) {
+        for (let i = 0; i < serverNameFullList.length; i++) {
+            if (name == serverNameFullList[i]) {
+                server = i
+                break;
+            }
+        }
+    }
     return server
 }
 

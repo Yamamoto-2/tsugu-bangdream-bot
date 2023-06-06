@@ -7,7 +7,7 @@ import { commandYcx } from './commands/ycx'
 import { commandSearchPlayer } from './commands/searchPlayer'
 import { commandYcxAll } from './commands/ycxAll'
 import { commandGroupSetting } from './commands/groupSetting'
-import { commandBindPlayer } from './commands/bindPlayer'
+import { commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer } from './commands/bindPlayer'
 import { Server } from './types/Server'
 import { defaultserver } from './config'
 
@@ -21,7 +21,7 @@ declare module 'koishi' {
       server_mode: Server,
       default_server: Server[],
       car: boolean,
-      server_list: Server[]
+      server_list: number[]
     }
   }
   interface Channel {
@@ -70,6 +70,32 @@ export function apply(ctx: Context) {
     .action(async ({ session }, serverName) => {
       return await commandBindPlayer(session, serverName)
     })
+  ctx.command(`解除绑定 [serverName:text]`)
+    .alias('解绑玩家')
+    .userFields(['tsugu'])
+    .action(async ({ session }, serverName) => {
+      return await commandUnbindPlayer(session, serverName)
+    })
+  ctx.command('服务器模式 <serverName:text>')
+    .alias('切换服务器')
+    .shortcut(/^(.+)模式$/, { args: ['$1'] })
+    .userFields(['tsugu'])
+    .action(async ({ session }, serverName) => {
+      return await commandSwitchServerMode(session, serverName)
+    })
+  ctx.command(`默认服务器 <...serverList>`)
+    .alias('切换默认服务器')
+    .userFields(['tsugu'])
+    .action(async ({ session }, ...serverList) => {
+      return await commandSwitchDefaultServer(session, serverList)
+    })
+  ctx.command('玩家状态 [serverName:text]')
+    .shortcut(/^(.+)玩家状态$/, { args: ['$1'] })
+    .userFields(['tsugu'])
+    .action(async ({ session }, serverName) => {
+      return await commandPlayerInfo(session, serverName)
+    })
+
 
   ctx.command("查卡 <word:text>", "查卡")
     .action(async (argv, text) => {
