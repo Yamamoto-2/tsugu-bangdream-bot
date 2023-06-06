@@ -6,7 +6,6 @@ import { commandGacha } from './commands/searchGacha'
 import { commandYcx } from './commands/ycx'
 import { commandSearchPlayer } from './commands/searchPlayer'
 import { commandYcxAll } from './commands/ycxAll'
-import { PlayerBinding } from './db/PlayerBinding'
 import { commandGroupSetting } from './commands/groupSetting'
 import { commandBindPlayer } from './commands/bindPlayer'
 import { Server } from './types/Server'
@@ -67,7 +66,7 @@ export function apply(ctx: Context) {
       return await commandSearchPlayer(argv, playerId, serverName)
     })
   ctx.command('绑定玩家 [serverName:text]')
-    .userFields(['tsugu_user_id', 'tsugu_platform', 'tsugu_server_mode', 'tsugu_default_server', 'tsugu_car', 'tsugu_server_list'])
+    .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
       return await commandBindPlayer(session, serverName)
     })
