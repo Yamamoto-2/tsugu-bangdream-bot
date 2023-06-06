@@ -16,12 +16,14 @@ export const name = 'tsugu-bangdream-bot'
 
 declare module 'koishi' {
   interface User {
-    tsugu_user_id: string,
-    tsugu_platform: string,
-    tsugu_server_mode: Server,
-    tsugu_default_server: Server[],
-    tsugu_car: boolean,
-    tsugu_server_list: Server[]
+    tsugu: {
+      user_id: string,
+      platform: string,
+      server_mode: Server,
+      default_server: Server[],
+      car: boolean,
+      server_list: Server[]
+    }
   }
   interface Channel {
     tsugu_gacha: boolean
@@ -45,15 +47,12 @@ export function apply(ctx: Context) {
   // 扩展 user 表存储玩家绑定数据
   ctx.model.extend('user',
     {
-      tsugu_user_id: 'string',
-      tsugu_platform: 'string',
-      tsugu_server_mode: { type: 'unsigned', initial: defaultserver[0] },
-      tsugu_default_server: { type: 'list', initial: defaultserver },
-      tsugu_car: { type: 'boolean', initial: true },
-      tsugu_server_list: { type: 'list', initial: [0, 0, 0, 0, 0] }
-    },
-    {
-      autoInc: true
+      'tsugu.user_id': 'string',
+      'tsugu.platform': 'string',
+      'tsugu.server_mode': { type: 'unsigned', initial: defaultserver[0] },
+      'tsugu.default_server': { type: 'list', initial: defaultserver },
+      'tsugu.car': { type: 'boolean', initial: true },
+      'tsugu.server_list': { type: 'list', initial: [0, 0, 0, 0, 0] }
     })
 
   // 扩展 channel 表存储群聊中的查卡开关
