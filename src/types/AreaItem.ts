@@ -42,6 +42,9 @@ export class AreaItem {
             technique: 0,
             visual: 0
         }
+        if(!this.isExist){
+            return emptyStat
+        }
         if (this.targetAttributes.includes(card.attribute) && this.targetBandIds.includes(card.bandId)) {
             var finalStat = {
                 performance: parseInt(this.performance[areaItemLevel][server]) * cardSTat.performance / 100,
