@@ -25,7 +25,7 @@ const typeName = {
     'birthday': '生日限定',
     'event': '活动',
     'others': '其他',
-    'campaign': '选举',
+    'campaign': '联动',
     'dreamfes': '梦幻Fes限定',
     'kirafes': '闪光Fes限定',
 }
