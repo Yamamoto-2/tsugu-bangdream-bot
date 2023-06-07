@@ -9,7 +9,7 @@ import { commandYcxAll } from './commands/ycxAll'
 import { commandGroupSetting } from './commands/groupSetting'
 import { BindingStatus, commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer } from './commands/bindPlayer'
 import { Server } from './types/Server'
-import { defaultserver } from './config'
+import { globalDefaultServer } from './config'
 
 export const name = 'tsugu-bangdream-bot'
 
@@ -53,8 +53,8 @@ export function apply(ctx: Context) {
     {
       'tsugu.user_id': 'string',
       'tsugu.platform': 'string',
-      'tsugu.server_mode': { type: 'unsigned', initial: defaultserver[0] },
-      'tsugu.default_server': { type: 'list', initial: defaultserver },
+      'tsugu.server_mode': { type: 'unsigned', initial: globalDefaultServer[0] },
+      'tsugu.default_server': { type: 'list', initial: globalDefaultServer },
       'tsugu.car': { type: 'boolean', initial: true },
       'tsugu.server_list': {
         type: 'json', initial:
@@ -75,39 +75,38 @@ export function apply(ctx: Context) {
     })
 
 
-  ctx.command('查玩家 <playerId:number> <serverName:text>', '查询玩家')
+  ctx.command('查玩家 <playerId:number> [serverName:text]', '查询玩家')
     .userFields(['tsugu'])
-    .action(async (argv, playerId, serverName) => {
-      return await commandSearchPlayer(argv, playerId, serverName)
+    .action(async ({ session }, playerId, serverName) => {
+      return await commandSearchPlayer(session, playerId, serverName)
     })
   ctx.command('绑定玩家 [serverName:text]')
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
       return await commandBindPlayer(session, serverName)
     })
-  ctx.command(`解除绑定 [serverName:text]`)
+  ctx.command('解除绑定 [serverName:text]', '解绑玩家')
     .option('force', '-f', { fallback: false })
-    .alias('解绑玩家')
     .shortcut('强制解绑玩家', { options: { force: true } })
     .shortcut('强制解除绑定', { options: { force: true } })
     .userFields(['tsugu'])
     .action(async ({ session, options }, serverName) => {
       return await commandUnbindPlayer(session, serverName, options.force)
     })
-  ctx.command('服务器模式 <serverName:text>')
+  ctx.command('服务器模式 <serverName:text>', '服务器模式')
     .alias('切换服务器')
     .shortcut(/^(.+)模式$/, { args: ['$1'] })
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
       return await commandSwitchServerMode(session, serverName)
     })
-  ctx.command(`默认服务器 <...serverList>`)
+  ctx.command('默认服务器 <...serverList>', '默认服务器')
     .alias('切换默认服务器')
     .userFields(['tsugu'])
     .action(async ({ session }, ...serverList) => {
       return await commandSwitchDefaultServer(session, serverList)
     })
-  ctx.command('玩家状态 [serverName:text]')
+  ctx.command('玩家状态 [serverName:text]', '玩家状态')
     .shortcut(/^(.+)玩家状态$/, { args: ['$1'] })
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
@@ -116,29 +115,35 @@ export function apply(ctx: Context) {
 
 
   ctx.command("查卡 <word:text>", "查卡")
-    .action(async (argv, text) => {
-      return await commandCard(argv, text)
+    .userFields(['tsugu'])
+    .action(async ({session}, text) => {
+      return await commandCard(session, text)
     })
   ctx.command("查活动 <word:text>", "查活动")
-    .action(async (argv, text) => {
-      return await commandEvent(argv, text)
+    .userFields(['tsugu'])
+    .action(async ({session}, text) => {
+      return await commandEvent(session, text)
     })
   ctx.command("查曲 <word:text>", "查曲")
-    .action(async (argv, text) => {
-      return await commandSong(argv, text)
+    .userFields(['tsugu'])
+    .action(async ({session}, text) => {
+      return await commandSong(session, text)
     })
   ctx.command("查卡池 <word:text>", "查卡池")
-    .action(async (argv, text) => {
-      return await commandGacha(argv, text)
+    .userFields(['tsugu'])
+    .action(async ({session}, text) => {
+      return await commandGacha(session, text)
     })
 
   ctx.command("ycx <tier:number> [serverName] [eventId:number]", "ycx")
-    .action(async (argv, tier, serverName, eventId) => {
-      return await commandYcx(argv, tier, serverName, eventId)
+    .userFields(['tsugu'])
+    .action(async ({ session }, tier, serverName, eventId) => {
+      return await commandYcx(session, tier, serverName, eventId)
     })
   ctx.command("ycxall [serverName] [eventId:number]", "ycxall")
-    .action(async (argv, serverName, eventId) => {
-      return await commandYcxAll(argv, serverName, eventId)
+    .userFields(['tsugu'])
+    .action(async ({ session }, serverName, eventId) => {
+      return await commandYcxAll(session, serverName, eventId)
     })
 
   ctx.command("抽卡 <word:text>")

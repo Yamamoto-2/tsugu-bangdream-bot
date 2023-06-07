@@ -1,11 +1,11 @@
 import { isInteger } from './utils'
 import { drawGachaDetail } from '../view/gachaDetail'
+import { Session } from 'koishi'
 
-export async function commandGacha(argv: any, text: string) {
+export async function commandGacha(session: Session<'tsugu', never>, text: string) {
     if (!text) {
         return '错误: 请输入卡池ID'
     }
-    console.log(argv)
     if (isInteger(text)) {
         return await drawGachaDetail(parseInt(text))
     }

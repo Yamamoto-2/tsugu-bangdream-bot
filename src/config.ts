@@ -31,7 +31,7 @@ export const bindingPlayerPromptWaitingTime: number = 5 * 60 * 10000
 
 export const Bestdoriurl: string = 'https://bestdori.com'; //Bestdori网站的url
 
-export const defaultserver: Array<Server> = [Server.cn, Server.jp]
+export const globalDefaultServer: Array<Server> = [Server.cn, Server.jp]
 
 export const EazyBG = true //是否使用简易背景，这将大幅提高速度
 
@@ -45,7 +45,7 @@ export const serverNameFullList = [
     '韩服'
 ]
 
-for (let i = 0; i < defaultserver.length; i++) {
-    defaultserverList.push(defaultserver[i])
+for (let i = 0; i < globalDefaultServer.length; i++) {
+    defaultserverList.push(globalDefaultServer[i])
 }
 

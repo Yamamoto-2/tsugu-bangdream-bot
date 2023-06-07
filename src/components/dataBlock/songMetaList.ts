@@ -3,8 +3,8 @@ import { Song, songInRank, getMetaRanking } from "../../types/Song"
 import { drawDatablock } from '../dataBlock'
 import { Image, Canvas, createCanvas } from "canvas"
 import { drawDottedLine } from '../../image/dottedLine'
-import { Server, defaultserverList } from "../../types/Server"
-import { serverNameFullList } from "../../config"
+import { Server } from "../../types/Server"
+import { globalDefaultServer, serverNameFullList } from "../../config"
 
 // 紧凑化虚线分割
 const line = drawDottedLine({
@@ -19,8 +19,9 @@ const line = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawSongMetaListDataBlock(Fever: boolean, song: Song, topLeftText?: string) {
+export async function drawSongMetaListDataBlock(Fever: boolean, song: Song, topLeftText?: string, defaultserverList: Server[] = undefined) {
     var metaRanking = {}
+    if (!defaultserverList) defaultserverList = globalDefaultServer
     for (let i = 0; i < defaultserverList.length; i++) {
         const server = defaultserverList[i];
         metaRanking[server] = {}

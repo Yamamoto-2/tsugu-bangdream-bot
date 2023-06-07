@@ -1,19 +1,20 @@
-import { isInteger } from "koishi"
+import { Session, isInteger } from "koishi"
 import { drawPlayerDetail } from "../view/playerDetail";
 import { Server, getServerByName } from "../types/Server";
 
-export async function commandSearchPlayer(argv: any, playerId: number, serverName: string) {
-    if (!playerId) {
-        return '错误: 请输入卡池ID'
-    }
+export async function commandSearchPlayer(session: Session<'tsugu', never>, playerId: number, serverName: string) {
+    const playerBinding = session.user.tsugu
+    let server: Server
     if (!serverName) {
-        return '错误: 缺少服务器'
+        server = playerBinding.server_mode
     }
-    console.log(argv)
-    var server = getServerByName(serverName)
+    else {
+        server = getServerByName(serverName)
+    }
     if (server == undefined) {
         return '错误: 服务器不存在'
     }
+
     if (isInteger(playerId)) {
         return await drawPlayerDetail(playerId, server)
     }

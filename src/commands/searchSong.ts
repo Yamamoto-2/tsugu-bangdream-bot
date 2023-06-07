@@ -3,8 +3,9 @@ import { fuzzySearch } from "./fuzzySearch"
 import { isInteger } from "./utils"
 import { drawSongDetail } from "../view/songDetail"
 import { Song } from "../types/Song"
+import { Session } from "koishi"
 
-export async function commandSong(argv: any, text: string) {
+export async function commandSong(session: Session<'tsugu', never>, text: string) {
     if (!text) {
         return '错误: 请输入关键词或卡片ID'
     }

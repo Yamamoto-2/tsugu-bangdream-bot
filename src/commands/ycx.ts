@@ -1,25 +1,27 @@
 import { drawCutoffDetail } from '../view/cutoffDetail'
-import { Server, defaultserverList, getServerByName } from '../types/Server';
+import { Server, getServerByName } from '../types/Server';
 import { getPresentEvent } from '../types/Event'
+import { Session } from 'koishi';
 
-export async function commandYcx(argv: any, tier: number, serverName: string, eventId: number) {
+export async function commandYcx(session: Session<'tsugu', never>, tier: number, serverName: string, eventId: number) {
     if (!tier) {
         return '请输入排名'
     }
+    const playerBinding = session.user.tsugu
+    let server: Server
     if (!serverName) {
-        serverName = defaultserverList[0].toString()
+        server = playerBinding.server_mode
     }
     else {
-        let tempServer = getServerByName(serverName)
-        if (tempServer == undefined) {
-            return '请输入正确的服务器'
-        }
+        server = getServerByName(serverName)
     }
-    var server = getServerByName(serverName)
-    console.log(server)
+    if (server == undefined) {
+        return '错误: 服务器不存在'
+    }
+
     if (!eventId) {
         eventId = getPresentEvent(server).eventId
     }
-    return (drawCutoffDetail(eventId, tier, server))
+    return await drawCutoffDetail(eventId, tier, server)
 
 }

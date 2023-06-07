@@ -4,11 +4,10 @@ import { Context, Schema, h, Session } from 'koishi'
 import { isInteger } from './utils'
 import { fuzzySearch } from './fuzzySearch'
 
-export async function commandCard(argv: any, text: string) {
+export async function commandCard(session: Session<'tsugu', never>, text: string) {
     if (!text) {
         return '错误: 请输入关键词或卡片ID'
     }
-    console.log(argv)
     if (isInteger(text)) {
         return await drawCardDetail(parseInt(text))
     }
@@ -18,5 +17,5 @@ export async function commandCard(argv: any, text: string) {
         return '错误: 没有有效的关键词'
     }
     return await drawCardList(fuzzySearchResult)
-     
+
 }

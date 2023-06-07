@@ -1,6 +1,6 @@
 import { downloadFileCache } from '../api/downloadFileCache'
 import { loadImage, Image } from 'canvas'
-import { defaultserver, serverNameFullList } from '../config'
+import { globalDefaultServer, serverNameFullList } from '../config'
 
 //服务器列表，因为有TW而不适用country
 export const serverList: Array<Server> = [0, 1, 2, 3, 4]

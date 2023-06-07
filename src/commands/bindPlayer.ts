@@ -1,5 +1,5 @@
 import { Database, Random, Session, h } from "koishi";
-import { bindingPlayerPromptWaitingTime, defaultserver, serverNameFullList } from "../config";
+import { bindingPlayerPromptWaitingTime, serverNameFullList } from "../config";
 import { Server, getServerByName } from "../types/Server";
 import { Player } from "../types/Player";
 import { drawPlayerDetail } from "../view/playerDetail";
