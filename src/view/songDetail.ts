@@ -4,7 +4,7 @@ import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '.
 import { drawDatablock } from '../components/dataBlock'
 import { Image, Canvas } from 'canvas'
 import { drawTimeInList } from '../components/list/time';
-import { Server, defaultserverList } from '../types/Server';
+import { Server } from '../types/Server';
 import { drawTitle } from '../components/title'
 import { outputFinalBuffer } from '../image/output'
 import { Song } from '../types/Song'
@@ -12,19 +12,16 @@ import { drawSongDataBlock } from '../components/dataBlock/song';
 import { Band } from '../types/Band';
 import { drawEventDatablock } from '../components/dataBlock/event';
 import { drawSongMetaListDataBlock } from '../components/dataBlock/songMetaList'
-import { serverNameFullList } from '../config';
+import { globalDefaultServer, serverNameFullList } from '../config';
 
-export async function drawSongDetail(song: Song): Promise<Element | string> {
+export async function drawSongDetail(song: Song, defaultServerList: Server[] = globalDefaultServer): Promise<Element | string> {
     if (song.isExist == false) {
         return '错误: 歌曲不存在'
     }
     await song.initFull()
     var list: Array<Image | Canvas> = []
     //标题
-    list.push(await drawListByServerList({
-        key: '歌曲名称',
-        content: song.musicTitle
-    }))
+    list.push(await drawListByServerList(song.musicTitle, '歌曲名称'))
     list.push(line)
 
     //歌曲tag(类型)
@@ -40,32 +37,20 @@ export async function drawSongDetail(song: Song): Promise<Element | string> {
 
     //乐队
     var band = new Band(song.bandId)
-    list.push(await drawListByServerList({
-        key: '乐队',
-        content: band.bandName
-    }))
+    list.push(await drawListByServerList(band.bandName, '乐队'))
     list.push(line)
 
     //作词
-    list.push(await drawListByServerList({
-        key: '作词',
-        content: song.detail.lyricist
-    }))
+    list.push(await drawListByServerList(song.detail.lyricist, '作词'))
     list.push(line)
     //作曲
-    list.push(await drawListByServerList({
-        key: '作曲',
-        content: song.detail.composer
-    }))
+    list.push(await drawListByServerList(song.detail.composer, '作曲'))
     list.push(line)
     //编曲
-    list.push(await drawListByServerList({
-        key: '编曲',
-        content: song.detail.arranger
-    }))
+    list.push(await drawListByServerList(song.detail.arranger, '编曲'))
     list.push(line)
     //时长
-    list.push(await drawList({
+    list.push(drawList({
         key: '时长',
         text: formatSeconds(song.length)
     }))
@@ -129,8 +114,8 @@ export async function drawSongDetail(song: Song): Promise<Element | string> {
 
     //相关活动
     var eventIdList = []//防止重复
-    for (var i = 0; i < defaultserverList.length; i++) {
-        var server = defaultserverList[i]
+    for (var i = 0; i < defaultServerList.length; i++) {
+        var server = defaultServerList[i]
         if (song.publishedAt[server] == null) {
             continue
         }

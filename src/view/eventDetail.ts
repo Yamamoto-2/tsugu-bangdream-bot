@@ -1,7 +1,7 @@
 import { h, Element } from 'koishi'
 import { Event } from '../types/Event';
 import { Card } from '../types/Card'
-import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
+import { drawList, line, drawListByServerList, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
 import { drawGachaDatablock } from '../components/dataBlock/gacha'
 import { Image, Canvas, createCanvas } from 'canvas'
@@ -12,15 +12,15 @@ import { drawCharacterInList } from '../components/list/character'
 import { statConfig } from '../components/list/stat'
 import { drawCardListInList } from '../components/list/cardIconList'
 import { getPresentGachaList, Gacha } from '../types/Gacha'
-import { Server, defaultserverList } from '../types/Server';
+import { Server } from '../types/Server';
 import { drawTitle } from '../components/title'
 import { outputFinalBuffer } from '../image/output'
 import { drawDegreeListOfEvent } from '../components/list/degreeList';
 import { Song, getPresentSongList } from '../types/Song'
 import { drawSongListDataBlock } from '../components/dataBlock/songList';
-import { serverNameFullList } from '../config';
+import { globalDefaultServer, serverNameFullList } from '../config';
 
-export async function drawEventDetail(eventId: number): Promise<Element | string> {
+export async function drawEventDetail(eventId: number, defaultServerList: Server[] = globalDefaultServer): Promise<Element | string> {
     const event = new Event(eventId)
     if (!event.isExist) {
         return '错误: 活动不存在'
@@ -35,10 +35,7 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
     list.push(createCanvas(800, 30))
 
     //标题
-    list.push(await drawListByServerList({
-        key: '活动名称',
-        content: event.eventName
-    }))
+    list.push(await drawListByServerList(event.eventName, '活动名称', defaultServerList))
     list.push(line)
 
     //类型
@@ -124,7 +121,7 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
     }
 
     //牌子
-    list.push(await drawDegreeListOfEvent(event))
+    list.push(await drawDegreeListOfEvent(event, defaultServerList))
     list.push(line)
 
     //奖励卡牌
@@ -155,8 +152,8 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
     var gachaImageList: Canvas[] = []
     var gachaIdList: number[] = []//用于去重
     //活动期间卡池卡牌
-    for (var i = 0; i < defaultserverList.length; i++) {
-        var server = defaultserverList[i]
+    for (var i = 0; i < defaultServerList.length; i++) {
+        var server = defaultServerList[i]
         if (event.startAt[server] == null) {
             continue
         }
@@ -201,8 +198,8 @@ export async function drawEventDetail(eventId: number): Promise<Element | string
     all.push(listImage)
 
     //歌曲
-    for (let i = 0; i < defaultserverList.length; i++) {
-        const server = defaultserverList[i];
+    for (let i = 0; i < defaultServerList.length; i++) {
+        const server = defaultServerList[i];
         if (event.startAt[server] == null) {
             continue
         }

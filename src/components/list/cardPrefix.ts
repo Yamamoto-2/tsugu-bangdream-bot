@@ -1,9 +1,9 @@
 import { Card } from '../../types/Card'
 import { Image, loadImage, Canvas, createCanvas } from 'canvas'
-import { assetsRootPath } from '../../config'
+import { assetsRootPath, globalDefaultServer } from '../../config'
 import { Band } from '../../types/Band'
 import { Character } from '../../types/Character'
-import { getServerByPriority } from '../../types/Server'
+import { Server, getServerByPriority } from '../../types/Server'
 import { setFontStyle } from '../text'
 import { drawRoundedRect } from '../../image/drawRect'
 import * as path from 'path'
@@ -19,7 +19,7 @@ async function loadImageOnce() {
 }
 loadImageOnce()
 
-export async function drawCardPrefixInList(card: Card) {
+export async function drawCardPrefixInList(card: Card, defaultServerList: Server[] = globalDefaultServer) {
     const canvas = createCanvas(800, 155)
     const ctx = canvas.getContext('2d')
     ctx.drawImage(prefixBG, 0, 0)
@@ -30,7 +30,7 @@ export async function drawCardPrefixInList(card: Card) {
     ctx.drawImage(bandLogo, 30, 25, 240, bandLogo.height * 240 / bandLogo.width)
 
     //prefix
-    const server = getServerByPriority(card.releasedAt)
+    const server = getServerByPriority(card.releasedAt, defaultServerList)
     ctx.fillStyle = '#5b5b5b'
     ctx.textBaseline = 'hanging'
     ctx.textAlign = 'left'
@@ -39,8 +39,8 @@ export async function drawCardPrefixInList(card: Card) {
 
     //characterName
     const character = new Character(card.characterId)
-    const tempserver = getServerByPriority(character.characterName)
-    const characterName = character.characterName[server]
+    const tempserver = getServerByPriority(character.characterName, defaultServerList)
+    const characterName = character.characterName[tempserver]
     setFontStyle(ctx, 40, 'old')
     ctx.fillText(characterName, 300, 75, 470)
 

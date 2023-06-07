@@ -1,8 +1,9 @@
 import { callAPIAndCacheResponse } from '../api/getApi'
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
-import { getServerByPriority, Server, defaultserverList } from './Server'
+import { getServerByPriority, Server } from './Server'
 import mainAPI from './_Main'
+import { globalDefaultServer } from '../config'
 
 interface difficulty {
     0: "easy",
@@ -158,7 +159,8 @@ export class Song {
     getSongRip(): number {
         return Math.ceil(this.songId / 10) * 10
     }
-    async getSongJacketImage(): Promise<Image> {
+    async getSongJacketImage(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
+        if (!defaultServerList) defaultServerList = globalDefaultServer
         var server = getServerByPriority(this.publishedAt)
         var jacketImageName = this.jacketImage[this.jacketImage.length - 1]
         var jacketImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`)

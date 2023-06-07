@@ -2,16 +2,16 @@ import { h, Element } from 'koishi'
 import { Canvas, createCanvas, Image, loadImage } from "canvas"
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
-import { Server, defaultserverList } from '../types/Server'
+import { Server } from '../types/Server'
 import { Player } from '../types/Player';
 import { drawPlayerDetailBlockWithIllust } from '../components/dataBlock/playerDetail'
 import { assetsRootPath } from '../config'
 import * as path from 'path'
 import { drawPlayerCardInList } from '../components/list/playerCardIconList'
-import { line, drawList, drawListByServerList } from '../components/list'
+import { line, drawList } from '../components/list'
 import { drawStatInList } from '../components/list/stat';
 import { drawDatablock } from '../components/dataBlock';
-import { drawPlayerBandRankInList,drawPlayerStageChallengeRankInList,drawPlayerDeckTotalRatingInList } from '../components/list/bandDetail'
+import { drawPlayerBandRankInList, drawPlayerStageChallengeRankInList, drawPlayerDeckTotalRatingInList } from '../components/list/bandDetail'
 import { drawPlayerDifficultyDetailInList } from '../components/list/difficultyDetail'
 
 let BGDefaultImage: Image
@@ -44,15 +44,15 @@ export async function drawPlayerDetail(playerId: number, server: Server): Promis
 
     //难度完成信息
     if (player.profile.publishMusicClearedFlg) {
-        list.push(drawPlayerDifficultyDetailInList(player,'clearedMusicCount','完成歌曲数'))
+        list.push(drawPlayerDifficultyDetailInList(player, 'clearedMusicCount', '完成歌曲数'))
         list.push(line)
     }
     if (player.profile.publishMusicFullComboFlg) {
-        list.push(drawPlayerDifficultyDetailInList(player,'fullComboMusicCount','FullCombo 歌曲数'))
+        list.push(drawPlayerDifficultyDetailInList(player, 'fullComboMusicCount', 'FullCombo 歌曲数'))
         list.push(line)
     }
     if (player.profile.publishMusicAllPerfectFlg) {
-        list.push(drawPlayerDifficultyDetailInList(player,'allPerfectMusicCount','AllPerfect 歌曲数'))
+        list.push(drawPlayerDifficultyDetailInList(player, 'allPerfectMusicCount', 'AllPerfect 歌曲数'))
         list.push(line)
     }
     //乐队等级
@@ -61,20 +61,20 @@ export async function drawPlayerDetail(playerId: number, server: Server): Promis
         list.push(line)
     }
     //stageChallenge完成情况
-    if(player.profile.publishStageChallengeAchievementConditionsFlg && player.profile.publishStageChallengeFriendRankingFlg){
-        list.push(await drawPlayerStageChallengeRankInList(player,'StageChallenge达成情况'))
+    if (player.profile.publishStageChallengeAchievementConditionsFlg && player.profile.publishStageChallengeFriendRankingFlg) {
+        list.push(await drawPlayerStageChallengeRankInList(player, 'StageChallenge达成情况'))
         list.push(line)
     }
     //乐队编成等级
-    if(player.profile.publishDeckRankFlg){
-        list.push(await drawPlayerDeckTotalRatingInList(player,'乐队编成等级'))
+    if (player.profile.publishDeckRankFlg) {
+        list.push(await drawPlayerDeckTotalRatingInList(player, '乐队编成等级'))
         list.push(line)
     }
     //hsr
-    if(player.profile.publishHighScoreRatingFlg){
+    if (player.profile.publishHighScoreRatingFlg) {
         list.push(drawList({
-            key:'HSR',
-            text:player.calcHSR().toString()
+            key: 'HSR',
+            text: player.calcHSR().toString()
         }))
         list.push(line)
     }

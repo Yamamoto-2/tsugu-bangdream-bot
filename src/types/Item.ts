@@ -3,6 +3,7 @@ import { downloadFileCache } from '../api/downloadFileCache'
 import { Server, getServerByPriority } from './Server';
 
 import mainAPI from './_Main'
+import { globalDefaultServer } from '../config';
 
 const typeNameList = {
     'item_': 'material',
@@ -51,11 +52,12 @@ export class Item {
             }
         }
     }
-    async getItemImage(server?: Server): Promise<Image> {
+    async getItemImage(server?: Server, defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
+        if (!defaultServerList) defaultServerList = globalDefaultServer
         if (server == undefined) {
-            server = getServerByPriority(this.name)
+            server = getServerByPriority(this.name, defaultServerList)
         }
-        server = getServerByPriority(this.name)
+        server = getServerByPriority(this.name, defaultServerList)
         if (this.typeName == 'material') {
             var itemImage = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/thumb/material_rip/${this.typeName}${formatNumber(this.resourceId, 3)}.png`)
         }

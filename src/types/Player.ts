@@ -1,6 +1,6 @@
 import { callAPIAndCacheResponse } from '../api/getApi';
 import { Bestdoriurl } from '../config';
-import { Server, getServerByPriority, defaultserverList } from './Server'
+import { Server } from './Server'
 import { Card, addStat, Stat } from './Card'
 import { AreaItem } from './AreaItem';
 import { Event } from './Event';

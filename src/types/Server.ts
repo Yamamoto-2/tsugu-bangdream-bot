@@ -4,7 +4,7 @@ import { globalDefaultServer, serverNameFullList } from '../config'
 
 //服务器列表，因为有TW而不适用country
 export const serverList: Array<Server> = [0, 1, 2, 3, 4]
-import { serverPriority } from '../config'
+import { globalServerPriority } from '../config'
 
 export enum Server {
     jp, en, tw, cn, kr
@@ -30,13 +30,13 @@ export async function getIcon(server: Server): Promise<Image> {
     return (await loadImage(iconBuffer))
 }
 
-export function getServerByPriority(content: Array<any>): Server {
+export function getServerByPriority(content: Array<any>, defaultServerList: Server[] = globalDefaultServer) {
+    const serverPriority: Server[] = [...new Set([...defaultServerList, ...globalServerPriority])];
     for (let i = 0; i < serverPriority.length; i++) {
-        const tempServer = serverPriority[i]
+        const tempServer = serverPriority[i];
         if (content[tempServer] != null) {
-            return tempServer
+            return tempServer;
         }
     }
+    return undefined;
 }
-
-export const defaultserverList: Array<Server> = []

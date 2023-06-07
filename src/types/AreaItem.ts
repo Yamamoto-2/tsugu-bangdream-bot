@@ -2,7 +2,7 @@ import { callAPIAndCacheResponse } from '../api/getApi';
 import { downloadFile } from '../api/downloadFile';
 import { Bestdoriurl } from '../config';
 import mainAPI from './_Main';
-import { Server, getServerByPriority } from './Server';
+import { Server } from './Server';
 import { Image, loadImage } from 'canvas';
 import { Card, Stat } from './Card';
 
@@ -42,7 +42,7 @@ export class AreaItem {
             technique: 0,
             visual: 0
         }
-        if(!this.isExist){
+        if (!this.isExist) {
             return emptyStat
         }
         if (this.targetAttributes.includes(card.attribute) && this.targetBandIds.includes(card.bandId)) {

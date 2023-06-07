@@ -2,8 +2,9 @@ import { Canvas, Image, createCanvas } from 'canvas';
 import { drawRoundedRectWithText } from '../image/drawRect';
 import { drawText, drawTextWithImages } from './text';
 import { drawDottedLine } from '../image/dottedLine'
-import { Server, getServerByPriority, defaultserverList, getIcon } from '../types/Server'
+import { Server, getServerByPriority, getIcon } from '../types/Server'
 import { stackImageHorizontal } from './utils';
+import { globalDefaultServer } from '../config';
 
 //表格用默认虚线
 export const line: Canvas = drawDottedLine({
@@ -112,19 +113,8 @@ export function drawTips({
     return canvas;
 }
 
-
-interface ListByServerListOptions {
-    key?: string;
-    content: Array<string | null>
-    serverList?: Array<Server>
-}
-
 //通过服务器列表获得内容，服务器icon开头，每一行为服务器对应内容，默认仅日服与简中服
-export async function drawListByServerList({
-    key,
-    content,
-    serverList = defaultserverList
-}: ListByServerListOptions) {
+export async function drawListByServerList(content: Array<string | null>, key: string = undefined, serverList: Server[] = globalDefaultServer) {
     var tempcontent: Array<string | Image | Canvas> = []
     //如果只有2个服务器，且内容相同
     if (serverList.length == 2) {
@@ -148,7 +138,7 @@ export async function drawListByServerList({
 
     }
     if (tempcontent.length == 0) {
-        const tempServer = getServerByPriority(content)
+        const tempServer = getServerByPriority(content, serverList)
         tempcontent.push(await getIcon(tempServer))
         tempcontent.push(content[tempServer])
         tempcontent.push('\n')

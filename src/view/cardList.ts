@@ -11,10 +11,11 @@ import { stackImage, stackImageHorizontal } from '../components/utils'
 import { drawRoundedRect } from "../image/drawRect";
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
-import { defaultserverList } from '../types/Server'
+import { Server } from '../types/Server'
+import { globalDefaultServer } from '../config';
 
 
-export async function drawCardList(matches: { [key: string]: string[] }): Promise<Element | string> {
+export async function drawCardList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer): Promise<Element | string> {
     //计算模糊搜索结果
     var tempCardList: Array<Card> = [];//最终输出的卡牌列表
     var cardIdList: Array<number> = Object.keys(mainAPI['cards']).map(Number);//所有卡牌ID列表
@@ -26,13 +27,13 @@ export async function drawCardList(matches: { [key: string]: string[] }): Promis
         var isMatch = match(matches, tempCard, ['scoreUpMaxValue']);
         //如果在所有所选服务器列表中都不存在，则不输出
         var numberOfNotReleasedServer = 0;
-        for (var j = 0; j < defaultserverList.length; j++) {
-            var server = defaultserverList[j];
+        for (var j = 0; j < defaultServerList.length; j++) {
+            var server = defaultServerList[j];
             if (tempCard.releasedAt[server] == null) {
                 numberOfNotReleasedServer++;
             }
         }
-        if (numberOfNotReleasedServer == defaultserverList.length) {
+        if (numberOfNotReleasedServer == defaultServerList.length) {
             isMatch = false;
         }
         if (isMatch) {
@@ -83,7 +84,7 @@ export async function drawCardList(matches: { [key: string]: string[] }): Promis
                 var tempAttributeCardList = getCardListByAttributeAndCharacterId(tempCardList, attribute, characterId);
                 tempAttributeCardImageList.push(await drawCardListLine(tempAttributeCardList));
                 //画角色头像
-                if(i==0){
+                if (i == 0) {
                     characterIconImageList.push(await drawCharacterIcon(characterId));
                 }
             }

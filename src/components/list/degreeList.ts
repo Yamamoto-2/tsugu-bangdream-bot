@@ -2,9 +2,10 @@ import { drawList } from '../list'
 import { Canvas } from 'canvas'
 import { drawDegree } from '../degree'
 import { Degree } from '../../types/Degree'
-import { Server, defaultserverList, getServerByPriority } from '../../types/Server'
+import { Server, getServerByPriority } from '../../types/Server'
 import { Event } from '../../types/Event'
 import { stackImage } from '../utils'
+import { globalDefaultServer } from '../../config'
 
 interface DegreeListInListOptions {
     key?: string;
@@ -12,11 +13,7 @@ interface DegreeListInListOptions {
     server?: Server;
 }
 
-export async function drawDegreeListInList({
-    key,
-    degreeList,
-    server = defaultserverList[0]
-}: DegreeListInListOptions): Promise<Canvas> {
+export async function drawDegreeListInList(key: string, degreeList: Degree[], server: Server, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     var list: Array<Canvas> = []
     for (let i = 0; i < degreeList.length; i++) {
         const element = degreeList[i];
@@ -30,11 +27,11 @@ export async function drawDegreeListInList({
     })
 }
 
-export async function drawDegreeListOfEvent(event: Event): Promise<Canvas> {
+export async function drawDegreeListOfEvent(event: Event, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     event.initFull(false)
     var list = []
     let tempDegreeList = []
-    var server = getServerByPriority(event.rankingRewards)
+    var server = getServerByPriority(event.rankingRewards, defaultServerList)
     let rankingRewards = event.rankingRewards[server]
     for (let i = 0; i < rankingRewards.length; i++) {
         if (rankingRewards[i].rewardType == "degree") {
@@ -42,11 +39,7 @@ export async function drawDegreeListOfEvent(event: Event): Promise<Canvas> {
             if (tempDegreeList.length >= 3) break
         }
     }
-    list.push(await drawDegreeListInList({
-        key: "活动奖励",
-        degreeList: tempDegreeList,
-        server: server
-    }))
+    list.push(await drawDegreeListInList("活动奖励", tempDegreeList, server))
     if (event.eventType == "versus" || event.eventType == "challenge" || event.eventType == "medley") {
         const rewards = event.musics[server]
         for (let i = 0; i < rewards.length; i++) {
@@ -57,10 +50,7 @@ export async function drawDegreeListOfEvent(event: Event): Promise<Canvas> {
                     if (tempDegreeList.length >= 3) break
                 }
             }
-            list.push(await drawDegreeListInList({
-                degreeList: tempDegreeList,
-                server: server
-            }))
+            list.push(await drawDegreeListInList("", tempDegreeList, server))
             if (event.eventType == "medley") {
                 break
             }
@@ -77,10 +67,7 @@ export async function drawDegreeListOfEvent(event: Event): Promise<Canvas> {
                 if (tempDegreeList.length >= 3) break
             }
         }
-        list.push(await drawDegreeListInList({
-            degreeList: tempDegreeList,
-            server: server
-        }))
+        list.push(await drawDegreeListInList("", tempDegreeList, server))
     }
     return (stackImage(list))
 }

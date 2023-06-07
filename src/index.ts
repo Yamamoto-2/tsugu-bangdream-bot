@@ -116,22 +116,22 @@ export function apply(ctx: Context) {
 
   ctx.command("查卡 <word:text>", "查卡")
     .userFields(['tsugu'])
-    .action(async ({session}, text) => {
+    .action(async ({ session }, text) => {
       return await commandCard(session, text)
     })
   ctx.command("查活动 <word:text>", "查活动")
     .userFields(['tsugu'])
-    .action(async ({session}, text) => {
+    .action(async ({ session }, text) => {
       return await commandEvent(session, text)
     })
   ctx.command("查曲 <word:text>", "查曲")
     .userFields(['tsugu'])
-    .action(async ({session}, text) => {
+    .action(async ({ session }, text) => {
       return await commandSong(session, text)
     })
   ctx.command("查卡池 <word:text>", "查卡池")
     .userFields(['tsugu'])
-    .action(async ({session}, text) => {
+    .action(async ({ session }, text) => {
       return await commandGacha(session, text)
     })
 

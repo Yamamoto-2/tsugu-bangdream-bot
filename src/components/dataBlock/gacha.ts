@@ -1,5 +1,5 @@
 import { Gacha } from "../../types/Gacha";
-import { drawListWithLine, drawListByServerList, drawList } from "../list";
+import { drawListWithLine, drawList } from "../list";
 import { drawDatablock } from '../dataBlock'
 import { drawCharacterInList } from '../list/character'
 import { drawAttributeInList } from "../list/attribute";

@@ -8,6 +8,7 @@ import { Image, loadImage } from 'canvas'
 import { downloadFile } from '../api/downloadFile'
 import { downloadFileCache } from '../api/downloadFileCache'
 import mainAPI from './_Main'
+import { globalDefaultServer } from '../config'
 
 var cardDataCache = {}
 
@@ -237,8 +238,9 @@ export class Card {
         }
         return true
     }
-    getFirstReleasedServer(): Server {//获得确保已经发布了的服务器
-        return getServerByPriority(this.releasedAt)
+    getFirstReleasedServer(defaultServerList: Server[] = globalDefaultServer): Server {//获得确保已经发布了的服务器
+        if (!defaultServerList) defaultServerList = globalDefaultServer
+        return getServerByPriority(this.releasedAt, defaultServerList)
     }
     getRip(): string {
         if (this.cardId < 9999) {//确定目录位置，50为一组

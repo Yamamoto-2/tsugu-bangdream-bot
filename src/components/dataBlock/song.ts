@@ -8,6 +8,7 @@ import { Server, getServerByPriority } from "../../types/Server"
 import { Band } from "../../types/Band"
 import { drawText } from "../text"
 import { drawDifficulityList } from "../list/difficulty"
+import { globalDefaultServer } from "../../config"
 
 // 紧凑化虚线分割
 const line = drawDottedLine({
@@ -22,8 +23,8 @@ const line = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawSongDataBlock(song: Song, text?: string) {
-    var server = getServerByPriority(song.publishedAt)
+export async function drawSongDataBlock(song: Song, text?: string, defaultServerList: Server[] = globalDefaultServer) {
+    var server = getServerByPriority(song.publishedAt, defaultServerList)
     var songJacketImage = await song.getSongJacketImage()
     // 缩放封面
     var songJacketCanvas = resizeImage({

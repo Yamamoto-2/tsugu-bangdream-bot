@@ -4,6 +4,7 @@ import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
 import { Server, getServerByPriority, serverList } from './Server';
 import { Event, getPresentEvent } from './Event';
+import { globalDefaultServer } from '../config';
 
 const typeName = {
     "permanent": "常驻",
@@ -121,12 +122,14 @@ export class Gacha {
             return (this.getGachaLogo())
         }
     }
-    async getGachaBGImage(): Promise<Image> {
+    async getGachaBGImage(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
+        if (!defaultServerList) defaultServerList = globalDefaultServer
         var server = getServerByPriority(this.publishedAt)
         var BGImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/bg.png`)
         return await loadImage(BGImageBuffer)
     }
-    async getGachaLogo(): Promise<Image> {
+    async getGachaLogo(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
+        if (!defaultServerList) defaultServerList = globalDefaultServer
         var server = getServerByPriority(this.publishedAt)
         var LogoImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/logo.png`)
         return await loadImage(LogoImageBuffer)

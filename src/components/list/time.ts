@@ -19,12 +19,12 @@ export async function drawTimeInList({
         }
         formatedTimeList.push(changeTimefomant(element))
     }
-    var canvas = await drawListByServerList({ key, content: formatedTimeList })
+    var canvas = await drawListByServerList(formatedTimeList, key)
     return canvas
 }
 
 export var changeTimefomant = function (timeStamp: number | null) {//时间戳到年月日 精确到分钟
-    if(timeStamp == null){
+    if (timeStamp == null) {
         return '?'
     }
     var date = new Date(Math.floor(timeStamp / 1000) * 1000)

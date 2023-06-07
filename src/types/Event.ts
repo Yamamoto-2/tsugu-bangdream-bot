@@ -1,10 +1,11 @@
 import { callAPIAndCacheResponse } from '../api/getApi';
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
-import { Server, getServerByPriority, defaultserverList } from './Server'
+import { Server, getServerByPriority } from './Server'
 import mainAPI from './_Main';
 import { Attribute } from './Attribute';
 import { Character } from './Character';
+import { globalDefaultServer } from '../config';
 
 var eventDataCache = {}
 
@@ -188,8 +189,9 @@ export class Event {
         var eventData = await callAPIAndCacheResponse(`https://bestdori.com/api/events/${this.eventId}.json`, time);
         return eventData
     }
-    async getBannerImage(): Promise<Image> {
-        var server = getServerByPriority(this.startAt)
+    async getBannerImage(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
+        if (!defaultServerList) defaultServerList = globalDefaultServer
+        var server = getServerByPriority(this.startAt, defaultServerList)
         try {
             var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/homebanner_rip/${this.bannerAssetBundleName}.png`, false)
             return await loadImage(BannerImageBuffer)
@@ -282,10 +284,10 @@ export function getPresentEvent(server: Server, time?: number) {
     return new Event(eventList[eventList.length - 1])
 }
 
-export function sortEventList(tempEventList: Array<Event>) {
+export function sortEventList(tempEventList: Event[], defaultServerList: Server[] = globalDefaultServer) {
     tempEventList.sort((a, b) => {
-        for (var i = 0; i < defaultserverList.length; i++) {
-            var server = defaultserverList[i]
+        for (var i = 0; i < defaultServerList.length; i++) {
+            var server = defaultServerList[i]
             if (a.startAt[server] == null || b.startAt[server] == null) {
                 continue
             }

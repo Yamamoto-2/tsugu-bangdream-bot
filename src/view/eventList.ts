@@ -8,7 +8,7 @@ import { line } from '../components/list';
 import { stackImage, stackImageHorizontal, resizeImage } from '../components/utils'
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
-import { defaultserverList, getIcon } from '../types/Server'
+import { Server, getIcon } from '../types/Server'
 import { Event, sortEventList } from '../types/Event';
 import { drawCardListInList } from '../components/list/cardIconList';
 import { changeTimefomant } from '../components/list/time';
@@ -16,6 +16,7 @@ import { drawTextWithImages } from '../components/text';
 import { getEventGachaAndCardList } from './eventDetail'
 import { drawDottedLine } from '../image/dottedLine'
 import { statConfig } from '../components/list/stat'
+import { globalDefaultServer } from '../config';
 
 const maxHeight = 7000
 
@@ -32,22 +33,22 @@ export const line2: Canvas = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawEventList(matches: { [key: string]: string[] }) {
+export async function drawEventList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer) {
     //计算模糊搜索结果
     var tempEventList: Array<Event> = [];//最终输出的活动列表
     var eventIdList: Array<number> = Object.keys(mainAPI['events']).map(Number);//所有活动ID列表
     for (let i = 0; i < eventIdList.length; i++) {
         const tempEvent = new Event(eventIdList[i]);
         var isMatch = match(matches, tempEvent, []);
-        //如果在所有所选服务器列表中都不存在，则不输出
+        // 如果在所有所选服务器列表中都不存在，则不输出
         var numberOfNotReleasedServer = 0;
-        for (var j = 0; j < defaultserverList.length; j++) {
-            var server = defaultserverList[j];
+        for (var j = 0; j < defaultServerList.length; j++) {
+            var server = defaultServerList[j];
             if (tempEvent.startAt[server] == null) {
                 numberOfNotReleasedServer++;
             }
         }
-        if (numberOfNotReleasedServer == defaultserverList.length) {
+        if (numberOfNotReleasedServer == defaultServerList.length) {
             isMatch = false;
         }
 
@@ -66,7 +67,7 @@ export async function drawEventList(matches: { [key: string]: string[] }) {
     var eventImageListHorizontal: Canvas[] = []
     var tempH = 0
     for (var i = 0; i < tempEventList.length; i++) {
-        var tempImage = await drawEventInList(tempEventList[i])
+        var tempImage = await drawEventInList(tempEventList[i], defaultServerList)
         tempH += tempImage.height
         if (tempH > maxHeight) {
             tempEventImageList.pop()
@@ -99,16 +100,16 @@ export async function drawEventList(matches: { [key: string]: string[] }) {
     return h.image(buffer, 'image/png')
 }
 
-async function drawEventInList(event: Event): Promise<Canvas> {
+async function drawEventInList(event: Event, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     await event.initFull(false)
     var textSize = 25 * 3 / 4;
     var content = []
     //活动类型
     content.push(`ID: ${event.eventId.toString()}  ${await event.getTypeName()}\n`)
     //活动时间
-    var numberOfServer = Math.min(defaultserverList.length, 2)
+    var numberOfServer = Math.min(defaultServerList.length, 2)
     for (var i = 0; i < numberOfServer; i++) {
-        let server = defaultserverList[i]
+        let server = defaultServerList[i]
         content.push(await getIcon(server), `${changeTimefomant(event.startAt[server])} - ${changeTimefomant(event.endAt[server])}\n`)
     }
     //活动加成
@@ -162,8 +163,8 @@ async function drawEventInList(event: Event): Promise<Canvas> {
     //活动期间卡池卡牌
     var cardList: Card[] = []
     var cardIdList: number[] = []//用于去重
-    for (var i = 0; i < defaultserverList.length; i++) {
-        var server = defaultserverList[i]
+    for (var i = 0; i < defaultServerList.length; i++) {
+        var server = defaultServerList[i]
         var EventGachaAndCardList = await getEventGachaAndCardList(event, server)
         var tempGachaCardList = EventGachaAndCardList.gachaCardList
         for (let i = 0; i < tempGachaCardList.length; i++) {

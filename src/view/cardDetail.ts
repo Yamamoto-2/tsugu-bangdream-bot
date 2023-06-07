@@ -1,7 +1,7 @@
 import { h, Element } from 'koishi'
 import { Card } from '../types/Card'
 import { Skill } from '../types/Skill';
-import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
+import { drawList, line, drawListByServerList, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
 import { drawCardIllustration } from '../components/card';
 import { drawSkillInList } from '../components/list/skill'
@@ -13,14 +13,14 @@ import { drawSdcharaInList } from '../components/list/cardSdchara'
 import { drawEventDatablock } from '../components/dataBlock/event';
 import { drawGachaDatablock } from '../components/dataBlock/gacha'
 import { Image, Canvas, createCanvas } from 'canvas'
-import { Server, defaultserverList } from '../types/Server';
+import { Server } from '../types/Server';
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
 import { Event } from '../types/Event';
 import { Gacha } from '../types/Gacha';
-import { serverNameFullList } from '../config';
+import { globalDefaultServer, serverNameFullList } from '../config';
 
-async function drawCardDetail(cardId: number): Promise<Element | string> {
+async function drawCardDetail(cardId: number, defaultServerList: Server[] = globalDefaultServer): Promise<Element | string> {
     const card = new Card(cardId)
     if (!card.isExist) {
         return '错误: 卡牌不存在'
@@ -31,7 +31,7 @@ async function drawCardDetail(cardId: number): Promise<Element | string> {
     var list: Array<Image | Canvas> = []
 
     //标题
-    list.push(await drawCardPrefixInList(card))
+    list.push(await drawCardPrefixInList(card, defaultServerList))
     var trainingStatusList = card.getTrainingStatusList()
     list.push(createCanvas(800, 30))
 
@@ -89,16 +89,13 @@ async function drawCardDetail(cardId: number): Promise<Element | string> {
     list.push(line)
 
     //标题
-    list.push(await drawListByServerList({
-        key: '标题',
-        content: card.prefix,
-    }))
+    list.push(await drawListByServerList(card.prefix, '标题'))
     list.push(line)
 
     //判断是否来自卡池
-    for (let j = 0; j < defaultserverList.length; j++) {
+    for (let j = 0; j < defaultServerList.length; j++) {
         var releaseFromGacha = false
-        var server = defaultserverList[j];
+        var server = defaultServerList[j];
         if (card.releasedAt[server] == null) {
             continue
         }
@@ -107,10 +104,7 @@ async function drawCardDetail(cardId: number): Promise<Element | string> {
             if (Object.prototype.hasOwnProperty.call(sourceOfServer, i)) {
                 if (i == 'gacha' && card.rarity > 2) {
                     //招募语
-                    list.push(await drawListByServerList({
-                        key: '招募语',
-                        content: card.gachaText,
-                    }))
+                    list.push(await drawListByServerList(card.gachaText, '招募语'))
                     list.push(line)
                     releaseFromGacha = true
                     break
@@ -154,8 +148,8 @@ async function drawCardDetail(cardId: number): Promise<Element | string> {
     var tempGachaIdList = []
     var eventImageList: Array<Canvas | Image> = []
     var gachaImageList: Array<Canvas | Image> = []
-    for (let k = 0; k < defaultserverList.length; k++) {
-        let server = defaultserverList[k];
+    for (let k = 0; k < defaultServerList.length; k++) {
+        let server = defaultServerList[k];
         if (card.releaseEvent[server].length != 0) {
             var tempEvent = new Event(card.releaseEvent[server][0])
             if (!tempEventIdList.includes(tempEvent.eventId)) {

@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { Server, defaultserverList } from './types/Server';
+import { Server } from './types/Server';
 
 export const projectRoot: string = path.resolve(path.dirname(__dirname));
 export const assetsRootPath: string = path.join(projectRoot, '/assets');
@@ -35,7 +35,7 @@ export const globalDefaultServer: Array<Server> = [Server.cn, Server.jp]
 
 export const EazyBG = true //是否使用简易背景，这将大幅提高速度
 
-export const serverPriority: Array<Server> = [Server.cn, Server.jp, Server.tw, Server.en, Server.kr]
+export const globalServerPriority: Array<Server> = [Server.cn, Server.jp, Server.tw, Server.en, Server.kr]
 
 export const serverNameFullList = [
     '日服',
@@ -44,8 +44,3 @@ export const serverNameFullList = [
     '国服',
     '韩服'
 ]
-
-for (let i = 0; i < globalDefaultServer.length; i++) {
-    defaultserverList.push(globalDefaultServer[i])
-}
-

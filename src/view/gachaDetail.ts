@@ -1,22 +1,22 @@
 import { h, Element } from 'koishi'
 import { getPresentEvent } from '../types/Event';
 import { Card } from '../types/Card'
-import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
+import { drawList, line, drawListByServerList, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
 import { Image, Canvas, createCanvas } from 'canvas'
 import { drawBannerImageCanvas } from '../components/dataBlock/utils'
 import { drawTimeInList } from '../components/list/time';
 import { drawCardListInList } from '../components/list/cardIconList'
 import { Gacha } from '../types/Gacha'
-import { Server, defaultserverList, getServerByPriority } from '../types/Server';
+import { Server, getServerByPriority } from '../types/Server';
 import { drawTitle } from '../components/title'
 import { outputFinalBuffer } from '../image/output'
 import { drawEventDatablock } from '../components/dataBlock/event';
 import { drawGashaPaymentMethodInList } from '../components/list/gachaPaymentMethod';
 import { drawGachaRateInList } from '../components/list/gachaRate';
-import { serverNameFullList } from '../config';
+import { globalDefaultServer, serverNameFullList } from '../config';
 
-export async function drawGachaDetail(gachaId: number): Promise<Element | string> {
+export async function drawGachaDetail(gachaId: number, defaultServerList: Server[] = globalDefaultServer): Promise<Element | string> {
     const gacha = new Gacha(gachaId)
     if (!gacha.isExist) {
         return '错误: 卡池不存在'
@@ -30,10 +30,7 @@ export async function drawGachaDetail(gachaId: number): Promise<Element | string
     list.push(createCanvas(800, 30))
 
     //标题
-    list.push(await drawListByServerList({
-        key: '卡池名称',
-        content: gacha.gachaName
-    }))
+    list.push(await drawListByServerList(gacha.gachaName, '卡池名称', defaultServerList))
     list.push(line)
 
     //类型
@@ -64,15 +61,12 @@ export async function drawGachaDetail(gachaId: number): Promise<Element | string
     list.push(line)
 
     //描述
-    list.push(await drawListByServerList({
-        key: '描述',
-        content: gacha.description
-    }))
+    list.push(await drawListByServerList(gacha.description, '描述', defaultServerList))
     list.push(line)
 
 
 
-    var server = getServerByPriority(gacha.publishedAt)
+    var server = getServerByPriority(gacha.publishedAt, defaultServerList)
 
     //支付方法
     list.push(await drawGashaPaymentMethodInList(gacha))
@@ -121,8 +115,8 @@ export async function drawGachaDetail(gachaId: number): Promise<Element | string
     var tempEventIdList = []//用于防止重复
     var eventImageList: Array<Canvas | Image> = []
 
-    for (let k = 0; k < defaultserverList.length; k++) {
-        let server = defaultserverList[k]
+    for (let k = 0; k < defaultServerList.length; k++) {
+        let server = defaultServerList[k]
         if (gacha.publishedAt[server] == null) {
             continue
         }

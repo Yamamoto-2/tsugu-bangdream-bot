@@ -5,10 +5,12 @@ import { match } from "../commands/fuzzySearch"
 import { Canvas, createCanvas, Image, loadImage } from "canvas"
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
-import {  drawDatablockHorizontal } from "../components/dataBlock";
+import { drawDatablockHorizontal } from "../components/dataBlock";
 import { drawSongInList } from '../components/list/song';
 import { drawDottedLine } from '../image/dottedLine';
 import { stackImage } from '../components/utils';
+import { Server } from '../types/Server';
+import { globalDefaultServer } from '../config';
 
 const maxHeight = 6000
 
@@ -39,7 +41,7 @@ const line2: Canvas = drawDottedLine({
 })
 
 
-export async function drawSongList(matches: { [key: string]: string[] }) {
+export async function drawSongList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer) {
     // 计算歌曲模糊搜索结果
     var tempSongList: Array<Song> = [];
     var songIdList: Array<number> = Object.keys(mainAPI['songs']).map(Number)
@@ -59,7 +61,7 @@ export async function drawSongList(matches: { [key: string]: string[] }) {
     var songImageListHorizontal: Canvas[] = []
     var tempH = 0;
     for (let i = 0; i < tempSongList.length; i++) {
-        var tempImage = await drawSongInList(tempSongList[i])
+        var tempImage = await drawSongInList(tempSongList[i], undefined, undefined, defaultServerList)
         tempH += tempImage.height
         if (tempH > maxHeight) {
             tempSongImageList.pop()
