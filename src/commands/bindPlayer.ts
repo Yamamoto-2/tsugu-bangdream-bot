@@ -32,12 +32,10 @@ export async function commandBindPlayer(session: Session<'tsugu', never>, server
     // 返回已绑定玩家的信息
     if (curServer.bindingStatus == BindingStatus.Success) {
         const playerId = curServer.gameID
-        await session.send(`你已经绑定了${serverNameFullList[server]}玩家数据: ${playerId}`)
-        const player = new Player(playerId, server)
-        return await drawPlayerDetail(player.playerId, server)
+        return `你已经绑定了${serverNameFullList[server]}玩家数据: ${playerId}`
     }
     else if (curServer.bindingStatus == BindingStatus.Verifying) {
-        return `正在验证玩家信息${curServer.gameID}, 验证码为${curServer.verifyCode}, 请稍后...`
+        return `正在验证玩家信息${curServer.gameID}, 验证码为${curServer.verifyCode}, 请等待验证完成`
     }
 
     // 绑定流程
@@ -106,6 +104,7 @@ export async function commandBindPlayer(session: Session<'tsugu', never>, server
     else if (player.profile.introduction == tempID.toString()) {
         // 修改玩家绑定信息
         // 清除验证码，将绑定状态设为 Success
+        session.send(`绑定${serverNameFullList[server]}玩家${playerId}成功, 正在生成玩家状态图片`)
         playerBinding.platform = session.platform
         playerBinding.user_id = session.userId
         curServer.bindingStatus = BindingStatus.Success
@@ -120,7 +119,7 @@ export async function commandBindPlayer(session: Session<'tsugu', never>, server
     }
 }
 
-export async function commandUnbindPlayer(session: Session<'tsugu', never>, serverName: string) {
+export async function commandUnbindPlayer(session: Session<'tsugu', never>, serverName: string, force: boolean = false) {
     const playerBinding = session.user.tsugu
     let server: Server
     if (!serverName) {
@@ -134,11 +133,20 @@ export async function commandUnbindPlayer(session: Session<'tsugu', never>, serv
     }
     const curServer = playerBinding.server_list[server]
 
-    if (curServer.gameID) {
+    if (curServer.bindingStatus == BindingStatus.Success) {
         curServer.bindingStatus = BindingStatus.None
         curServer.verifyCode = undefined
         curServer.gameID = 0
         return `${serverNameFullList[server]}玩家数据解绑成功`
+    }
+    else if (curServer.bindingStatus != BindingStatus.None && force) {
+        curServer.bindingStatus = BindingStatus.None
+        curServer.verifyCode = undefined
+        curServer.gameID = 0
+        return `成功强制重置${serverNameFullList[server]}玩家绑定状态`
+    }
+    else if (curServer.bindingStatus == BindingStatus.Verifying) {
+        return `玩家数据${curServer.gameID}正在验证中，请等待验证完成`
     }
     else {
         return `错误: 未检测到${serverNameFullList[server]}的玩家数据`

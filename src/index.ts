@@ -86,10 +86,13 @@ export function apply(ctx: Context) {
       return await commandBindPlayer(session, serverName)
     })
   ctx.command(`解除绑定 [serverName:text]`)
+    .option('force', '-f', { fallback: false })
     .alias('解绑玩家')
+    .shortcut('强制解绑玩家', { options: { force: true } })
+    .shortcut('强制解除绑定', { options: { force: true } })
     .userFields(['tsugu'])
-    .action(async ({ session }, serverName) => {
-      return await commandUnbindPlayer(session, serverName)
+    .action(async ({ session, options }, serverName) => {
+      return await commandUnbindPlayer(session, serverName, options.force)
     })
   ctx.command('服务器模式 <serverName:text>')
     .alias('切换服务器')

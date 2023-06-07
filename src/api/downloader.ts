@@ -9,7 +9,7 @@ import {
 import request, { CoreOptions, UrlOptions } from 'request';
 import { join } from 'path';
 import { Parser } from 'xml2js';
-import {cacheRootPath} from '../config';
+import { cacheRootPath } from '../config';
 
 const MAX_RETRY_COUNT = 5;
 const RETRY_WAIT_TIME = 500;
@@ -20,7 +20,7 @@ function sleep(ms: number) {
 }
 
 let lastModifiedCache: any = undefined;
-const cachePath = cacheRootPath+'/lastModifiedCache.json';
+const cachePath = cacheRootPath + '/lastModifiedCache.json';
 function loadLastModifiedCache() {
   if (existsSync(cachePath)) {
     try {
@@ -61,7 +61,7 @@ async function makeRequest(options: RequestOptions, retry = 0) {
         console.log(`${options.url}: ${err}`);
         makeRequest(options, retry + 1).then((body) => {
           resolve(body);
-        });
+        }).catch(reject);
       } else if (res.statusCode == 304) {
         console.log(`不需更新:${options.url}`)
         resolve(null);
@@ -133,7 +133,7 @@ async function download(
     });
     return promise;
   }
-  console.log("不需下载:" + filepath + filename )
+  console.log("不需下载:" + filepath + filename)
   return readFileSync(join(filepath, filename));
 }
 
@@ -145,7 +145,7 @@ async function getJson(url: string, ifmodifiedsince = null) {
   if (ifmodifiedsince) {
     options.headers = { 'If-Modified-Since': ifmodifiedsince };
   }
-  return makeRequest(options);
+  return await makeRequest(options);
 }
 
 // Read from json file if exsits. Use file modified time for If-Modified-Since header

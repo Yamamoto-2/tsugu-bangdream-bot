@@ -241,7 +241,7 @@ export class Player {
             this.initError = true;
             return
         }
-        if (playerData['data']['profile'] == null) {
+        if (!playerData["result"] || playerData['data']['profile'] == null) {
             this.isExist = false;
             return
         }
