@@ -194,6 +194,9 @@ export async function commandSwitchServerMode(session: Session<'tsugu', never>, 
 export async function commandSwitchDefaultServer(session: Session<'tsugu', never>, serverName: string[]) {
     const playerBinding = session.user.tsugu
     const servers = serverName.map(s => getServerByName(s))
+    if (new Set(servers).size != servers.length) {
+        return '错误: 指定了重复的服务器'
+    }
     if (servers.includes(undefined)) {
         return '错误: 指定了不存在的服务器'
     }

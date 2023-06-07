@@ -101,7 +101,7 @@ export function apply(ctx: Context) {
       return await commandSwitchServerMode(session, serverName)
     })
   ctx.command('默认服务器 <...serverList>', '默认服务器')
-    .alias('切换默认服务器')
+    .alias('设置默认服务器')
     .userFields(['tsugu'])
     .action(async ({ session }, ...serverList) => {
       return await commandSwitchDefaultServer(session, serverList)
