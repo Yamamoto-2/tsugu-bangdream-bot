@@ -37,17 +37,17 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
 
     //乐队
     var band = new Band(song.bandId)
-    list.push(await drawListByServerList(band.bandName, '乐队'))
+    list.push(await drawListByServerList(band.bandName, '乐队', defaultServerList))
     list.push(line)
 
     //作词
-    list.push(await drawListByServerList(song.detail.lyricist, '作词'))
+    list.push(await drawListByServerList(song.detail.lyricist, '作词', defaultServerList))
     list.push(line)
     //作曲
-    list.push(await drawListByServerList(song.detail.composer, '作曲'))
+    list.push(await drawListByServerList(song.detail.composer, '作曲', defaultServerList))
     list.push(line)
     //编曲
-    list.push(await drawListByServerList(song.detail.arranger, '编曲'))
+    list.push(await drawListByServerList(song.detail.arranger, '编曲', defaultServerList))
     list.push(line)
     //时长
     list.push(drawList({
@@ -82,7 +82,7 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
     list.push(await drawTimeInList({
         key: '发布时间',
         content: song.publishedAt
-    }))
+    }, defaultServerList))
     list.push(line)
 
     //special难度发布时间
@@ -90,7 +90,7 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
         list.push(await drawTimeInList({
             key: 'special难度发布时间',
             content: song.difficulty['4'].publishedAt
-        }))
+        }, defaultServerList))
     }
 
     //创建最终输出数组
@@ -108,7 +108,7 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
     var ferverStatusList = [true, false]
     for (let j = 0; j < ferverStatusList.length; j++) {
         const feverStatus = ferverStatusList[j];
-        var songMetaListDataBlockImage = await drawSongMetaListDataBlock(feverStatus, song, `${feverStatus ? 'Fever' : '无Fever'}`)
+        var songMetaListDataBlockImage = await drawSongMetaListDataBlock(feverStatus, song, `${feverStatus ? 'Fever' : '无Fever'}`, defaultServerList)
         all.push(songMetaListDataBlockImage)
     }
 

@@ -85,11 +85,11 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
     */
     //技能
     var skill = new Skill(card.skillId)
-    list.push(await drawSkillInList({ key: '技能', card: card, content: skill }))
+    list.push(await drawSkillInList({ key: '技能', card: card, content: skill }, defaultServerList))
     list.push(line)
 
     //标题
-    list.push(await drawListByServerList(card.prefix, '标题'))
+    list.push(await drawListByServerList(card.prefix, '标题', defaultServerList))
     list.push(line)
 
     //判断是否来自卡池
@@ -104,7 +104,7 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
             if (Object.prototype.hasOwnProperty.call(sourceOfServer, i)) {
                 if (i == 'gacha' && card.rarity > 2) {
                     //招募语
-                    list.push(await drawListByServerList(card.gachaText, '招募语'))
+                    list.push(await drawListByServerList(card.gachaText, '招募语', defaultServerList))
                     list.push(line)
                     releaseFromGacha = true
                     break
@@ -122,7 +122,7 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
     list.push(await drawTimeInList({
         key: '发布日期',
         content: card.releasedAt
-    }))
+    }, defaultServerList))
     list.push(line)
 
     //缩略图

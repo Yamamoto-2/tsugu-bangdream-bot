@@ -1,3 +1,5 @@
+import { globalDefaultServer } from '../../config';
+import { Server } from '../../types/Server';
 import { drawListByServerList } from '../list'
 import { Canvas } from 'canvas'
 
@@ -8,8 +10,7 @@ interface timeInListOptions {
 export async function drawTimeInList({
     key,
     content
-}: timeInListOptions
-): Promise<Canvas> {
+}: timeInListOptions, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     var formatedTimeList: Array<string> = []
     for (let i = 0; i < content.length; i++) {
         const element = content[i];
@@ -19,7 +20,7 @@ export async function drawTimeInList({
         }
         formatedTimeList.push(changeTimefomant(element))
     }
-    var canvas = await drawListByServerList(formatedTimeList, key)
+    var canvas = await drawListByServerList(formatedTimeList, key, defaultServerList)
     return canvas
 }
 
