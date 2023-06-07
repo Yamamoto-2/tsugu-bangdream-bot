@@ -7,6 +7,7 @@ import { commandYcx } from './commands/ycx'
 import { commandSearchPlayer } from './commands/searchPlayer'
 import { commandYcxAll } from './commands/ycxAll'
 import { commandGroupSetting } from './commands/groupSetting'
+import {commandGachaSimulate} from './commands/gachaSimulate'
 import { BindingStatus, commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer } from './commands/bindPlayer'
 import { Server } from './types/Server'
 import { globalDefaultServer } from './config'
@@ -163,6 +164,12 @@ export function apply(ctx: Context) {
         }
       }
     })
+    ctx.command('抽卡模拟 [gachaId:number] [times:number]', '抽卡模拟')
+    .userFields(['tsugu'])
+    .action(async ({ session }, gachaId, times) => {
+      return await commandGachaSimulate(session, gachaId, times)
+    }
+    )
 }
 
 
