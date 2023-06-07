@@ -11,9 +11,15 @@ interface DegreeListInListOptions {
     key?: string;
     degreeList: Array<Degree>;
     server?: Server;
+    defaultServerList?: Server[];
 }
 
-export async function drawDegreeListInList(key: string, degreeList: Degree[], server: Server, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
+export async function drawDegreeListInList({
+    degreeList,
+    server,
+    defaultServerList = globalDefaultServer,
+    key
+}: DegreeListInListOptions): Promise<Canvas> {
     var list: Array<Canvas> = []
     for (let i = 0; i < degreeList.length; i++) {
         const element = degreeList[i];
@@ -39,7 +45,9 @@ export async function drawDegreeListOfEvent(event: Event, defaultServerList: Ser
             if (tempDegreeList.length >= 3) break
         }
     }
-    list.push(await drawDegreeListInList("活动奖励", tempDegreeList, server))
+    list.push(await drawDegreeListInList({
+        key: "活动奖励", degreeList: tempDegreeList, server: server
+    }))
     if (event.eventType == "versus" || event.eventType == "challenge" || event.eventType == "medley") {
         const rewards = event.musics[server]
         for (let i = 0; i < rewards.length; i++) {
@@ -50,7 +58,9 @@ export async function drawDegreeListOfEvent(event: Event, defaultServerList: Ser
                     if (tempDegreeList.length >= 3) break
                 }
             }
-            list.push(await drawDegreeListInList("", tempDegreeList, server))
+            list.push(await drawDegreeListInList({
+                degreeList: tempDegreeList, server: server
+            }))
             if (event.eventType == "medley") {
                 break
             }
@@ -67,7 +77,9 @@ export async function drawDegreeListOfEvent(event: Event, defaultServerList: Ser
                 if (tempDegreeList.length >= 3) break
             }
         }
-        list.push(await drawDegreeListInList("", tempDegreeList, server))
+        list.push(await drawDegreeListInList({
+            degreeList: tempDegreeList, server: server
+        }))
     }
     return (stackImage(list))
 }
