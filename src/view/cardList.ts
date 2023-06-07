@@ -7,7 +7,7 @@ import { match } from "../commands/fuzzySearch"
 import { Canvas, createCanvas, Image, loadImage } from "canvas"
 import { drawCardIcon } from "../components/card"
 import { drawDatablock, drawDatablockHorizontal } from '../components/dataBlock';
-import { stackImage } from '../components/utils'
+import { stackImage, stackImageHorizontal } from '../components/utils'
 import { drawRoundedRect } from "../image/drawRect";
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
@@ -56,6 +56,22 @@ export async function drawCardList(matches: { [key: string]: string[] }): Promis
         }
     }
     var cardListImage: Canvas;
+    var characterIconImageList: Canvas[] = [];//角色头像列表，画在最左边
+    //画角色头像Icon函数
+    async function drawCharacterIcon(characterId: number | null): Promise<Canvas> {
+        const tempCanvas = createCanvas(100, 140);
+        const ctx = tempCanvas.getContext('2d');
+        if (characterId == null) {
+            return tempCanvas;
+        }
+        const character = new Character(characterId);
+        const characterIcon = await character.getIcon();
+        ctx.drawImage(characterIcon, 0, 25, 75, 75);
+        return tempCanvas;
+    }
+    characterIdList.sort((a, b) => {
+        return a - b;
+    })
     //如果角色数量大于5，则颜色作为X轴，角色作为Y轴
     if (characterIdList.length > 5) {
         var tempAttributeImageList: Canvas[] = []//每一个颜色的所有角色的列
@@ -66,11 +82,18 @@ export async function drawCardList(matches: { [key: string]: string[] }): Promis
                 const characterId = characterIdList[j];
                 var tempAttributeCardList = getCardListByAttributeAndCharacterId(tempCardList, attribute, characterId);
                 tempAttributeCardImageList.push(await drawCardListLine(tempAttributeCardList));
+                //画角色头像
+                if(i==0){
+                    characterIconImageList.push(await drawCharacterIcon(characterId));
+                }
             }
-            tempAttributeImageList.push(await stackImage(
-                tempAttributeCardImageList));
+            tempAttributeImageList.push(stackImage(
+                tempAttributeCardImageList
+            ));
 
         }
+        const characterIconImage = stackImage(characterIconImageList);
+        tempAttributeImageList.unshift(characterIconImage);
         cardListImage = await drawDatablockHorizontal({
             list: tempAttributeImageList,
         })
@@ -85,11 +108,20 @@ export async function drawCardList(matches: { [key: string]: string[] }): Promis
                 if (tempAttributeCardList.length != 0) {
                     tempCardImageList.push(await drawCardListLine(tempAttributeCardList));
                 }
+                //画角色头像
+                if (j == 0) {
+                    characterIconImageList.push(await drawCharacterIcon(characterId));
+                }
+                else {
+                    characterIconImageList.push(await drawCharacterIcon(null));
+                }
             }
         }
-        cardListImage = await drawDatablock({
-            list: tempCardImageList,
-        })
+        const cardListImageWithoutCharacterIcon = await stackImage(
+            tempCardImageList,
+        )
+        var characterIconImage = stackImage(characterIconImageList);
+        cardListImage = await drawDatablockHorizontal({ list: [characterIconImage, cardListImageWithoutCharacterIcon] });
     }
     var all = []
     all.push(drawTitle('查询', '卡牌列表'))
