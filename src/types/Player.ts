@@ -15,6 +15,7 @@ import { Event } from './Event';
 export class Player {
     playerId: number;
     isExist: boolean = false;
+    initError: boolean = false;
     cache: boolean;
     time: number;
     profile: {
@@ -237,6 +238,7 @@ export class Player {
         }
         catch {
             this.isExist = false;
+            this.initError = true;
             return
         }
         if (playerData['data']['profile'] == null) {

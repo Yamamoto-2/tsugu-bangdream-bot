@@ -7,11 +7,12 @@ import { commandYcx } from './commands/ycx'
 import { commandSearchPlayer } from './commands/searchPlayer'
 import { commandYcxAll } from './commands/ycxAll'
 import { commandGroupSetting } from './commands/groupSetting'
-import { commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer } from './commands/bindPlayer'
+import { BindingStatus, commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer } from './commands/bindPlayer'
 import { Server } from './types/Server'
 import { defaultserver } from './config'
 
 export const name = 'tsugu-bangdream-bot'
+
 
 declare module 'koishi' {
   interface User {
@@ -21,7 +22,11 @@ declare module 'koishi' {
       server_mode: Server,
       default_server: Server[],
       car: boolean,
-      server_list: number[]
+      server_list: {
+        gameID: number,
+        verifyCode?: number,
+        bindingStatus: BindingStatus
+      }[]
     }
   }
   interface Channel {
@@ -51,7 +56,16 @@ export function apply(ctx: Context) {
       'tsugu.server_mode': { type: 'unsigned', initial: defaultserver[0] },
       'tsugu.default_server': { type: 'list', initial: defaultserver },
       'tsugu.car': { type: 'boolean', initial: true },
-      'tsugu.server_list': { type: 'list', initial: [0, 0, 0, 0, 0] }
+      'tsugu.server_list': {
+        type: 'json', initial:
+          [
+            { gameID: 0, bindingStatus: BindingStatus.None },
+            { gameID: 0, bindingStatus: BindingStatus.None },
+            { gameID: 0, bindingStatus: BindingStatus.None },
+            { gameID: 0, bindingStatus: BindingStatus.None },
+            { gameID: 0, bindingStatus: BindingStatus.None }
+          ]
+      }
     })
 
   // 扩展 channel 表存储群聊中的查卡开关
@@ -62,6 +76,7 @@ export function apply(ctx: Context) {
 
 
   ctx.command('查玩家 <playerId:number> <serverName:text>', '查询玩家')
+    .userFields(['tsugu'])
     .action(async (argv, playerId, serverName) => {
       return await commandSearchPlayer(argv, playerId, serverName)
     })
