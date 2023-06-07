@@ -157,9 +157,9 @@ export async function drawCardIllustration({
     var Frame = await getCardIllustrationFrame(card.rarity, card.attribute)
     ctx.drawImage(Frame, 0, 0, 1360, 905)
     var attributeIcon = await new Attribute(card.attribute).getIcon()
-    ctx.drawImage(attributeIcon, 1203, 7, 150, 150)
+    ctx.drawImage(attributeIcon, 1195, 11, 150, 150)
     var bandIcon = await new Band(card.bandId).getIcon()
-    ctx.drawImage(bandIcon, 7, 7, 150, 150)
+    ctx.drawImage(bandIcon, 11, 11, 150, 150)
 
     var star = starList[trainingStatus ? 'trained' : 'normal']
     for (var i = 0; i < card.rarity; i++) {//星星数量
