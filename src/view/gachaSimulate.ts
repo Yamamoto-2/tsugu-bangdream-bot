@@ -15,6 +15,9 @@ import { drawGachaDatablock } from "../components/dataBlock/gacha";
 
 const maxWidth = 230 * 5
 export async function drawRandomGacha(gacha: Gacha, times: number = 10, server: Server): Promise<Element | string> {
+    if (times > 10000) {
+        return '错误: 抽卡次数过多, 请不要超过10000次'
+    }
     await gacha.initFull()
     console.log(gacha.gachaId)
     let gachaImage: Canvas;
@@ -105,12 +108,13 @@ async function drawGachaCard(card: Card, numberOfCard: number = 1) {
             ctx.drawImage(cardIconWithoutId, 35 - ((maxTimes - i + 1) * 4), 20 - ((maxTimes - i + 1) * 4), 180, 180);
         }
         ctx.drawImage(cardIconWithId, 35, 20, 180, 210);
-        ctx.drawImage(drawText({
+        const numberText = drawText({
             text: `x${numberOfCard}`,
             textSize: 30,
             maxWidth: 80,
             color: '#A7A7A7',
-        }), 180, 195);
+        })
+        ctx.drawImage(numberText, 215 - numberText.width, 195);
         return canvas;
     }
     else {
