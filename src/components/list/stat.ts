@@ -27,7 +27,7 @@ export async function drawCardStatInList(card: Card) {
 }
 
 export async function drawStatInList(stat:Stat){
-    const statTotal = stat.performance + stat.technique + stat.visual;
+    const statTotal = Math.floor(stat.performance + stat.technique + stat.visual);
     const statImage = await drawCardStatDivided(stat, statTotal);
     const list = [];
     list.push(drawList({
@@ -44,7 +44,7 @@ async function drawCardStatDivided(stat: Stat, statTotal: number, limitBreakstat
     function drawStatLine(key: string, value: number, total: number): Canvas {
         const canvas = createCanvas(800, 70);
         const ctx = canvas.getContext('2d');
-        let text =  `${statConfig[key].name}: ${value}`;
+        let text =  `${statConfig[key].name}: ${Math.floor(value)}`;
         if (limitBreakstat) {
             text += ` + (${limitBreakstat[key] * 4})`
         }

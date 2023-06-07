@@ -391,9 +391,9 @@ export class Player {
         //相加
         addStat(cardStat, extraStat)
         //将cardStat所有参数向下取整
-        cardStat.performance = Math.floor(cardStat.performance)
-        cardStat.technique = Math.floor(cardStat.technique)
-        cardStat.visual = Math.floor(cardStat.visual)
+        cardStat.performance = cardStat.performance
+        cardStat.technique = cardStat.technique
+        cardStat.visual = cardStat.visual
 
         return cardStat
     }
