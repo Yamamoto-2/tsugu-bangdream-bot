@@ -45,7 +45,7 @@ export async function commandBindPlayer(session: Session<'tsugu', never>, server
     const tempID = curServer.bindingStatus == BindingStatus.None ? rand.int(10000, 99999) : curServer.verifyCode
 
     if (curServer.bindingStatus == BindingStatus.None)
-        await session.send(`请将你的评论(个性签名)改为${tempID}后，发送你的玩家id`)
+        await session.send(`请将你的评论(个性签名)改为${tempID}后，直接发送你的玩家id`)
     else
         await session.send(`你的上次绑定尝试(玩家ID:${curServer.gameID}, 验证码:${curServer.verifyCode})失败，发送\"y\"以自动重试，发送\"n\"以取消`)
 
@@ -196,6 +196,9 @@ export async function commandSwitchDefaultServer(session: Session<'tsugu', never
     const servers = serverName.map(s => getServerByName(s))
     if (new Set(servers).size != servers.length) {
         return '错误: 指定了重复的服务器'
+    }
+    if (servers.length == 0) {
+        return '错误: 请指定至少一个服务器'
     }
     if (servers.includes(undefined)) {
         return '错误: 指定了不存在的服务器'

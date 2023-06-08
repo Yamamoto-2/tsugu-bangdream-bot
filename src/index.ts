@@ -7,7 +7,7 @@ import { commandYcx } from './commands/ycx'
 import { commandSearchPlayer } from './commands/searchPlayer'
 import { commandYcxAll } from './commands/ycxAll'
 import { commandGroupSetting } from './commands/groupSetting'
-import {commandGachaSimulate} from './commands/gachaSimulate'
+import { commandGachaSimulate } from './commands/gachaSimulate'
 import { BindingStatus, commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer } from './commands/bindPlayer'
 import { Server } from './types/Server'
 import { globalDefaultServer } from './config'
@@ -76,17 +76,19 @@ export function apply(ctx: Context) {
     })
 
 
-  ctx.command('查玩家 <playerId:number> [serverName:text]', '查询玩家')
+  ctx.command('查玩家 <playerId:number> [serverName:text]', '查询玩家信息')
+    .alias('查询玩家')
     .userFields(['tsugu'])
     .action(async ({ session }, playerId, serverName) => {
       return await commandSearchPlayer(session, playerId, serverName)
     })
-  ctx.command('绑定玩家 [serverName:text]')
+  ctx.command('绑定玩家 [serverName:text]', '绑定玩家信息')
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
       return await commandBindPlayer(session, serverName)
     })
-  ctx.command('解除绑定 [serverName:text]', '解绑玩家')
+  ctx.command('解除绑定 [serverName:text]', '解除当前服务器的玩家绑定')
+    .alias('解绑玩家')
     .option('force', '-f', { fallback: false })
     .shortcut('强制解绑玩家', { options: { force: true } })
     .shortcut('强制解除绑定', { options: { force: true } })
@@ -96,19 +98,21 @@ export function apply(ctx: Context) {
     })
   ctx.command('服务器模式 <serverName:text>', '服务器模式')
     .alias('切换服务器')
-    .shortcut(/^(.+)模式$/, { args: ['$1'] })
+    .shortcut(/^(.+服)模式$/, { args: ['$1'] })
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
       return await commandSwitchServerMode(session, serverName)
     })
-  ctx.command('默认服务器 <...serverList>', '默认服务器')
-    .alias('设置默认服务器')
+  ctx.command('设置默认服务器 <...serverList>', '设定信息显示中的默认服务器排序')
+    .alias('默认服务器')
+    .usage('使用空格分隔服务器列表，支持服务器的英文缩写(如cn)和中文全名(如日服)')
+    .example('设置默认服务器 国服 日服')
     .userFields(['tsugu'])
     .action(async ({ session }, ...serverList) => {
       return await commandSwitchDefaultServer(session, serverList)
     })
-  ctx.command('玩家状态 [serverName:text]', '玩家状态')
-    .shortcut(/^(.+)玩家状态$/, { args: ['$1'] })
+  ctx.command('玩家状态 [serverName:text]', '查询自己的玩家状态')
+    .shortcut(/^(.+服)玩家状态$/, { args: ['$1'] })
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
       return await commandPlayerInfo(session, serverName)
@@ -136,18 +140,18 @@ export function apply(ctx: Context) {
       return await commandGacha(session, text)
     })
 
-  ctx.command("ycx <tier:number> [serverName] [eventId:number]", "ycx")
+  ctx.command("ycx <tier:number> [serverName] [eventId:number]", "查询指定档位的预测线")
     .userFields(['tsugu'])
     .action(async ({ session }, tier, serverName, eventId) => {
       return await commandYcx(session, tier, serverName, eventId)
     })
-  ctx.command("ycxall [serverName] [eventId:number]", "ycxall")
+  ctx.command("ycxall [serverName] [eventId:number]", "查询所有档位的预测线")
     .userFields(['tsugu'])
     .action(async ({ session }, serverName, eventId) => {
       return await commandYcxAll(session, serverName, eventId)
     })
 
-  ctx.command("抽卡 <word:text>")
+  ctx.command("抽卡 <word:text>", '开关群聊抽卡功能')
     .channelFields(["tsugu_gacha"])
     .action(async ({ session }, text) => {
       const roles = session?.author.roles
@@ -156,20 +160,20 @@ export function apply(ctx: Context) {
           case "on":
           case "开启":
             session.channel.tsugu_gacha = true
-            return h.at(session.uid) + "关闭成功"
+            return h.at(session.userId) + "关闭成功"
           case "off":
           case "关闭":
             session.channel.tsugu_gacha = false
-            return h.at(session.uid) + "开启成功"
+            return h.at(session.userId) + "开启成功"
         }
       }
     })
-    ctx.command('抽卡模拟 [gachaId:number] [times:number]', '抽卡模拟')
+  ctx.command('抽卡模拟 [gachaId:number] [times:number]', '抽卡模拟')
     .userFields(['tsugu'])
+    .channelFields(['tsugu_gacha'])
     .action(async ({ session }, gachaId, times) => {
       return await commandGachaSimulate(session, gachaId, times)
-    }
-    )
+    })
 }
 
 
