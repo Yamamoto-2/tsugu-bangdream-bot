@@ -96,7 +96,7 @@ export function apply(ctx: Context) {
     .action(async ({ session, options }, serverName) => {
       return await commandUnbindPlayer(session, serverName, options.force)
     })
-  ctx.command('服务器模式 <serverName:text>', '服务器模式')
+  ctx.command('服务器模式 <serverName:text>', '设置主服务器')
     .alias('切换服务器')
     .shortcut(/^(.+服)模式$/, { args: ['$1'] })
     .userFields(['tsugu'])
@@ -152,27 +152,30 @@ export function apply(ctx: Context) {
     })
 
   ctx.command("抽卡 <word:text>", '开关群聊抽卡功能')
+    .shortcut('开启抽卡', { args: ['on'] })
+    .shortcut('关闭抽卡', { args: ['off'] })
     .channelFields(["tsugu_gacha"])
+    .userFields(['authority'])
     .action(async ({ session }, text) => {
       const roles = session?.author.roles
-      if (roles.includes('admin') || roles.includes('owner')) {
+      if (session.user.authority > 1 || roles?.includes('admin') || roles?.includes('owner')) {
         switch (text) {
           case "on":
           case "开启":
             session.channel.tsugu_gacha = true
-            return h.at(session.userId) + "关闭成功"
+            return "开启成功"
           case "off":
           case "关闭":
             session.channel.tsugu_gacha = false
-            return h.at(session.userId) + "开启成功"
+            return "关闭成功"
         }
       }
     })
-  ctx.command('抽卡模拟 [gachaId:number] [times:number]', '抽卡模拟')
+  ctx.command('抽卡模拟 [times:number] [gachaId:number]')
     .userFields(['tsugu'])
     .channelFields(['tsugu_gacha'])
-    .action(async ({ session }, gachaId, times) => {
-      return await commandGachaSimulate(session, gachaId, times)
+    .action(async ({ session }, times, gachaId) => {
+      return await commandGachaSimulate(session, times, gachaId)
     })
 }
 
