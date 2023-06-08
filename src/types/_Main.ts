@@ -26,6 +26,12 @@ async function loadMainAPI(useCache: boolean = false) {
     for(var key in skillCNfix){
         mainAPI['skills'][key] = skillCNfix[key]
     }
+    var areaItemFix = await readJSON(path.join(configPath,'areaItemFix.json'))
+    for(var key in areaItemFix){
+        if(mainAPI['areaItems'][key] == undefined){
+            mainAPI['areaItems'][key] = areaItemFix[key]
+        }
+    }
     
 }
 
