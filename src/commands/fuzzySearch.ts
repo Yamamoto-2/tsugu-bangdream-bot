@@ -69,7 +69,7 @@ export function fuzzySearch(keywords: string[]): { [key: string]: string[] } {
             }
           }
           //如果是对象，匹配对象的每一个key
-          if(typeof value == 'object'){
+          if (typeof value == 'object') {
             if (Object.keys(value).includes(keyword)) {
               if (!matches[type]) {
                 matches[type] = [];
@@ -99,13 +99,34 @@ export function match(matches: { [key: string]: string[] }, target: any, numberT
       continue
     }
     if (target[key] != undefined) {
-      if (matches[key].includes(target[key].toString())) {
-        match = true
-        continue
+      //判断target[key]是否为array
+      if (Array.isArray(target[key])) {
+        for (let i = 0; i < target[key].length; i++) {
+          const element = target[key][i];
+          if (matches[key].includes(element.toString())) {
+            match = true
+            continue
+          }
+          if (!matches[key].includes(element.toString())) {
+            match = false
+          }
+        }
+        if(match){
+          continue
+        }
+        else{
+          break
+        }
       }
-      if (!matches[key].includes(target[key].toString())) {
-        match = false
-        break
+      else {
+        if (matches[key].includes(target[key].toString())) {
+          match = true
+          continue
+        }
+        if (!matches[key].includes(target[key].toString())) {
+          match = false
+          break
+        }
       }
     }
   }
