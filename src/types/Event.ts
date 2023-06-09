@@ -6,6 +6,7 @@ import mainAPI from './_Main';
 import { Attribute } from './Attribute';
 import { Character } from './Character';
 import { globalDefaultServer } from '../config';
+import { stringToNumberArray } from './utils'
 
 var eventDataCache = {}
 
@@ -116,8 +117,8 @@ export class Event {
         this.eventType = eventData['eventType'];
         this.eventName = eventData['eventName'];
         this.bannerAssetBundleName = eventData['bannerAssetBundleName'];
-        this.startAt = eventData['startAt'];
-        this.endAt = eventData['endAt'];
+        this.startAt = stringToNumberArray(eventData['startAt']);
+        this.endAt = stringToNumberArray(eventData['endAt']);
         this.attributes = eventData['attributes'];
         this.characters = eventData['characters'];
         this.rewardCards = eventData['rewardCards'];
@@ -157,8 +158,8 @@ export class Event {
         this.eventName = eventData['eventName'];
         this.assetBundleName = eventData['assetBundleName'];
         this.bannerAssetBundleName = eventData['bannerAssetBundleName'];
-        this.startAt = eventData['startAt'];
-        this.endAt = eventData['endAt'];
+        this.startAt = stringToNumberArray(eventData['startAt']);
+        this.endAt = stringToNumberArray(eventData['endAt']);
         this.attributes = eventData['attributes'];
         this.characters = eventData['characters'];
         this.eventAttributeAndCharacterBonus = eventData['eventAttributeAndCharacterBonus'];
@@ -166,8 +167,8 @@ export class Event {
         this.rewardCards = eventData['rewardCards'];
         //other
         //this.enableFlag = eventData['enableFlag'];
-        this.publicStartAt = eventData['publicStartAt'];
-        this.publicEndAt = eventData['publicEndAt'];
+        this.publicStartAt = stringToNumberArray(eventData['publicStartAt']);
+        this.publicEndAt = stringToNumberArray(eventData['publicEndAt']);
         this.pointRewards = eventData['pointRewards'];
         this.rankingRewards = eventData['rankingRewards'];
         /*

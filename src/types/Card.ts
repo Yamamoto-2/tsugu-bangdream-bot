@@ -9,6 +9,7 @@ import { downloadFile } from '../api/downloadFile'
 import { downloadFileCache } from '../api/downloadFileCache'
 import mainAPI from './_Main'
 import { globalDefaultServer } from '../config'
+import {stringToNumberArray} from './utils'
 
 var cardDataCache = {}
 
@@ -95,7 +96,7 @@ export class Card {
         this.levelLimit = cardData['levelLimit']
         this.resourceSetName = cardData['resourceSetName']
         this.prefix = cardData['prefix']
-        this.releasedAt = cardData['releasedAt']
+        this.releasedAt = stringToNumberArray(cardData['releasedAt'])
         this.skillId = cardData['skillId']
         this.stat = cardData['stat']
         var skill = new Skill(this.skillId)
@@ -123,7 +124,7 @@ export class Card {
         this.levelLimit = cardData['levelLimit']
         this.resourceSetName = cardData['resourceSetName']
         this.prefix = cardData['prefix']
-        this.releasedAt = cardData['releasedAt']
+        this.releasedAt =  stringToNumberArray(cardData['releasedAt'])
         */
         this.sdResourceName = cardData['sdResourceName']
         this.costumeId = cardData['costumeId']

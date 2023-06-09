@@ -4,6 +4,7 @@ import { downloadFileCache } from '../api/downloadFileCache'
 import { getServerByPriority, Server } from './Server'
 import mainAPI from './_Main'
 import { globalDefaultServer } from '../config'
+import {stringToNumberArray} from './utils'
 
 interface difficulty {
     0: "easy",
@@ -102,8 +103,8 @@ export class Song {
         this.bandId = songData['bandId']
         this.jacketImage = songData['jacketImage']
         this.musicTitle = songData['musicTitle']
-        this.publishedAt = songData['publishedAt']
-        this.closedAt = songData['closedAt']
+        this.publishedAt =  stringToNumberArray(songData['publishedAt'])
+        this.closedAt =  stringToNumberArray(songData['closedAt'])
         this.difficulty = songData['difficulty']
         this.length = songData['length']
         this.notes = songData['notes']
@@ -133,8 +134,8 @@ export class Song {
         this.bandId = songData['bandId']
         this.jacketImage = songData['jacketImage']
         this.musicTitle = songData['musicTitle']
-        this.publishedAt = songData['publishedAt']
-        this.closedAt = songData['closedAt']
+        this.publishedAt =  stringToNumberArray(songData['publishedAt'])
+        this.closedAt =  stringToNumberArray(songData['closedAt'])
         this.difficulty = songData['difficulty']
         this.length = songData['length']
         this.notes = songData['notes']

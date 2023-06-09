@@ -4,6 +4,7 @@ import { Bestdoriurl, globalDefaultServer } from '../config';
 import mainAPI from './_Main';
 import { Server, getServerByPriority } from './Server';
 import { Image, loadImage } from 'canvas';
+import {stringToNumberArray} from './utils'
 
 export class Costume {
     costumeId: number;
@@ -26,7 +27,7 @@ export class Costume {
         this.characterId = costumeData['characterId'];
         this.assetBundleName = costumeData['assetBundleName'];
         this.description = costumeData['description'];
-        this.publishedAt = costumeData['publishedAt'];
+        this.publishedAt = stringToNumberArray(costumeData['publishedAt']);
     }
     async initFull() {
         //https://bestdori.com/api/costumes/36.json
@@ -36,7 +37,7 @@ export class Costume {
         this.characterId = costumeData['characterId'];
         this.assetBundleName = costumeData['assetBundleName'];
         this.description = costumeData['description'];
-        this.publishedAt = costumeData['publishedAt'];
+        this.publishedAt = stringToNumberArray(costumeData['publishedAt']);
         this.cards = costumeData['cards'];
         this.sdResourceName = costumeData['sdResourceName'];
     }
