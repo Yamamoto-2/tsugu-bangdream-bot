@@ -1,9 +1,9 @@
-import { h, Element } from 'koishi'
+import { h, Element,Session } from 'koishi'
 import { Card } from "../types/Card";
 import mainAPI from "../types/_Main"
 import { match } from "../commands/fuzzySearch"
 import { Canvas, createCanvas, Image, loadImage } from "canvas"
-import { drawDatablockHorizontal } from '../components/dataBlock';
+import { drawDatablock, drawDatablockHorizontal } from '../components/dataBlock';
 import { line } from '../components/list';
 import { stackImage, stackImageHorizontal, resizeImage } from '../components/utils'
 import { drawTitle } from '../components/title';
@@ -19,6 +19,7 @@ import { statConfig } from '../components/list/stat'
 import { globalDefaultServer } from '../config';
 
 const maxHeight = 7000
+const maxColumns = 7
 
 //表格用默认虚线
 export const line2: Canvas = drawDottedLine({
@@ -33,7 +34,7 @@ export const line2: Canvas = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawEventList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer) {
+export async function drawEventList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer,session:Session) {
     //计算模糊搜索结果
     var tempEventList: Array<Event> = [];//最终输出的活动列表
     var eventIdList: Array<number> = Object.keys(mainAPI['events']).map(Number);//所有活动ID列表
@@ -86,18 +87,41 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
     }
     eventImageListHorizontal.pop()
 
-    var eventListImage = await drawDatablockHorizontal({
-        list: eventImageListHorizontal
-    })
 
-    var all = []
-    all.push(drawTitle('查询', '活动列表'))
-    all.push(eventListImage)
-    var buffer = await outputFinalBuffer({
-        imageList: all,
-        useEazyBG: true
-    })
-    return h.image(buffer, 'image/png')
+    if(eventImageListHorizontal.length > maxColumns){
+        let times = 0
+        for (let i = 0; i < eventImageListHorizontal.length; i++) {
+            const tempCanv = eventImageListHorizontal[i];
+            if(tempCanv == line2){
+                continue
+            }
+            const all = []
+            if(times = 0){
+                all.push(drawTitle('查询', '活动列表'))
+            }
+            all.push(await drawDatablock({list:[tempCanv]}))
+            const buffer = await outputFinalBuffer({
+                imageList: all,
+                useEazyBG: true
+            })
+            session.send(h.image(buffer, 'image/png'))  
+            times += 1
+        }
+        return '活动列表过长，已经拆分输出'
+    }else{
+        const all = []
+        const eventListImage = await drawDatablockHorizontal({
+            list: eventImageListHorizontal
+        })
+        all.push(drawTitle('查询', '活动列表'))
+        all.push(eventListImage)
+        const buffer = await outputFinalBuffer({
+            imageList: all,
+            useEazyBG: true
+        })
+        return h.image(buffer, 'image/png')
+    }
+
 }
 
 async function drawEventInList(event: Event, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {

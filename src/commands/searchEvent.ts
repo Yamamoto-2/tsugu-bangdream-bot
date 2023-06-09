@@ -18,6 +18,6 @@ export async function commandEvent(session: Session<'tsugu', never>, text: strin
     if (Object.keys(fuzzySearchResult).length == 0) {
         return '错误: 没有有效的关键词'
     }
-    return await drawEventList(fuzzySearchResult, default_servers)
+    return await drawEventList(fuzzySearchResult, default_servers, session)
 
 }
