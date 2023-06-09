@@ -48,6 +48,17 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
     for (let i = 0; i < songIdList.length; i++) {
         const tempSong = new Song(songIdList[i]);
         var isMatch = match(matches, tempSong, []);
+        //如果在所有所选服务器列表中都不存在，则不输出
+        var numberOfNotReleasedServer = 0;
+        for (var j = 0; j < defaultServerList.length; j++) {
+            var server = defaultServerList[j];
+            if (tempSong.publishedAt[server] == null) {
+                numberOfNotReleasedServer++;
+            }
+        }
+        if (numberOfNotReleasedServer == defaultServerList.length) {
+            isMatch = false;
+        }
         if (isMatch) {
             tempSongList.push(tempSong);
         }
