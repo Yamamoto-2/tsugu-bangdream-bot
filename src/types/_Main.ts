@@ -38,10 +38,10 @@ async function loadMainAPI(useCache: boolean = false) {
 console.log("正在初始化")
 loadMainAPI(true).then(() => {
     console.log("初始化完成")
-    //loadMainAPI()
+    loadMainAPI()
 })
 
 
-//setInterval(loadMainAPI, 1000 * 60 * 5)//5分钟更新一次
+setInterval(loadMainAPI, 1000 * 60 * 5)//5分钟更新一次
 
 export default mainAPI
