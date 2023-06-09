@@ -90,6 +90,7 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
 
     if(eventImageListHorizontal.length > maxColumns){
         let times = 0
+        let tempImageList = []
         for (let i = 0; i < eventImageListHorizontal.length; i++) {
             const tempCanv = eventImageListHorizontal[i];
             if(tempCanv == line2){
@@ -104,9 +105,10 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
                 imageList: all,
                 useEazyBG: true
             })
-            session.send(h.image(buffer, 'image/png'))  
+            tempImageList.push(h.image(buffer, 'image/png'))  
             times += 1
         }
+        session.send(tempImageList)
         return '活动列表过长，已经拆分输出'
     }else{
         const all = []
