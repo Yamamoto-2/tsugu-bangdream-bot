@@ -5,7 +5,7 @@ import { Gacha, getPresentGachaList } from '../types/Gacha';
 export async function commandGachaSimulate(session: Session<'tsugu', 'tsugu_gacha'>, times: number = 10, gachaId?: number) {
     let gacha: Gacha;
     const default_server = session.user.tsugu.default_server[0]
-    if (session.channel.tsugu_gacha) {
+    if (session.channel?.tsugu_gacha || session.subsubtype  == 'private') {
         if (!gachaId) {
             gacha = getPresentGachaList(default_server)[0];
         }
