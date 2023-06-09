@@ -166,6 +166,9 @@ export function getPresentGachaList(server: Server, start: number = Date.now(), 
             const gacha = new Gacha(parseInt(gachaId))
 
             // 检查卡池持续时间是否与start和end有交集
+            if(gacha.publishedAt[server] == null){
+                continue
+            }
             if (gacha.publishedAt[server] <= end && gacha.closedAt[server] >= start) {
                 if (gacha.type == 'special' || gacha.type == 'free') {
                     continue

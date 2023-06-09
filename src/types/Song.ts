@@ -211,6 +211,9 @@ export function getPresentSongList(server: Server, start: number = Date.now(), e
         if (Object.prototype.hasOwnProperty.call(songListMain, songId)) {
             const song = new Song(parseInt(songId))
             // 检查活动的发布时间和结束时间是否在指定范围内
+            if( song.publishedAt[server] == null){
+                continue
+            }
             if (song.publishedAt[server] <= end && song.publishedAt[server] >= start) {
                 songList.push(song)
             }
