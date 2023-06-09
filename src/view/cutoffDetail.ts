@@ -3,7 +3,6 @@ import { Event } from '../types/Event';
 import { drawList, line } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
 import { Image, Canvas, createCanvas } from 'canvas'
-import { drawBannerImageCanvas } from '../components/dataBlock/utils'
 import { changeTimefomant } from '../components/list/time';
 import { Server } from '../types/Server';
 import { drawTitle } from '../components/title'
@@ -11,6 +10,7 @@ import { outputFinalBuffer } from '../image/output'
 import { Cutoff } from "../types/Cutoff";
 import { drawCutoffChart } from '../components/chart/cutoffChat'
 import { serverNameFullList } from '../config';
+import { drawEventDatablock } from '../components/dataBlock/event';
 
 var statusName = {
     'not_start': '未开始',
@@ -29,15 +29,12 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
         return '错误: 活动或档线数据错误'
     }
     */
+    var all = []
+    all.push(drawTitle('预测线', `${serverNameFullList[server]} ${cutoff.tier}档线`))
     console.log(cutoff)
     var list: Array<Image | Canvas> = []
     var event = new Event(eventId)
-
-    //banner
-    var eventBannerImage = await event.getBannerImage()
-    var eventBannerImageCanvas = drawBannerImageCanvas(eventBannerImage)
-    list.push(eventBannerImageCanvas)
-    list.push(createCanvas(800, 30))
+    all.push(await drawEventDatablock(event))
 
     //状态
     var time = new Date().getTime()
@@ -105,8 +102,7 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
 
     //创建最终输出数组
     var listImage = await drawDatablock({ list })
-    var all = []
-    all.push(drawTitle('预测线', `${serverNameFullList[server]} ${cutoff.tier}档线`))
+
     all.push(listImage)
     var buffer = await outputFinalBuffer({
         imageList: all,

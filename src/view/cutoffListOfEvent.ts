@@ -11,6 +11,8 @@ import { outputFinalBuffer } from '../image/output'
 import { Cutoff, tierListOfServer } from "../types/Cutoff";
 import { drawCutoffChart } from '../components/chart/cutoffChat'
 import { serverNameFullList } from '../config';
+import { drawEventDatablock } from '../components/dataBlock/event';
+
 
 var statusName = {
     'not_start': '未开始',
@@ -20,12 +22,11 @@ var statusName = {
 
 export async function drawCutoffListOfEvent(eventId: number, server: Server): Promise<Element | string> {
     var event = new Event(eventId)
+    var all = []
+    all.push(drawTitle('档线列表', `${serverNameFullList[server]}`))
+    all.push(await drawEventDatablock(event))
+
     const list: Array<Image | Canvas> = []
-    //banner
-    var eventBannerImage = await event.getBannerImage()
-    var eventBannerImageCanvas = drawBannerImageCanvas(eventBannerImage)
-    list.push(eventBannerImageCanvas)
-    list.push(createCanvas(800, 30))
     //状态
     var time = new Date().getTime()
     var status = ''
@@ -90,8 +91,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server): Pr
 
     //创建最终输出数组
     var listImage = await drawDatablock({ list })
-    var all = []
-    all.push(drawTitle('档线列表', `${serverNameFullList[server]}`))
+
     all.push(listImage)
     var buffer = await outputFinalBuffer({
         imageList: all,
