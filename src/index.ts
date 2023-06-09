@@ -8,6 +8,7 @@ import { commandSearchPlayer } from './commands/searchPlayer'
 import { commandYcxAll } from './commands/ycxAll'
 import { commandGroupSetting } from './commands/groupSetting'
 import { commandGachaSimulate } from './commands/gachaSimulate'
+import {commandGetCardIllustration} from './commands/getCardIllustration'
 import { BindingStatus, commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer } from './commands/bindPlayer'
 import { Server } from './types/Server'
 import { globalDefaultServer } from './config'
@@ -123,6 +124,11 @@ export function apply(ctx: Context) {
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
       return await commandCard(session, text)
+    })
+  ctx.command('查卡面 <cardId:number>', '查卡面').alias('查卡插画', '查插画')
+    .userFields(['tsugu'])
+    .action(async ({ session }, cardId) => {
+      return await commandGetCardIllustration(session, cardId)
     })
   ctx.command("查活动 <word:text>", "查活动")
     .userFields(['tsugu'])
