@@ -9,6 +9,7 @@ async function loadImageOnce() {
 loadImageOnce()
 
 interface outputFinalOptions {
+    startWithSpace?: boolean;
     imageList: Array<Image | Canvas>;
     useEazyBG?: boolean;
     text?: string;
@@ -17,12 +18,16 @@ interface outputFinalOptions {
 
 //将图片列表从上到下叠在一起输出为一张图片
 export var outputFinalCanv = async function ({ imageList,
+    startWithSpace = true,
     useEazyBG = true,
     text = 'BanG Dream!',
     BGimage = BGDefaultImage
 }: outputFinalOptions
 ): Promise<Canvas> {
-    var allH = 70
+    let allH = 30
+    if(startWithSpace){
+        allH += 50
+    }
     var maxW = 0
     for (var i = 0; i < imageList.length; i++) {
         allH = allH + imageList[i].height
@@ -50,7 +55,10 @@ export var outputFinalCanv = async function ({ imageList,
     }
 
 
-    var allH2 = 50
+    let allH2 = 0
+    if(startWithSpace){
+        allH2 += 50
+    }
     for (var i = 0; i < imageList.length; i++) {
         ctx.drawImage(imageList[i], 0, allH2)
         allH2 = allH2 + imageList[i].height
@@ -64,6 +72,7 @@ export var outputFinalCanv = async function ({ imageList,
 
 //输出为二进制流
 export var outputFinalBuffer = async function ({
+    startWithSpace = true,
     imageList,
     useEazyBG = true,
     text,

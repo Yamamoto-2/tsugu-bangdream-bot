@@ -8,7 +8,9 @@ import { commandSearchPlayer } from './commands/searchPlayer'
 import { commandYcxAll } from './commands/ycxAll'
 import { commandGroupSetting } from './commands/groupSetting'
 import { commandGachaSimulate } from './commands/gachaSimulate'
-import {commandGetCardIllustration} from './commands/getCardIllustration'
+import { commandGetCardIllustration } from './commands/getCardIllustration'
+import { queryRoomNumber } from './commands/roomNumber'
+import { drawRoomList } from './view/roomList'
 import { BindingStatus, commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer } from './commands/bindPlayer'
 import { Server } from './types/Server'
 import { globalDefaultServer } from './config'
@@ -49,6 +51,17 @@ export const Config: Schema<Config> = Schema.object({
   })
 })
 
+//判断左侧是否为数字
+function checkLeftDigits(input: string): number {
+  const digits = input.substring(0, 6);
+  if (/^\d{5}$|^\d{6}$/.test(digits)) {
+    return parseInt(digits, 10);
+  } else {
+    return 0;
+  }
+}
+
+
 export function apply(ctx: Context) {
   // 扩展 user 表存储玩家绑定数据
   ctx.model.extend('user',
@@ -76,6 +89,19 @@ export function apply(ctx: Context) {
       tsugu_gacha: { type: 'boolean', initial: true }
     })
 
+  //判断是否为车牌
+  ctx.middleware(async (session, next) => {
+    const number = checkLeftDigits(session.content)
+    if (number != 0) {
+      await session.observeUser(['tsugu'])
+      await queryRoomNumber(session, number, session.content)
+    }
+  })
+  ctx.command('ycm [keyword:text]', '查询车牌')
+    .alias('有车吗','车来')
+    .action(async ({ session }, keyword) => {
+      return await drawRoomList(session, keyword)
+    })
 
   ctx.command('查玩家 <playerId:number> [serverName:text]', '查询玩家信息')
     .alias('查询玩家')
@@ -151,7 +177,7 @@ export function apply(ctx: Context) {
     .action(async ({ session }, tier, serverName, eventId) => {
       return await commandYcx(session, tier, serverName, eventId)
     })
-  ctx.command("ycxall [serverName] [eventId:number]", "查询所有档位的预测线")
+  ctx.command("ycxall [serverName] [eventId:number]", "查询所有档位的预测线").alias('myycx')
     .userFields(['tsugu'])
     .action(async ({ session }, serverName, eventId) => {
       return await commandYcxAll(session, serverName, eventId)

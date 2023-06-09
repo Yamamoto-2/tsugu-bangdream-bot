@@ -5,7 +5,7 @@ export const projectRoot: string = path.resolve(path.dirname(__dirname));
 export const assetsRootPath: string = path.join(projectRoot, '/assets');
 export const configPath: string = path.join(projectRoot, '/config');
 export const fuzzySearchPath = path.join(configPath, '/fuzzy_search_settings.json');
-export const carKeywordPath = path.join(configPath, '/card_keyword.json');
+export const carKeywordPath = path.join(configPath, '/car_keyword.json');
 
 export const cacheRootPath: string = path.join(projectRoot, '/cache');
 export const BestdoriapiPath = { //Bestdori网站的列表api路径
@@ -30,10 +30,12 @@ export const BestdoriapiPath = { //Bestdori网站的列表api路径
 export const bindingPlayerPromptWaitingTime: number = 5 * 60 * 10000
 
 export const Bestdoriurl: string = 'https://bestdori.com'; //Bestdori网站的url
+export const BandoriStationurl: string = 'https://api.bandoristation.com/'; //BandoriStation网站的url
+export const bandoriStationToken: string = 'ZtV4EX2K9Onb'
 
 export const globalDefaultServer: Array<Server> = [Server.cn, Server.jp]
 
-export const EazyBG = true //是否使用简易背景，这将大幅提高速度
+export const EazyBG = false //是否使用简易背景，这将大幅提高速度
 
 export const globalServerPriority: Array<Server> = [Server.cn, Server.jp, Server.tw, Server.en, Server.kr]
 

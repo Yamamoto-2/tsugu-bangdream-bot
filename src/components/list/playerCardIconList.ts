@@ -4,8 +4,7 @@ import { Canvas } from "canvas";
 import { drawCardIcon } from "../card";
 import {drawList} from '../list'
 
-export async function drawPlayerCardInList(player: Player,key?:string,cardIdVisible = false): Promise<Canvas> {
-    let lineHeight = 184
+export async function drawPlayerCardInList(player: Player,key?:string,cardIdVisible = false,lineHeight = 184): Promise<Canvas> {
     let textSize = lineHeight / 200 * 180
     let spacing = lineHeight / 200 * 13
     if (cardIdVisible) {
