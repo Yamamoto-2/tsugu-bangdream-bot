@@ -24,7 +24,7 @@ export async function commandBindPlayer(session: Session<'tsugu', never>, server
         server = getServerByName(serverName)
     }
     if (server == undefined) {
-        return '错误: 服务器不存在'
+        return '错误: 服务器不存在，请不要在参数中添加玩家ID'
     }
     const curServer = playerBinding.server_list[server]
 
