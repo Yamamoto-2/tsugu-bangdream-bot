@@ -6,6 +6,8 @@ import { Server, getServerByPriority, serverList } from './Server';
 import { Event, getPresentEvent } from './Event';
 import { globalDefaultServer } from '../config';
 
+let gachaDataCache = {}
+
 const typeName = {
     "permanent": "常驻",
     "special": "特殊",
@@ -67,6 +69,8 @@ export class Gacha {
         newMemberInfo: Array<string | null>,
         notice: Array<string | null>,
     }
+    //用于计算
+    pickUpCardId: Array<number>;
 
     constructor(gachaId: number) {
         this.gachaId = gachaId
@@ -85,12 +89,19 @@ export class Gacha {
         this.type = gachaData['type']
         this.newCards = gachaData['newCards']
     }
-    async initFull() {
+    async initFull(update: boolean = true) {
         if (this.isExist == false) {
             return
         }
+        let gachaData: object;
+        if (gachaDataCache[this.gachaId.toString()] != undefined && !update) {
+            gachaData = gachaDataCache[this.gachaId.toString()]
+        }
+        else {
+            gachaData = await this.getData(update)
+        }
+
         this.isExist = true;
-        const gachaData = await this.getData();
         this.resourceName = gachaData['resourceName'];
         this.bannerAssetBundleName = gachaData['bannerAssetBundleName'];
         this.gachaName = gachaData['gachaName'];
@@ -108,9 +119,12 @@ export class Gacha {
         this.gachaPeriod = gachaData['gachaPeriod'];
         this.gachaType = gachaData['gachaType'];
         this.information = gachaData['information'];
+        //加载pickUpCardId
+        this.getGachaPickUpCardId()
     }
-    async getData() {
-        const gachaData = await callAPIAndCacheResponse(`https://bestdori.com/api/gacha/${this.gachaId}.json`)
+    async getData(update: boolean = true) {
+        var time = update ? 0 : 1 / 0
+        const gachaData = await callAPIAndCacheResponse(`https://bestdori.com/api/gacha/${this.gachaId}.json`,time)
         return gachaData
     }
     async getBannerImage(): Promise<Image> {
@@ -153,6 +167,19 @@ export class Gacha {
             return this.type
         }
         return typeName[this.type]
+    }
+    getGachaPickUpCardId() {
+        this.pickUpCardId = []
+        const server = getServerByPriority(this.publishedAt)
+        const details = this.details[server]
+        for (const i in details) {
+            if (Object.prototype.hasOwnProperty.call(details, i)) {
+                const element = details[i];
+                if(element['pickup']){
+                    this.pickUpCardId.push(Number(i))
+                }
+            }
+        }
     }
 }
 

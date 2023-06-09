@@ -251,7 +251,11 @@ export async function getEventGachaAndCardList(event: Event, server: Server) {
     var gachaCardIdList: number[] = []
     for (var i = 0; i < gachaList.length; i++) {
         var tempGacha = gachaList[i]
-        var tempCardList = tempGacha.newCards
+        if (tempGacha.type == 'birthday') {
+            continue
+        }
+        await tempGacha.initFull(false)
+        var tempCardList = tempGacha.pickUpCardId
         /*
         //检查是否有超过7张稀有度2的卡牌，发布了太多2星卡的卡池会被跳过
         var rarity2CardNum = 0
@@ -277,7 +281,7 @@ export async function getEventGachaAndCardList(event: Event, server: Server) {
         var tempCardId = gachaCardIdList[i]
         var tempCard = new Card(tempCardId)
         //如果卡牌的发布时间不在活动期间内，则不显示
-        if (tempCard.releasedAt[server] < event.startAt[server] || tempCard.releasedAt[server] > event.endAt[server]) {
+        if (tempCard.releasedAt[server] < event.startAt[server] - 1000 * 60 * 60 * 24 || tempCard.releasedAt[server] > event.endAt[server]) {
             continue
         }
         gachaCardList.push(tempCard)
