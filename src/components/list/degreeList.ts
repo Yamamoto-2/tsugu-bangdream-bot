@@ -69,12 +69,17 @@ export async function drawDegreeListOfEvent(event: Event, defaultServerList: Ser
     }
     else if (event.eventType == "live_try") {
         let tempDegreeList = []
-        let data = await event.getData()
-        let rewards = data["masterLiveTryLevelRewardDifficultyMap"][0]["entries"]["normal"]["entries"]
-        for (let j in rewards) {
-            if (rewards[j]["resourceType"] == "degree") {
-                tempDegreeList.push(new Degree(rewards[j]["resourceId"]))
-                if (tempDegreeList.length >= 6) break
+        const data = await event.getData()
+        const rewards = data["masterLiveTryLevelRewardDifficultyMap"][0]["entries"]
+        for (const i in rewards) {
+            if (Object.prototype.hasOwnProperty.call(rewards, i)) {
+                const rewardsList = rewards[i]['entries'];
+                for (let j in rewardsList) {
+                    if (rewardsList[j]["resourceType"] == "degree") {
+                        tempDegreeList.push(new Degree(rewardsList[j]["resourceId"]))
+                        if (tempDegreeList.length >= 6) break
+                    }
+                }
             }
         }
         list.push(await drawDegreeListInList({
