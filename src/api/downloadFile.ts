@@ -7,14 +7,14 @@ import * as fs from 'fs';
 
 const errUrl: string[] = [];
 
-async function downloadFile(url: string, IgnoreErr: boolean = true): Promise<Buffer> {
+async function downloadFile(url: string, IgnoreErr: boolean = true, overWrite = false): Promise<Buffer> {
   try {
     if (errUrl.includes(url)) {
       throw new Error("downloadFile: errUrl.includes(url)");
     }
     const cacheDir = getCacheDirectory(url);
     const fileName = getFileNameFromUrl(url);
-    const data = await download(url, cacheDir, fileName, false);
+    const data = await download(url, cacheDir, fileName, overWrite);
     return data as Buffer;
   } catch (e) {
     errUrl.push(url);
