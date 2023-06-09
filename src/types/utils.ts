@@ -5,7 +5,9 @@ export function stringToNumberArray(stringArray: Array<string | null>): number[]
         if (stringArray[i] == null) {
             numberArray.push(null)
         }
-        numberArray.push(Number(stringArray[i]))
+        else{
+            numberArray.push(Number(stringArray[i]))
+        }
     }
     return numberArray
 }
