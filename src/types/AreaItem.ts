@@ -47,9 +47,9 @@ export class AreaItem {
         }
         if (this.targetAttributes.includes(card.attribute) && this.targetBandIds.includes(card.bandId)) {
             var finalStat = {
-                performance: parseInt(this.performance[areaItemLevel][server]) * cardSTat.performance / 100,
-                technique: parseInt(this.technique[areaItemLevel][server]) * cardSTat.technique / 100,
-                visual: parseInt(this.visual[areaItemLevel][server]) * cardSTat.visual / 100
+                performance: this.performance[areaItemLevel.toString()][server] * cardSTat.performance / 100,
+                technique: this.technique[areaItemLevel.toString()][server] * cardSTat.technique / 100,
+                visual: this.visual[areaItemLevel.toString()][server] * cardSTat.visual / 100
             }
             return finalStat
         }
