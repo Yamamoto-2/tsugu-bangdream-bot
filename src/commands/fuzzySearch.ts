@@ -93,7 +93,7 @@ export function match(matches: { [key: string]: string[] }, target: any, numberT
   if (Object.keys(matches).length == 0) {
     return true
   }
-  var match = false
+  let match = false
   for (var key in matches) {
     if (key == 'number') {
       continue
@@ -101,20 +101,20 @@ export function match(matches: { [key: string]: string[] }, target: any, numberT
     if (target[key] != undefined) {
       //判断target[key]是否为array
       if (Array.isArray(target[key])) {
+        let matchArray = false
         for (let i = 0; i < target[key].length; i++) {
           const element = target[key][i];
           if (matches[key].includes(element.toString())) {
-            match = true
-            continue
-          }
-          if (!matches[key].includes(element.toString())) {
-            match = false
+            matchArray = true
+            break
           }
         }
-        if(match){
+        if (matchArray) {
+          match = true
           continue
         }
-        else{
+        else {
+          match = false
           break
         }
       }

@@ -100,9 +100,9 @@ export class Event {
     } = {}
 
     //以下用于模糊搜索
-    characterId: string[] = []
-    attribute: string[] = []
-    bandId: string[] = []
+    characterId: string[] 
+    attribute: string[] 
+    bandId: string[] 
 
 
 
@@ -123,15 +123,18 @@ export class Event {
         this.characters = eventData['characters'];
         this.rewardCards = eventData['rewardCards'];
         //用于模糊搜索
+        this.characterId =[]
         for (let i = 0; i < this.characters.length; i++) {
             const element = this.characters[i];
             this.characterId.push(element.characterId.toString())
         }
+        this.attribute =[]
         for (let i = 0; i < this.attributes.length; i++) {
             const element = this.attributes[i];
             this.attribute.push(element.attribute)
         }
         //如果所有character来自同一个band，则bandId为该bandId
+        this.bandId = []
         let isSameBand = true
         for (var i = 0; i < this.characters.length; i++) {
             if (new Character(this.characters[i].characterId).bandId != new Character(this.characters[0].characterId).bandId) {
