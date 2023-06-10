@@ -290,5 +290,13 @@ export async function getEventGachaAndCardList(event: Event, server: Server) {
     gachaCardList.sort((a, b) => {
         return a.rarity - b.rarity
     })
+    gachaList.sort((a, b) => {
+        if( a.publishedAt[server] != b.publishedAt[server]){
+            return a.publishedAt[server] - b.publishedAt[server]
+        }
+        else{
+            return a.gachaId - b.gachaId
+        }
+    })
     return { gachaCardList, gachaList }
 }

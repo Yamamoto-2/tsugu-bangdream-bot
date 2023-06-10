@@ -158,7 +158,18 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
             }
         }
         if (card.releaseGacha[server].length != 0) {
-            var tempGacha = new Gacha(card.releaseGacha[server][0])
+            const gachaIdList = card.releaseGacha[server]
+            gachaIdList.sort((a, b) => {
+                const gachaA = new Gacha(a);
+                const gachaB = new Gacha(b);
+                if(gachaA.publishedAt[server] != gachaB.publishedAt[server]){
+                    return gachaA.publishedAt[server] - gachaB.publishedAt[server];
+                }
+                else{
+                    return gachaA.gachaId - gachaB.gachaId;
+                }
+            })
+            var tempGacha = new Gacha(gachaIdList[0])
             var tempEventId = tempGacha.getEventId()[server]
             if (tempEventId != null) {
                 var tempEvent = new Event(tempEventId)
