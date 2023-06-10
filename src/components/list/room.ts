@@ -105,13 +105,20 @@ async function drawPlayerDetailInRoomList(player: Player) {
     ctx.drawImage(cardIconList, -20, 10)
     //画综合力
     const stat = await player.calcStat()
-    const statText = drawText({
-        text: `综合力: ${Math.floor(stat.performance + stat.technique + stat.visual)}`,
+    let statText:string
+    if(player.profile.publishTotalDeckPowerFlg){
+        statText = `综合力: ${Math.floor(stat.performance + stat.technique + stat.visual)}`
+    }
+    else{
+        statText = `综合力: 未公开`
+    }
+    const statTextImage = drawText({
+        text: statText,
         textSize: 30,
         lineHeight: 50,
         maxWidth: 400
     })
-    ctx.drawImage(statText, 800 - statText.width, 0)
+    ctx.drawImage(statTextImage, 800 - statTextImage.width, 0)
 
     //画牌子
     var degreeImageList: Array<Canvas | Image> = []

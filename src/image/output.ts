@@ -79,6 +79,7 @@ export var outputFinalBuffer = async function ({
     BGimage
 }: outputFinalOptions): Promise<Buffer> {
     var tempcanv = await outputFinalCanv({
+        startWithSpace,
         imageList,
         useEazyBG,
         text,
