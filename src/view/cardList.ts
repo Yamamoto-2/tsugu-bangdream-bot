@@ -134,18 +134,20 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         var tempCardImageList: Canvas[] = []//总列
         for (let i = 0; i < characterIdList.length; i++) {
             const characterId = characterIdList[i];
+            let icon = true
             for (let j = 0; j < attributeList.length; j++) {
                 const attribute = attributeList[j];
                 var tempAttributeCardList = getCardListByAttributeAndCharacterId(tempCardList, attribute, characterId);
                 if (tempAttributeCardList.length != 0) {
                     tempCardImageList.push(await drawCardListLine(tempAttributeCardList));
-                }
-                //画角色头像
-                if (j == 0) {
-                    characterIconImageList.push(await drawCharacterIcon(characterId));
-                }
-                else {
-                    characterIconImageList.push(await drawCharacterIcon(null));
+                    //画角色头像
+                    if (icon) {
+                        characterIconImageList.push(await drawCharacterIcon(characterId));
+                        icon = false
+                    }
+                    else {
+                        characterIconImageList.push(await drawCharacterIcon(null));
+                    }
                 }
             }
         }
