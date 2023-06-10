@@ -1,4 +1,4 @@
-import { h, Element } from 'koishi'
+import { h, Element, Session } from 'koishi'
 import { Card } from "../types/Card";
 import { Attribute } from "../types/Attribute";
 import { Character } from "../types/Character";
@@ -14,8 +14,9 @@ import { outputFinalBuffer } from '../image/output'
 import { Server } from '../types/Server'
 import { globalDefaultServer } from '../config';
 
+const maxWidth = 7000
 
-export async function drawCardList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer): Promise<Element | string> {
+export async function drawCardList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer, session: Session): Promise<Element | string> {
     //计算模糊搜索结果
     var tempCardList: Array<Card> = [];//最终输出的卡牌列表
     var cardIdList: Array<number> = Object.keys(mainAPI['cards']).map(Number);//所有卡牌ID列表
@@ -98,6 +99,36 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         cardListImage = await drawDatablockHorizontal({
             list: tempAttributeImageList,
         })
+        if (cardListImage.width > maxWidth) {
+            let times = 0
+            let tempImageList = []
+
+            for (let i = 0; i < tempAttributeImageList.length; i++) {
+
+                const tempCanv = tempAttributeImageList[i];
+                if (tempCanv == characterIconImage) {
+                    continue
+                }
+                const all = []
+                all.push(await drawDatablockHorizontal({ list: [characterIconImage, tempCanv] }))
+                const buffer = await outputFinalBuffer({
+                    imageList: all,
+                    useEazyBG: true
+                })
+                tempImageList.push(h.image(buffer, 'image/png'))
+                times += 1
+            }
+            session.send(tempImageList)
+            return '卡牌列表过长，已经拆分输出'
+        }
+        var all = []
+        all.push(drawTitle('查询', '卡牌列表'))
+        all.push(cardListImage)
+        var buffer = await outputFinalBuffer({
+            imageList: all,
+            useEazyBG: true
+        })
+        return h.image(buffer, 'image/png')
     }
     else {
         var tempCardImageList: Canvas[] = []//总列
@@ -123,15 +154,16 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         )
         var characterIconImage = stackImage(characterIconImageList);
         cardListImage = await drawDatablockHorizontal({ list: [characterIconImage, cardListImageWithoutCharacterIcon] });
+        var all = []
+        all.push(drawTitle('查询', '卡牌列表'))
+        all.push(cardListImage)
+        var buffer = await outputFinalBuffer({
+            imageList: all,
+            useEazyBG: true
+        })
+        return h.image(buffer, 'image/png')
     }
-    var all = []
-    all.push(drawTitle('查询', '卡牌列表'))
-    all.push(cardListImage)
-    var buffer = await outputFinalBuffer({
-        imageList: all,
-        useEazyBG: true
-    })
-    return h.image(buffer, 'image/png')
+
 
 }
 
