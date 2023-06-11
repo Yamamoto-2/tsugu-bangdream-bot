@@ -1,6 +1,5 @@
 import { h, Element } from 'koishi'
 import { Canvas, createCanvas, Image, loadImage } from "canvas"
-import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
 import { Server } from '../types/Server'
 import { Player } from '../types/Player';
@@ -8,7 +7,7 @@ import { drawPlayerDetailBlockWithIllust } from '../components/dataBlock/playerD
 import { assetsRootPath } from '../config'
 import * as path from 'path'
 import { drawPlayerCardInList } from '../components/list/playerCardIconList'
-import { line, drawList } from '../components/list'
+import { line, drawList, drawTipsInList} from '../components/list'
 import { drawStatInList } from '../components/list/stat';
 import { drawDatablock } from '../components/dataBlock';
 import { drawPlayerBandRankInList, drawPlayerStageChallengeRankInList, drawPlayerDeckTotalRatingInList } from '../components/list/bandDetail'
@@ -39,6 +38,9 @@ export async function drawPlayerDetail(playerId: number, server: Server): Promis
     if (player.profile.publishTotalDeckPowerFlg) {
         var stat = await player.calcStat()
         list.push(await drawStatInList(stat))
+        list.push(drawTipsInList({
+            text:'因为无法获得角色等级加成，综合力可能会出现偏差'
+        }))
         list.push(line)
     }
 
@@ -73,7 +75,7 @@ export async function drawPlayerDetail(playerId: number, server: Server): Promis
     //hsr
     if (player.profile.publishHighScoreRatingFlg) {
         list.push(drawList({
-            key: 'HSR',
+            key: 'High Score Rating',
             text: player.calcHSR().toString()
         }))
         list.push(line)

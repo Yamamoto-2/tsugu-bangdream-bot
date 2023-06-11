@@ -1,13 +1,14 @@
 import { Player } from "../../types/Player";
 import { Canvas, createCanvas, Image, loadImage } from "canvas";
-import { drawList, drawImageListCenter } from '../list'
-import { resizeImage, stackImage } from "../utils";
+import { drawList } from '../list'
+import { resizeImage } from "../utils";
 import { Band } from "../../types/Band";
 import { drawTextWithImages } from "../text";
 import { starList } from './rarity'
 import mainAPI from "../../types/_Main";
-import { downloadFileCache } from "../../api/downloadFileCache";
 import { Bestdoriurl } from "../../config";
+import { assetsRootPath } from "../../config";
+import * as path from 'path'
 
 interface drawBandDetailsInListOptions {
     [bandId: number]: Array<Canvas | Image | string>
@@ -62,13 +63,13 @@ export async function drawPlayerBandRankInList(player: Player, key?: string): Pr
 }
 
 var bandIDlist = {//乐队对应的stageChallenge编号
-    "1":1,
-    "2":2,
-    "3":5,
-    "4":3,
-    "5":4,
-    "21":6,
-    "18":7,
+    "1": 1,
+    "2": 2,
+    "3": 5,
+    "4": 3,
+    "5": 4,
+    "21": 6,
+    "18": 7,
 }
 
 //画玩家信息内stage challenge等级
@@ -93,20 +94,44 @@ const DeckTotalRatingIdList = {
     ss: 5
 }
 
+let rankImage: { [rankImageName: string]: Image } = {}
+async function loadRankImage(rankImageName: string): Promise<Image> {
+    if (rankImage[rankImageName] == undefined) {
+        try {
+            rankImage[rankImageName] = await loadImage(path.join(assetsRootPath, `/Rank/${rankImageName}.png`))
+        }
+        catch (e) {
+            console.log(e)
+            rankImage[rankImageName] = await loadImage(`${Bestdoriurl}/res/icon/${rankImageName}.png`)
+        }
+    }
+    return rankImage[rankImageName]
+}
+
 export async function drawPlayerDeckTotalRatingInList(player: Player, key?: string) {
     const userDeckTotalRatingMap = player.profile.userDeckTotalRatingMap.entries
     let BandDetails = {}
 
     for (let i in mainAPI['bands']) {
         if (userDeckTotalRatingMap[i] != undefined) {
-            const content = []
             const rankName = userDeckTotalRatingMap[i].rank
-            const rankImage = await loadImage(await downloadFileCache(`${Bestdoriurl}/res/icon/rank_${DeckTotalRatingIdList[rankName]}.png`))
-            content.push(rankImage)
+            let rankId = DeckTotalRatingIdList[rankName]
+            const rankImage = await loadRankImage(`rank_${rankId}`)
+            const canvas = createCanvas(100, 100)
+            const ctx = canvas.getContext('2d')
+            ctx.drawImage(rankImage, 0, 0, 100, 100)
             if (userDeckTotalRatingMap[i].level != 0) {
-                content.push(userDeckTotalRatingMap[i].level.toString())
+                //ss与s字体相同
+                if (rankId > 4) {
+                    rankId = 4
+                }
+                const rankLevelImage = resizeImage({
+                    image: await loadRankImage(`rank_${rankId}_${userDeckTotalRatingMap[i].level}`),
+                    heightMax: 50
+                })
+                ctx.drawImage(rankLevelImage, 102 - rankLevelImage.width, 45)
             }
-            BandDetails[i] = content
+            BandDetails[i] = [canvas]
         }
         else {
             BandDetails[i] = ['?']
