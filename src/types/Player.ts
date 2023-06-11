@@ -429,7 +429,6 @@ export class Player {
             illustCardId = this.profile.userProfileSituation.situationId
             trainingStatus = this.profile.userProfileSituation.illust === 'after_training' ? true : false
         }
-        var illustCard = new Card(illustCardId)
         return { cardId: illustCardId, trainingStatus: trainingStatus }
     }
 }
