@@ -78,6 +78,10 @@ export class Character {
         this.defaultCostumeId = characterData["defaultCostumeId"];
         this.ruby = characterData["ruby"];
         this.profile = characterData["profile"];
+        //修复学年类型错误
+        for (var i = 0; i < this.profile.schoolYear.length; i++) {
+            this.profile.schoolYear[i] = this.profile.schoolYear[i].toString()
+        }
 
         //缓存数据
         if (characterDataCache[this.characterId.toString()] == undefined) {
