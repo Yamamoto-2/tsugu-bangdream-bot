@@ -123,7 +123,8 @@ export async function drawListByServerList(content: Array<string | null>, key: s
         if (content[serverList[0]] == content[serverList[1]]) {
             var canvas = drawList({
                 key: key,
-                text: content[serverList[0]]
+                text: content[serverList[0]],
+                maxWidth
             })
             return canvas
         }
@@ -225,10 +226,10 @@ export function drawImageListCenter(imageList: Array<Canvas | Image>, maxWidth =
         const element = lineList[i];
         Height += element.height
     }
-    var canvas = createCanvas(800, Height)
+    var canvas = createCanvas(maxWidth, Height)
     var ctx = canvas.getContext('2d')
     //画每一行
-    const middleWidth = 800 / 2
+    const middleWidth = maxWidth / 2
     var y = 0
     for (let i = 0; i < lineList.length; i++) {
         const element = lineList[i];

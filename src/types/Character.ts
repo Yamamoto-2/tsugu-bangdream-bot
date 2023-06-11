@@ -4,6 +4,8 @@ import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
 import { formatNumber } from './utils';
 
+let characterDataCache = {}
+
 export class Character {
     characterId: number;
     data: object;
@@ -26,12 +28,13 @@ export class Character {
         selfIntroduction: Array<string | null>;
         school: Array<string | null>;
         schoolCls: Array<string | null>;
-        schoolYear: number|string;
+        schoolYear: string[];
         part: string;
         birthday: string;
         constellation: string;
         height: number;
     };
+    isInitFull: boolean = false;
 
     constructor(characterId: number) {
         var characterData = mainAPI["characters"][characterId.toString()];
@@ -47,44 +50,65 @@ export class Character {
         this.lastName = this.data["lastName"];
         this.nickname = this.data["nickname"];
         this.bandId = this.data["bandId"];
+
+        this.isExist = true;
     }
-    async initFull() {
+    async initFull(update: boolean = true) {
         if (this.isExist == false) {
             return
         }
-        this.data = await this.getData();
-        this.characterType = this.data["characterType"];
-        this.characterName = this.data["characterName"];
-        this.firstName = this.data["firstName"];
-        this.lastName = this.data["lastName"];
-        this.nickname = this.data["nickname"];
-        this.bandId = this.data["bandId"];
-        this.colorCode = this.data["colorCode"];
-        this.sdAssetBundleName = this.data["sdAssetBundleName"];
-        this.defaultCostumeId = this.data["defaultCostumeId"];
-        this.ruby = this.data["ruby"];
-        this.profile = this.data["profile"];
+        this.isExist = true;
+        if (characterDataCache[this.characterId.toString()] != undefined && !update) {
+            var characterData = characterDataCache[this.characterId.toString()]
+        }
+        else {
+            var characterData = await this.getData(update)
+        }
+        this.isInitFull = true;
+
+        this.data = characterData
+        this.characterType = characterData["characterType"];
+        this.characterName = characterData["characterName"];
+        this.firstName = characterData["firstName"];
+        this.lastName = characterData["lastName"];
+        this.nickname = characterData["nickname"];
+        this.bandId = characterData["bandId"];
+        this.colorCode = characterData["colorCode"];
+        this.sdAssetBundleName = characterData["sdAssetBundleName"];
+        this.defaultCostumeId = characterData["defaultCostumeId"];
+        this.ruby = characterData["ruby"];
+        this.profile = characterData["profile"];
+
+        //缓存数据
+        if (characterDataCache[this.characterId.toString()] == undefined) {
+            characterDataCache[this.characterId.toString()] = characterData
+        }
     }
-    async getData() {
-        var cardData = await callAPIAndCacheResponse('https://bestdori.com/api/characters/' + this.characterId + '.json')
+    async getData(update: boolean = true) {
+        var time = update ? 0 : 1 / 0
+        var cardData = await callAPIAndCacheResponse('https://bestdori.com/api/characters/' + this.characterId + '.json', time)
         return cardData
     }
-    async getIcon(): Promise<Image>{
+    async getIcon(): Promise<Image> {
         const iconBuffer = await downloadFileCache(`https://bestdori.com/res/icon/chara_icon_${this.characterId}.png`)
         return (await loadImage(iconBuffer))
     }
-    async getIllustration(): Promise<Image>{
-        const illustrationBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/ui/character_kv_image/${formatNumber(this.characterId,3)}_rip/image.png`)
+    async getIllustration(): Promise<Image> {
+        const illustrationBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/ui/character_kv_image/${formatNumber(this.characterId, 3)}_rip/image.png`)
         return (await loadImage(illustrationBuffer))
     }
-    getCharacterName():Array<string|null>{
+    async getNameBanner(): Promise<Image> {
+        const nameBannerBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/character_name_rip/name_top_chr${formatNumber(this.characterId, 2)}.png`)
+        return (await loadImage(nameBannerBuffer))
+    }
+    getCharacterName(): Array<string | null> {
         const characterNameList = []
         for (let i = 0; i < this.characterName.length; i++) {
             const element = this.characterName[i];
-            if(this.nickname[i] != null){
+            if (this.nickname[i] != null) {
                 characterNameList.push(`${this.nickname[i]} (${element})`)
             }
-            else{
+            else {
                 characterNameList.push(element)
             }
         }

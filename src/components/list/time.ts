@@ -41,6 +41,23 @@ export function changeTimefomant(timeStamp: number | null) {//时间戳到年月
     return temp
 }
 
+export function changeTimefomantMonthDay(timeStamp: number | null) {//获取生日的月与日
+    if (timeStamp == null) {
+        return '?'
+    }
+    var date = new Date(Math.floor(timeStamp / 1000) * 1000)
+    var nMinutes: string
+    if (date.getMinutes() < 10) {
+        nMinutes = "0" + date.getMinutes().toString()
+        if (date.getMinutes() == 0) { nMinutes = "00" }
+    }
+    else {
+        nMinutes = date.getMinutes().toString()
+    }
+    var temp =  (date.getMonth() + 1).toString() + "月" + date.getDate().toString() + "日 "
+    return temp
+}
+
 export function changeTimePeriodFormat(period: number): string {//时间戳的差值到月日时分秒
     if (period == null) {
         return '?'

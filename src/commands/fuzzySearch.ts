@@ -20,7 +20,7 @@ function extractLvNumber(str: string): number | null {
   return null;
 }
 
-var config: Config = loadConfig();
+export let config: Config = loadConfig();
 //用于模糊搜索
 export function fuzzySearch(keywords: string[]): { [key: string]: string[] } {
 
