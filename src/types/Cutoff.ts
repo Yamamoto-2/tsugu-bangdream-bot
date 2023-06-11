@@ -58,7 +58,8 @@ export class Cutoff {
         this.isExist = true;
         this.cutoffs = cutoffData['cutoffs'] as { time: number, ep: number }[]
         if (this.cutoffs.length == 0) {
-            this.latestCutoff = { time: 0, ep: 0 }
+            const event = new Event(this.eventId)
+            this.latestCutoff = { time: event.startAt[this.server], ep: 0 }
             return
         }
         else {

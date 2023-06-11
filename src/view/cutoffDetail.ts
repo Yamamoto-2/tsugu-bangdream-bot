@@ -1,9 +1,9 @@
 import { h, Element } from 'koishi'
 import { Event } from '../types/Event';
-import { drawList, line } from '../components/list';
+import { drawList, line, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
 import { Image, Canvas, createCanvas } from 'canvas'
-import { changeTimefomant } from '../components/list/time';
+import { changeTimePeriodFormat } from '../components/list/time';
 import { Server } from '../types/Server';
 import { drawTitle } from '../components/title'
 import { outputFinalBuffer } from '../image/output'
@@ -21,7 +21,7 @@ var statusName = {
 export async function drawCutoffDetail(eventId: number, tier: number, server: Server): Promise<Element | string> {
     var cutoff = new Cutoff(eventId, server, tier)
     if (cutoff.isExist == false) {
-        return '错误: 活动或档线不存在'
+        return `错误: ${serverNameFullList[server]} 活动或档线不存在`
     }
     await cutoff.initFull()
     /*
@@ -31,7 +31,6 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
     */
     var all = []
     all.push(drawTitle('预测线', `${serverNameFullList[server]} ${cutoff.tier}档线`))
-    console.log(cutoff)
     var list: Array<Image | Canvas> = []
     var event = new Event(eventId)
     all.push(await drawEventDatablock(event))
@@ -48,16 +47,11 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
     else {
         status = 'in_progress'
     }
-    list.push(drawList({
-        key: '状态',
-        text: statusName[status]
-    }))
-    list.push(line)
+
 
     //如果活动在进行中    
     if (status == 'in_progress') {
         cutoff.predict()
-
         if (cutoff.predictEP == null || cutoff.predictEP == 0) {
             var predictText = '?'
         }
@@ -71,21 +65,31 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
         }))
         list.push(line)
 
+        const tempImageList = []
         //最新分数线
-        list.push(drawList({
+        const finalCutoffImage = drawList({
             key: '最新分数线',
             text: cutoff.latestCutoff.ep.toString()
-        }))
-        list.push(line)
+        })
+        tempImageList.push(finalCutoffImage)
 
         //更新时间
-        list.push(drawList({
+        const finalTimeImage = drawList({
             key: '更新时间',
-            text: changeTimefomant(cutoff.latestCutoff.time)
-        }))
+            text: `${changeTimePeriodFormat((new Date().getTime()) - cutoff.latestCutoff.time)}前`
+        })
+        tempImageList.push(finalTimeImage)
+
+        list.push(drawListMerge(tempImageList)) //合并两个list
         list.push(line)
+
     }
     else if (status == 'ended') {
+        list.push(drawList({
+            key: '状态',
+            text: statusName[status]
+        }))
+        list.push(line)
 
         //最新分数线
         list.push(drawList({

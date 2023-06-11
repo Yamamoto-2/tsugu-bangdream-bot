@@ -24,7 +24,7 @@ export async function drawTimeInList({
     return canvas
 }
 
-export var changeTimefomant = function (timeStamp: number | null) {//时间戳到年月日 精确到分钟
+export function changeTimefomant(timeStamp: number | null) {//时间戳到年月日 精确到分钟
     if (timeStamp == null) {
         return '?'
     }
@@ -39,4 +39,34 @@ export var changeTimefomant = function (timeStamp: number | null) {//时间戳�
     }
     var temp = date.getFullYear().toString() + "年" + (date.getMonth() + 1).toString() + "月" + date.getDate().toString() + "日 " + date.getHours().toString() + ":" + nMinutes
     return temp
+}
+
+export function changeTimePeriodFormat(period: number): string {//时间戳的差值到月日时分秒
+    if (period == null) {
+        return '?'
+    }
+    
+    var months = Math.floor(period / (1000 * 60 * 60 * 24 * 30));
+    var days = Math.floor((period % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((period % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((period % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((period % (1000 * 60)) / 1000);
+
+    var temp = "";
+
+    if (months != 0) {
+        temp += months.toString() + "月";
+    }
+    if (days != 0) {
+        temp += days.toString() + "日";
+    }
+    if (hours != 0) {
+        temp += hours.toString() + "小时";
+    }
+    if (minutes != 0) {
+        temp += minutes.toString() + "分钟";
+    }
+    temp += seconds.toString() + "秒";
+    
+    return temp;
 }

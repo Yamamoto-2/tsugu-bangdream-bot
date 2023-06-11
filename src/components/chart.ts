@@ -5,7 +5,7 @@ import 'chartjs-adapter-moment';
 registerFont(assetsRootPath + "/Fonts/default.ttf", { family: "default" })
 registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
 var width = 800
-var height = 1000
+var height = 800
 const chartJSNodeCanvas = new ChartJSNodeCanvas({
     width, height, chartCallback: (ChartJS) => {
         ChartJS.defaults.font.family = 'old';
@@ -38,12 +38,13 @@ export async function drawTimeLineChart({
     start,
     end,
     setStartToZero = false,
-    data,
-    height = 600
-}) {
+    data
+}:drawTimeLineChartOptions) {
+    /*
     for (var i = 0; i < data['datasets'].length; i++) {
         console.log(data['datasets'][i]['data'])
     }
+    */
     var options = {
         plugins: {
             legend: {
@@ -74,6 +75,12 @@ export async function drawTimeLineChart({
         data: data,
         options: options
     }
-    const image = await chartJSNodeCanvas.renderToBuffer(configuration);
-    return await loadImage(image);
+    try{
+        const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+        return await loadImage(image);
+    }
+    catch(e){
+        console.log(e)
+        return loadImage(assetsRootPath+'/err.png')
+    }
 }
