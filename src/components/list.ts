@@ -116,7 +116,7 @@ export function drawTipsInList({
 }
 
 //通过服务器列表获得内容，服务器icon开头，每一行为服务器对应内容，默认仅日服与简中服
-export async function drawListByServerList(content: Array<string | null>, key: string = undefined, serverList: Server[] = globalDefaultServer) {
+export async function drawListByServerList(content: Array<string | null>, key: string = undefined, serverList: Server[] = globalDefaultServer, maxWidth = 800) {
     var tempcontent: Array<string | Image | Canvas> = []
     //如果只有2个服务器，且内容相同
     if (serverList.length == 2) {
@@ -148,7 +148,8 @@ export async function drawListByServerList(content: Array<string | null>, key: s
     tempcontent.pop()
     var canvas = drawList({
         key: key,
-        content: tempcontent
+        content: tempcontent,
+        maxWidth
     })
     return canvas
 }
