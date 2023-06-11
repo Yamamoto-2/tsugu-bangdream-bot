@@ -209,7 +209,7 @@ export class Player {
         userCharacterRankMap: {
             entries: {
                 [characterId: number]: {
-                    rank: 3,
+                    rank: number,
                     exp: number,
                     addExp: number,
                     nextExp: number,

@@ -1,9 +1,11 @@
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
 import { Server, getServerByPriority } from './Server';
+import { formatNumber } from './utils';
 
 import mainAPI from './_Main'
 import { globalDefaultServer } from '../config';
+
 
 const typeNameList = {
     'item_': 'material',
@@ -69,16 +71,4 @@ export class Item {
         }
         return await loadImage(itemImage)
     }
-}
-
-function formatNumber(num: number, length: number): string {
-    // 将数字转换为字符串
-    const str = num.toString();
-
-    // 如果字符串长度小于3，前面补0直到长度为3
-    if (str.length < length) {
-        return str.padStart(length, '0');
-    }
-
-    return str;
 }

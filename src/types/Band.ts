@@ -2,6 +2,7 @@ import mainAPI from './_Main';
 import { Character } from './Character';
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache';
+import { formatNumber } from './utils';
 
 export class Band {
     bandId: number;
@@ -45,15 +46,3 @@ export class Band {
         return (await loadImage(logoBuffer))
     }
 }
-
-function formatNumber(num: number,length:number): string {
-    // 将数字转换为字符串
-    const str = num.toString();
-  
-    // 如果字符串长度小于3，前面补0直到长度为3
-    if (str.length < length) {
-      return str.padStart(length, '0');
-    }
-  
-    return str;
-  }
