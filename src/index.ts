@@ -194,14 +194,15 @@ export function apply(ctx: Context) {
       return await commandGacha(session, text)
     })
 
-  ctx.command("ycx <tier:number> [serverName] [eventId:number]", "查询指定档位的预测线")
+  ctx.command("ycx <tier:number> [eventId:number] [serverName]", "查询指定档位的预测线")
     .userFields(['tsugu'])
-    .action(async ({ session }, tier, serverName, eventId) => {
+    .action(async ({ session }, tier, eventId, serverName) => {
       return await commandYcx(session, tier, serverName, eventId)
     })
-  ctx.command("ycxall [serverName] [eventId:number]", "查询所有档位的预测线").alias('myycx')
+  ctx.command("ycxall [eventId:number] [serverName]", "查询所有档位的预测线")
+    .alias('myycx')
     .userFields(['tsugu'])
-    .action(async ({ session }, serverName, eventId) => {
+    .action(async ({ session }, eventId, serverName) => {
       return await commandYcxAll(session, serverName, eventId)
     })
 
