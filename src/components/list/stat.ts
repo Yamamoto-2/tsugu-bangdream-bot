@@ -1,7 +1,7 @@
 import { Canvas, createCanvas, Image } from "canvas";
 import { drawText } from "../text";
 import { drawList } from "../list";
-import {stackImage} from '../utils'
+import { stackImage } from '../utils'
 import { drawRoundedRect } from "../../image/drawRect";
 import { Card, Stat, limitBreakRankStat } from "../../types/Card";
 
@@ -19,14 +19,14 @@ export async function drawCardStatInList(card: Card) {
     const statImage = await drawCardStatDivided(stat, statTotal, limitBreakstat)
     const list = []
     list.push(drawList({
-        key: '综合力', content: [`综合力: ${statTotal} + (${limitBreakstatTotal})`]
+        key: '综合力', content: [`综合力: ${statTotal} + (${limitBreakstatTotal * 4})`]
     }))
     list.push(createCanvas(1, 5))
     list.push(statImage)
     return stackImage(list)
 }
 
-export async function drawStatInList(stat:Stat){
+export async function drawStatInList(stat: Stat) {
     const statTotal = Math.floor(stat.performance + stat.technique + stat.visual);
     const statImage = await drawCardStatDivided(stat, statTotal);
     const list = [];
@@ -44,7 +44,7 @@ async function drawCardStatDivided(stat: Stat, statTotal: number, limitBreakstat
     function drawStatLine(key: string, value: number, total: number): Canvas {
         const canvas = createCanvas(800, 70);
         const ctx = canvas.getContext('2d');
-        let text =  `${statConfig[key].name}: ${Math.floor(value)}`;
+        let text = `${statConfig[key].name}: ${Math.floor(value)}`;
         if (limitBreakstat) {
             text += ` + (${limitBreakstat[key] * 4})`
         }
