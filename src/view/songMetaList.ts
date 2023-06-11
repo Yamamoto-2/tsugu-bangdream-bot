@@ -31,7 +31,7 @@ export async function drawSongMetaList(server: Server) {
         imageList.push(await drawMetaRankListDatablock(element, server))
     }
     var all = []
-    all.push(drawTitle('查询', `${serverNameFullList[server]} 效率排行榜}`))
+    all.push(drawTitle('查询', `${serverNameFullList[server]} 效率排行榜`))
     all.push(stackImageHorizontal(imageList))
     var buffer = await outputFinalBuffer({
         imageList: all,
