@@ -15,8 +15,8 @@ function loadConfig(): Config {
 const config = loadConfig();
 
 
-export async function queryRoomNumber(session:Session<'tsugu', never>, number: number, raw_message: string) {
-    if(!session.user.tsugu.car){
+export async function queryRoomNumber(session: Session<'tsugu', never>, number: number, raw_message: string) {
+    if (!session.user.tsugu.car) {
         return
     }
     let isCar = false
@@ -34,7 +34,7 @@ export async function queryRoomNumber(session:Session<'tsugu', never>, number: n
     }
     if (isCar) {
         let platform = session.platform
-        if(platform == 'onebot'){
+        if (platform == 'onebot') {
             platform = 'qq'
         }
         await submitRoomNumber({
@@ -42,9 +42,9 @@ export async function queryRoomNumber(session:Session<'tsugu', never>, number: n
             rawMessage: raw_message,
             source: platform,
             userId: session.userId,
-            userName:session.username,
+            userName: session.username,
             time: Date.now()
-        },session)
+        }, session)
     }
 }
 
