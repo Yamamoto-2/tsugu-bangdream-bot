@@ -1,6 +1,6 @@
 import { Skill } from '../../types/Skill'
 import { Server, getServerByPriority } from '../../types/Server'
-import { drawTips, drawListByServerList } from '../list'
+import { drawTipsInList, drawListByServerList } from '../list'
 import { stackImage } from '../utils'
 import { Canvas } from 'canvas'
 import { Card } from '../../types/Card'
@@ -18,7 +18,7 @@ export async function drawSkillInList({
 }: SkillInListOptions, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     var listImage = await drawListByServerList(card.skillName, key, defaultServerList)
     var server = getServerByPriority(content.description, defaultServerList)
-    var tipsImage = drawTips({
+    var tipsImage = drawTipsInList({
         text: content.getSkillDescription()[server]
     })
     return stackImage([listImage, tipsImage])

@@ -1,6 +1,6 @@
 import { h, Element } from 'koishi'
 import { getPresentEvent } from '../types/Event';
-import { drawList, line, drawListByServerList, drawTips, drawListMerge } from '../components/list';
+import { drawList, line, drawListByServerList, drawTipsInList, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
 import { Image, Canvas } from 'canvas'
 import { drawTimeInList } from '../components/list/time';

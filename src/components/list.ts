@@ -27,6 +27,7 @@ interface ListOptions {
     lineHeight?: number;
     spacing?: number;
     color?: string;
+    maxWidth?: number;
 }
 
 //画表格中的一行
@@ -37,10 +38,11 @@ export function drawList({
     textSize = 40,
     lineHeight = textSize * 1.5,
     spacing = textSize / 3,
-    color = '#505050'
+    color = '#505050',
+    maxWidth = 800
 
 }: ListOptions): Canvas {
-    const xmax = 760
+    const xmax = maxWidth - 40
     const keyImage = drawRoundedRectWithText({
         text: key,
         textSize: 30,
@@ -67,7 +69,7 @@ export function drawList({
         return stackImageHorizontal([createCanvas(20, 1), textImage])
     }
     var ymax = textImage.height + keyImage.height + 10;
-    const canvas = createCanvas(800, ymax);
+    const canvas = createCanvas(maxWidth, ymax);
     const ctx = canvas.getContext('2d');
     ctx.drawImage(keyImage, 0, 0);
     ctx.drawImage(textImage, 20, keyImage.height + 10);
@@ -81,7 +83,7 @@ interface tipsOptions {
     lineHeight?: number;
     spacing?: number;
 }
-export function drawTips({
+export function drawTipsInList({
     text,
     content,
     textSize = 30,
