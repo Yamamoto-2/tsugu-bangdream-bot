@@ -17,6 +17,6 @@ export async function commandCard(session: Session<'tsugu', never>, text: string
     if (Object.keys(fuzzySearchResult).length == 0) {
         return '错误: 没有有效的关键词'
     }
-    return await drawCardList(fuzzySearchResult, default_servers)
+    return await drawCardList(fuzzySearchResult, default_servers, session)
 
 }
