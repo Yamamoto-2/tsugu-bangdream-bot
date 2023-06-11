@@ -15,7 +15,7 @@ function loadConfig(): Config {
 const config = loadConfig();
 
 
-export async function queryRoomNumber(session: Session<'tsugu', never>, number: number, raw_message: string) {
+export async function queryRoomNumber(session: Session<'tsugu', never>, number: number, raw_message: string,bandoriStationToken: string) {
     if (!session.user.tsugu.car) {
         return
     }
@@ -43,7 +43,8 @@ export async function queryRoomNumber(session: Session<'tsugu', never>, number: 
             source: platform,
             userId: session.userId,
             userName: session.username,
-            time: Date.now()
+            time: Date.now(),
+            bandoriStationToken
         }, session)
     }
 }

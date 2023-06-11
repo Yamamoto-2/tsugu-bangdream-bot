@@ -103,7 +103,7 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
             all.push(drawDatablock({list:[tempCanv]}))
             const buffer = await outputFinalBuffer({
                 imageList: all,
-                useEazyBG: true
+                useEasyBG: true
             })
             tempImageList.push(h.image(buffer, 'image/png'))  
             times += 1
@@ -119,7 +119,7 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
         all.push(eventListImage)
         const buffer = await outputFinalBuffer({
             imageList: all,
-            useEazyBG: true
+            useEasyBG: true
         })
         return h.image(buffer, 'image/png')
     }

@@ -21,7 +21,7 @@ export async function drawRoomList(session: Session, keyword?: string) {
     }
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEazyBG: true,
+        useEasyBG: true,
         startWithSpace: false
     })
     return h.image(buffer, 'image/png')

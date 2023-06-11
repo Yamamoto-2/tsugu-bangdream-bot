@@ -1,6 +1,6 @@
 import { Canvas, Image, createCanvas, loadImage } from 'canvas';
 import { CreateBG, CreateBGEazy } from './BG';
-import { assetsRootPath, EazyBG } from '../config';
+import { assetsRootPath } from '../config';
 import * as path from 'path';
 var BGDefaultImage: Image
 async function loadImageOnce() {
@@ -11,7 +11,7 @@ loadImageOnce()
 interface outputFinalOptions {
     startWithSpace?: boolean;
     imageList: Array<Image | Canvas>;
-    useEazyBG?: boolean;
+    useEasyBG?: boolean;
     text?: string;
     BGimage?: Image | Canvas;
 }
@@ -19,7 +19,7 @@ interface outputFinalOptions {
 //将图片列表从上到下叠在一起输出为一张图片
 export var outputFinalCanv = async function ({ imageList,
     startWithSpace = true,
-    useEazyBG = true,
+    useEasyBG = true,
     text = 'BanG Dream!',
     BGimage = BGDefaultImage
 }: outputFinalOptions
@@ -39,7 +39,7 @@ export var outputFinalCanv = async function ({ imageList,
     var tempcanv = createCanvas(maxW, allH)
     var ctx = tempcanv.getContext("2d")
 
-    if (EazyBG || useEazyBG) {
+    if ( useEasyBG) {
         ctx.drawImage(await CreateBGEazy({
             width: maxW,
             height: allH
@@ -74,14 +74,14 @@ export var outputFinalCanv = async function ({ imageList,
 export var outputFinalBuffer = async function ({
     startWithSpace = true,
     imageList,
-    useEazyBG = true,
+    useEasyBG = true,
     text,
     BGimage
 }: outputFinalOptions): Promise<Buffer> {
     var tempcanv = await outputFinalCanv({
         startWithSpace,
         imageList,
-        useEazyBG,
+        useEasyBG,
         text,
         BGimage
     })

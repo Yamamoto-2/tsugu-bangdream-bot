@@ -1,4 +1,4 @@
-import { BandoriStationurl, bandoriStationToken } from "../config";
+import { BandoriStationurl } from "../config";
 import { callAPIAndCacheResponse } from "../api/getApi";
 import { Player } from "./Player";
 import { unescape } from "querystring";
@@ -52,6 +52,7 @@ interface RoomOption {
     time: number;
     avanter?: string;
     userName?: string;
+    bandoriStationToken?: string;
 }
 
 export class Room {
@@ -139,6 +140,7 @@ export async function queryRoomNumberFromBandoriStation(): Promise<Room[]> {
             userId: roomData['user_info']['user_id'],
             time: roomData['time'],
             avanter: roomData['user_info']['avatar']
+            
         })
         if (roomData['user_info']?.['bandori_player_brief_info']?.['user_id'] != undefined) {
             const player = new Player(
@@ -161,7 +163,7 @@ function decode(text: string): string {
 }
 
 //向BandoriStation提交房间号
-export async function submitRoomNumber({ number, rawMessage, source, userId, time, userName }: RoomOption,session:Session<'tsugu', never>) {
+export async function submitRoomNumber({ number, rawMessage, source, userId, time, userName,bandoriStationToken }: RoomOption,session:Session<'tsugu', never>) {
     if (source == 'onebot') {
         source = 'qq'
     }

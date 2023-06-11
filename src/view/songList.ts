@@ -100,7 +100,7 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
     all.push(songListImage)
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEazyBG: true
+        useEasyBG: true
     })
     return h.image(buffer, 'image/png')
 }

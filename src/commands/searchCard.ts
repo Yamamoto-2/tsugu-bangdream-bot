@@ -4,13 +4,13 @@ import { Context, Schema, h, Session } from 'koishi'
 import { isInteger } from './utils'
 import { fuzzySearch } from './fuzzySearch'
 
-export async function commandCard(session: Session<'tsugu', never>, text: string) {
+export async function commandCard(session: Session<'tsugu', never>, text: string,useEasyBG: boolean) {
     const default_servers = session.user.tsugu.default_server
     if (!text) {
         return '错误: 请输入关键词或卡片ID'
     }
     if (isInteger(text)) {
-        return await drawCardDetail(parseInt(text), default_servers)
+        return await drawCardDetail(parseInt(text), default_servers,useEasyBG)
     }
     var fuzzySearchResult = fuzzySearch(text.split(' '))
     console.log(fuzzySearchResult)

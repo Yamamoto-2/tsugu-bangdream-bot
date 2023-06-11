@@ -219,7 +219,7 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
 
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEazyBG: true
+        useEasyBG: true
     })
 
     return h.image(buffer, 'image/png')

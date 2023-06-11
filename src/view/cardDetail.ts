@@ -20,7 +20,7 @@ import { Event } from '../types/Event';
 import { Gacha } from '../types/Gacha';
 import { globalDefaultServer, serverNameFullList } from '../config';
 
-async function drawCardDetail(cardId: number, defaultServerList: Server[] = globalDefaultServer): Promise<Element | string> {
+async function drawCardDetail(cardId: number, defaultServerList: Server[] = globalDefaultServer,useEasyBG:boolean): Promise<Element | string> {
     const card = new Card(cardId)
     if (!card.isExist) {
         return '错误: 卡牌不存在'
@@ -201,7 +201,7 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
 
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEazyBG: false,
+        useEasyBG: useEasyBG,
         BGimage,
         text: 'Card'
     })

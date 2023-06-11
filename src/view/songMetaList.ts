@@ -35,7 +35,7 @@ export async function drawSongMetaList(server: Server) {
     all.push(stackImageHorizontal(imageList))
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEazyBG: true
+        useEasyBG: true
     })
     return h.image(buffer, 'image/png')
 }

@@ -62,7 +62,7 @@ export async function drawCharacterList(matches: { [key: string]: string[] }, de
     }))
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEazyBG: true
+        useEasyBG: true
     })
     return h.image(buffer, 'image/png')
 }

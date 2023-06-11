@@ -2,7 +2,7 @@ import { Session, isInteger } from "koishi"
 import { drawPlayerDetail } from "../view/playerDetail";
 import { Server, getServerByName } from "../types/Server";
 
-export async function commandSearchPlayer(session: Session<'tsugu', never>, playerId: number, serverName: string) {
+export async function commandSearchPlayer(session: Session<'tsugu', never>, playerId: number, serverName: string, useEasyBG: boolean) {
     const playerBinding = session.user.tsugu
     let server: Server
     if (!serverName) {
@@ -16,7 +16,7 @@ export async function commandSearchPlayer(session: Session<'tsugu', never>, play
     }
 
     if (isInteger(playerId)) {
-        return await drawPlayerDetail(playerId, server)
+        return await drawPlayerDetail(playerId, server, useEasyBG)
     }
     return '错误: 请输入正确的卡池ID'
 }

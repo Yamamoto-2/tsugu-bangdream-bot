@@ -11,7 +11,7 @@ export enum BindingStatus {
     None, Verifying, Success, Failed
 }
 
-export async function commandBindPlayer(session: Session<'tsugu', never>, serverName: string) {
+export async function commandBindPlayer(session: Session<'tsugu', never>, serverName: string, useEasyBG: boolean) {
     const playerBinding = session.user.tsugu
 
     // 获得待绑定的服务器
@@ -109,7 +109,7 @@ export async function commandBindPlayer(session: Session<'tsugu', never>, server
         playerBinding.user_id = session.userId
         curServer.bindingStatus = BindingStatus.Success
         curServer.verifyCode = undefined
-        return await drawPlayerDetail(player.playerId, server)
+        return await drawPlayerDetail(player.playerId, server, useEasyBG)
     }
     else {
         curServer.gameID = 0
@@ -152,7 +152,7 @@ export async function commandUnbindPlayer(session: Session<'tsugu', never>, serv
         return `错误: 未检测到${serverNameFullList[server]}的玩家数据`
     }
 }
-export async function commandPlayerInfo(session: Session<'tsugu', never>, serverName: string) {
+export async function commandPlayerInfo(session: Session<'tsugu', never>, serverName: string, useEasyBG: boolean) {
     const playerBinding = session.user.tsugu
     let server: Server
     if (!serverName) {
@@ -170,7 +170,7 @@ export async function commandPlayerInfo(session: Session<'tsugu', never>, server
         return `错误: 未检测到${serverNameFullList[server]}的玩家数据`
     }
     else {
-        return await drawPlayerDetail(curServer.gameID, server)
+        return await drawPlayerDetail(curServer.gameID, server, useEasyBG)
     }
 }
 

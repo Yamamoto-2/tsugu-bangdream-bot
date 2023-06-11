@@ -95,7 +95,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server): Pr
     all.push(listImage)
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEazyBG: true
+        useEasyBG: true
     })
 
     return h.image(buffer, 'image/png')

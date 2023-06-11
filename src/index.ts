@@ -39,19 +39,18 @@ declare module 'koishi' {
     tsugu_gacha: boolean
   }
 }
+
 export interface Config {
-  content: {
-    a: string,
-    b: string
-  }
+  useEasyBG: boolean,
+  bandoriStationToken: string,
 }
 
-export const Config: Schema<Config> = Schema.object({
-  content: Schema.object({
-    a: Schema.string(),
-    b: Schema.string()
-  })
+
+export const Config = Schema.object({
+  useEasyBG: Schema.boolean().default(false).description('是否使用简易背景，启用这将大幅提高速度'),
+  bandoriStationToken: Schema.string().description('BandoriStationToken, 用于发送车牌，可以去 bandoristation.com 申请。缺失的情况下，车牌将无法被同步到服务器')
 })
+
 
 //判断左侧是否为数字
 function checkLeftDigits(input: string): number {
@@ -64,7 +63,7 @@ function checkLeftDigits(input: string): number {
 }
 
 
-export function apply(ctx: Context) {
+export function apply(ctx: Context, config: Config) {
   // 扩展 user 表存储玩家绑定数据
   ctx.model.extend('user',
     {
@@ -85,6 +84,7 @@ export function apply(ctx: Context) {
       }
     })
 
+    
   // 扩展 channel 表存储群聊中的查卡开关
   ctx.model.extend("channel",
     {
@@ -96,7 +96,7 @@ export function apply(ctx: Context) {
     const number = checkLeftDigits(session.content)
     if (number != 0) {
       await session.observeUser(['tsugu'])
-      await queryRoomNumber(<Session<'tsugu', never>>session, number, session.content)
+      await queryRoomNumber(<Session<'tsugu', never>>session, number, session.content,config.bandoriStationToken)
     }
   })
   ctx.command('ycm [keyword:text]', '获取车牌')
@@ -125,13 +125,13 @@ export function apply(ctx: Context) {
     .example('查玩家 100001 jp')
     .userFields(['tsugu'])
     .action(async ({ session }, playerId, serverName) => {
-      return await commandSearchPlayer(session, playerId, serverName)
+      return await commandSearchPlayer(session, playerId, serverName,config.useEasyBG)
     })
   ctx.command('绑定玩家 [serverName:text]', '绑定玩家信息')
     .usage('开始玩家数据绑定流程。省略服务器名时，默认为绑定到你当前的主服务器')
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
-      return await commandBindPlayer(session, serverName)
+      return await commandBindPlayer(session, serverName,config.useEasyBG)
     })
   ctx.command('解除绑定 [serverName:text]', '解除当前服务器的玩家绑定')
     .alias('解绑玩家')
@@ -166,14 +166,14 @@ export function apply(ctx: Context) {
     .shortcut(/^(.+服)玩家状态$/, { args: ['$1'] })
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
-      return await commandPlayerInfo(session, serverName)
+      return await commandPlayerInfo(session, serverName,config.useEasyBG)
     })
 
 
   ctx.command("查卡 <word:text>", "查卡")
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
-      return await commandCard(session, text)
+      return await commandCard(session, text,config.useEasyBG)
     })
   ctx.command('查卡面 <cardId:number>', '查卡面').alias('查卡插画', '查插画')
     .userFields(['tsugu'])
@@ -189,7 +189,7 @@ export function apply(ctx: Context) {
   ctx.command("查活动 <word:text>", "查活动")
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
-      return await commandEvent(session, text)
+      return await commandEvent(session, text,config.useEasyBG)
     })
   ctx.command("查曲 <word:text>", "查曲")
     .userFields(['tsugu'])
@@ -205,7 +205,7 @@ export function apply(ctx: Context) {
   ctx.command("查卡池 <word:text>", "查卡池")
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
-      return await commandGacha(session, text)
+      return await commandGacha(session, text,config.useEasyBG)
     })
 
   ctx.command("ycx <tier:number> [eventId:number] [serverName]", "查询指定档位的预测线")

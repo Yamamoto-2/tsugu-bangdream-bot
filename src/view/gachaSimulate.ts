@@ -78,7 +78,7 @@ export async function drawRandomGacha(gacha: Gacha, times: number = 10, server: 
 
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEazyBG: true,
+        useEasyBG: true,
     })
     return h.image(buffer, 'image/png')
 

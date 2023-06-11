@@ -113,7 +113,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
                 all.push(drawDatablockHorizontal({ list: [characterIconImage, tempCanv] }))
                 const buffer = await outputFinalBuffer({
                     imageList: all,
-                    useEazyBG: true
+                    useEasyBG: true
                 })
                 tempImageList.push(h.image(buffer, 'image/png'))
                 times += 1
@@ -126,7 +126,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         all.push(cardListImage)
         var buffer = await outputFinalBuffer({
             imageList: all,
-            useEazyBG: true
+            useEasyBG: true
         })
         return h.image(buffer, 'image/png')
     }
@@ -161,7 +161,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         all.push(cardListImage)
         var buffer = await outputFinalBuffer({
             imageList: all,
-            useEazyBG: true
+            useEasyBG: true
         })
         return h.image(buffer, 'image/png')
     }

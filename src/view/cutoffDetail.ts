@@ -110,7 +110,7 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
     all.push(listImage)
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEazyBG: true
+        useEasyBG: true
     })
 
     return h.image(buffer, 'image/png')

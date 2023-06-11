@@ -4,13 +4,13 @@ import { drawEventDetail } from '../view/eventDetail'
 import { drawEventList } from '../view/eventList'
 import { Session } from 'koishi'
 
-export async function commandEvent(session: Session<'tsugu', never>, text: string) {
+export async function commandEvent(session: Session<'tsugu', never>, text: string, useEasyBG: boolean) {
     const default_servers = session.user.tsugu.default_server
     if (!text) {
         return '错误: 请输入关键词或活动ID'
     }
     if (isInteger(text)) {
-        return await drawEventDetail(parseInt(text), default_servers)
+        return await drawEventDetail(parseInt(text), default_servers, useEasyBG)
     }
 
     var fuzzySearchResult = fuzzySearch(text.split(' '))

@@ -16,7 +16,7 @@ import { drawGashaPaymentMethodInList } from '../components/list/gachaPaymentMet
 import { drawGachaRateInList } from '../components/list/gachaRate';
 import { globalDefaultServer, serverNameFullList } from '../config';
 
-export async function drawGachaDetail(gachaId: number, defaultServerList: Server[] = globalDefaultServer): Promise<Element | string> {
+export async function drawGachaDetail(gachaId: number, defaultServerList: Server[] = globalDefaultServer,useEasyBG:boolean): Promise<Element | string> {
     const gacha = new Gacha(gachaId)
     if (!gacha.isExist) {
         return '错误: 卡池不存在'
@@ -130,9 +130,12 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
     for (let i = 0; i < eventImageList.length; i++) {
         all.push(eventImageList[i])
     }
+    const gachaBGImage = await gacha.getGachaBGImage();
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEazyBG: true
+        useEasyBG: useEasyBG,
+        BGimage: gachaBGImage,
+        text:'Gacha'
     })
     return h.image(buffer, 'image/png')
 }

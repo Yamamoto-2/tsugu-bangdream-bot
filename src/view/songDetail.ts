@@ -129,7 +129,7 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
 
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEazyBG: true
+        useEasyBG: true
     })
     return h.image(buffer, 'image/png')
 }
