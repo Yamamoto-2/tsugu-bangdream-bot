@@ -2,7 +2,7 @@ import { h, Element } from 'koishi'
 import { Event } from '../types/Event';
 import { drawList, line, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
-import { Image, Canvas, createCanvas } from 'canvas'
+import { Image, Canvas, createCanvas, loadImage } from 'canvas'
 import { changeTimePeriodFormat } from '../components/list/time';
 import { Server } from '../types/Server';
 import { drawTitle } from '../components/title'
@@ -11,6 +11,9 @@ import { Cutoff } from "../types/Cutoff";
 import { drawCutoffChart } from '../components/chart/cutoffChat'
 import { serverNameFullList } from '../config';
 import { drawEventDatablock } from '../components/dataBlock/event';
+import { drawTips } from '../components/tips'
+import { assetsRootPath } from '../config';
+import * as path from 'path'
 
 var statusName = {
     'not_start': '未开始',
@@ -108,6 +111,12 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
     var listImage = drawDatablock({ list })
 
     all.push(listImage)
+
+    all.push(drawTips({
+        text: '想给我们提供数据?\n可以在B站 @Tsugu_Official 的置顶动态留言\n或者在群238052000中提供数据\n也可以扫描右侧二维码进行上传\n手机可以长按图片扫描二维码\n我们会尽快将数据上传至服务器',
+        image: await loadImage(path.join(assetsRootPath, 'shimowendang.png'))
+    }))
+
     var buffer = await outputFinalBuffer({
         imageList: all,
         useEasyBG: true
