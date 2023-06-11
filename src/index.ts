@@ -94,28 +94,37 @@ export function apply(ctx: Context) {
     const number = checkLeftDigits(session.content)
     if (number != 0) {
       await session.observeUser(['tsugu'])
-      await queryRoomNumber(session, number, session.content)
+      await queryRoomNumber(<Session<'tsugu', never>>session, number, session.content)
     }
   })
-  ctx.command('ycm [keyword:text]', '查询车牌')
-    .alias('有车吗','车来')
+  ctx.command('ycm [keyword:text]', '获取车牌')
+    .alias('有车吗', '车来')
+    .usage(`根据关键词从车站获取车牌`)
+    .example('ycm')
+    .example('ycm 大分 长途')
     .action(async ({ session }, keyword) => {
       return await drawRoomList(session, keyword)
     })
 
   ctx.command('查玩家 <playerId:number> [serverName:text]', '查询玩家信息')
     .alias('查询玩家')
+    .usage('查询指定ID玩家的信息。省略服务器名时，默认从你当前的主服务器查询')
+    .example('查玩家 10000000')
+    .example('查玩家 100001 jp')
     .userFields(['tsugu'])
     .action(async ({ session }, playerId, serverName) => {
       return await commandSearchPlayer(session, playerId, serverName)
     })
   ctx.command('绑定玩家 [serverName:text]', '绑定玩家信息')
+    .usage('开始玩家数据绑定流程。省略服务器名时，默认为绑定到你当前的主服务器')
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
       return await commandBindPlayer(session, serverName)
     })
   ctx.command('解除绑定 [serverName:text]', '解除当前服务器的玩家绑定')
     .alias('解绑玩家')
+    .usage('解除指定服务器的玩家数据绑定。省略服务器名时，默认为当前的主服务器')
+    .usage('绑定流程出现问题时，可使用\"强制解绑玩家\"指令重置绑定状态')
     .option('force', '-f', { fallback: false })
     .shortcut('强制解绑玩家', { options: { force: true } })
     .shortcut('强制解除绑定', { options: { force: true } })
@@ -123,8 +132,11 @@ export function apply(ctx: Context) {
     .action(async ({ session, options }, serverName) => {
       return await commandUnbindPlayer(session, serverName, options.force)
     })
-  ctx.command('服务器模式 <serverName:text>', '设置主服务器')
-    .alias('切换服务器')
+  ctx.command('主服务器 <serverName:text>', '设置主服务器')
+    .alias('服务器模式', '切换服务器')
+    .usage('将指定的服务器设置为你的主服务器')
+    .example('主服务器 cn')
+    .example('日服模式')
     .shortcut(/^(.+服)模式$/, { args: ['$1'] })
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
@@ -132,7 +144,7 @@ export function apply(ctx: Context) {
     })
   ctx.command('设置默认服务器 <...serverList>', '设定信息显示中的默认服务器排序')
     .alias('默认服务器')
-    .usage('使用空格分隔服务器列表，支持服务器的英文缩写(如cn)和中文全名(如日服)')
+    .usage('使用空格分隔服务器列表')
     .example('设置默认服务器 国服 日服')
     .userFields(['tsugu'])
     .action(async ({ session }, ...serverList) => {
