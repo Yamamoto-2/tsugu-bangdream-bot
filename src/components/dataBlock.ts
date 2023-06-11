@@ -8,11 +8,11 @@ interface datablockOptions {
     topLeftText?: string
 }
 //组合表格子程序，使用block当做底，通过最大高度换行，默认高度无上限
-export var drawDatablock = async function ({
+export function drawDatablock({
     list,
     BG = true,
     topLeftText
-}: datablockOptions): Promise<Canvas> {
+}: datablockOptions): Canvas {
     const topLeftTextHeight = 70
     //计算高度
     var allH = 0
@@ -93,11 +93,11 @@ export var drawDatablock = async function ({
     return (tempcanv)
 }
 
-export var drawDatablockHorizontal = async function ({
+export function drawDatablockHorizontal ({
     list,
     BG = true,
     topLeftText
-}: datablockOptions): Promise<Canvas> {
+}: datablockOptions): Canvas {
     const topLeftTextHeight = 70;
 
     // 计算宽度和高度
