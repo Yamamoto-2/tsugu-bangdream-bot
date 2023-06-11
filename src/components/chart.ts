@@ -76,7 +76,7 @@ export async function drawTimeLineChart({
         options: options
     }
     try{
-        const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+        const image = await chartJSNodeCanvas.renderToBuffer(configuration as any);
         return await loadImage(image);
     }
     catch(e){
