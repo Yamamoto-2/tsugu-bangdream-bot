@@ -58,6 +58,7 @@ async function getCardIllustrationFrame(rarity: number, attribute: 'cool' | 'hap
 interface drawCardIconOptions {
     card: Card
     trainingStatus: boolean,
+    illustTrainingStatus?: boolean,
     limitBreakRank?: number,
     level?: number,
     cardIdVisible?: boolean,
@@ -71,6 +72,7 @@ interface drawCardIconOptions {
 export async function drawCardIcon({
     card,
     trainingStatus,
+    illustTrainingStatus,
     limitBreakRank = 0,
     cardIdVisible = false,
     skillTypeVisible = false,
@@ -78,9 +80,10 @@ export async function drawCardIcon({
     skillLevel
 }: drawCardIconOptions): Promise<Canvas> {
     trainingStatus = card.ableToTraining(trainingStatus)
+    illustTrainingStatus ??= trainingStatus
     const canvas: Canvas = cardIdVisible ? createCanvas(180, 210) : createCanvas(180, 180);
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(await card.getCardIconImage(trainingStatus), 0, 0, 180, 180);
+    ctx.drawImage(await card.getCardIconImage(illustTrainingStatus), 0, 0, 180, 180);
     //如果显示卡牌ID，画面高度为210，在下方显示
     if (cardIdVisible) {
         ctx.textAlign = 'start'

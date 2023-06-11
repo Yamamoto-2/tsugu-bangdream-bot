@@ -25,6 +25,7 @@ export async function drawPlayerCardInList(player: Player,key?:string,cardIdVisi
         cardIconList.push(await drawCardIcon({
             card: new Card(tempCardData.situationId),
             trainingStatus: tempCardData.trainingStatus == 'done',
+            illustTrainingStatus: tempCardData.illust == 'after_training',
             limitBreakRank: tempCardData.limitBreakRank,
             cardIdVisible: cardIdVisible,
             skillTypeVisible: true,

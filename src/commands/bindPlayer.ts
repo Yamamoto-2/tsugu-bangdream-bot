@@ -208,3 +208,12 @@ export async function commandSwitchDefaultServer(session: Session<'tsugu', never
         return `成功切换默认服务器顺序: ${servers.map(s => serverNameFullList[s]).join(", ")}`
     }
 }
+
+export async function commandSwitchCarMode(session: Session<'tsugu', never>, mode: boolean) {
+    const playerBinding = session.user.tsugu
+    if (mode == undefined) {
+        return '错误: 未知的车辆模式'
+    }
+    playerBinding.car = mode
+    return `已${mode ? '开启' : '关闭'}车牌转发`
+}

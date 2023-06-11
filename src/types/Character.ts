@@ -2,6 +2,7 @@ import mainAPI from './_Main'
 import { callAPIAndCacheResponse } from '../api/getApi'
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '../api/downloadFileCache'
+import { formatNumber } from './utils';
 
 export class Character {
     characterId: number;
@@ -25,7 +26,7 @@ export class Character {
         selfIntroduction: Array<string | null>;
         school: Array<string | null>;
         schoolCls: Array<string | null>;
-        schoolYear: number;
+        schoolYear: number|string;
         part: string;
         birthday: string;
         constellation: string;
@@ -72,6 +73,10 @@ export class Character {
         const iconBuffer = await downloadFileCache(`https://bestdori.com/res/icon/chara_icon_${this.characterId}.png`)
         return (await loadImage(iconBuffer))
     }
+    async getIllustration(): Promise<Image>{
+        const illustrationBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/ui/character_kv_image/${formatNumber(this.characterId,3)}_rip/image.png`)
+        return (await loadImage(illustrationBuffer))
+    }
     getCharacterName():Array<string|null>{
         const characterNameList = []
         for (let i = 0; i < this.characterName.length; i++) {
@@ -87,3 +92,4 @@ export class Character {
     }
 
 }
+

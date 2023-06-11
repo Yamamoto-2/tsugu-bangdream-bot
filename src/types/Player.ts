@@ -209,7 +209,7 @@ export class Player {
         userCharacterRankMap: {
             entries: {
                 [characterId: number]: {
-                    rank: 3,
+                    rank: number,
                     exp: number,
                     addExp: number,
                     nextExp: number,
@@ -429,7 +429,6 @@ export class Player {
             illustCardId = this.profile.userProfileSituation.situationId
             trainingStatus = this.profile.userProfileSituation.illust === 'after_training' ? true : false
         }
-        var illustCard = new Card(illustCardId)
         return { cardId: illustCardId, trainingStatus: trainingStatus }
     }
 }

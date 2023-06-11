@@ -11,7 +11,7 @@ import { commandGachaSimulate } from './commands/gachaSimulate'
 import { commandGetCardIllustration } from './commands/getCardIllustration'
 import { queryRoomNumber } from './commands/roomNumber'
 import { drawRoomList } from './view/roomList'
-import { BindingStatus, commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer } from './commands/bindPlayer'
+import { BindingStatus, commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer, commandSwitchCarMode } from './commands/bindPlayer'
 import { Server } from './types/Server'
 import { globalDefaultServer } from './config'
 
@@ -104,6 +104,16 @@ export function apply(ctx: Context) {
     .example('ycm 大分 长途')
     .action(async ({ session }, keyword) => {
       return await drawRoomList(session, keyword)
+    })
+    ctx.command('开启车牌转发', '开启车牌转发')
+    .userFields(['tsugu'])
+    .action(async ({ session }) => {
+      return await commandSwitchCarMode(session, true)
+    })
+  ctx.command('关闭车牌转发', '关闭车牌转发')
+    .userFields(['tsugu'])
+    .action(async ({ session }) => {
+      return await commandSwitchCarMode(session, false)
     })
 
   ctx.command('查玩家 <playerId:number> [serverName:text]', '查询玩家信息')
