@@ -71,7 +71,7 @@ export async function drawRandomGacha(gacha: Gacha, times: number = 10, server: 
 
     const all = []
     all.push(drawTitle('卡池', '抽卡模拟'))
-    all.push(await drawDatablock({
+    all.push(drawDatablock({
         list: [gachaImage]
     }))
     //下方banner与ok按钮

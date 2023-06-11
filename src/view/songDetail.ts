@@ -94,7 +94,7 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
     }
 
     //创建最终输出数组
-    var listImage = await drawDatablock({ list })
+    var listImage = drawDatablock({ list })
     var all = []
     all.push(drawTitle('查询', '歌曲'))
 

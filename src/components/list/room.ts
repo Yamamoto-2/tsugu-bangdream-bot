@@ -94,7 +94,7 @@ export async function drawRoonInList(room: Room) {
         list.push(line)
         list.push(await drawPlayerDetailInRoomList(room.player))
     }
-    return (await drawDatablock({ list: list }))
+    return (drawDatablock({ list: list }))
 }
 
 async function drawPlayerDetailInRoomList(player: Player) {

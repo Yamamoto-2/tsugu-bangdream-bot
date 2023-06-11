@@ -96,7 +96,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         }
         const characterIconImage = stackImage(characterIconImageList);
         tempAttributeImageList.unshift(characterIconImage);
-        cardListImage = await drawDatablockHorizontal({
+        cardListImage = drawDatablockHorizontal({
             list: tempAttributeImageList,
         })
         if (cardListImage.width > maxWidth) {
@@ -110,7 +110,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
                     continue
                 }
                 const all = []
-                all.push(await drawDatablockHorizontal({ list: [characterIconImage, tempCanv] }))
+                all.push(drawDatablockHorizontal({ list: [characterIconImage, tempCanv] }))
                 const buffer = await outputFinalBuffer({
                     imageList: all,
                     useEazyBG: true
@@ -155,7 +155,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
             tempCardImageList,
         )
         var characterIconImage = stackImage(characterIconImageList);
-        cardListImage = await drawDatablockHorizontal({ list: [characterIconImage, cardListImageWithoutCharacterIcon] });
+        cardListImage = drawDatablockHorizontal({ list: [characterIconImage, cardListImageWithoutCharacterIcon] });
         var all = []
         all.push(drawTitle('查询', '卡牌列表'))
         all.push(cardListImage)

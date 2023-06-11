@@ -106,7 +106,7 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
 
 
 
-    var listImage = await drawDatablock({ list })
+    var listImage = drawDatablock({ list })
     var all = []
     all.push(drawTitle('查询', '卡池'))
     all.push(listImage)

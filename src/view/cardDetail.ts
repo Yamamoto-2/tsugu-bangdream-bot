@@ -139,7 +139,7 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
     list.push(await drawSdcharaInList(card))
 
     //创建最终输出数组
-    var listImage = await drawDatablock({ list })
+    var listImage = drawDatablock({ list })
     var all = []
     all.push(drawTitle('查询', '卡牌'))
     all.push(listImage)

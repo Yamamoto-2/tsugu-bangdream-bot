@@ -90,7 +90,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server): Pr
     list.push(await drawCutoffChart(cutoffList))
 
     //创建最终输出数组
-    var listImage = await drawDatablock({ list })
+    var listImage = drawDatablock({ list })
 
     all.push(listImage)
     var buffer = await outputFinalBuffer({

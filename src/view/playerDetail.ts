@@ -85,7 +85,7 @@ export async function drawPlayerDetail(playerId: number, server: Server): Promis
     const all: Array<Canvas | Image> = []
     //玩家信息 顶部 
     all.push(await drawPlayerDetailBlockWithIllust(player))
-    var listImage = await drawDatablock({ list })
+    var listImage = drawDatablock({ list })
     all.push(listImage)
     var buffer = await outputFinalBuffer({
         imageList: all,

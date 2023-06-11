@@ -143,6 +143,6 @@ var drawRankingrewards = async function (eventID) {
         }
         all.push(await drawrewardsets(all1))
     }
-    return(await drawDatablock_T(all))
+    return(drawDatablock_T(all))
 }
 */

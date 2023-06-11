@@ -91,7 +91,7 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
     }
     songImageListHorizontal.pop()
 
-    var songListImage = await drawDatablockHorizontal({
+    var songListImage = drawDatablockHorizontal({
         list: songImageListHorizontal
     })
 

@@ -100,7 +100,7 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
             if(times = 0){
                 all.push(drawTitle('查询', '活动列表'))
             }
-            all.push(await drawDatablock({list:[tempCanv]}))
+            all.push(drawDatablock({list:[tempCanv]}))
             const buffer = await outputFinalBuffer({
                 imageList: all,
                 useEazyBG: true
@@ -112,7 +112,7 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
         return '活动列表过长，已经拆分输出'
     }else{
         const all = []
-        const eventListImage = await drawDatablockHorizontal({
+        const eventListImage = drawDatablockHorizontal({
             list: eventImageListHorizontal
         })
         all.push(drawTitle('查询', '活动列表'))

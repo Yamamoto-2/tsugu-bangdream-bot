@@ -194,7 +194,7 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
         trainingStatus: false
     }))
 
-    var listImage = await drawDatablock({ list })
+    var listImage = drawDatablock({ list })
     all.push(listImage)
 
     //歌曲
