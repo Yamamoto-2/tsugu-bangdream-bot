@@ -3,7 +3,7 @@
     "rootDir": "src",
     "outDir": "lib",
     "target": "es2020",
-    "module": "ES6",
+    "module": "commonjs",
     "declaration": true,
     "composite": true,
     "incremental": true,
@@ -12,8 +12,10 @@
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "jsxImportSource": "@satorijs/element",
-    "allowJs": true,
+    "emitDeclarationOnly": true,
+    "sourceMap": false,
   },
   "include": [
-    "src" ],
+    "src",
+  ],
 }
