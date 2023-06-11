@@ -10,7 +10,6 @@ export async function drawRoomList(session: Session, keyword?: string) {
     if (roomList.length == 0) {
         return 'myc'
     }
-    console.log(roomList)
     for (let i = 0; i < roomList.length; i++) {
         const room = roomList[i]
         if (keyword != undefined) {
@@ -20,7 +19,6 @@ export async function drawRoomList(session: Session, keyword?: string) {
         }
         all.push(await drawRoonInList(room))
     }
-    console.log(all)
     var buffer = await outputFinalBuffer({
         imageList: all,
         useEazyBG: true,

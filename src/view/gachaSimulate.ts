@@ -19,7 +19,6 @@ export async function drawRandomGacha(gacha: Gacha, times: number = 10, server: 
         return '错误: 抽卡次数过多, 请不要超过10000次'
     }
     await gacha.initFull()
-    console.log(gacha.gachaId)
     let gachaImage: Canvas;
     if (times <= 10) {
         const cardImageList: Canvas[] = []
