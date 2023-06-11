@@ -9,7 +9,8 @@ import { commandYcxAll } from './commands/ycxAll'
 import { commandGroupSetting } from './commands/groupSetting'
 import { commandGachaSimulate } from './commands/gachaSimulate'
 import { commandGetCardIllustration } from './commands/getCardIllustration'
-import {commandCharacter} from './commands/searchCharacter'
+import { commandCharacter } from './commands/searchCharacter'
+import { commandSongMeta } from './commands/songMeta'
 import { queryRoomNumber } from './commands/roomNumber'
 import { drawRoomList } from './view/roomList'
 import { BindingStatus, commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer, commandSwitchCarMode } from './commands/bindPlayer'
@@ -106,7 +107,7 @@ export function apply(ctx: Context) {
     .action(async ({ session }, keyword) => {
       return await drawRoomList(session, keyword)
     })
-    ctx.command('开启车牌转发', '开启车牌转发')
+  ctx.command('开启车牌转发', '开启车牌转发')
     .userFields(['tsugu'])
     .action(async ({ session }) => {
       return await commandSwitchCarMode(session, true)
@@ -179,7 +180,7 @@ export function apply(ctx: Context) {
     .action(async ({ session }, cardId) => {
       return await commandGetCardIllustration(session, cardId)
     })
-    ctx.command('查角色 <word:text>', '查角色')
+  ctx.command('查角色 <word:text>', '查角色')
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
       return await commandCharacter(session, text)
@@ -194,6 +195,12 @@ export function apply(ctx: Context) {
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
       return await commandSong(session, text)
+    })
+  ctx.command('查询效率表 <word:text>', '查询效率表')
+    .alias('查效率表', '查询效率榜', '查效率榜')
+    .userFields(['tsugu'])
+    .action(async ({ session }, text) => {
+      return await commandSongMeta(session, text)
     })
   ctx.command("查卡池 <word:text>", "查卡池")
     .userFields(['tsugu'])
