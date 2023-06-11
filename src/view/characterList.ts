@@ -1,18 +1,16 @@
 import { h, Element, Session } from 'koishi'
 import { Character } from "../types/Character";
-import { Attribute } from "../types/Attribute";
 import mainAPI from "../types/_Main"
 import { match } from "../commands/fuzzySearch"
-import { Canvas, createCanvas, Image, loadImage } from "canvas"
-import { drawDatablock, drawDatablockHorizontal } from '../components/dataBlock';
-import { stackImage, stackImageHorizontal } from '../components/utils'
-import { drawRoundedRect } from "../image/drawRect";
+import { Canvas } from "canvas"
+import { drawDatablock, } from '../components/dataBlock';
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
 import { Server } from '../types/Server'
 import { globalDefaultServer } from '../config';
 import { drawCharacterHalfBlock } from '../components/dataBlock/characterHalf'
 import { drawList } from '../components/list'
+import { drawCharacterDetail } from './characterDetail'
 
 const maxWidth = 1370
 
@@ -42,6 +40,9 @@ export async function drawCharacterList(matches: { [key: string]: string[] }, de
     if (tempCharacterList.length == 0) {
         return '没有搜索到符合条件的角色'
     }
+    if (tempCharacterList.length == 1) {
+        return (await drawCharacterDetail(tempCharacterList[0].characterId, defaultServerList))
+    }
     const characterImageList: Canvas[] = []
     for (let i = 0; i < tempCharacterList.length; i++) {
         const element = tempCharacterList[i];
@@ -51,8 +52,8 @@ export async function drawCharacterList(matches: { [key: string]: string[] }, de
         content: characterImageList,
         maxWidth: maxWidth,
         spacing: 20,
-        lineHeight:820,
-        textSize:800
+        lineHeight: 820,
+        textSize: 800
     })
     let all = []
     all.push(drawTitle('查询', '角色列表'))
