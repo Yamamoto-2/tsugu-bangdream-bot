@@ -48,19 +48,29 @@ export interface Config {
 
 export const Config = Schema.object({
   useEasyBG: Schema.boolean().default(false).description('是否使用简易背景，启用这将大幅提高速度'),
-  bandoriStationToken: Schema.string().description('BandoriStationToken, 用于发送车牌，可以去 bandoristation.com 申请。缺失的情况下，车牌将无法被同步到服务器')
+  bandoriStationToken: Schema.string().description('BandoriStationToken, 用于发送车牌，可以去 bandoristation.com 申请。缺失的情况下，车牌将无法被同步到服务器').required(false)
 })
 
 
-//判断左侧是否为数字
-function checkLeftDigits(input: string): number {
-  const digits = input.substring(0, 6);
-  if (/^\d{5}$|^\d{6}$/.test(digits)) {
-    return parseInt(digits, 10);
-  } else {
-    return 0;
+//判断左侧5个或者6个是否为数字
+function checkLeftDigits(str: string): number {
+  const regexSixDigits = /^(\d{6})/;
+  const regexFiveDigits = /^(\d{5})/;
+
+  const sixDigitsMatch = str.match(regexSixDigits);
+  if (sixDigitsMatch) {
+    return parseInt(sixDigitsMatch[1]);
   }
+
+  const fiveDigitsMatch = str.match(regexFiveDigits);
+  if (fiveDigitsMatch) {
+    return parseInt(fiveDigitsMatch[1]);
+  }
+
+  return 0;
 }
+
+
 
 
 export function apply(ctx: Context, config: Config) {
@@ -183,7 +193,7 @@ export function apply(ctx: Context, config: Config) {
       return await commandGetCardIllustration(session, cardId)
     })
   ctx.command('查角色 <word:text>', '查角色').usage('根据关键词或角色ID查询角色信息')
-  .example('查角色 10 :返回10号角色的信息').example('查角色 吉他 :返回所有角色模糊搜索标签中包含吉他的角色列表')
+    .example('查角色 10 :返回10号角色的信息').example('查角色 吉他 :返回所有角色模糊搜索标签中包含吉他的角色列表')
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
       return await commandCharacter(session, text)
@@ -214,13 +224,13 @@ export function apply(ctx: Context, config: Config) {
     })
 
   ctx.command("ycx <tier:number> [eventId:number] [serverName]", "查询指定档位的预测线").usage('查询指定档位的预测线，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动')
-  .example('ycx 1000 :返回默认服务器当前活动1000档位的档线与预测线').example('ycx 1000 177 jp:返回日服177号活动1000档位的档线与预测线')
+    .example('ycx 1000 :返回默认服务器当前活动1000档位的档线与预测线').example('ycx 1000 177 jp:返回日服177号活动1000档位的档线与预测线')
     .userFields(['tsugu'])
     .action(async ({ session }, tier, eventId, serverName) => {
       return await commandYcx(session, tier, serverName, eventId)
     })
   ctx.command("ycxall [eventId:number] [serverName]", "查询所有档位的预测线").usage('查询所有档位的预测线，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动')
-  .example('ycxall :返回默认服务器当前活动所有档位的档线与预测线').example('ycxall 177 jp:返回日服177号活动所有档位的档线与预测线')
+    .example('ycxall :返回默认服务器当前活动所有档位的档线与预测线').example('ycxall 177 jp:返回日服177号活动所有档位的档线与预测线')
     .alias('myycx')
     .userFields(['tsugu'])
     .action(async ({ session }, eventId, serverName) => {
@@ -248,7 +258,7 @@ export function apply(ctx: Context, config: Config) {
         }
       }
     })
-  ctx.command('抽卡模拟 [times:number] [gachaId:number]').usage ('模拟抽卡，如果没有卡池ID的话，卡池为当前活动的卡池')
+  ctx.command('抽卡模拟 [times:number] [gachaId:number]').usage('模拟抽卡，如果没有卡池ID的话，卡池为当前活动的卡池')
     .example('抽卡模拟:模拟抽卡10次').example('抽卡模拟 300 922 :模拟抽卡300次，卡池为922号卡池')
     .userFields(['tsugu'])
     .channelFields(['tsugu_gacha'])
