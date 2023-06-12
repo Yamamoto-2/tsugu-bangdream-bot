@@ -1,5 +1,5 @@
 import { h, Element } from 'koishi'
-import { Canvas, createCanvas, Image, loadImage } from "canvas"
+import { Canvas, createCanvas, Image, loadImage } from 'canvas'
 import { outputFinalBuffer } from '../image/output'
 import { Server } from '../types/Server'
 import { Player } from '../types/Player';

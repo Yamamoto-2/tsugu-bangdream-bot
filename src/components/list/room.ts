@@ -1,7 +1,7 @@
 import { Room } from "../../types/Room";
 import { Player } from "../../types/Player";
 import { getQQUserIcon, getBandoriStationUserIcon } from "../../api/userIcon"
-import { Canvas, Image, createCanvas, loadImage } from "canvas";
+import { Canvas, Image, createCanvas, loadImage } from 'canvas';
 import { drawDatablock } from "../dataBlock";
 import { drawList, line, drawListWithLine } from "../list";
 import { drawText } from "../text";

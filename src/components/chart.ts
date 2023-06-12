@@ -2,7 +2,6 @@ import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import { assetsRootPath } from '../config';
 import { registerFont, loadImage } from 'canvas';
 import 'chartjs-adapter-moment';
-registerFont(assetsRootPath + "/Fonts/default.ttf", { family: "default" })
 registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
 var width = 800
 var height = 800

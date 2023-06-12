@@ -1,7 +1,7 @@
 import {drawSongInList} from "../list/song"
 import { Song } from "../../types/Song"
 import { drawDatablock } from '../dataBlock'
-import { Image, Canvas, createCanvas } from "canvas"
+import { Image, Canvas, createCanvas } from 'canvas'
 import { drawDottedLine } from '../../image/dottedLine'
 
 // 紧凑化虚线分割

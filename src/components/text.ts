@@ -1,6 +1,5 @@
 import { createCanvas, registerFont, Image, Canvas, CanvasRenderingContext2D } from 'canvas';
 import { assetsRootPath } from '../config';
-registerFont(assetsRootPath + "/Fonts/default.ttf", { family: "default" })
 registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
 
 interface warpTextOptions {

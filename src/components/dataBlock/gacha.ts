@@ -5,7 +5,7 @@ import { drawCharacterInList } from '../list/character'
 import { drawAttributeInList } from "../list/attribute";
 import { drawTimeInList } from "../list/time";
 import { drawText } from "../text";
-import { createCanvas, Image, Canvas } from "canvas";
+import { createCanvas, Image, Canvas } from 'canvas';
 import { drawBannerImageCanvas } from './utils'
 
 export async function drawGachaDatablock(gacha: Gacha, topLeftText?: string) {

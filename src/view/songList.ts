@@ -2,7 +2,7 @@ import { h, Element, Context } from 'koishi'
 import { Song } from "../types/Song";
 import mainAPI from "../types/_Main"
 import { match } from "../commands/fuzzySearch"
-import { Canvas, createCanvas, Image, loadImage } from "canvas"
+import { Canvas, createCanvas, Image, loadImage } from 'canvas'
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
 import { drawDatablockHorizontal } from "../components/dataBlock";

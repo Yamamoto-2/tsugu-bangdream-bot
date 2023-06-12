@@ -1,4 +1,4 @@
-import { createCanvas, Canvas } from "canvas"
+import { createCanvas, Canvas } from 'canvas'
 import { Song } from "../../types/Song"
 import { drawText } from "../text"
 

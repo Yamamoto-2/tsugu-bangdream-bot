@@ -2,7 +2,7 @@ import { Player } from '../../types/Player';
 import { drawImageListCenter } from "../list";
 import { drawDatablock } from '../dataBlock'
 import { drawText, drawTextWithImages } from "../text";
-import { createCanvas, Image, Canvas } from "canvas";
+import { createCanvas, Image, Canvas } from 'canvas';
 import { drawDegree } from '../degree';
 import { Degree } from '../../types/Degree';
 import { Card } from '../../types/Card';

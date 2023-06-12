@@ -2,7 +2,7 @@ import { Gacha, getPresentGachaList } from "../types/Gacha";
 import { Card } from "../types/Card";
 import { drawCardIcon } from "../components/card";
 import { drawTitle } from "../components/title";
-import { createCanvas, Canvas, Image, loadImage } from "canvas";
+import { createCanvas, Canvas, Image, loadImage } from 'canvas';
 import { drawTextWithImages, drawText } from "../components/text";
 import { outputFinalBuffer } from '../image/output'
 import { h, Element } from 'koishi'

@@ -2,7 +2,7 @@ import { h, Element,Session } from 'koishi'
 import { Card } from "../types/Card";
 import mainAPI from "../types/_Main"
 import { match } from "../commands/fuzzySearch"
-import { Canvas, createCanvas, Image, loadImage } from "canvas"
+import { Canvas, createCanvas, Image, loadImage } from 'canvas'
 import { drawDatablock, drawDatablockHorizontal } from '../components/dataBlock';
 import { line } from '../components/list';
 import { stackImage, stackImageHorizontal, resizeImage } from '../components/utils'

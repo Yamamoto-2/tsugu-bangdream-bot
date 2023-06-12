@@ -1,6 +1,6 @@
 import { h, Element, Context } from 'koishi'
 import { Song, getMetaRanking } from "../types/Song";
-import { Canvas, createCanvas, Image, loadImage } from "canvas"
+import { Canvas, createCanvas, Image, loadImage } from 'canvas'
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
 import { drawSongInList } from '../components/list/song';

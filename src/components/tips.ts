@@ -1,4 +1,4 @@
-import { Canvas, Image, createCanvas } from "canvas"
+import { Canvas, Image, createCanvas } from 'canvas'
 import { drawText } from "./text"
 import { resizeImage } from "./utils"
 

@@ -4,7 +4,7 @@ import { Attribute } from "../types/Attribute";
 import { Character } from "../types/Character";
 import mainAPI from "../types/_Main"
 import { match } from "../commands/fuzzySearch"
-import { Canvas, createCanvas, Image, loadImage } from "canvas"
+import { Canvas, createCanvas, Image, loadImage } from 'canvas'
 import { drawCardIcon } from "../components/card"
 import { drawDatablock, drawDatablockHorizontal } from '../components/dataBlock';
 import { stackImage, stackImageHorizontal } from '../components/utils'

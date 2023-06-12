@@ -1,6 +1,6 @@
 import { Costume } from "../../types/Costume";
 import { Card } from "../../types/Card";
-import { Canvas, createCanvas } from "canvas";
+import { Canvas, createCanvas } from 'canvas';
 import { drawList } from '../list'
 
 export async function drawSdcharaInList(card: Card): Promise<Canvas> {

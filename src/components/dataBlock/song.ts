@@ -1,7 +1,7 @@
 import { drawSongInList } from "../list/song"
 import { Song } from "../../types/Song"
 import { drawDatablock } from '../dataBlock'
-import { Image, Canvas, createCanvas } from "canvas"
+import { Image, Canvas, createCanvas } from 'canvas'
 import { drawDottedLine } from '../../image/dottedLine'
 import { resizeImage, stackImage, stackImageHorizontal } from "../utils"
 import { Server, getServerByPriority } from "../../types/Server"

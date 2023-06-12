@@ -1,4 +1,4 @@
-import { Canvas, createCanvas } from "canvas"
+import { Canvas, createCanvas } from 'canvas'
 import { Band } from "../../types/Band"
 import { Server, getServerByPriority } from "../../types/Server"
 import { Song } from "../../types/Song"

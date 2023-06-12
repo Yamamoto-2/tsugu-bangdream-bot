@@ -1,4 +1,4 @@
-import { Canvas, createCanvas, Image } from "canvas";
+import { Canvas, createCanvas, Image } from 'canvas';
 import { drawText } from "../text";
 import { drawList } from "../list";
 import { stackImage } from '../utils'

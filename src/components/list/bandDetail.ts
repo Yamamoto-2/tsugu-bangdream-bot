@@ -1,5 +1,5 @@
 import { Player } from "../../types/Player";
-import { Canvas, createCanvas, Image, loadImage } from "canvas";
+import { Canvas, createCanvas, Image, loadImage } from 'canvas';
 import { drawList } from '../list'
 import { resizeImage } from "../utils";
 import { Band } from "../../types/Band";

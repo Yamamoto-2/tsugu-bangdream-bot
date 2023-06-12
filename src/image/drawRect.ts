@@ -1,7 +1,6 @@
 import { createCanvas, Canvas, registerFont } from 'canvas';
 import { assetsRootPath } from '../config';
 import {getTextWidth} from './utils';
-registerFont(assetsRootPath + "/Fonts/default.ttf", { family: "default" })
 registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
 
 interface RoundedRect {

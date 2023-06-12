@@ -1,6 +1,6 @@
 import { difficultyColorList, difficultyNameList } from "./difficulty"
 import { drawRoundedRectWithText } from "../../image/drawRect"
-import { Canvas, createCanvas, Image } from "canvas";
+import { Canvas, createCanvas, Image } from 'canvas';
 import { drawTextWithImages } from "../text";
 import { drawList, drawImageListCenter } from '../list'
 import { resizeImage, stackImage } from "../utils";

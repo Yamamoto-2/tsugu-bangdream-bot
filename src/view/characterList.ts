@@ -2,7 +2,7 @@ import { h, Element, Session } from 'koishi'
 import { Character } from "../types/Character";
 import mainAPI from "../types/_Main"
 import { match } from "../commands/fuzzySearch"
-import { Canvas } from "canvas"
+import { Canvas } from 'canvas'
 import { drawDatablock, } from '../components/dataBlock';
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'

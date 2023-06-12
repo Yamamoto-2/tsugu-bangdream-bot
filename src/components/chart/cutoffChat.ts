@@ -1,4 +1,4 @@
-import { createCanvas } from "canvas";
+import { createCanvas } from 'canvas';
 import { Cutoff } from "../../types/Cutoff";
 import { drawTimeLineChart, getColor } from "../chart";
 

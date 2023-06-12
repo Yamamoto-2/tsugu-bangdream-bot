@@ -1,7 +1,7 @@
 import { drawSongInList } from "../list/song"
 import { Song, songInRank, getMetaRanking } from "../../types/Song"
 import { drawDatablock } from '../dataBlock'
-import { Image, Canvas, createCanvas } from "canvas"
+import { Image, Canvas, createCanvas } from 'canvas'
 import { drawDottedLine } from '../../image/dottedLine'
 import { Server } from "../../types/Server"
 import { globalDefaultServer, serverNameFullList } from "../../config"
