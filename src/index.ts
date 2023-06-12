@@ -6,7 +6,6 @@ import { commandGacha } from './commands/searchGacha'
 import { commandYcx } from './commands/ycx'
 import { commandSearchPlayer } from './commands/searchPlayer'
 import { commandYcxAll } from './commands/ycxAll'
-import { commandGroupSetting } from './commands/groupSetting'
 import { commandGachaSimulate } from './commands/gachaSimulate'
 import { commandGetCardIllustration } from './commands/getCardIllustration'
 import { commandCharacter } from './commands/searchCharacter'
@@ -48,7 +47,7 @@ export interface Config {
 
 export const Config = Schema.object({
   useEasyBG: Schema.boolean().default(false).description('是否使用简易背景，启用这将大幅提高速度'),
-  bandoriStationToken: Schema.string().description('BandoriStationToken, 用于发送车牌，可以去 bandoristation.com 申请。缺失的情况下，车牌将无法被同步到服务器').required(false)
+  bandoriStationToken: Schema.string().description('BandoriStationToken, 用于发送车牌，可以去 bandoristation.com 申请。缺失的情况下，车牌将无法被同步到服务器')
 })
 
 
@@ -267,8 +266,3 @@ export function apply(ctx: Context, config: Config) {
     })
 
 }
-
-
-
-
-console.log("time:" + new Date().toLocaleString());
