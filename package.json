@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-tsugu-bangdream-bot",
   "description": "BanG Dream！少女乐团派对 多功能bot",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "contributors": [
     "Yamamoto <1810972564qq@gmail.com>",
     "DreamPrism <dreamprism01@gmail.com>",
@@ -16,7 +16,9 @@
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
-    "dist"
+    "dist",
+    "config",
+    "assets"
   ],
   "license": "MIT",
   "scripts": {},
