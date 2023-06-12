@@ -15,7 +15,7 @@ function loadConfig(): Config {
 const config = loadConfig();
 
 
-export async function queryRoomNumber(session: Session<'tsugu', never>, number: number, raw_message: string,bandoriStationToken: string) {
+export async function queryRoomNumber(session: Session<'tsugu', never>, number: number, raw_message: string,bandoriStationToken?: string) {
     if (!session.user.tsugu.car) {
         return
     }

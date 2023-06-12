@@ -2,8 +2,6 @@ import { Room } from "../../types/Room";
 import { Player } from "../../types/Player";
 import { getQQUserIcon, getBandoriStationUserIcon } from "../../api/userIcon"
 import { Canvas, Image, createCanvas, loadImage } from "canvas";
-import { assetsRootPath } from "../../config";
-import * as path from 'path'
 import { drawDatablock } from "../dataBlock";
 import { drawList, line, drawListWithLine } from "../list";
 import { drawText } from "../text";
@@ -14,13 +12,7 @@ import { drawDegree } from '../degree'
 import { Degree } from "../../types/Degree";
 import { resizeImage } from "../utils";
 
-let IconUndefind: Image
-async function loadIconUndefind() {
-    if (!IconUndefind) {
-        IconUndefind = await loadImage(path.join(assetsRootPath, 'iconUndefined.png'))
-    }
-    return IconUndefind
-}
+
 
 export async function drawRoomListTitle() {
     const canvas = createCanvas(1000, 150)
@@ -50,16 +42,13 @@ export async function drawRoonInList(room: Room) {
     const timeNow = new Date().getTime()
     //头像
     let Icon: Image
-    /*
     if (room.avanter != undefined) {
-        Icon = await loadImage(await getBandoriStationUserIcon(room.avanter))
+        Icon = await getBandoriStationUserIcon(room.avanter)
     }
     else if (room.source = 'qq') {
-        Icon = await loadImage(await getQQUserIcon(Number(room.userId)))
+        Icon = await getQQUserIcon(Number(room.userId))
     }
-    else {*/
-    Icon = await loadIconUndefind()
-    //}
+
     //文本
     const textList: Canvas[] = []
     textList.push(drawText({
