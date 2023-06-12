@@ -187,8 +187,10 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
             room.setPlayer(player)
         }
     }
-    
     roomStack.push(room)
+    if(bandoriStationToken == undefined){
+        return
+    }
     if(source == 'qq'){
         const url = `${BandoriStationurl}index.php?function=submit_room_number&number=${number}&user_id=${userId}&raw_message=${encodeURIComponent(rawMessage)}&source=Tsugu&token=${bandoriStationToken}`
         try {
