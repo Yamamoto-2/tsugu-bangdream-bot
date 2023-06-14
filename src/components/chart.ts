@@ -44,6 +44,7 @@ export async function drawTimeLineChart({
         console.log(data['datasets'][i]['data'])
     }
     */
+   const yMax = Math.max(...data['datasets'].map((dataset:any) => Math.max(...dataset['data'].map((data:any) => data['y']))))
     var options = {
         plugins: {
             legend: {
@@ -65,7 +66,8 @@ export async function drawTimeLineChart({
                 display: !setStartToZero
             },
             y: {
-                min: 0
+                min: 0,
+                max: yMax * 1.1,
             }
         }
     }
