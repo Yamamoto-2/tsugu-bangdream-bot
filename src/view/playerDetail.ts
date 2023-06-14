@@ -1,4 +1,3 @@
-import { h, Element } from 'koishi'
 import { Canvas, createCanvas, Image, loadImage } from 'canvas'
 import { outputFinalBuffer } from '../image/output'
 import { Server } from '../types/Server'
@@ -19,11 +18,11 @@ async function loadImageOnce() {
 }
 loadImageOnce()
 
-export async function drawPlayerDetail(playerId: number, server: Server,useEasyBG:boolean): Promise<Element | string> {
+export async function drawPlayerDetail(playerId: number, server: Server,useEasyBG:boolean):Promise<Array<Buffer | string>>  {
     var player = new Player(playerId, server)
     await player.initFull()
     if (!player.isExist) {
-        return '错误: 玩家不存在，请检查服务器是否正确'
+        return ['错误: 玩家不存在，请检查服务器是否正确']
     }/*
     var stat = await player.calcStat()
     console.log(stat)
@@ -93,5 +92,5 @@ export async function drawPlayerDetail(playerId: number, server: Server,useEasyB
         text: ' ',
         BGimage: BGDefaultImage
     })
-    return h.image(buffer, 'image/png')
+    return [buffer]
 }

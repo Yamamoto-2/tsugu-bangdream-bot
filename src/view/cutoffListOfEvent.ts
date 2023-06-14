@@ -1,4 +1,3 @@
-import { h, Element } from 'koishi'
 import { Event } from '../types/Event';
 import { drawList, line } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
@@ -22,7 +21,7 @@ var statusName = {
     'ended': '已结束'
 }
 
-export async function drawCutoffListOfEvent(eventId: number, server: Server): Promise<Element | string> {
+export async function drawCutoffListOfEvent(eventId: number, server: Server):Promise<Array<Buffer | string>> {
     var event = new Event(eventId)
     var all = []
     all.push(drawTitle('档线列表', `${serverNameFullList[server]}`))
@@ -105,6 +104,5 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server): Pr
         imageList: all,
         useEasyBG: true
     })
-
-    return h.image(buffer, 'image/png')
+    return [buffer]
 }

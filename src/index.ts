@@ -1,4 +1,4 @@
-import { Context, Schema, h, Session, Command, User } from 'koishi'
+import { Context, Schema, h, Session, Element } from 'koishi'
 import { commandCard } from './commands/searchCard'
 import { commandEvent } from './commands/searchEvent'
 import { commandSong } from './commands/searchSong'
@@ -12,9 +12,10 @@ import { commandCharacter } from './commands/searchCharacter'
 import { commandSongMeta } from './commands/songMeta'
 import { queryRoomNumber } from './commands/roomNumber'
 import { drawRoomList } from './view/roomList'
-import { BindingStatus, commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer, commandSwitchCarMode } from './commands/bindPlayer'
+import { commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer, commandSwitchCarMode } from './commands/bindPlayer'
 import { Server } from './types/Server'
-import { globalDefaultServer } from './config'
+import { globalDefaultServer, BindingStatus, tsuguUser } from './config'
+import { checkLeftDigits } from './utils'
 
 export const name = 'tsugu-bangdream-bot'
 
@@ -50,23 +51,23 @@ export const Config = Schema.object({
   bandoriStationToken: Schema.string().description('BandoriStationToken, 用于发送车牌，可以去 bandoristation.com 申请。缺失的情况下，车牌将无法被同步到服务器')
 })
 
-
-//判断左侧5个或者6个是否为数字
-function checkLeftDigits(str: string): number {
-  const regexSixDigits = /^(\d{6})/;
-  const regexFiveDigits = /^(\d{5})/;
-
-  const sixDigitsMatch = str.match(regexSixDigits);
-  if (sixDigitsMatch) {
-    return parseInt(sixDigitsMatch[1]);
+function paresMessageList(list?: Array<Buffer | string>): Array<Element | string> {
+  if (!list) {
+    return []
   }
-
-  const fiveDigitsMatch = str.match(regexFiveDigits);
-  if (fiveDigitsMatch) {
-    return parseInt(fiveDigitsMatch[1]);
+  let messageList = []
+  for (let i = 0; i < list.length; i++) {
+    parseMessage(list[i])
   }
-
-  return 0;
+  function parseMessage(message: Buffer | string) {
+    if (typeof message == 'string') {
+      messageList.push(message)
+    }
+    else if (message instanceof Buffer) {
+      messageList.push(h.image(message, 'image/png'))
+    }
+  }
+  return messageList
 }
 
 
@@ -105,17 +106,33 @@ export function apply(ctx: Context, config: Config) {
     const number = checkLeftDigits(session.content)
     if (number != 0) {
       await session.observeUser(['tsugu'])
-      await queryRoomNumber(<Session<'tsugu', never>>session, number, session.content, config.bandoriStationToken)
+      const user = session.user['tsugu'] as tsuguUser
+      await queryRoomNumber(user, number, session.content, config.bandoriStationToken)
     }
   })
-  ctx.command('ycm [keyword:text]', '获取车牌')
-    .alias('有车吗', '车来')
-    .usage(`获取所有车牌车牌，可以通过关键词过滤`)
-    .example('ycm : 获取所有车牌')
-    .example('ycm 大分: 获取所有车牌，其中包含"大分"关键词的车牌')
-    .action(async ({ session }, keyword) => {
-      return await drawRoomList(session, keyword)
+  //群相关
+  ctx.command("抽卡 <word:text>", '开关群聊抽卡功能').usage('开关群聊抽卡功能，需要管理员权限')
+    .example('开启抽卡 :开启群聊抽卡功能').example('关闭抽卡 :关闭群聊抽卡功能')
+    .shortcut('开启抽卡', { args: ['on'] })
+    .shortcut('关闭抽卡', { args: ['off'] })
+    .channelFields(["tsugu_gacha"])
+    .userFields(['authority'])
+    .action(async ({ session }, text) => {
+      const roles = session?.author.roles
+      if (session.user.authority > 1 || roles?.includes('admin') || roles?.includes('owner')) {
+        switch (text) {
+          case "on":
+          case "开启":
+            session.channel.tsugu_gacha = true
+            return "开启成功"
+          case "off":
+          case "关闭":
+            session.channel.tsugu_gacha = false
+            return "关闭成功"
+        }
+      }
     })
+  //玩家相关
   ctx.command('开启车牌转发', '开启车牌转发')
     .userFields(['tsugu'])
     .action(async ({ session }) => {
@@ -127,15 +144,6 @@ export function apply(ctx: Context, config: Config) {
       return await commandSwitchCarMode(session, false)
     })
 
-  ctx.command('查玩家 <playerId:number> [serverName:text]', '查询玩家信息')
-    .alias('查询玩家')
-    .usage('查询指定ID玩家的信息。省略服务器名时，默认从你当前的主服务器查询')
-    .example('查玩家 10000000 : 查询你当前默认服务器中，玩家ID为10000000的玩家信息')
-    .example('查玩家 40474621 jp : 查询日服玩家ID为40474621的玩家信息')
-    .userFields(['tsugu'])
-    .action(async ({ session }, playerId, serverName) => {
-      return await commandSearchPlayer(session, playerId, serverName, config.useEasyBG)
-    })
   ctx.command('绑定玩家 [serverName:text]', '绑定玩家信息')
     .usage('开始玩家数据绑定流程，请不要在"绑定玩家"指令后添加玩家ID。省略服务器名时，默认为绑定到你当前的主服务器。请在获得临时验证数字后，将玩家签名改为该数字，并回复你的玩家ID')
     .userFields(['tsugu'])
@@ -178,91 +186,112 @@ export function apply(ctx: Context, config: Config) {
       return await commandPlayerInfo(session, serverName, config.useEasyBG)
     })
 
+  //其他
+  ctx.command('ycm [keyword:text]', '获取车牌')
+    .alias('有车吗', '车来')
+    .usage(`获取所有车牌车牌，可以通过关键词过滤`)
+    .example('ycm : 获取所有车牌')
+    .example('ycm 大分: 获取所有车牌，其中包含"大分"关键词的车牌')
+    .action(async ({ session }, keyword) => {
+      const list = await drawRoomList(keyword)
+      return (paresMessageList(list))
+    })
+  ctx.command('查玩家 <playerId:number> [serverName:text]', '查询玩家信息')
+    .alias('查询玩家')
+    .usage('查询指定ID玩家的信息。省略服务器名时，默认从你当前的主服务器查询')
+    .example('查玩家 10000000 : 查询你当前默认服务器中，玩家ID为10000000的玩家信息')
+    .example('查玩家 40474621 jp : 查询日服玩家ID为40474621的玩家信息')
+    .userFields(['tsugu'])
+    .action(async ({ session }, playerId, serverName) => {
+      const list = await commandSearchPlayer(session.user.tsugu, playerId, serverName, config.useEasyBG)
+      return (paresMessageList(list))
+    })
   ctx.command("查卡 <word:text>", "查卡").alias('查卡牌')
     .usage('根据关键词或卡牌ID查询卡片信息，请使用空格隔开所有参数')
     .example('查卡 1399 :返回1399号卡牌的信息').example('查卡 绿 tsugu :返回所有属性为pure的羽泽鸫的卡牌列表')
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
-      return await commandCard(session, text, config.useEasyBG)
+      const default_servers = session.user.tsugu.default_server
+      const list = await commandCard(default_servers, text, config.useEasyBG)
+      return (paresMessageList(list))
     })
   ctx.command('查卡面 <cardId:number>', '查卡面').alias('查卡插画', '查插画')
     .usage('根据卡片ID查询卡片插画').example('查卡面 1399 :返回1399号卡牌的插画')
     .userFields(['tsugu'])
     .action(async ({ session }, cardId) => {
-      return await commandGetCardIllustration(session, cardId)
+      const list = await commandGetCardIllustration(cardId)
+      return paresMessageList(list)
     })
   ctx.command('查角色 <word:text>', '查角色').usage('根据关键词或角色ID查询角色信息')
     .example('查角色 10 :返回10号角色的信息').example('查角色 吉他 :返回所有角色模糊搜索标签中包含吉他的角色列表')
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
-      return await commandCharacter(session, text)
+      const default_servers = session.user.tsugu.default_server
+      const list = await commandCharacter(default_servers, text)
+      return paresMessageList(list)
     })
 
   ctx.command("查活动 <word:text>", "查活动").usage('根据关键词或活动ID查询活动信息')
     .example('查活动 177 :返回177号活动的信息').example('查活动 绿 tsugu :返回所有属性加成为pure，且活动加成角色中包括羽泽鸫的活动列表')
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
-      return await commandEvent(session, text, config.useEasyBG)
+      const default_servers = session.user.tsugu.default_server
+      const list = await commandEvent(default_servers, text, config.useEasyBG)
+      return paresMessageList(list)
     })
   ctx.command("查曲 <word:text>", "查曲").usage('根据关键词或曲目ID查询曲目信息')
     .example('查曲 1 :返回1号曲的信息').example('查曲 ag lv27 :返回所有难度为27的ag曲列表')
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
-      return await commandSong(session, text)
+      const default_servers = session.user.tsugu.default_server
+      const list = await commandSong(default_servers, text)
+      return paresMessageList(list)
     })
   ctx.command('查询效率表 <word:text>', '查询效率表').usage('查询指定服务器的歌曲效率表，如果没有服务器名的话，服务器为用户的默认服务器')
     .alias('查效率表', '查询效率榜', '查效率榜')
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
-      return await commandSongMeta(session, text)
+      const default_servers = session.user.tsugu.default_server
+      const list = await commandSongMeta(default_servers, text)
+      return paresMessageList(list)
+
     })
   ctx.command("查卡池 <gachaId:number>", "查卡池").usage('根据卡池ID查询卡池信息')
     .userFields(['tsugu'])
     .action(async ({ session }, gachaId) => {
-      return await commandGacha(session, gachaId, config.useEasyBG)
+      const default_servers = session.user.tsugu.default_server
+      const list = await commandGacha(default_servers, gachaId, config.useEasyBG)
+      return paresMessageList(list)
     })
 
-  ctx.command("ycx <tier:number> [eventId:number] [serverName]", "查询指定档位的预测线").usage('查询指定档位的预测线，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动')
+  ctx.command("ycx <tier:number> [eventId:number] [serverName]", "查询指定档位的预测线").usage("查询指定档位的预测线，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动\n可用档线:\n'jp': [100, 500, 1000, 2000, 5000, 10000],\n'tw': [100, 500],\n'en': [50, 100, 300, 500, 1000, 2000, 2500],\n'kr': [100],\n'cn': [50, 100, 300, 500, 1000, 2000]")
     .example('ycx 1000 :返回默认服务器当前活动1000档位的档线与预测线').example('ycx 1000 177 jp:返回日服177号活动1000档位的档线与预测线')
     .userFields(['tsugu'])
     .action(async ({ session }, tier, eventId, serverName) => {
-      return await commandYcx(session, tier, serverName, eventId)
+      const server_mode = session.user.tsugu.server_mode
+      const list = await commandYcx(server_mode, tier, serverName, eventId)
+      return paresMessageList(list)
     })
-  ctx.command("ycxall [eventId:number] [serverName]", "查询所有档位的预测线").usage('查询所有档位的预测线，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动')
+  ctx.command("ycxall [eventId:number] [serverName]", "查询所有档位的预测线").usage("查询所有档位的预测线，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动\n可用档线:\n'jp': [100, 500, 1000, 2000, 5000, 10000],\n'tw': [100, 500],\n'en': [50, 100, 300, 500, 1000, 2000, 2500],\n'kr': [100],\n'cn': [50, 100, 300, 500, 1000, 2000]")
     .example('ycxall :返回默认服务器当前活动所有档位的档线与预测线').example('ycxall 177 jp:返回日服177号活动所有档位的档线与预测线')
     .alias('myycx')
     .userFields(['tsugu'])
     .action(async ({ session }, eventId, serverName) => {
-      return await commandYcxAll(session, serverName, eventId)
+      const server_mode = session.user.tsugu.server_mode
+      const list = await commandYcxAll(server_mode, serverName, eventId)
+      return paresMessageList(list)
     })
 
-  ctx.command("抽卡 <word:text>", '开关群聊抽卡功能').usage('开关群聊抽卡功能，需要管理员权限')
-    .example('开启抽卡 :开启群聊抽卡功能').example('关闭抽卡 :关闭群聊抽卡功能')
-    .shortcut('开启抽卡', { args: ['on'] })
-    .shortcut('关闭抽卡', { args: ['off'] })
-    .channelFields(["tsugu_gacha"])
-    .userFields(['authority'])
-    .action(async ({ session }, text) => {
-      const roles = session?.author.roles
-      if (session.user.authority > 1 || roles?.includes('admin') || roles?.includes('owner')) {
-        switch (text) {
-          case "on":
-          case "开启":
-            session.channel.tsugu_gacha = true
-            return "开启成功"
-          case "off":
-          case "关闭":
-            session.channel.tsugu_gacha = false
-            return "关闭成功"
-        }
-      }
-    })
+
   ctx.command('抽卡模拟 [times:number] [gachaId:number]').usage('模拟抽卡，如果没有卡池ID的话，卡池为当前活动的卡池')
     .example('抽卡模拟:模拟抽卡10次').example('抽卡模拟 300 922 :模拟抽卡300次，卡池为922号卡池')
     .userFields(['tsugu'])
     .channelFields(['tsugu_gacha'])
     .action(async ({ session }, times, gachaId) => {
-      return await commandGachaSimulate(session, times, gachaId)
+      const default_server = session.user.tsugu.default_server[0]
+      const status = session.channel?.tsugu_gacha ?? true
+      const list = await commandGachaSimulate(default_server, status, times, gachaId)
+      return (paresMessageList(list))
     })
 
 }

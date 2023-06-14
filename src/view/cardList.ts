@@ -1,4 +1,3 @@
-import { h, Element, Session } from 'koishi'
 import { Card } from "../types/Card";
 import { Attribute } from "../types/Attribute";
 import { Character } from "../types/Character";
@@ -16,7 +15,7 @@ import { globalDefaultServer } from '../config';
 
 const maxWidth = 7000
 
-export async function drawCardList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer, session: Session): Promise<Element | string> {
+export async function drawCardList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
     //计算模糊搜索结果
     var tempCardList: Array<Card> = [];//最终输出的卡牌列表
     var cardIdList: Array<number> = Object.keys(mainAPI['cards']).map(Number);//所有卡牌ID列表
@@ -42,7 +41,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         }
     }
     if (tempCardList.length == 0) {
-        return '没有搜索到符合条件的卡牌'
+        return ['没有搜索到符合条件的卡牌']
     }
 
     //计算表格，X轴为颜色，Y轴为角色
@@ -101,8 +100,8 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         })
         if (cardListImage.width > maxWidth) {
             let times = 0
-            let tempImageList = []
-
+            let tempImageList:Array<Buffer|string> = []
+            tempImageList.push('卡牌列表过长，已经拆分输出')
             for (let i = 0; i < tempAttributeImageList.length; i++) {
 
                 const tempCanv = tempAttributeImageList[i];
@@ -115,11 +114,10 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
                     imageList: all,
                     useEasyBG: true
                 })
-                tempImageList.push(h.image(buffer, 'image/png'))
+                tempImageList.push(buffer)
                 times += 1
             }
-            session.send(tempImageList)
-            return '卡牌列表过长，已经拆分输出'
+            return tempImageList
         }
         var all = []
         all.push(drawTitle('查询', '卡牌列表'))
@@ -128,7 +126,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
             imageList: all,
             useEasyBG: true
         })
-        return h.image(buffer, 'image/png')
+        return [buffer]
     }
     else {
         var tempCardImageList: Canvas[] = []//总列
@@ -163,7 +161,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
             imageList: all,
             useEasyBG: true
         })
-        return h.image(buffer, 'image/png')
+        return [buffer]
     }
 
 

@@ -1,4 +1,3 @@
-import { h, Element, Context } from 'koishi'
 import { Song, getMetaRanking } from "../types/Song";
 import { Canvas, createCanvas, Image, loadImage } from 'canvas'
 import { drawTitle } from '../components/title';
@@ -23,7 +22,7 @@ const line = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawSongMetaList(server: Server) {
+export async function drawSongMetaList(server: Server):Promise<Array<Buffer | string>> {
     const feverMode = [true, false]
     const imageList = []
     for (let i = 0; i < feverMode.length; i++) {
@@ -37,7 +36,7 @@ export async function drawSongMetaList(server: Server) {
         imageList: all,
         useEasyBG: true
     })
-    return h.image(buffer, 'image/png')
+    return [buffer]
 }
 
 async function drawMetaRankListDatablock(Fever: boolean, server: Server): Promise<Canvas> {

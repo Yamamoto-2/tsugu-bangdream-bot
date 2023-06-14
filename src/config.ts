@@ -41,3 +41,24 @@ export const serverNameFullList = [
     '国服',
     '韩服'
 ]
+
+export enum BindingStatus {
+    None, Verifying, Success, Failed
+}
+
+export interface tsuguUser{
+    user_id: string,
+    platform: string,
+    server_mode: Server,
+    default_server: Server[],
+    car: boolean,
+    server_list: {
+      gameID: number,
+      verifyCode?: number,
+      bindingStatus: BindingStatus
+    }[]
+}
+
+export interface Channel {
+    tsugu_gacha: boolean
+  }

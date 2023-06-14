@@ -1,4 +1,3 @@
-import { h, Element } from 'koishi'
 import { getPresentEvent } from '../types/Event';
 import { drawList, line, drawListByServerList, drawTipsInList, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
@@ -14,9 +13,9 @@ import { drawEventDatablock } from '../components/dataBlock/event';
 import { drawSongMetaListDataBlock } from '../components/dataBlock/songMetaList'
 import { globalDefaultServer, serverNameFullList } from '../config';
 
-export async function drawSongDetail(song: Song, defaultServerList: Server[] = globalDefaultServer): Promise<Element | string> {
+export async function drawSongDetail(song: Song, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
     if (song.isExist == false) {
-        return '错误: 歌曲不存在'
+        return ['错误: 歌曲不存在']
     }
     await song.initFull()
     var list: Array<Image | Canvas> = []
@@ -131,7 +130,7 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
         imageList: all,
         useEasyBG: true
     })
-    return h.image(buffer, 'image/png')
+    return [buffer]
 }
 
 //时间长度转时分秒函数

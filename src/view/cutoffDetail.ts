@@ -1,4 +1,3 @@
-import { h, Element } from 'koishi'
 import { Event } from '../types/Event';
 import { drawList, line, drawListMerge } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
@@ -21,10 +20,10 @@ var statusName = {
     'ended': '已结束'
 }
 
-export async function drawCutoffDetail(eventId: number, tier: number, server: Server): Promise<Element | string> {
+export async function drawCutoffDetail(eventId: number, tier: number, server: Server): Promise<Array<Buffer | string>>{
     var cutoff = new Cutoff(eventId, server, tier)
     if (cutoff.isExist == false) {
-        return `错误: ${serverNameFullList[server]} 活动或档线不存在`
+        return [`错误: ${serverNameFullList[server]} 活动或档线不存在`]
     }
     await cutoff.initFull()
     /*
@@ -122,6 +121,6 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
         useEasyBG: true
     })
 
-    return h.image(buffer, 'image/png')
+    return [buffer];
 
 }

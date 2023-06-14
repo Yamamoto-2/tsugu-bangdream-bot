@@ -1,4 +1,3 @@
-import { h, Element, Session } from 'koishi'
 import { Character } from "../types/Character";
 import mainAPI from "../types/_Main"
 import { match } from "../commands/fuzzySearch"
@@ -14,7 +13,7 @@ import { drawCharacterDetail } from './characterDetail'
 
 const maxWidth = 1370
 
-export async function drawCharacterList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer, session: Session): Promise<Element | string> {
+export async function drawCharacterList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
     //计算模糊搜索结果
     var tempCharacterList: Array<Character> = [];//最终输出的角色列表
     var characterIdList: Array<number> = Object.keys(mainAPI['characters']).map(Number);//所有卡牌ID列表
@@ -38,7 +37,7 @@ export async function drawCharacterList(matches: { [key: string]: string[] }, de
         }
     }
     if (tempCharacterList.length == 0) {
-        return '没有搜索到符合条件的角色'
+        return ['没有搜索到符合条件的角色']
     }
     if (tempCharacterList.length == 1) {
         return (await drawCharacterDetail(tempCharacterList[0].characterId, defaultServerList))
@@ -64,5 +63,5 @@ export async function drawCharacterList(matches: { [key: string]: string[] }, de
         imageList: all,
         useEasyBG: true
     })
-    return h.image(buffer, 'image/png')
+    return [buffer];
 }

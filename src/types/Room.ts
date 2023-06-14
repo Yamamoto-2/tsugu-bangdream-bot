@@ -1,12 +1,9 @@
-import { BandoriStationurl } from "../config";
-import { callAPIAndCacheResponse } from "../api/getApi";
+import { BandoriStationurl, tsuguUser } from "../config";
 import { Player } from "./Player";
 import { unescape } from "querystring";
 import { getServerByName } from "./Server";
 import { getJson } from "../api/downloader";
-import { Session } from "koishi";
-import { Server } from "./Server";
-import {BindingStatus} from "../commands/bindPlayer"
+import {BindingStatus} from "../config"
 
 
 //栈函数
@@ -163,7 +160,7 @@ function decode(text: string): string {
 }
 
 //向BandoriStation提交房间号
-export async function submitRoomNumber({ number, rawMessage, source, userId, time, userName,bandoriStationToken }: RoomOption,session:Session<'tsugu', never>) {
+export async function submitRoomNumber({ number, rawMessage, source, userId, time, userName,bandoriStationToken }: RoomOption,user:tsuguUser) {
     if (source == 'onebot') {
         source = 'qq'
     }
@@ -177,10 +174,9 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
     })
 
     //玩家数据
-    const playerBinding = session.user.tsugu
-    const server = playerBinding.server_mode
+    const server = user.server_mode
     if (server != undefined) {
-        const curServer = playerBinding.server_list[server]
+        const curServer = user.server_list[server]
         if (curServer.bindingStatus == BindingStatus.Success) {
             const player = new Player(curServer.gameID,server)
             await player.initFull()

@@ -1,13 +1,13 @@
 import { isInteger } from './utils'
 import { drawGachaDetail } from '../view/gachaDetail'
-import { Session } from 'koishi'
+import { Server } from '../types/Server'
 
-export async function commandGacha(session: Session<'tsugu', never>, gachaId: number,useEasyBG: boolean) {
+export async function commandGacha(default_server:Server[], gachaId: number,useEasyBG: boolean): Promise<Array<Buffer | string>> {
     if (!gachaId) {
-        return '错误: 请输入卡池ID'
+        return ['错误: 请输入卡池ID']
     }
     if (typeof gachaId == 'number') {
-        return await drawGachaDetail(gachaId, session.user.tsugu.default_server,useEasyBG)
+        return await drawGachaDetail(gachaId, default_server,useEasyBG)
     }
-    return '错误: 请输入正确的卡池ID'
+    return ['错误: 请输入正确的卡池ID']
 }

@@ -1,4 +1,3 @@
-import { h, Element } from 'koishi'
 import { drawList, line, drawListByServerList, drawListMerge, drawImageListCenter, drawTipsInList } from '../components/list';
 import { drawDatablock } from '../components/dataBlock'
 import { Image, Canvas, createCanvas } from 'canvas'
@@ -43,10 +42,10 @@ const constellationList = {
     'sagittarius': '射手座',
 }
 
-export async function drawCharacterDetail(characterId: number, defaultServerList: Server[] = globalDefaultServer): Promise<Element | string> {
+export async function drawCharacterDetail(characterId: number, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
     const character = new Character(characterId)
     if (!character.isExist) {
-        return '错误: 角色不存在'
+        return ['错误: 角色不存在']
     }
     await character.initFull()
     let all: Array<Canvas | Image> = []
@@ -222,7 +221,5 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
         useEasyBG: true
     })
 
-    return h.image(buffer, 'image/png')
-
-
+    return [buffer]
 }

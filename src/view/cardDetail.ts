@@ -1,4 +1,3 @@
-import { h, Element } from 'koishi'
 import { Card } from '../types/Card'
 import { Skill } from '../types/Skill';
 import { drawList, line, drawListByServerList, drawListMerge } from '../components/list';
@@ -20,10 +19,10 @@ import { Event } from '../types/Event';
 import { Gacha } from '../types/Gacha';
 import { globalDefaultServer, serverNameFullList } from '../config';
 
-async function drawCardDetail(cardId: number, defaultServerList: Server[] = globalDefaultServer,useEasyBG:boolean): Promise<Element | string> {
+async function drawCardDetail(cardId: number, defaultServerList: Server[] = globalDefaultServer,useEasyBG:boolean): Promise<Array<string|Buffer>> {
     const card = new Card(cardId)
     if (!card.isExist) {
-        return '错误: 卡牌不存在'
+        return ['错误: 卡牌不存在']
     }
     await card.initFull()
     var source = card.source
@@ -206,7 +205,7 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
         text: 'Card'
     })
 
-    return h.image(buffer, 'image/png')
+    return [buffer]
 }
 
 export {

@@ -1,4 +1,3 @@
-import { h, Element } from 'koishi'
 import { getPresentEvent } from '../types/Event';
 import { Card } from '../types/Card'
 import { drawList, line, drawListByServerList, drawListMerge } from '../components/list';
@@ -16,10 +15,10 @@ import { drawGashaPaymentMethodInList } from '../components/list/gachaPaymentMet
 import { drawGachaRateInList } from '../components/list/gachaRate';
 import { globalDefaultServer, serverNameFullList } from '../config';
 
-export async function drawGachaDetail(gachaId: number, defaultServerList: Server[] = globalDefaultServer,useEasyBG:boolean): Promise<Element | string> {
+export async function drawGachaDetail(gachaId: number, defaultServerList: Server[] = globalDefaultServer,useEasyBG:boolean): Promise<Array<Buffer | string>>{
     const gacha = new Gacha(gachaId)
     if (!gacha.isExist) {
-        return '错误: 卡池不存在'
+        return ['错误: 卡池不存在']
     }
     await gacha.initFull()
     var list: Array<Image | Canvas> = []
@@ -137,5 +136,5 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
         BGimage: gachaBGImage,
         text:'Gacha'
     })
-    return h.image(buffer, 'image/png')
+    return [buffer]
 }

@@ -1,4 +1,3 @@
-import { h, Element,Session } from 'koishi'
 import { Card } from "../types/Card";
 import mainAPI from "../types/_Main"
 import { match } from "../commands/fuzzySearch"
@@ -34,7 +33,7 @@ export const line2: Canvas = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawEventList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer,session:Session) {
+export async function drawEventList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
     //计算模糊搜索结果
     var tempEventList: Array<Event> = [];//最终输出的活动列表
     var eventIdList: Array<number> = Object.keys(mainAPI['events']).map(Number);//所有活动ID列表
@@ -58,7 +57,7 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
         }
     }
     if (tempEventList.length == 0) {
-        return '没有搜索到符合条件的活动'
+        return ['没有搜索到符合条件的活动']
     }
 
     //按照开始时间排序
@@ -88,29 +87,29 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
     eventImageListHorizontal.pop()
 
 
-    if(eventImageListHorizontal.length > maxColumns){
+    if (eventImageListHorizontal.length > maxColumns) {
         let times = 0
-        let tempImageList = []
+        let tempImageList: Array<string | Buffer> = []
+        tempImageList.push('活动列表过长，已经拆分输出')
         for (let i = 0; i < eventImageListHorizontal.length; i++) {
             const tempCanv = eventImageListHorizontal[i];
-            if(tempCanv == line2){
+            if (tempCanv == line2) {
                 continue
             }
             const all = []
-            if(times = 0){
+            if (times = 0) {
                 all.push(drawTitle('查询', '活动列表'))
             }
-            all.push(drawDatablock({list:[tempCanv]}))
+            all.push(drawDatablock({ list: [tempCanv] }))
             const buffer = await outputFinalBuffer({
                 imageList: all,
                 useEasyBG: true
             })
-            tempImageList.push(h.image(buffer, 'image/png'))  
+            tempImageList.push(buffer, 'image/png')
             times += 1
         }
-        session.send(tempImageList)
-        return '活动列表过长，已经拆分输出'
-    }else{
+        return tempImageList
+    } else {
         const all = []
         const eventListImage = drawDatablockHorizontal({
             list: eventImageListHorizontal
@@ -121,7 +120,7 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
             imageList: all,
             useEasyBG: true
         })
-        return h.image(buffer, 'image/png')
+        return [buffer]
     }
 
 }

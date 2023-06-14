@@ -1,14 +1,13 @@
 import { drawRoomListTitle, drawRoonInList } from "../components/list/room";
 import { outputFinalBuffer } from "../image/output";
 import { Room, queryAllRoom } from "../types/Room";
-import { Session, h } from "koishi";
 
-export async function drawRoomList(session: Session, keyword?: string) {
+export async function drawRoomList(keyword?: string):Promise<Array<Buffer | string>> {
     let all = []
     all.push(await drawRoomListTitle())
     let roomList = await queryAllRoom()
     if (roomList.length == 0) {
-        return 'myc'
+        return ['myc']
     }
     for (let i = 0; i < roomList.length; i++) {
         const room = roomList[i]
@@ -24,7 +23,7 @@ export async function drawRoomList(session: Session, keyword?: string) {
         useEasyBG: true,
         startWithSpace: false
     })
-    return h.image(buffer, 'image/png')
+    return [buffer]
 }
 
 

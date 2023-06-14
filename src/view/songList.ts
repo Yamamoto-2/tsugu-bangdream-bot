@@ -1,4 +1,3 @@
-import { h, Element, Context } from 'koishi'
 import { Song } from "../types/Song";
 import mainAPI from "../types/_Main"
 import { match } from "../commands/fuzzySearch"
@@ -41,7 +40,7 @@ const line2: Canvas = drawDottedLine({
 })
 
 
-export async function drawSongList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer) {
+export async function drawSongList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
     // 计算歌曲模糊搜索结果
     var tempSongList: Array<Song> = [];
     var songIdList: Array<number> = Object.keys(mainAPI['songs']).map(Number)
@@ -64,7 +63,7 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
         }
     }
     if (tempSongList.length == 0) {
-        return '没有搜索到符合条件的歌曲'
+        return ['没有搜索到符合条件的歌曲']
     }
 
 
@@ -102,5 +101,5 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
         imageList: all,
         useEasyBG: true
     })
-    return h.image(buffer, 'image/png')
+    return [buffer]
 }

@@ -1,11 +1,10 @@
 import { Card } from "../types/Card";
 import { Canvas, createCanvas, Image } from "canvas";
-import { h, Schema, Context, Session } from "koishi";
 
-export async function commandGetCardIllustration(session:Session,cardId: number) {
+export async function commandGetCardIllustration(cardId: number): Promise<Array<Buffer | string>> {
     let card = new Card(cardId);
     if (!card.isExist) {
-        return '错误: 该卡不存在'
+        return ['错误: 该卡不存在']
     }
     const trainingStatusList = card.getTrainingStatusList();
     const imageList = []
@@ -16,7 +15,7 @@ export async function commandGetCardIllustration(session:Session,cardId: number)
         const ctx = tempCanvas.getContext("2d");
         ctx.drawImage(Illustration, 0, 0);
         const buffer = tempCanvas.toBuffer("image/png");
-        imageList.push(h.image(buffer, 'image/png'))
+        imageList.push(buffer)
     }
     return imageList
 }

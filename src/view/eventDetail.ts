@@ -1,4 +1,3 @@
-import { h, Element } from 'koishi'
 import { Event } from '../types/Event';
 import { Card } from '../types/Card'
 import { drawList, line, drawListByServerList, drawListMerge } from '../components/list';
@@ -20,10 +19,10 @@ import { Song, getPresentSongList } from '../types/Song'
 import { drawSongListDataBlock } from '../components/dataBlock/songList';
 import { globalDefaultServer, serverNameFullList } from '../config';
 
-export async function drawEventDetail(eventId: number, defaultServerList: Server[] = globalDefaultServer,useEasyBG:boolean): Promise<Element | string> {
+export async function drawEventDetail(eventId: number, defaultServerList: Server[] = globalDefaultServer,useEasyBG:boolean): Promise<Array<Buffer | string>> {
     const event = new Event(eventId)
     if (!event.isExist) {
-        return '错误: 活动不存在'
+        return ['错误: 活动不存在']
     }
     await event.initFull()
     var list: Array<Image | Canvas> = []
@@ -231,8 +230,7 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
         text: 'Event'
     })
 
-    return h.image(buffer, 'image/png')
-
+    return [buffer];
 }
 
 export async function getEventGachaAndCardList(event: Event, server: Server) {

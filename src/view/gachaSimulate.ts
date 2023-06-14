@@ -5,7 +5,6 @@ import { drawTitle } from "../components/title";
 import { createCanvas, Canvas, Image, loadImage } from 'canvas';
 import { drawTextWithImages, drawText } from "../components/text";
 import { outputFinalBuffer } from '../image/output'
-import { h, Element } from 'koishi'
 import { getServerByPriority, Server } from "../types/Server";
 import { drawDatablock } from "../components/dataBlock";
 import { drawRoundedRectWithText } from "../image/drawRect";
@@ -14,9 +13,9 @@ import { drawGachaDatablock } from "../components/dataBlock/gacha";
 
 
 const maxWidth = 230 * 5
-export async function drawRandomGacha(gacha: Gacha, times: number = 10, server: Server): Promise<Element | string> {
+export async function drawRandomGacha(gacha: Gacha, times: number = 10, server: Server): Promise<Array<Buffer | string>> {
     if (times > 10000) {
-        return '错误: 抽卡次数过多, 请不要超过10000次'
+        return ['错误: 抽卡次数过多, 请不要超过10000次']
     }
     await gacha.initFull()
     let gachaImage: Canvas;
@@ -80,8 +79,7 @@ export async function drawRandomGacha(gacha: Gacha, times: number = 10, server: 
         imageList: all,
         useEasyBG: true,
     })
-    return h.image(buffer, 'image/png')
-
+    return [buffer]
 }
 
 //画抽卡模拟的卡牌

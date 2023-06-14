@@ -1,15 +1,12 @@
 import { Database, Random, Session, h } from "koishi";
-import { bindingPlayerPromptWaitingTime, serverNameFullList } from "../config";
+import { bindingPlayerPromptWaitingTime, serverNameFullList, BindingStatus } from "../config";
 import { Server, getServerByName } from "../types/Server";
 import { Player } from "../types/Player";
 import { drawPlayerDetail } from "../view/playerDetail";
-import { cursorTo } from "readline";
 
 var rand = new Random()
 
-export enum BindingStatus {
-    None, Verifying, Success, Failed
-}
+
 
 export async function commandBindPlayer(session: Session<'tsugu', never>, serverName: string, useEasyBG: boolean) {
     const playerBinding = session.user.tsugu
@@ -109,7 +106,7 @@ export async function commandBindPlayer(session: Session<'tsugu', never>, server
         playerBinding.user_id = session.userId
         curServer.bindingStatus = BindingStatus.Success
         curServer.verifyCode = undefined
-        return await drawPlayerDetail(player.playerId, server, useEasyBG)
+        return h.image(await drawPlayerDetail(player.playerId, server, useEasyBG)[0], 'image/png')
     }
     else {
         curServer.gameID = 0
@@ -170,7 +167,7 @@ export async function commandPlayerInfo(session: Session<'tsugu', never>, server
         return `错误: 未检测到${serverNameFullList[server]}的玩家数据`
     }
     else {
-        return await drawPlayerDetail(curServer.gameID, server, useEasyBG)
+        return  h.image(await drawPlayerDetail(curServer.gameID, server, useEasyBG)[0], 'image/png')
     }
 }
 

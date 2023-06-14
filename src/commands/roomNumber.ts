@@ -1,7 +1,6 @@
 import { Room, submitRoomNumber } from "../types/Room";
 import * as fs from 'fs'
-import { carKeywordPath } from "../config";
-import { Database, Random, Session, h } from "koishi";
+import { carKeywordPath, tsuguUser, Channel } from "../config";
 
 interface Config {
     [type: string]: string[];
@@ -15,8 +14,8 @@ function loadConfig(): Config {
 const config = loadConfig();
 
 
-export async function queryRoomNumber(session: Session<'tsugu', never>, number: number, raw_message: string,bandoriStationToken?: string) {
-    if (!session.user.tsugu.car) {
+export async function queryRoomNumber(user: tsuguUser, number: number, raw_message: string, bandoriStationToken?: string) {
+    if (!user.car) {
         return
     }
     let isCar = false
@@ -33,7 +32,7 @@ export async function queryRoomNumber(session: Session<'tsugu', never>, number: 
         }
     }
     if (isCar) {
-        let platform = session.platform
+        let platform = user.platform
         if (platform == 'onebot') {
             platform = 'qq'
         }
@@ -41,11 +40,10 @@ export async function queryRoomNumber(session: Session<'tsugu', never>, number: 
             number: number,
             rawMessage: raw_message,
             source: platform,
-            userId: session.userId,
-            userName: session.username,
+            userId: user.user_id,
             time: Date.now(),
             bandoriStationToken
-        }, session)
+        }, user)
     }
 }
 
