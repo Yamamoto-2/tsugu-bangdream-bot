@@ -6,7 +6,7 @@ import {
   mkdirSync,
   statSync,
 } from 'fs';
-import request, { CoreOptions, UrlOptions } from 'request';
+import axios, { AxiosRequestConfig } from 'axios';
 import { join } from 'path';
 import { Parser } from 'xml2js';
 import { cacheRootPath } from '../config';
@@ -46,42 +46,36 @@ function saveLastModifiedCache() {
   process.on(eventType, saveLastModifiedCache);
 });
 
-export type RequestOptions = CoreOptions & UrlOptions;
+export type RequestOptions = AxiosRequestConfig;
 
 async function makeRequest(options: RequestOptions, retry = 0) {
   if (retry) await sleep(RETRY_WAIT_TIME);
-  return new Promise((resolve, reject) => {
-    request(options, (err, res, body) => {
-      if (err) {
-        if (retry >= MAX_RETRY_COUNT) {
-          console.log(`访问${options.url}失败`);
-          reject(`${options.url}: ${err}`);
-          return;
-        }
-        console.log(`${options.url}: ${err}`);
-        makeRequest(options, retry + 1).then((body) => {
-          resolve(body);
-        }).catch(reject);
-      } else if (res.statusCode == 304) {
-        console.log(`不需更新:${options.url}`)
-        resolve(null);
-        return;
-      } else if (!body) {
-        reject(`${options.url}: 返回为空`);
-        return;
-      } else if (body.toString().startsWith('<!DOCTYPE html>')) {
-        reject(`${options.url}: 不是有效资源`);
-        return;
-      } else {
-        console.log(`访问${options.url}成功`)
-        var lastModified = res.caseless.get('last-modified');
-        if (lastModified)
-          lastModifiedCache[options.url as string] = lastModified;
-        resolve(body);
-        return;
+  try {
+    const response = await axios(options);
+    const { status, data, headers } = response;
+    if (status === 304) {
+      console.log(`不需更新:${options.url}`);
+      return null;
+    } else if (!data) {
+      throw new Error(`${options.url}: 返回为空`);
+    } else if (data.toString().startsWith('<!DOCTYPE html>')) {
+      throw new Error(`${options.url}: 不是有效资源`);
+    } else {
+      console.log(`访问${options.url}成功`);
+      const lastModified = headers['last-modified'];
+      if (lastModified) {
+        lastModifiedCache[options.url as string] = lastModified;
       }
-    });
-  });
+      return data;
+    }
+  } catch (err) {
+    if (retry >= MAX_RETRY_COUNT) {
+      console.log(`访问${options.url}失败`);
+      throw new Error(`${options.url}: ${err}`);
+    }
+    console.log(`${options.url}: ${err}`);
+    return makeRequest(options, retry + 1);
+  }
 }
 
 function createDirIfNonExist(filepath: string) {
@@ -96,7 +90,7 @@ function createDirIfNonExist(filepath: string) {
 }
 
 // overwrite: If need to overwrite existing file
-// cache:     add If-Modified-Since header to bypass unnessesary download based on file modify date.
+// cache:     add If-Modified-Since header to bypass unnecessary download based on file modify date.
 //            Only meaningful if used with overwrite==true
 async function download(
   url: string,
@@ -108,47 +102,46 @@ async function download(
   if (!lastModifiedCache) loadLastModifiedCache();
 
   createDirIfNonExist(filepath);
-  var exists = existsSync(join(filepath, filename));
+  const exists = existsSync(join(filepath, filename));
   if (!exists || overwrite) {
-    var promise = new Promise(function (resolve, reject) {
-      const options: RequestOptions = { url };
-      options.timeout = DEFAULT_REQUEST_TIMEOUT;
-      options.encoding = null;
-      options.strictSSL = false;
-      options.gzip = true;
+    try {
+      const options: RequestOptions = {
+        url,
+        timeout: DEFAULT_REQUEST_TIMEOUT,
+        responseType: 'arraybuffer',
+        httpsAgent: { rejectUnauthorized: false },
+      };
       if (exists && cache && url in lastModifiedCache) {
         options.headers = { 'If-Modified-Since': lastModifiedCache[url] };
       }
-      makeRequest(options)
-        .then((body) => {
-          if (body) {
-            writeFileSync(join(filepath, filename), body as any);
-          }
-          resolve(body);
-        })
-        .catch((err) => {
-          console.log(err);
-          reject(err);
-        });
-    });
-    return promise;
+      const response = await makeRequest(options);
+      if (response) {
+        writeFileSync(join(filepath, filename), response as any);
+      }
+      return response;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
-  console.log("不需下载:" + url)
+  console.log("不需下载:" + url);
   return readFileSync(join(filepath, filename));
 }
 
 async function getJson(url: string, ifmodifiedsince = null) {
-  const options: RequestOptions = { url };
-  options.json = true;
-  options.strictSSL = false;
-  options.gzip = true;
+  const options: RequestOptions = {
+    url,
+    headers: {},
+    responseType: 'json',
+    httpsAgent: { rejectUnauthorized: false },
+  };
   if (ifmodifiedsince) {
-    options.headers = { 'If-Modified-Since': ifmodifiedsince };
+    options.headers['If-Modified-Since'] = ifmodifiedsince;
   }
   return await makeRequest(options);
 }
 
-// Read from json file if exsits. Use file modified time for If-Modified-Since header
+// Read from json file if exists. Use file modified time for If-Modified-Since header
 async function getJsonAndSave(
   url: string,
   filepath: string,
@@ -158,11 +151,11 @@ async function getJsonAndSave(
   if (!lastModifiedCache) loadLastModifiedCache();
 
   createDirIfNonExist(filepath);
-  var filefullpath = join(filepath, filename);
-  var fileexists = existsSync(filefullpath);
-  var limittimestamp = new Date().getTime() - timelimit;
-  var data: any = null;
-  var filetimestamp: number;
+  const filefullpath = join(filepath, filename);
+  const fileexists = existsSync(filefullpath);
+  const limittimestamp = new Date().getTime() - timelimit;
+  let data: any = null;
+  let filetimestamp: number;
   if (fileexists) {
     filetimestamp = statSync(filefullpath).mtime.getTime();
     if (limittimestamp < filetimestamp) {
@@ -172,33 +165,44 @@ async function getJsonAndSave(
   }
 
   if (fileexists && url in lastModifiedCache) {
-    var lastModifiedStamp = Date.parse(lastModifiedCache[url]);
-    if (filetimestamp! < lastModifiedStamp) data = await getJson(url);
-    else data = await getJson(url, lastModifiedCache[url]);
-    if (!data) data = JSON.parse(readFileSync(filefullpath, 'utf8'));
-  } else data = await getJson(url);
+    const lastModifiedStamp = Date.parse(lastModifiedCache[url]);
+    if (filetimestamp! < lastModifiedStamp) {
+      data = await getJson(url);
+    } else {
+      data = await getJson(url, lastModifiedCache[url]);
+    }
+    if (!data) {
+      data = JSON.parse(readFileSync(filefullpath, 'utf8'));
+    }
+  } else {
+    data = await getJson(url);
+  }
   if (data) {
     writeFileSync(filefullpath, JSON.stringify(data));
     return data;
-  } else return null;
+  } else {
+    return null;
+  }
 }
 
-var xmlParser = new Parser();
+const xmlParser = new Parser();
 
 async function getXml(url: string, ifmodifiedsince = null) {
-  var options: RequestOptions = { url };
-  options.json = true;
-  options.strictSSL = false;
-  options.gzip = true;
+  const options: RequestOptions = {
+    url,
+    headers: {},
+    responseType: 'text',
+    httpsAgent: { rejectUnauthorized: false },
+  };
   if (ifmodifiedsince) {
-    options.headers = { 'If-Modified-Since': ifmodifiedsince };
+    options.headers['If-Modified-Since'] = ifmodifiedsince;
   }
-  var tempxml = (await makeRequest(options)) as string;
-  var tempjson = xmlParser.parseStringPromise(tempxml);
+  const tempxml = await makeRequest(options);
+  const tempjson = xmlParser.parseStringPromise(tempxml);
   return tempjson;
 }
 
-//Read from xml file if exsits. Automatically transform xml format to json format. Use file modified time for If-Modified-Since header
+//Read from xml file if exists. Automatically transform xml format to json format. Use file modified time for If-Modified-Since header
 
 async function getXmlAndSave(
   url: string,
@@ -209,11 +213,11 @@ async function getXmlAndSave(
   if (!lastModifiedCache) loadLastModifiedCache();
 
   createDirIfNonExist(filepath);
-  var filefullpath = join(filepath, filename);
-  var fileexists = existsSync(filefullpath);
-  var limittimestamp = new Date().getTime() - timelimit;
-  var data = null;
-  var filetimestamp;
+  const filefullpath = join(filepath, filename);
+  const fileexists = existsSync(filefullpath);
+  const limittimestamp = new Date().getTime() - timelimit;
+  let data = null;
+  let filetimestamp;
   if (fileexists) {
     filetimestamp = statSync(filefullpath).mtime.getTime();
     if (limittimestamp < filetimestamp) {
@@ -223,7 +227,7 @@ async function getXmlAndSave(
   }
 
   if (fileexists && url in lastModifiedCache) {
-    var lastModifiedStamp = Date.parse(lastModifiedCache[url]);
+    const lastModifiedStamp = Date.parse(lastModifiedCache[url]);
     if (limittimestamp > lastModifiedStamp) {
       await download(url, filepath, filename, true);
       data = await xmlParser.parseStringPromise(readFileSync(filefullpath));
