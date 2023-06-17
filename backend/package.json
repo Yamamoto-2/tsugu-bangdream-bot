@@ -1,0 +1,61 @@
+{
+  "name": "koishi-plugin-tsugu-bangdream-bot",
+  "description": "BanG Dream！少女乐团派对 多功能bot",
+  "version": "0.0.4",
+  "contributors": [
+    "Yamamoto <1810972564qq@gmail.com>",
+    "DreamPrism <dreamprism01@gmail.com>",
+    "HarryShan <harryshan_1991@163.com>"
+  ],
+  "homepage": "https://github.com/Yamamoto-2/tsugu-bangdream-bot",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yamamoto-2/tsugu-bangdream-bot.git"
+  },
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist",
+    "config",
+    "assets"
+  ],
+  "license": "MIT",
+  "scripts": {},
+  "keywords": [
+    "chatbot",
+    "koishi",
+    "plugin",
+    "tsugu",
+    "bangdream"
+  ],
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.4",
+    "@types/request": "^2.48.8",
+    "@types/xml2js": "^0.4.11"
+  },
+  "dependencies": {
+    "better-sqlite3": "^8.4.0",
+    "canvas": "^2.11.2",
+    "chart.js": "^3.9.1",
+    "chartjs-adapter-moment": "^1.0.1",
+    "chartjs-node-canvas": "^4.1.6",
+    "jimp": "^0.22.8",
+    "moment": "^2.29.4",
+    "request": "^2.88.2"
+  },
+  "koishi": {
+    "description": {
+      "en": "BanG Dream! girs band party bot, data from https://bestdori.com/",
+      "zh": "BanG Dream！少女乐团派对 多功能bot, 数据来自 https://bestdori.com/"
+    },
+    "service": {
+      "required": [
+        "database"
+      ]
+    },
+    "locales": [
+      "zh"
+    ]
+  }
+}

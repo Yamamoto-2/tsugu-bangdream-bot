@@ -1,0 +1,492 @@
+{
+    "10000": {
+        "characterId": 17,
+        "rarity": 2,
+        "attribute": "cool",
+        "levelLimit": 30,
+        "resourceSetName": "res017900",
+        "prefix": [
+            null,
+            null,
+            null,
+            "bilibili",
+            null
+        ],
+        "releasedAt": [
+            null,
+            null,
+            null,
+            "1561492800000",
+            null
+        ],
+        "skillId": 5,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 1332,
+                "technique": 2502,
+                "visual": 1698
+            },
+            "30": {
+                "performance": 3369,
+                "technique": 6330,
+                "visual": 4297
+            }
+        }
+    },
+    "10001": {
+        "characterId": 22,
+        "rarity": 2,
+        "attribute": "cool",
+        "levelLimit": 30,
+        "resourceSetName": "res022900",
+        "prefix": [
+            null,
+            "To The Party",
+            null,
+            "bilibili",
+            null
+        ],
+        "releasedAt": [
+            null,
+            "1540108800000",
+            null,
+            "1561492800000",
+            null
+        ],
+        "skillId": 8,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 1835,
+                "technique": 2785,
+                "visual": 1373
+            },
+            "30": {
+                "performance": 4642,
+                "technique": 7046,
+                "visual": 3470
+            }
+        }
+    },
+    "10002": {
+        "characterId": 5,
+        "rarity": 2,
+        "attribute": "cool",
+        "levelLimit": 30,
+        "resourceSetName": "res005900",
+        "prefix": [
+            null,
+            "To The Party",
+            null,
+            "霓裳羽衣",
+            null
+        ],
+        "releasedAt": [
+            null,
+            "1539936000000",
+            null,
+            "1581138000000",
+            null
+        ],
+        "skillId": 8,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 1973,
+                "technique": 1716,
+                "visual": 2574
+            },
+            "30": {
+                "performance": 4951,
+                "technique": 4305,
+                "visual": 6461
+            }
+        }
+    },
+    "10003": {
+        "characterId": 7,
+        "rarity": 2,
+        "attribute": "pure",
+        "levelLimit": 30,
+        "resourceSetName": "res007900",
+        "prefix": [
+            null,
+            "To The Party",
+            null,
+            "霓裳羽衣",
+            null
+        ],
+        "releasedAt": [
+            null,
+            "1540281600000",
+            null,
+            "1581138000000",
+            null
+        ],
+        "skillId": 2,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 1716,
+                "technique": 2125,
+                "visual": 2627
+            },
+            "30": {
+                "performance": 4305,
+                "technique": 5334,
+                "visual": 6595
+            }
+        }
+    },
+    "10004": {
+        "characterId": 13,
+        "rarity": 2,
+        "attribute": "happy",
+        "levelLimit": 30,
+        "resourceSetName": "res013900",
+        "prefix": [
+            null,
+            "To The Party",
+            null,
+            "霓裳羽衣",
+            null
+        ],
+        "releasedAt": [
+            null,
+            "1540022400000",
+            null,
+            "1581138000000",
+            null
+        ],
+        "skillId": 5,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 1762,
+                "technique": 2554,
+                "visual": 1947
+            },
+            "30": {
+                "performance": 4424,
+                "technique": 6411,
+                "visual": 4883
+            }
+        }
+    },
+    "10005": {
+        "characterId": 16,
+        "rarity": 2,
+        "attribute": "powerful",
+        "levelLimit": 30,
+        "resourceSetName": "res016900",
+        "prefix": [
+            null,
+            "To The Party",
+            null,
+            "霓裳羽衣",
+            null
+        ],
+        "releasedAt": [
+            null,
+            "1540195200000",
+            null,
+            "1581138000000",
+            null
+        ],
+        "skillId": 5,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 2468,
+                "technique": 1848,
+                "visual": 2145
+            },
+            "30": {
+                "performance": 6145,
+                "technique": 4602,
+                "visual": 5341
+            }
+        }
+    },
+    "10006": {
+        "characterId": 24,
+        "rarity": 2,
+        "attribute": "powerful",
+        "levelLimit": 30,
+        "resourceSetName": "res024900",
+        "prefix": [
+            null,
+            "Enjoy! Party!",
+            null,
+            "霓裳羽衣",
+            null
+        ],
+        "releasedAt": [
+            null,
+            "1590048000000",
+            null,
+            "1581138000000",
+            null
+        ],
+        "skillId": 5,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 2171,
+                "technique": 2303,
+                "visual": 2185
+            },
+            "30": {
+                "performance": 5363,
+                "technique": 5692,
+                "visual": 5396
+            }
+        }
+    },
+    "10007": {
+        "characterId": 18,
+        "rarity": 2,
+        "attribute": "cool",
+        "levelLimit": 30,
+        "resourceSetName": "res018900",
+        "prefix": [
+            null,
+            "Enjoy! Party!",
+            null,
+            "bilibili",
+            null
+        ],
+        "releasedAt": [
+            null,
+            "1590048000000",
+            null,
+            "1593147600000",
+            null
+        ],
+        "skillId": 5,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 1855,
+                "technique": 2699,
+                "visual": 1511
+            },
+            "30": {
+                "performance": 4693,
+                "technique": 6828,
+                "visual": 3822
+            }
+        }
+    },
+    "10008": {
+        "characterId": 14,
+        "rarity": 2,
+        "attribute": "cool",
+        "levelLimit": 30,
+        "resourceSetName": "res014900",
+        "prefix": [
+            null,
+            "Enjoy! Party!",
+            null,
+            "bilibili",
+            null
+        ],
+        "releasedAt": [
+            null,
+            "1590048000000",
+            null,
+            "1593147600000",
+            null
+        ],
+        "skillId": 8,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 1736,
+                "technique": 1696,
+                "visual": 2633
+            },
+            "30": {
+                "performance": 4393,
+                "technique": 4290,
+                "visual": 6661
+            }
+        }
+    },
+    "10009": {
+        "characterId": 18,
+        "rarity": 2,
+        "attribute": "happy",
+        "levelLimit": 30,
+        "resourceSetName": "res018901",
+        "prefix": [
+            null,
+            "Enjoy! Party!",
+            null,
+            "独白",
+            null
+        ],
+        "releasedAt": [
+            null,
+            "1590048000000",
+            null,
+            "1609477200000",
+            null
+        ],
+        "skillId": 2,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 1808,
+                "technique": 2251,
+                "visual": 2402
+            },
+            "30": {
+                "performance": 4499,
+                "technique": 5610,
+                "visual": 5980
+            }
+        }
+    },
+    "10010": {
+        "characterId": 25,
+        "rarity": 2,
+        "attribute": "cool",
+        "levelLimit": 30,
+        "resourceSetName": "res025900",
+        "prefix": [
+            null,
+            "Enjoy! Party!",
+            null,
+            "叹息",
+            null
+        ],
+        "releasedAt": [
+            null,
+            "1590048000000",
+            null,
+            "1609477200000",
+            null
+        ],
+        "skillId": 5,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 2310,
+                "technique": 2251,
+                "visual": 2099
+            },
+            "30": {
+                "performance": 5706,
+                "technique": 5560,
+                "visual": 5183
+            }
+        }
+    },
+    "10011": {
+        "characterId": 21,
+        "rarity": 2,
+        "attribute": "happy",
+        "levelLimit": 30,
+        "resourceSetName": "res021900",
+        "prefix": [
+            null,
+            null,
+            null,
+            "誓语",
+            null
+        ],
+        "releasedAt": [
+            null,
+            null,
+            null,
+            "1609477200000",
+            null
+        ],
+        "skillId": 23,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 1740,
+                "technique": 2028,
+                "visual": 2292
+            },
+            "30": {
+                "performance": 4332,
+                "technique": 5050,
+                "visual": 5705
+            }
+        }
+    },
+    "10012": {
+        "characterId": 4,
+        "rarity": 2,
+        "attribute": "pure",
+        "levelLimit": 30,
+        "resourceSetName": "res004900",
+        "prefix": [
+            null,
+            null,
+            null,
+            "倾诉",
+            null
+        ],
+        "releasedAt": [
+            null,
+            null,
+            null,
+            "1609477200000",
+            null
+        ],
+        "skillId": 5,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 1902,
+                "technique": 1920,
+                "visual": 2238
+            },
+            "30": {
+                "performance": 4736,
+                "technique": 4779,
+                "visual": 5573
+            }
+        }
+    },
+    "10013": {
+        "characterId": 12,
+        "rarity": 2,
+        "attribute": "powerful",
+        "levelLimit": 30,
+        "resourceSetName": "res012900",
+        "prefix": [
+            null,
+            null,
+            null,
+            "幻想",
+            null
+        ],
+        "releasedAt": [
+            null,
+            null,
+            null,
+            "1609477200000",
+            null
+        ],
+        "skillId": 8,
+        "type": "campaign",
+        "stat": {
+            "1": {
+                "performance": 2130,
+                "technique": 1860,
+                "visual": 2070
+            },
+            "30": {
+                "performance": 5261,
+                "technique": 4596,
+                "visual": 5113
+            }
+        }
+    }
+}

@@ -11,7 +11,7 @@ import { commandGetCardIllustration } from './commands/getCardIllustration'
 import { commandCharacter } from './commands/searchCharacter'
 import { commandSongMeta } from './commands/songMeta'
 import { queryRoomNumber } from './commands/roomNumber'
-import { drawRoomList } from './view/roomList'
+import { commandRoomList } from './commands/roomList'
 import { commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer, commandSwitchCarMode } from './commands/bindPlayer'
 import { Server } from './types/Server'
 import { globalDefaultServer, BindingStatus, tsuguUser } from './config'
@@ -193,7 +193,7 @@ export function apply(ctx: Context, config: Config) {
     .example('ycm : 获取所有车牌')
     .example('ycm 大分: 获取所有车牌，其中包含"大分"关键词的车牌')
     .action(async ({ session }, keyword) => {
-      const list = await drawRoomList(keyword)
+      const list = await commandRoomList(keyword)
       return (paresMessageList(list))
     })
   ctx.command('查玩家 <playerId:number> [serverName:text]', '查询玩家信息')

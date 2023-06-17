@@ -1,0 +1,3125 @@
+{
+    "1": {
+        "simpleDescription": [
+            "スコア10%ＵＰ",
+            "Score Boost 10%",
+            "ＳＣＯＲＥ１０%ＵＰ",
+            "得分提升10%",
+            "스코어 10% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが10%UPする",
+            "Score increased by 10% for {0} secs",
+            "{0}秒中 ＳＣＯＲＥ １０％ ＵＰ",
+            "{0}秒内  得分提升10%",
+            "{0}초간 스코어가 10% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        10,
+                        10,
+                        10,
+                        10,
+                        10
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "2": {
+        "simpleDescription": [
+            "スコア30%ＵＰ",
+            "Score Boost 30%",
+            "ＳＣＯＲＥ３０%ＵＰ",
+            "得分提升30%",
+            "스코어 30% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが30%UPする",
+            "Score increased by 30% for {0} secs",
+            "{0}秒中 ＳＣＯＲＥ ３０％ ＵＰ",
+            "{0}秒内  得分提升30%",
+            "{0}초간 스코어가 30% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        30,
+                        30,
+                        30,
+                        30,
+                        30
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "3": {
+        "simpleDescription": [
+            "スコア60%ＵＰ",
+            "Score Boost 60%",
+            "ＳＣＯＲＥ６０%ＵＰ",
+            "得分提升60%",
+            "스코어 60% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが60%UPする",
+            "Score increased by 60% for {0} secs",
+            "{0}秒中 ＳＣＯＲＥ ６０％ ＵＰ",
+            "{0}秒内  得分提升60%",
+            "{0}초간 스코어가 60% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        60,
+                        60,
+                        60,
+                        60,
+                        60
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "4": {
+        "simpleDescription": [
+            "スコア100%ＵＰ",
+            "Score Boost 100%",
+            "ＳＣＯＲＥ１００%ＵＰ",
+            "得分提升100%",
+            "스코어 100% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが100%UPする",
+            "Score increased by 100% for {0} secs",
+            "{0}秒中ＳＣＯＲＥ１００％ＵＰ",
+            "{0}秒内  得分提升100%",
+            "{0}초간 스코어가 100% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        100,
+                        100,
+                        100,
+                        100,
+                        100
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "5": {
+        "simpleDescription": [
+            "判定強化(中)\n＆スコア10%ＵＰ",
+            "Note Boost (S)\n& Score Boost 10%",
+            "判定強化(中)\n＆ＳＣＯＲＥ１０%ＵＰ",
+            "判定强化(中)&得分提升10%",
+            "판정 강화(중)\n＆스코어 10% UP"
+        ],
+        "description": [
+            "{0}秒間  GREATがPERFECTになり、スコアが10％UPする",
+            "GREAT becomes PERFECT and Score increased by 10% for {0} secs",
+            "{0}秒中 ＧＲＥＡＴ將轉換為ＰＥＲＦＥＣＴ，ＳＣＯＲＥ １０％ ＵＰ",
+            "{0}秒内  GREAT变为PERFECT\n得分提升10%",
+            "{0}초간 GREAT 판정이 전부 PERFECT 판정이 되고,\n스코어가 10% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.7,
+            6.4,
+            7.2,
+            8
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        10,
+                        10,
+                        10,
+                        10,
+                        10
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                },
+                "judge": {
+                    "activateEffectValue": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "activateEffectValueType": "real_value",
+                    "activateCondition": "great"
+                }
+            }
+        }
+    },
+    "6": {
+        "simpleDescription": [
+            "判定強化(大)\n＆スコア20%ＵＰ",
+            "Note Boost (M)\n& Score Boost 20%",
+            "判定強化(大)\n＆ＳＣＯＲＥ２０%ＵＰ",
+            "判定强化(大)&得分提升20%",
+            "판정 강화(대)\n＆스코어 20% UP"
+        ],
+        "description": [
+            "{0}秒間  GOOD以上がすべてPERFECTになり、スコアが20％UPする",
+            "GOOD and higher becomes PERFECT and Score increased by 20% for {0} secs",
+            "{0}秒中 ＧＯＯＤ以上評價將轉換為ＰＥＲＦＥＣＴ，ＳＣＯＲＥ ２０％ ＵＰ",
+            "{0}秒内  GOOD以上全部变为PERFECT\n得分提升20%",
+            "{0}초간 GOOD 이상의 판정이 전부 PERFECT 판정이 되고,\n스코어가 20％ 올라간다."
+        ],
+        "duration": [
+            5,
+            5.7,
+            6.4,
+            7.2,
+            8
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        20,
+                        20,
+                        20,
+                        20,
+                        20
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                },
+                "judge": {
+                    "activateEffectValue": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "activateEffectValueType": "real_value",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "7": {
+        "simpleDescription": [
+            "判定強化(特大)\n＆スコア40%ＵＰ",
+            "Note Boost (L)\n& Score Boost 40%",
+            "判定強化(特大)\n＆ＳＣＯＲＥ４０%ＵＰ",
+            "判定强化(特大)&得分提升40%",
+            "판정 강화(특대)\n＆스코어 40% UP"
+        ],
+        "description": [
+            "{0}秒間  BAD以上がすべてPERFECTになり、スコアが40％UPする",
+            "BAD and higher becomes PERFECT and Score increased by 40% for {0} secs",
+            "{0}秒中 ＢＡＤ以上評價將轉換為ＰＥＲＦＥＣＴ，ＳＣＯＲＥ ４０％ ＵＰ",
+            "{0}秒内  BAD以上全部变为PERFECT\n得分提升40%",
+            "{0}초간 BAD 이상의 판정이 전부 PERFECT 판정이 되고,\n스코어가 40％ 올라간다."
+        ],
+        "duration": [
+            5,
+            5.7,
+            6.4,
+            7.2,
+            8
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        40,
+                        40,
+                        40,
+                        40,
+                        40
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                },
+                "judge": {
+                    "activateEffectValue": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "activateEffectValueType": "real_value",
+                    "activateCondition": "bad"
+                }
+            }
+        }
+    },
+    "8": {
+        "simpleDescription": [
+            "ライフ300回復\n＆スコア10%ＵＰ",
+            "300 Life Recovery\n& Score Boost 10%",
+            "ＬＩＦＥ３００回復\n＆ＳＣＯＲＥ１０%ＵＰ",
+            "生命回复(中)&得分提升10%",
+            "라이프 300 회복\n＆스코어 10% UP"
+        ],
+        "description": [
+            "ライフが{0}回復し、{1}秒間  スコアが10%UPする",
+            "{0} Life Recovery and Score increased by 10% for {1} secs",
+            "ＬＩＦＥ{0}回復，{1}秒中 ＳＣＯＲＥ １０％ ＵＰ",
+            "生命回复（{0}）\n{1}秒内 得分提升10%",
+            "라이프가 {0} 회복되고, {1}초간 스코어가 10% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.7,
+            6.4,
+            7.2,
+            8
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        10,
+                        10,
+                        10,
+                        10,
+                        10
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        },
+        "onceEffect": {
+            "onceEffectType": "life",
+            "onceEffectValueType": "real_value",
+            "onceEffectValue": [
+                200,
+                220,
+                240,
+                270,
+                300
+            ]
+        }
+    },
+    "9": {
+        "simpleDescription": [
+            "ライフ450回復\n＆スコア20%ＵＰ",
+            "450 Life Recovery\n& Score Boost 20%",
+            "ＬＩＦＥ４５０回復\n＆ＳＣＯＲＥ２０%ＵＰ",
+            "生命回复(大)&得分提升20%",
+            "라이프 450 회복\n＆스코어 20% UP"
+        ],
+        "description": [
+            "ライフが{0}回復し、{1}秒間  スコアが20%UPする",
+            "{0} Life Recovery and Score increased by 20% for {1} secs",
+            "ＬＩＦＥ{0}回復，{1}秒中 ＳＣＯＲＥ ２０％ ＵＰ",
+            "生命回复（{0}）\n{1}秒内  得分提升20%",
+            "라이프가 {0} 회복되고, {1}초간 스코어가 20% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.7,
+            6.4,
+            7.2,
+            8
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        20,
+                        20,
+                        20,
+                        20,
+                        20
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        },
+        "onceEffect": {
+            "onceEffectType": "life",
+            "onceEffectValueType": "real_value",
+            "onceEffectValue": [
+                300,
+                330,
+                370,
+                410,
+                450
+            ]
+        }
+    },
+    "10": {
+        "simpleDescription": [
+            "ライフ750回復\n＆スコア40%ＵＰ",
+            "750 Life Recovery\n& Score Boost 40%",
+            "ＬＩＦＥ７５０回復\n＆ＳＣＯＲＥ４０%ＵＰ",
+            "生命回复(特大)&得分提升40%",
+            "라이프 750 회복\n＆스코어 40% UP"
+        ],
+        "description": [
+            "ライフが{0}回復し、{1}秒間  スコアが40%UPする",
+            "{0} Life Recovery and Score increased by 40% for {1} secs",
+            "ＬＩＦＥ{0}回復，{1}秒中 ＳＣＯＲＥ ４０％ ＵＰ",
+            "生命回复（{0}）\n{1}秒内 得分提升40%",
+            "라이프가 {0} 회복되고, {1}초간 스코어가 40% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.7,
+            6.4,
+            7.2,
+            8
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        40,
+                        40,
+                        40,
+                        40,
+                        40
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        },
+        "onceEffect": {
+            "onceEffectType": "life",
+            "onceEffectValueType": "real_value",
+            "onceEffectValue": [
+                500,
+                560,
+                620,
+                680,
+                750
+            ]
+        }
+    },
+    "11": {
+        "simpleDescription": [
+            "判定強化(中)\n＆スコア30%ＵＰ",
+            "Note Boost (S)\n& Score Boost 30%",
+            "判定強化(中)\n＆ＳＣＯＲＥ３０%ＵＰ",
+            "判定强化(中)&得分提升30%",
+            "판정 강화(중)\n＆스코어 30% UP"
+        ],
+        "description": [
+            "{0}秒間  GREATがPERFECTになり、スコアが30％UPする",
+            "GREAT becomes PERFECT and Score increased by 30% for {0} secs",
+            "{0}秒中 ＧＲＥＡＴ將轉換為ＰＥＲＦＥＣＴ，ＳＣＯＲＥ ３０％ ＵＰ",
+            "{0}秒内  GREAT变为PERFECT\n得分提升30%",
+            "{0}초간 GREAT 판정이 전부 PERFECT 판정이 되고,\n스코어가 30％ 올라간다."
+        ],
+        "duration": [
+            5,
+            5.6,
+            6.2,
+            6.8,
+            7.5
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        30,
+                        30,
+                        30,
+                        30,
+                        30
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                },
+                "judge": {
+                    "activateEffectValue": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "activateEffectValueType": "real_value",
+                    "activateCondition": "great"
+                }
+            }
+        }
+    },
+    "12": {
+        "simpleDescription": [
+            "判定強化(大)\n＆スコア60%ＵＰ",
+            "Note Boost (M)\n& Score Boost 60%",
+            "判定強化(大)\n＆ＳＣＯＲＥ６０%ＵＰ",
+            "判定强化(大)&得分提升60%",
+            "판정 강화(대)\n＆스코어 60% UP"
+        ],
+        "description": [
+            "{0}秒間  GOOD以上がすべてPERFECTになり、スコアが60％UPする",
+            "GOOD and higher becomes PERFECT and Score increased by 60% for {0} secs",
+            "{0}秒中 ＧＯＯＤ以上評價將轉換為ＰＥＲＦＥＣＴ，ＳＣＯＲＥ ６０％ ＵＰ",
+            "{0}秒内  GOOD以上全部变为PERFECT\n得分提升60%",
+            "{0}초간 GOOD 이상의 판정이 전부 PERFECT 판정이 되고,\n스코어가 60％ 올라간다."
+        ],
+        "duration": [
+            5,
+            5.6,
+            6.2,
+            6.8,
+            7.5
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        60,
+                        60,
+                        60,
+                        60,
+                        60
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                },
+                "judge": {
+                    "activateEffectValue": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "activateEffectValueType": "real_value",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "13": {
+        "simpleDescription": [
+            "ライフ300回復\n＆スコア30%ＵＰ",
+            "300 Life Recovery\n& Score Boost 30%",
+            "ＬＩＦＥ３００回復\n＆ＳＣＯＲＥ３０%ＵＰ",
+            "生命回复300\n＆得分提升30%",
+            "라이프 300 회복\n＆스코어 30% UP"
+        ],
+        "description": [
+            "ライフが{0}回復し、{1}秒間  スコアが30%UPする",
+            "{0} Life Recovery and Score increased by 30% for {1} secs",
+            "ＬＩＦＥ{0}回復，{1}秒中 ＳＣＯＲＥ ３０％ ＵＰ",
+            "生命回复{0}\n{1}秒内 得分提升30%",
+            "라이프가 {0} 회복되고, {1}초간 스코어가 30% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.6,
+            6.2,
+            6.8,
+            7.5
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        30,
+                        30,
+                        30,
+                        30,
+                        30
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        },
+        "onceEffect": {
+            "onceEffectType": "life",
+            "onceEffectValueType": "real_value",
+            "onceEffectValue": [
+                200,
+                220,
+                240,
+                270,
+                300
+            ]
+        }
+    },
+    "14": {
+        "simpleDescription": [
+            "ライフ450回復\n＆スコア60%ＵＰ",
+            "450 Life Recovery\n& Score Boost 60%",
+            "ＬＩＦＥ４５０回復\n＆ＳＣＯＲＥ６０%ＵＰ",
+            "生命回复450\n＆得分提升60%",
+            "라이프 450 회복\n＆스코어 60% UP"
+        ],
+        "description": [
+            "ライフが{0}回復し、{1}秒間  スコアが60%UPする",
+            "{0} Life Recovery and Score increased by 60% for {1} secs",
+            "ＬＩＦＥ{0}回復，{1}秒中 ＳＣＯＲＥ ６０％ ＵＰ",
+            "生命回复{0}\n{1}秒内 得分提升60%",
+            "라이프가 {0} 회복되고, {1}초간 스코어가 60% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.6,
+            6.2,
+            6.8,
+            7.5
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        60,
+                        60,
+                        60,
+                        60,
+                        60
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        },
+        "onceEffect": {
+            "onceEffectType": "life",
+            "onceEffectValueType": "real_value",
+            "onceEffectValue": [
+                300,
+                330,
+                370,
+                410,
+                450
+            ]
+        }
+    },
+    "15": {
+        "simpleDescription": [
+            "ライフ300回復\n＆判定強化(中)",
+            "300 Life Recovery\n& Note Boost (S)",
+            "ＬＩＦＥ３００回復\n＆判定強化(中)",
+            "生命回复300\n＆判定强化(中)",
+            "라이프 300 회복\n＆판정 강화 (중)"
+        ],
+        "description": [
+            "ライフが{0}回復し、{1}秒間  GREATがPERFECTになる",
+            "{0} Life Recovery and GREAT becomes PERFECT for {1} secs",
+            "ＬＩＦＥ{0}回復，{1}秒中 ＧＲＥＡＴ將轉換為ＰＥＲＦＥＣＴ",
+            "生命回复{0}\n{1}秒内 GREAT变为PERFECT",
+            "라이프가 {0} 회복되고, {1}초간 GREAT 판정이\n전부 PERFECT 판정이 된다."
+        ],
+        "duration": [
+            5,
+            5.6,
+            6.2,
+            6.8,
+            7.5
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "judge": {
+                    "activateEffectValue": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "activateEffectValueType": "real_value",
+                    "activateCondition": "great"
+                }
+            }
+        },
+        "onceEffect": {
+            "onceEffectType": "life",
+            "onceEffectValueType": "real_value",
+            "onceEffectValue": [
+                200,
+                220,
+                240,
+                270,
+                300
+            ]
+        }
+    },
+    "16": {
+        "simpleDescription": [
+            "ライフ450回復\n＆判定強化(大)",
+            "450 Life Recovery\n& Note Boost (M)",
+            "ＬＩＦＥ４５０回復\n＆判定強化(大)",
+            "生命回复450\n＆判定强化(大)",
+            "라이프 450 회복\n＆판정 강화 (대)"
+        ],
+        "description": [
+            "ライフが{0}回復し、{1}秒間  GOOD以上がすべてPERFECTになる",
+            "{0} Life Recovery and GOOD and higher becomes PERFECT for {1} secs",
+            "ＬＩＦＥ{0}回復，{1}秒中 ＧＯＯＤ以上評價將轉換為ＰＥＲＦＥＣＴ",
+            "生命回复{0}/n{1}秒内 GOOD以上全部变为PERFECT",
+            "라이프가 {0} 회복되고, {1}초간 GOOD 이상의 판정이\n전부 PERFECT 판정이 된다."
+        ],
+        "duration": [
+            5,
+            5.6,
+            6.2,
+            6.8,
+            7.5
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "judge": {
+                    "activateEffectValue": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "activateEffectValueType": "real_value",
+                    "activateCondition": "good"
+                }
+            }
+        },
+        "onceEffect": {
+            "onceEffectType": "life",
+            "onceEffectValueType": "real_value",
+            "onceEffectValue": [
+                300,
+                330,
+                370,
+                410,
+                450
+            ]
+        }
+    },
+    "17": {
+        "simpleDescription": [
+            "ライフ900以上で\nスコア65%UP|ライフ900未満の場合\nスコア55%UP",
+            "900+ Life for\nScore Boost 65%|Score Boost 55%\nwhen <900 Life",
+            "ＬＩＦＥ在９００以上時\nＳＣＯＲＥ６５%ＵＰ|ＬＩＦＥ在９００未滿的情況\nＳＣＯＲＥ５５%ＵＰ",
+            "生命900以上则得分提升65%|生命不满900则得分提升55%",
+            "라이프가 900이상일 때\n스코어 65% UP|라이프 900 미만인 경우\n스코어 55% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが55%UP、発動時に自分のライフが900以上の場合はスコアが65%UPする",
+            "Score increased by 55% (65% if Life is over 900) for {0} secs",
+            "{0}秒中 ＳＣＯＲＥ ５５％ ＵＰ，發動期間ＬＩＦＥ在 ９００以上時ＳＣＯＲＥ ６５％ ＵＰ",
+            "{0}秒内 得分提升55%\n发动时若生命在900以上则得分提升65%",
+            "{0}초간 스코어가 55% 올라간다. 발동 시 자신의 라이프가\n900이상일 경우 스코어가 65% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score_over_life": {
+                    "activateEffectValue": [
+                        65,
+                        65,
+                        65,
+                        65,
+                        65
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good",
+                    "activateConditionLife": 900
+                },
+                "score_under_life": {
+                    "activateEffectValue": [
+                        55,
+                        55,
+                        55,
+                        55,
+                        55
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good",
+                    "activateConditionLife": 900
+                }
+            }
+        }
+    },
+    "18": {
+        "simpleDescription": [
+            "ライフ900以上で\nスコア110%UP|ライフ900未満の場合\nスコア90%UP",
+            "900+ Life for\nScore Boost 110%|Score Boost 90%\nwhen <900 Life",
+            "ＬＩＦＥ在９００以上時\nＳＣＯＲＥ１１０%ＵＰ|ＬＩＦＥ在９００未滿的情況\nＳＣＯＲＥ９０%ＵＰ",
+            "生命900以上则得分提升110%|生命不满900则得分提升90%",
+            "라이프가 900이상일 때\n스코어 110% UP|라이프 900 미만인 경우 \n스코어 90% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが90%UP、発動時に自分のライフが900以上の場合はスコアが110%UPする",
+            "Score increased by 90% (110% if Life is over 900) for {0} secs",
+            "{0}秒中 ＳＣＯＲＥ ９０％ ＵＰ，發動期間ＬＩＦＥ在 ９００以上時ＳＣＯＲＥ １１０％ ＵＰ",
+            "{0}秒内 得分提升90%\n发动时若生命在900以上则得分提升110%",
+            "{0}초간 스코어가90% 올라간다. 발동 시 자신의 라이프가\n900이상일 경우 스코어가 110% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score_over_life": {
+                    "activateEffectValue": [
+                        110,
+                        110,
+                        110,
+                        110,
+                        110
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good",
+                    "activateConditionLife": 900
+                },
+                "score_under_life": {
+                    "activateEffectValue": [
+                        90,
+                        90,
+                        90,
+                        90,
+                        90
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good",
+                    "activateConditionLife": 900
+                }
+            }
+        }
+    },
+    "20": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア120%UP",
+            "PERFECT Only \nScore Boost 120%",
+            "ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１２０％ＵＰ",
+            "仅在PERFECT时\n得分提升120%",
+            "PERFECT일 때만\n스코어 120% UP"
+        ],
+        "description": [
+            "{0}秒間  PERFECTのときのみ、スコアが120%UPする",
+            "PERFECT Notes Score increased by 120% for {0} secs",
+            "{0}秒中評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１２０％ＵＰ",
+            "{0}秒内  仅在PERFECT时 得分提升120%",
+            "{0}초간 PERFECT일 때만 스코어가 120% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        120,
+                        120,
+                        120,
+                        120,
+                        120
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "21": {
+        "simpleDescription": [
+            "ライフ600以上で\nスコア40%UP|ライフ600未満の場合\nライフ450回復",
+            "600+ Life for\nScore Boost 40%|450 Life Recovery\nwhen <600 Life",
+            "ＬＩＦＥ在６００以上的話\nＳＣＯＲＥ４０％ＵＰ|ＬＩＦＥ在６００未滿的情況\nＬＩＦＥ４５０回復",
+            "生命600以上则得分提升40%|生命不满600则生命回复450",
+            "라이프 600 이상일 때\n스코어 40% UP|라이프 600 미만인 경우\n라이프 450 회복"
+        ],
+        "description": [
+            "発動時に自分のライフが600以上の場合は、{1}秒間 スコアが40％UPする。ライフが600未満の場合は、ライフを{0}回復する",
+            "Score increased by 40% for {1} secs if Life is over 600. If not, {0} Life Recovery.",
+            "發動時若自己的ＬＩＦＥ在６００以上的話，{1}秒中 ＳＣＯＲＥ４０％ＵＰ。若ＬＩＦＥ在６００未滿的情況，ＬＩＦＥ {0}回復",
+            "发动时若生命在600以上则\n{1}秒内 得分提升40%。\n若生命不满600时 生命回复{0}",
+            "발동 시 자신의 라이프가 600 이상일 경우, {1}초간 스코어가\n40％ 올라간다. 라이프가 600 미만인 경우 라이프를 {0} 회복한다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score_over_life": {
+                    "activateEffectValue": [
+                        40,
+                        40,
+                        40,
+                        40,
+                        40
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good",
+                    "activateConditionLife": 600
+                }
+            }
+        },
+        "onceEffect": {
+            "onceEffectType": "life",
+            "onceEffectValueType": "real_value",
+            "onceEffectConditionLifeType": "under_life",
+            "onceEffectConditionLife": 600,
+            "onceEffectValue": [
+                300,
+                330,
+                370,
+                410,
+                450
+            ]
+        }
+    },
+    "22": {
+        "simpleDescription": [
+            "ライフ600以上で\nスコア80%UP|ライフ600未満の場合\nライフ500回復",
+            "600+ Life for\nScore Boost 80%|500 Life Recovery\nwhen <600 Life",
+            "ＬＩＦＥ在６００以上的話\nＳＣＯＲＥ８０％ＵＰ|ＬＩＦＥ在６００未滿的情況\nＬＩＦＥ５００回復",
+            "生命600以上则得分提升80%|生命不满600则生命回复500",
+            "라이프 600 이상일 때\n스코어 80% UP|라이프 600 미만인 경우\n라이프 500 회복"
+        ],
+        "description": [
+            "発動時に自分のライフが600以上の場合は、{1}秒間 スコアが80％UPする。ライフが600未満の場合は、ライフを{0}回復する",
+            "Score increased by 80% for {1} secs if Life is over 600. If not, {0} Life Recovery.",
+            "發動時若自己的ＬＩＦＥ在６００以上的話，{1}秒中 ＳＣＯＲＥ８０％ＵＰ。若ＬＩＦＥ在６００未滿的情況，ＬＩＦＥ {0}回復",
+            "发动时若生命在600以上则\n{1}秒内 得分提升80%。\n若生命不满600时 生命回复{0}",
+            "발동 시 자신의 라이프가 600 이상일 경우, {1}초간 스코어가\n80％ 올라간다. 라이프가 600 미만인 경우 라이프를 {0} 회복한다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score_over_life": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good",
+                    "activateConditionLife": 600
+                }
+            }
+        },
+        "onceEffect": {
+            "onceEffectType": "life",
+            "onceEffectValueType": "real_value",
+            "onceEffectConditionLifeType": "under_life",
+            "onceEffectConditionLife": 600,
+            "onceEffectValue": [
+                400,
+                420,
+                440,
+                460,
+                500
+            ]
+        }
+    },
+    "23": {
+        "simpleDescription": [
+            "ライフ減少無効\n＆スコア10％UP",
+            "Damage Guard\n& Score Boost 10%",
+            "ＬＩＦＥ減少無效\n＆ＳＣＯＲＥ１０％ＵＰ",
+            "生命减少无效＆得分提升10％",
+            "라이프 감소 무효\n＆스코어 10% UP"
+        ],
+        "description": [
+            "{0}秒間 BAD以下でもライフが減少しなくなり、スコアが10％UPする",
+            "BAD and lower will not decrease Life and Score increased by 10% for {0} secs.",
+            "{0}秒中 ＢＡＤ以下評價也不會減少ＬＩＦＥ，ＳＣＯＲＥ１０％ＵＰ",
+            "{0}秒内 BAD以下时生命不会减少\n得分提升10%",
+            "{0}초간 BAD 이하의 판정에서도 라이프가 감소하지 않고,\n스코어가 10％ 올라간다."
+        ],
+        "duration": [
+            3,
+            3.5,
+            4,
+            4.5,
+            5
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "damage": {
+                    "activateEffectValue": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "none"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        10,
+                        10,
+                        10,
+                        10,
+                        10
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "24": {
+        "simpleDescription": [
+            "ライフ減少無効\n＆スコア30％UP",
+            "Damage Guard\n& Score Boost 30%",
+            "ＬＩＦＥ減少無效\n＆ＳＣＯＲＥ３０％ＵＰ",
+            "生命减少无效＆得分提升30％",
+            "라이프 감소 무효\n＆스코어 30% UP"
+        ],
+        "description": [
+            "{0}秒間 BAD以下でもライフが減少しなくなり、スコアが30％UPする",
+            "BAD and lower will not decrease Life and Score increased by 30% for {0} secs.",
+            "{0}秒中 ＢＡＤ以下評價也不會減少ＬＩＦＥ，ＳＣＯＲＥ３０％ＵＰ",
+            "{0}秒内 BAD以下时生命不会减少\n得分提升30%",
+            "{0}초간 BAD 이하의 판정에서도 라이프가 감소하지 않고,\n스코어가 30％ 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "damage": {
+                    "activateEffectValue": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "none"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        30,
+                        30,
+                        30,
+                        30,
+                        30
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "25": {
+        "simpleDescription": [
+            "GREAT以下を出すまで\nスコアが65％UP",
+            "Score increased by 65%\nuntil GREAT or lower",
+            "在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ６５％ＵＰ",
+            "到GREAT以下出现为止\n得分提升65％",
+            "GREAT 이하 판정을 낼 때까지\n스코어가 65% UP"
+        ],
+        "description": [
+            "{0}秒間 スコアが55％UP、GREAT以下を出すまではスコアが65％UPする",
+            "Score increased by 65% (lowered to 55% after GREAT or lower) for {0} secs.",
+            "{0}秒中 ＳＣＯＲＥ５５％ＵＰ，在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ６５％ＵＰ",
+            "{0}秒内 得分提升55%\n到GREAT以下出现为止 得分提升65%",
+            "{0}초간 스코어가 55％ 오르고, GREAT 이하 판정을\n낼 때까진 스코어가 65％ 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score_continued_note_judge": {
+                    "activateEffectValue": [
+                        65,
+                        65,
+                        65,
+                        65,
+                        65
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        55,
+                        55,
+                        55,
+                        55,
+                        55
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "26": {
+        "simpleDescription": [
+            "GREAT以下を出すまで\nスコアが110％UP",
+            "Score increased by 110%\nuntil GREAT or lower.",
+            "在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ１１０％ＵＰ",
+            "到GREAT以下出现为止\n得分提升110％",
+            "GREAT 이하 판정을 낼 때까지\n스코어가 110% UP"
+        ],
+        "description": [
+            "{0}秒間 スコアが90％UP、GREAT以下を出すまではスコアが110％UPする",
+            "Score increased by 110% (lowered to 90% after GREAT or lower) for {0} secs.",
+            "{0}秒中 ＳＣＯＲＥ９０％ＵＰ，在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ１１０％ＵＰ",
+            "{0}秒内 得分提升90%\n到GREAT以下出现为止 得分提升110%",
+            "{0}초간 스코어가 90％ 오르고, GREAT 이하 판정을\n낼 때까진 스코어가 110％ 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score_continued_note_judge": {
+                    "activateEffectValue": [
+                        110,
+                        110,
+                        110,
+                        110,
+                        110
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        90,
+                        90,
+                        90,
+                        90,
+                        90
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "27": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア125%UP|PERFECTのみ\nスコア110%UP",
+            "PERFECT Only \nScore Boost 125% | PERFECT Only \nScore Boost 110%",
+            "ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１２５％ＵＰ|ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１１０％ＵＰ",
+            "仅在PERFECT时\n得分提升125%|仅在PERFECT时\n得分提升110%",
+            "PERFECT일 때만\n스코어 125%UP|PERFECT일 때만\n스코어 110%UP"
+        ],
+        "description": [
+            "{0}秒間 PERFECTのときのみ、スコアが110%UP。発動者のバンド編成がPoppin'Partyのみの場合はPERFECTのときのみ、スコアが125%UP",
+            "Perfect Note Score increased by 110% for {0} secs. If the Band is all Poppin'Party members, Perfect Note Score increased by 125%",
+            "{0}秒中評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１１０％ＵＰ。發動者的樂團編成只有Poppin’Party成員，且評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１２５％ＵＰ",
+            "{0}秒内 仅在PERFECT时 得分提升110%。\n发动者的队伍编队内仅有Poppin'Party乐队成员的\n情况下，得分提升125%",
+            "{0}초간 PERFECT일 때만 스코어가 110% 올라간다. \n발동한 사람의 밴드가 Poppin'Party로만 편성된 경우, PERFECT일 때만 스코어가 125% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 125,
+            "unificationActivateConditionBandId": 1,
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        110,
+                        110,
+                        110,
+                        110,
+                        110
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "28": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア125%UP|PERFECTのみ\nスコア110%UP",
+            "PERFECT Only \nScore Boost 125% | PERFECT Only \nScore Boost 110%",
+            "ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１２５％ＵＰ|ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１１０％ＵＰ",
+            "仅在PERFECT时\n得分提升125%|仅在PERFECT时\n得分提升110%",
+            "PERFECT일 때만\n스코어 125%UP|PERFECT일 때만\n스코어 110%UP"
+        ],
+        "description": [
+            "{0}秒間 PERFECTのときのみ、スコアが110%UP。発動者のバンド編成がAfterglowのみの場合はPERFECTのときのみ、スコアが125%UP",
+            "Perfect Note Score increased by 110% for {0} secs. If the Band is all Afterglow members, Perfect Note Score increased by 125%",
+            "{0}秒中評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１１０％ＵＰ。發動者的樂團編成只有Afterglow成員，且評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１２５％ＵＰ",
+            "{0}秒内 仅在PERFECT时 得分提升110%。\n发动者的队伍编队内仅有Afterglow乐队成员的情况下，\n得分提升125%",
+            "{0}초간 PERFECT일 때만 스코어가 110% 올라간다. \n발동한 사람의 밴드가 Afterglow로만 편성된 경우, PERFECT일 때만 스코어가 125% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 125,
+            "unificationActivateConditionBandId": 2,
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        110,
+                        110,
+                        110,
+                        110,
+                        110
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "29": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア125%UP|PERFECTのみ\nスコア110%UP",
+            "PERFECT Only \nScore Boost 125% | PERFECT Only \nScore Boost 110%",
+            "ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１２５％ＵＰ|ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１１０％ＵＰ",
+            "仅在PERFECT时\n得分提升125%|仅在PERFECT时\n得分提升110%",
+            "PERFECT일 때만\n스코어 125%UP|PERFECT일 때만\n스코어 110%UP"
+        ],
+        "description": [
+            "{0}秒間 PERFECTのときのみ、スコアが110%UP。発動者のバンド編成がPastel＊Palettesのみの場合はPERFECTのときのみ、スコアが125%UP",
+            "Perfect Note Score increased by 110% for {0} secs. If the Band is all Pastel＊Palettes members, Perfect Note Score increased by 125%",
+            "{0}秒中評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１１０％ＵＰ。發動者的樂團編成只有Pastel＊Palettes成員，且評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１２５％ＵＰ",
+            "{0}秒内 仅在PERFECT时 得分提升110%。\n发动者的队伍编队内仅有Pastel＊Palettes乐队成员的\n情况下，得分提升125%",
+            "{0}초간 PERFECT일 때만 스코어가 110% 올라간다. \n발동한 사람의 밴드가 Pastel * Palettes로만 편성된 경우, PERFECT일 때만 스코어가 125% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 125,
+            "unificationActivateConditionBandId": 4,
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        110,
+                        110,
+                        110,
+                        110,
+                        110
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "30": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア125%UP|PERFECTのみ\nスコア110%UP",
+            "PERFECT Only \nScore Boost 125% | PERFECT Only \nScore Boost 110%",
+            "ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１２５％ＵＰ|ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１１０％ＵＰ",
+            "仅在PERFECT时\n得分提升125%|仅在PERFECT时\n得分提升110%",
+            "PERFECT일 때만\n스코어 125%UP|PERFECT일 때만\n스코어 110%UP"
+        ],
+        "description": [
+            "{0}秒間 PERFECTのときのみ、スコアが110%UP。発動者のバンド編成がRoseliaのみの場合はPERFECTのときのみ、スコアが125%UP",
+            "Perfect Note Score increased by 110% for {0} secs. If the Band is all Roselia members, Perfect Note Score increased by 125%",
+            "{0}秒中評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１１０％ＵＰ。發動者的樂團編成只有Roselia成員，且評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１２５％ＵＰ",
+            "{0}秒内 仅在PERFECT时 得分提升110%。\n发动者的队伍编队内仅有Roselia乐队成员的情况下，\n得分提升125%",
+            "{0}초간 PERFECT일 때만 스코어가 110% 올라간다. \n발동한 사람의 밴드가 Roselia로만 편성된 경우, PERFECT일 때만 스코어가 125% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 125,
+            "unificationActivateConditionBandId": 5,
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        110,
+                        110,
+                        110,
+                        110,
+                        110
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "31": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア125%UP|PERFECTのみ\nスコア110%UP",
+            "PERFECT Only \nScore Boost 125% | PERFECT Only \nScore Boost 110%",
+            "ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１２５％ＵＰ|ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１１０％ＵＰ",
+            "仅在PERFECT时\n得分提升125%|仅在PERFECT时\n得分提升110%",
+            "PERFECT일 때만\n스코어 125%UP|PERFECT일 때만\n스코어 110%UP"
+        ],
+        "description": [
+            "{0}秒間 PERFECTのときのみ、スコアが110%UP。発動者のバンド編成がハロー、ハッピーワールド！のみの場合はPERFECTのときのみ、スコアが125%UP",
+            "Perfect Note Score increased by 110% for {0} secs. If the Band is all Hello, Happy World! members, Perfect Note Score increased by 125%",
+            "{0}秒中評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１１０％ＵＰ。發動者的樂團編成只有Hello，Happy World！成員，且評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１２５％ＵＰ",
+            "{0}秒内 仅在PERFECT时 得分提升110%。发动者的队伍编队内仅有\nHello, Happy World! 乐队成员的\n情况下，得分提升125%",
+            "{0}초간 PERFECT일 때만 스코어가 110% 올라간다. \n발동한 사람의 밴드가 헬로 해피월드!로만 편성된 경우, PERFECT일 때만 스코어가 125% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 125,
+            "unificationActivateConditionBandId": 3,
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        110,
+                        110,
+                        110,
+                        110,
+                        110
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "32": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア125%UP|PERFECTのみ\nスコア110%UP",
+            "PERFECT Only \nScore Boost 125% | PERFECT Only \nScore Boost 110%",
+            "ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１２５％ＵＰ|ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１１０％ＵＰ",
+            "仅在PERFECT时\n得分提升125%|仅在PERFECT时\n得分提升110%",
+            "PERFECT일 때만\n스코어 125%UP|PERFECT일 때만\n스코어 110%UP"
+        ],
+        "description": [
+            "{0}秒間 PERFECTのときのみ、スコアが110%UP。発動者のバンド編成がMorfonicaのみの場合はPERFECTのときのみ、スコアが125%UP",
+            "Perfect Note Score increased by 110% for {0} secs. If the Band is all Morfonica members, Perfect Note Score increased by 125%",
+            "{0}秒中評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１１０％ＵＰ。發動者的樂團編成只有Morfonica成員，且評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１２５％ＵＰ",
+            "{0}秒内 仅在PERFECT时 得分提升110%。\n发动者的队伍编队内仅有Morfonica乐队成员的情况下，\n得分提升125%",
+            "{0}초간 PERFECT일 때만 스코어가 110% 올라간다. \n발동한 사람의 밴드가 Morfonica로만 편성된 경우, PERFECT일 때만 스코어가 125% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 125,
+            "unificationActivateConditionBandId": 21,
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        110,
+                        110,
+                        110,
+                        110,
+                        110
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "33": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア125%UP|PERFECTのみ\nスコア100%UP",
+            "PERFECT Only \nScore Boost 125% | PERFECT Only \nScore Boost 100%",
+            "ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１２５％ＵＰ|ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１００％ＵＰ",
+            "仅在PERFECT时\n得分提升125%|仅在PERFECT时\n得分提升100%",
+            "PERFECT일 때만\n스코어 125%UP|PERFECT일 때만\n스코어 100%UP"
+        ],
+        "description": [
+            "{0}秒間 PERFECTのときのみ、スコアが100%UP。発動者のバンド編成がハッピータイプのみの場合はPERFECTのときのみ、スコアが125%UP",
+            "Perfect Note Score increased by 100% for {0} secs. If the Band is all Happy Types, Perfect Note Score increased by 125%",
+            "{0}秒中評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１００％ＵＰ。發動者的樂團編成只有ＨＡＰＰＹ屬性成員，且評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１２５％ＵＰ",
+            "{0}秒内 仅在PERFECT时 得分提升100%。\n发动者的队伍成员全部为Happy属性的情况下，\n得分提升125%",
+            "{0}초간 PERFECT일 때만 스코어가 100% 올라간다. \n발동한 사람의 밴드가 해피 타입으로만 편성된 경우, PERFECT일 때만 스코어가 125% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 125,
+            "unificationActivateConditionType": "HAPPY",
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        100,
+                        100,
+                        100,
+                        100,
+                        100
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "34": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア125%UP|PERFECTのみ\nスコア100%UP",
+            "PERFECT Only \nScore Boost 125% | PERFECT Only \nScore Boost 100%",
+            "ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１２５％ＵＰ|ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１００％ＵＰ",
+            "仅在PERFECT时\n得分提升125%|仅在PERFECT时\n得分提升100%",
+            "PERFECT일 때만\n스코어 125%UP|PERFECT일 때만\n스코어 100%UP"
+        ],
+        "description": [
+            "{0}秒間 PERFECTのときのみ、スコアが100%UP。発動者のバンド編成がクールタイプのみの場合はPERFECTのときのみ、スコアが125%UP",
+            "Perfect Note Score increased by 100% for {0} secs. If the Band is all Cool Types, Perfect Note Score increased by 125%",
+            "{0}秒中評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１００％ＵＰ。發動者的樂團編成只有ＣＯＯＬ屬性成員，且評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１２５％ＵＰ",
+            "{0}秒内 仅在PERFECT时 得分提升100%。\n发动者的队伍成员全部为Cool属性的情况下，\n得分提升125%",
+            "{0}초간 PERFECT일 때만 스코어가 100% 올라간다. \n발동한 사람의 밴드가 쿨 타입으로만 편성된 경우, PERFECT일 때만 스코어가 125% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 125,
+            "unificationActivateConditionType": "COOL",
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        100,
+                        100,
+                        100,
+                        100,
+                        100
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "35": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア125%UP|PERFECTのみ\nスコア100%UP",
+            "PERFECT Only \nScore Boost 125% | PERFECT Only \nScore Boost 100%",
+            "ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１２５％ＵＰ|ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１００％ＵＰ",
+            "仅在PERFECT时\n得分提升125%|仅在PERFECT时\n得分提升100%",
+            "PERFECT일 때만\n스코어 125%UP|PERFECT일 때만\n스코어 100%UP"
+        ],
+        "description": [
+            "{0}秒間 PERFECTのときのみ、スコアが100%UP。発動者のバンド編成がパワフルタイプのみの場合はPERFECTのときのみ、スコアが125%UP",
+            "Perfect Note Score increased by 100% for {0} secs. If the Band is all Powerful Types, Perfect Note Score increased by 125%",
+            "{0}秒中評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１００％ＵＰ。發動者的樂團編成只有ＰＯＷＥＲＦＵＬ屬性成員，且評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１２５％ＵＰ",
+            "{0}秒内 仅在PERFECT时 得分提升100%。\n发动者的队伍成员全部为Powerful属性的情况下，\n得分提升125%",
+            "{0}초간 PERFECT일 때만 스코어가 100% 올라간다. \n발동한 사람의 밴드가 파워풀 타입으로만 편성된 경우, PERFECT일 때만 스코어가 125% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 125,
+            "unificationActivateConditionType": "POWERFUL",
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        100,
+                        100,
+                        100,
+                        100,
+                        100
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "36": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア125%UP|PERFECTのみ\nスコア100%UP",
+            "PERFECT Only \nScore Boost 125% | PERFECT Only \nScore Boost 100%",
+            "ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１２５％ＵＰ|ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１００％ＵＰ",
+            "仅在PERFECT时\n得分提升125%|仅在PERFECT时\n得分提升100%",
+            "PERFECT일 때만\n스코어 125%UP|PERFECT일 때만\n스코어 100%UP"
+        ],
+        "description": [
+            "{0}秒間 PERFECTのときのみ、スコアが100%UP。発動者のバンド編成がピュアタイプのみの場合はPERFECTのときのみ、スコアが125%UP",
+            "Perfect Note Score increased by 100% for {0} secs. If the Band is all Pure Types, Perfect Note Score increased by 125%",
+            "{0}秒中評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１００％ＵＰ。發動者的樂團編成只ＰＵＲＥ屬性成員，且評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１２５％ＵＰ",
+            "{0}秒内 仅在PERFECT时 得分提升100%。\n发动者的队伍成员全部为Pure属性的情况下，\n得分提升125%",
+            "{0}초간 PERFECT일 때만 스코어가 100% 올라간다. \n발동한 사람의 밴드가 퓨어 타입으로만 편성된 경우, PERFECT일 때만 스코어가 125% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 125,
+            "unificationActivateConditionType": "PURE",
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        100,
+                        100,
+                        100,
+                        100,
+                        100
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "37": {
+        "simpleDescription": [
+            "GREAT以下を出すまで\nスコア115%UP|GREAT以下を出すまで\nスコア95%UP",
+            "Score +115% \ntill GREAT or Less|Score +95% \ntill GREAT or Less",
+            "在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ１１５％ＵＰ|在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ９５％ＵＰ",
+            "到GREAT以下出现为止\n得分提升115%|到GREAT以下出现为止\n得分提升95%",
+            "GREAT 이하 판정을 낼 때까지\n스코어 115% UP|GREAT 이하 판정을 낼 때까지\n스코어 95% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP、GREAT以下を出すまではスコアが95%UP、発動者のバンド編成がPoppin'Partyのみの場合はGREAT以下を出すまでスコアが115%UP",
+            "Score increased by 95% (lowered to 80% after GREAT or lower) for {0} secs. If the Band is all Poppin'Party members, Score increased by 115% instead.",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ，在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ９５％ＵＰ，發動者的樂團編成只有Poppin’Party成員，且在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ１１５％ＵＰ",
+            "{0}秒内  得分提升80%。\n到GREAT以下出现为止得分提升95%；\n发动者的队伍编队内仅有Poppin'Party乐队成员的情况下，\n到GREAT以下出现为止得分提升115%",
+            "{0}초간 스코어가 80％ 오르고, GREAT 이하 판정을 낼 때까진 스코어가 95％ 올라간다. \n발동한 사람의 밴드가 Poppin'Party로만 편성된 경우, GREAT 이하 판정을 낼 때까지 스코어가 115% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 115,
+            "unificationActivateConditionBandId": 1,
+            "activateEffectTypes": {
+                "score_continued_note_judge": {
+                    "activateEffectValue": [
+                        95,
+                        95,
+                        95,
+                        95,
+                        95
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "38": {
+        "simpleDescription": [
+            "GREAT以下を出すまで\nスコア115%UP|GREAT以下を出すまで\nスコア95%UP",
+            "Score +115% \ntill GREAT or Less|Score +95% \ntill GREAT or Less",
+            "在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ１１５％ＵＰ|在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ９５％ＵＰ",
+            "到GREAT以下出现为止\n得分提升115%|到GREAT以下出现为止\n得分提升95%",
+            "GREAT 이하 판정을 낼 때까지\n스코어 115% UP|GREAT 이하 판정을 낼 때까지\n스코어 95% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP、GREAT以下を出すまではスコアが95%UP、発動者のバンド編成がAfterglowのみの場合はGREAT以下を出すまでスコアが115%UP",
+            "Score increased by 95% (lowered to 80% after GREAT or lower) for {0} secs. If the Band is all Afterglow members, Score increased by 115% instead.",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ，在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ９５％ＵＰ，發動者的樂團編成只有Afterglow成員，且在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ１１５％ＵＰ",
+            "{0}秒内  得分提升80%。\n到GREAT以下出现为止得分提升95%；\n发动者的队伍编队内仅有Afterglow乐队成员的情况下，到GREAT以下出现为止得分提升115%",
+            "{0}초간 스코어가 80％ 오르고, GREAT 이하 판정을 낼 때까진 스코어가 95％ 올라간다. \n발동한 사람의 밴드가 Afterglow로만 편성된 경우, GREAT 이하 판정을 낼 때까지 스코어가 115% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 115,
+            "unificationActivateConditionBandId": 2,
+            "activateEffectTypes": {
+                "score_continued_note_judge": {
+                    "activateEffectValue": [
+                        95,
+                        95,
+                        95,
+                        95,
+                        95
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "39": {
+        "simpleDescription": [
+            "GREAT以下を出すまで\nスコア115%UP|GREAT以下を出すまで\nスコア95%UP",
+            "Score +115% \ntill GREAT or Less|Score +95% \ntill GREAT or Less",
+            "在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ１１５％ＵＰ|在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ９５％ＵＰ",
+            "到GREAT以下出现为止\n得分提升115%|到GREAT以下出现为止\n得分提升95%",
+            "GREAT 이하 판정을 낼 때까지\n스코어 115% UP|GREAT 이하 판정을 낼 때까지\n스코어 95% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP、GREAT以下を出すまではスコアが95%UP、発動者のバンド編成がPastel＊Palettesのみの場合はGREAT以下を出すまでスコアが115%UP",
+            "Score increased by 95% (lowered to 80% after GREAT or lower) for {0} secs. If the Band is all Pastel＊Palettes members, Score increased by 115% instead.",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ，在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ９５％ＵＰ，發動者的樂團編成只有Pastel＊Palettes成員，且在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ１１５％ＵＰ",
+            "{0}秒内  得分提升80%。\n到GREAT以下出现为止得分提升95%；\n发动者的队伍编队内仅有Pastel＊Palettes乐队成员的\n情况下，到GREAT以下出现为止得分提升115%",
+            "{0}초간 스코어가 80％ 오르고, GREAT 이하 판정을 낼 때까진 스코어가 95％ 올라간다. \n발동한 사람의 밴드가 Pastel * Palettes로만 편성된 경우, GREAT 이하 판정을 낼 때까지 스코어가 115% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 115,
+            "unificationActivateConditionBandId": 4,
+            "activateEffectTypes": {
+                "score_continued_note_judge": {
+                    "activateEffectValue": [
+                        95,
+                        95,
+                        95,
+                        95,
+                        95
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "40": {
+        "simpleDescription": [
+            "GREAT以下を出すまで\nスコア115%UP|GREAT以下を出すまで\nスコア95%UP",
+            "Score +115% \ntill GREAT or Less|Score +95% \ntill GREAT or Less",
+            "在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ１１５％ＵＰ|在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ９５％ＵＰ",
+            "到GREAT以下出现为止\n得分提升115%|到GREAT以下出现为止\n得分提升95%",
+            "GREAT 이하 판정을 낼 때까지\n스코어 115% UP|GREAT 이하 판정을 낼 때까지\n스코어 95% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP、GREAT以下を出すまではスコアが95%UP、発動者のバンド編成がRoseliaのみの場合はGREAT以下を出すまでスコアが115%UP",
+            "Score increased by 95% (lowered to 80% after GREAT or lower) for {0} secs. If the Band is all Roselia members, Score increased by 115% instead.",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ，在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ９５％ＵＰ，發動者的樂團編成只有Roselia成員，且在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ１１５％ＵＰ",
+            "{0}秒内  得分提升80%。\n到GREAT以下出现为止得分提升95%；\n发动者的队伍编队内仅有Roselia乐队成员的情况下，\n到GREAT以下出现为止得分提升115%",
+            "{0}초간 스코어가 80％ 오르고, GREAT 이하 판정을 낼 때까진 스코어가 95％ 올라간다. \n발동한 사람의 밴드가 Roselia로만 편성된 경우, GREAT 이하 판정을 낼 때까지 스코어가 115% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 115,
+            "unificationActivateConditionBandId": 5,
+            "activateEffectTypes": {
+                "score_continued_note_judge": {
+                    "activateEffectValue": [
+                        95,
+                        95,
+                        95,
+                        95,
+                        95
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "41": {
+        "simpleDescription": [
+            "GREAT以下を出すまで\nスコア115%UP|GREAT以下を出すまで\nスコア95%UP",
+            "Score +115% \ntill GREAT or Less|Score +95% \ntill GREAT or Less",
+            "在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ１１５％ＵＰ|在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ９５％ＵＰ",
+            "到GREAT以下出现为止\n得分提升115%|到GREAT以下出现为止\n得分提升95%",
+            "GREAT 이하 판정을 낼 때까지\n스코어 115% UP|GREAT 이하 판정을 낼 때까지\n스코어 95% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP、GREAT以下を出すまではスコアが95%UP、発動者のバンド編成がハロー、ハッピーワールド！のみの場合はGREAT以下を出すまでスコアが115%UP",
+            "Score increased by 95% (lowered to 80% after GREAT or lower) for {0} secs. If the Band is all Hello, Happy World! members, Score increased by 115% instead.",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ，在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ９５％ＵＰ，發動者的樂團編成只有Hello，Happy World！成員，且在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ１１５％ＵＰ",
+            "{0}秒内  得分提升80%。\n到GREAT以下出现为止得分提升95%；\n发动者的队伍编队内仅有Hello, Happy World! 乐队成员的\n情况下，到GREAT以下出现为止得分提升115%",
+            "{0}초간 스코어가 80％ 오르고, GREAT 이하 판정을 낼 때까진 스코어가 95％ 올라간다. \n발동한 사람의 밴드가 헬로 해피월드!로만 편성된 경우, GREAT 이하 판정을 낼 때까지 스코어가 115% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 115,
+            "unificationActivateConditionBandId": 3,
+            "activateEffectTypes": {
+                "score_continued_note_judge": {
+                    "activateEffectValue": [
+                        95,
+                        95,
+                        95,
+                        95,
+                        95
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "42": {
+        "simpleDescription": [
+            "GREAT以下を出すまで\nスコア115%UP|GREAT以下を出すまで\nスコア95%UP",
+            "Score +115% \ntill GREAT or Less|Score +95% \ntill GREAT or Less",
+            "在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ１１５％ＵＰ|在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ９５％ＵＰ",
+            "到GREAT以下出现为止\n得分提升115%|到GREAT以下出现为止\n得分提升95%",
+            "GREAT 이하 판정을 낼 때까지\n스코어 115% UP|GREAT 이하 판정을 낼 때까지\n스코어 95% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP、GREAT以下を出すまではスコアが95%UP、発動者のバンド編成がMorfonicaのみの場合はGREAT以下を出すまでスコアが115%UP",
+            "Score increased by 95% (lowered to 80% after GREAT or lower) for {0} secs. If the Band is all Morfonica members, Score increased by 115% instead.",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ，在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ９５％ＵＰ，發動者的樂團編成只有Morfonica成員，且在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ１１５％ＵＰ",
+            "{0}秒内  得分提升80%。\n到GREAT以下出现为止得分提升95%；\n发动者的队伍编队内仅有Morfonica乐队成员的情况下，\n到GREAT以下出现为止得分提升115%",
+            "{0}초간 스코어가 80％ 오르고, GREAT 이하 판정을 낼 때까진 스코어가 95％ 올라간다. \n발동한 사람의 밴드가 Morfonica로만 편성된 경우, GREAT 이하 판정을 낼 때까지 스코어가 115% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 115,
+            "unificationActivateConditionBandId": 21,
+            "activateEffectTypes": {
+                "score_continued_note_judge": {
+                    "activateEffectValue": [
+                        95,
+                        95,
+                        95,
+                        95,
+                        95
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "43": {
+        "simpleDescription": [
+            "GREAT以下を出すまで\nスコア115%UP|GREAT以下を出すまで\nスコア95%UP",
+            "Score +115% \ntill GREAT or Less|Score +95% \ntill GREAT or Less",
+            "在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ１１５％ＵＰ|在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ９５％ＵＰ",
+            "到GREAT以下出现为止\n得分提升115%|到GREAT以下出现为止\n得分提升95%",
+            "GREAT 이하 판정을 낼 때까지\n스코어 115% UP|GREAT 이하 판정을 낼 때까지\n스코어 95% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP、GREAT以下を出すまではスコアが95%UP、発動者のバンド編成がハッピータイプのみの場合はGREAT以下を出すまでスコアが115%UP",
+            "Score increased by 95% (lowered to 80% after GREAT or lower) for {0} secs. If the Band is all Happy Types, Score increased by 115% instead.",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ，在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ９５％ＵＰ，發動者的樂團編成只有ＨＡＰＰＹ屬性成員，且在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ１１５％ＵＰ",
+            "{0}秒内  得分提升80%。\n到GREAT以下出现为止得分提升95%；\n发动者的队伍成员全部为Happy属性的情况下，\n到GREAT以下出现为止得分提升115%",
+            "{0}초간 스코어가 80％ 오르고, GREAT 이하 판정을 낼 때까진 스코어가 95％ 올라간다. \n발동한 사람의 밴드가 해피 타입으로만 편성된 경우, GREAT 이하 판정을 낼 때까지 스코어가 115% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 115,
+            "unificationActivateConditionType": "HAPPY",
+            "activateEffectTypes": {
+                "score_continued_note_judge": {
+                    "activateEffectValue": [
+                        95,
+                        95,
+                        95,
+                        95,
+                        95
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "44": {
+        "simpleDescription": [
+            "GREAT以下を出すまで\nスコア115%UP|GREAT以下を出すまで\nスコア95%UP",
+            "Score +115% \ntill GREAT or Less|Score +95% \ntill GREAT or Less",
+            "在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ１１５％ＵＰ|在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ９５％ＵＰ",
+            "到GREAT以下出现为止\n得分提升115%|到GREAT以下出现为止\n得分提升95%",
+            "GREAT 이하 판정을 낼 때까지\n스코어 115% UP|GREAT 이하 판정을 낼 때까지\n스코어 95% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP、GREAT以下を出すまではスコアが95%UP、発動者のバンド編成がクールタイプのみの場合はGREAT以下を出すまでスコアが115%UP",
+            "Score increased by 95% (lowered to 80% after GREAT or lower) for {0} secs. If the Band is all Cool Types, Score increased by 115% instead.",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ，在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ９５％ＵＰ，發動者的樂團編成只有ＣＯＯＬ屬性成員，且在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ１１５％ＵＰ",
+            "{0}秒内  得分提升80%。\n到GREAT以下出现为止得分提升95%；\n发动者的队伍成员全部为Cool属性的情况下，\n到GREAT以下出现为止得分提升115%",
+            "{0}초간 스코어가 80％ 오르고, GREAT 이하 판정을 낼 때까진 스코어가 95％ 올라간다. \n발동한 사람의 밴드가 쿨 타입으로만 편성된 경우, GREAT 이하 판정을 낼 때까지 스코어가 115% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 115,
+            "unificationActivateConditionType": "COOL",
+            "activateEffectTypes": {
+                "score_continued_note_judge": {
+                    "activateEffectValue": [
+                        95,
+                        95,
+                        95,
+                        95,
+                        95
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "45": {
+        "simpleDescription": [
+            "GREAT以下を出すまで\nスコア115%UP|GREAT以下を出すまで\nスコア95%UP",
+            "Score +115% \ntill GREAT or Less|Score +95% \ntill GREAT or Less",
+            "在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ１１５％ＵＰ|在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ９５％ＵＰ",
+            "到GREAT以下出现为止\n得分提升115%|到GREAT以下出现为止\n得分提升95%",
+            "GREAT 이하 판정을 낼 때까지\n스코어 115% UP|GREAT 이하 판정을 낼 때까지\n스코어 95% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP、GREAT以下を出すまではスコアが95%UP、発動者のバンド編成がパワフルタイプのみの場合はGREAT以下を出すまでスコアが115%UP",
+            "Score increased by 95% (lowered to 80% after GREAT or lower) for {0} secs. If the Band is all Powerful Types, Score increased by 115% instead.",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ，在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ９５％ＵＰ，發動者的樂團編成只有ＰＯＷＥＲＦＵＬ屬性成員，且在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ１１５％ＵＰ",
+            "{0}秒内  得分提升80%。\n到GREAT以下出现为止得分提升95%；\n发动者的队伍成员全部为Powerful属性的情况下，\n到GREAT以下出现为止得分提升115%",
+            "{0}초간 스코어가 80％ 오르고, GREAT 이하 판정을 낼 때까진 스코어가 95％ 올라간다. \n발동한 사람의 밴드가 파워풀 타입으로만 편성된 경우, GREAT 이하 판정을 낼 때까지 스코어가 115% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 115,
+            "unificationActivateConditionType": "POWERFUL",
+            "activateEffectTypes": {
+                "score_continued_note_judge": {
+                    "activateEffectValue": [
+                        95,
+                        95,
+                        95,
+                        95,
+                        95
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "46": {
+        "simpleDescription": [
+            "GREAT以下を出すまで\nスコア115%UP|GREAT以下を出すまで\nスコア95%UP",
+            "Score +115% \ntill GREAT or Less|Score +95% \ntill GREAT or Less",
+            "在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ１１５％ＵＰ|在評價低於ＧＲＥＡＴ以前\nＳＣＯＲＥ９５％ＵＰ",
+            "到GREAT以下出现为止\n得分提升115%|到GREAT以下出现为止\n得分提升95%",
+            "GREAT 이하 판정을 낼 때까지\n스코어 115% UP|GREAT 이하 판정을 낼 때까지\n스코어 95% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP、GREAT以下を出すまではスコアが95%UP、発動者のバンド編成がピュアタイプのみの場合はGREAT以下を出すまでスコアが115%UP",
+            "Score increased by 95% (lowered to 80% after GREAT or lower) for {0} secs. If the Band is all Pure Types, Score increased by 115% instead.",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ，在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ９５％ＵＰ，發動者的樂團編成只有ＰＵＲＥ屬性成員，且在評價低於ＧＲＥＡＴ以前ＳＣＯＲＥ１１５％ＵＰ",
+            "{0}秒内  得分提升80%。\n到GREAT以下出现为止得分提升95%；\n发动者的队伍成员全部为Pure属性的情况下，\n到GREAT以下出现为止得分提升115%",
+            "{0}초간 스코어가 80％ 오르고, GREAT 이하 판정을 낼 때까진 스코어가 95％ 올라간다. \n발동한 사람의 밴드가 퓨어 타입으로만 편성된 경우, GREAT 이하 판정을 낼 때까지 스코어가 115% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 115,
+            "unificationActivateConditionType": "PURE",
+            "activateEffectTypes": {
+                "score_continued_note_judge": {
+                    "activateEffectValue": [
+                        95,
+                        95,
+                        95,
+                        95,
+                        95
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "47": {
+        "simpleDescription": [
+            "スコア105%UP|スコア80%UP",
+            "Score Boost 105% | \nScore Boost 80%",
+            "ＳＣＯＲＥ１０５％ＵＰ|ＳＣＯＲＥ８０％ＵＰ",
+            "得分提升105%|得分提升80%",
+            "스코어 105% UP|스코어 80% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP。発動者のバンド編成がPoppin'Partyのみの場合はスコアが105%UP",
+            "Score increased by 80% for {0} secs. If the Band is all Poppin'Party members, Score increased by 105%",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ。發動者的樂團編成只有Poppin’Party成員時ＳＣＯＲＥ１０５％ＵＰ",
+            "{0}秒内  得分提升80%。\n发动者的队伍编队内仅有Poppin'Party乐队成员的情况下，\n得分提升105%",
+            "{0}초간 스코어가 80% 올라간다. \n발동한 사람의 밴드가 Poppin'Party로만 편성된 경우, 스코어가 105% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 105,
+            "unificationActivateConditionBandId": 1,
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "48": {
+        "simpleDescription": [
+            "スコア105%UP|スコア80%UP",
+            "Score Boost 105% | \nScore Boost 80%",
+            "ＳＣＯＲＥ１０５％ＵＰ|ＳＣＯＲＥ８０％ＵＰ",
+            "得分提升105%|得分提升80%",
+            "스코어 105% UP|스코어 80% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP。発動者のバンド編成がAfterglowのみの場合はスコアが105%UP",
+            "Score increased by 80% for {0} secs. If the Band is all Afterglow members, Score increased by 105%",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ。發動者的樂團編成只有Afterglow成員時ＳＣＯＲＥ１０５％ＵＰ",
+            "{0}秒内  得分提升80%。\n发动者的队伍编队内仅有Afterglow乐队成员的情况下，\n得分提升105%",
+            "{0}초간 스코어가 80% 올라간다. \n발동한 사람의 밴드가 Afterglow로만 편성된 경우, 스코어가 105% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 105,
+            "unificationActivateConditionBandId": 2,
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "49": {
+        "simpleDescription": [
+            "スコア105%UP|スコア80%UP",
+            "Score Boost 105% | \nScore Boost 80%",
+            "ＳＣＯＲＥ１０５％ＵＰ|ＳＣＯＲＥ８０％ＵＰ",
+            "得分提升105%|得分提升80%",
+            "스코어 105% UP|스코어 80% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP。発動者のバンド編成がPastel＊Palettesのみの場合はスコアが105%UP",
+            "Score increased by 80% for {0} secs. If the Band is all Pastel＊Palettes members, Score increased by 105%",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ。發動者的樂團編成只有Pastel＊Palettes成員時ＳＣＯＲＥ１０５％ＵＰ",
+            "{0}秒内  得分提升80%。\n发动者的队伍编队内仅有Pastel＊Palettes乐队成员的\n情况下，得分提升105%",
+            "{0}초간 스코어가 80% 올라간다. \n발동한 사람의 밴드가 Pastel * Palettes로만 편성된 경우, 스코어가 105% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 105,
+            "unificationActivateConditionBandId": 4,
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "50": {
+        "simpleDescription": [
+            "スコア105%UP|スコア80%UP",
+            "Score Boost 105% | \nScore Boost 80%",
+            "ＳＣＯＲＥ１０５％ＵＰ|ＳＣＯＲＥ８０％ＵＰ",
+            "得分提升105%|得分提升80%",
+            "스코어 105% UP|스코어 80% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP。発動者のバンド編成がRoseliaのみの場合はスコアが105%UP",
+            "Score increased by 80% for {0} secs. If the Band is all Roselia members, Score increased by 105%",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ。發動者的樂團編成只有Roselia成員時ＳＣＯＲＥ１０５％ＵＰ",
+            "{0}秒内  得分提升80%。\n发动者的队伍编队内仅有Roselia乐队成员的情况下，\n得分提升105%",
+            "{0}초간 스코어가 80% 올라간다. \n발동한 사람의 밴드가 Roselia로만 편성된 경우, 스코어가 105% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 105,
+            "unificationActivateConditionBandId": 5,
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "51": {
+        "simpleDescription": [
+            "スコア105%UP|スコア80%UP",
+            "Score Boost 105% | \nScore Boost 80%",
+            "ＳＣＯＲＥ１０５％ＵＰ|ＳＣＯＲＥ８０％ＵＰ",
+            "得分提升105%|得分提升80%",
+            "스코어 105% UP|스코어 80% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP。発動者のバンド編成がハロー、ハッピーワールド！のみの場合はスコアが105%UP",
+            "Score increased by 80% for {0} secs. If the Band is all Hello, Happy World! members, Score increased by 105%",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ。發動者的樂團編成只有Hello，Happy World！成員時ＳＣＯＲＥ１０５％ＵＰ",
+            "{0}秒内  得分提升80%。\n发动者的队伍编队内仅有Hello, Happy World! 乐队成员的\n情况下，得分提升105%",
+            "{0}초간 스코어가 80% 올라간다. \n발동한 사람의 밴드가 헬로 해피월드!로만 편성된 경우, 스코어가 105% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 105,
+            "unificationActivateConditionBandId": 3,
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "52": {
+        "simpleDescription": [
+            "スコア105%UP|スコア80%UP",
+            "Score Boost 105% | \nScore Boost 80%",
+            "ＳＣＯＲＥ１０５％ＵＰ|ＳＣＯＲＥ８０％ＵＰ",
+            "得分提升105%|得分提升80%",
+            "스코어 105% UP|스코어 80% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP。発動者のバンド編成がMorfonicaのみの場合はスコアが105%UP",
+            "Score increased by 80% for {0} secs. If the Band is all Morfonica members, Score increased by 105%",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ。發動者的樂團編成只有Morfonica成員時ＳＣＯＲＥ１０５％ＵＰ",
+            "{0}秒内  得分提升80%。\n发动者的队伍编队内仅有Morfonica乐队成员的情况下，\n得分提升105%",
+            "{0}초간 스코어가 80% 올라간다. \n발동한 사람의 밴드가 Morfonica로만 편성된 경우, 스코어가 105% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 105,
+            "unificationActivateConditionBandId": 21,
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "53": {
+        "simpleDescription": [
+            "スコア105%UP|スコア80%UP",
+            "Score Boost 105% | \nScore Boost 80%",
+            "ＳＣＯＲＥ１０５％ＵＰ|ＳＣＯＲＥ８０％ＵＰ",
+            "得分提升105%|得分提升80%",
+            "스코어 105% UP|스코어 80% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP。発動者のバンド編成がハッピータイプのみの場合はスコアが105%UP",
+            "Score increased by 80% for {0} secs. If the Band is all Happy Types, Score increased by 105%",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ。發動者的樂團編成只有ＨＡＰＰＹ屬性成員時ＳＣＯＲＥ１０５％ＵＰ",
+            "{0}秒内  得分提升80%。\n发动者的队伍成员全部为Happy属性的情况下，\n得分提升105%",
+            "{0}초간 스코어가 80% 올라간다. \n발동한 사람의 밴드가 해피 타입으로만 편성된 경우, 스코어가 105% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 105,
+            "unificationActivateConditionType": "HAPPY",
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "54": {
+        "simpleDescription": [
+            "スコア105%UP|スコア80%UP",
+            "Score Boost 105% | \nScore Boost 80%",
+            "ＳＣＯＲＥ１０５％ＵＰ|ＳＣＯＲＥ８０％ＵＰ",
+            "得分提升105%|得分提升80%",
+            "스코어 105% UP|스코어 80% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP。発動者のバンド編成がクールタイプのみの場合はスコアが105%UP",
+            "Score increased by 80% for {0} secs. If the Band is all Cool Types, Score increased by 105%",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ。發動者的樂團編成只有ＣＯＯＬ屬性成員時ＳＣＯＲＥ１０５％ＵＰ",
+            "{0}秒内  得分提升80%。\n发动者的队伍成员全部为Cool属性的情况下，\n得分提升105%",
+            "{0}초간 스코어가 80% 올라간다. \n발동한 사람의 밴드가 쿨 타입으로만 편성된 경우, 스코어가 105% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 105,
+            "unificationActivateConditionType": "COOL",
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "55": {
+        "simpleDescription": [
+            "スコア105%UP|スコア80%UP",
+            "Score Boost 105% | \nScore Boost 80%",
+            "ＳＣＯＲＥ１０５％ＵＰ|ＳＣＯＲＥ８０％ＵＰ",
+            "得分提升105%|得分提升80%",
+            "스코어 105% UP|스코어 80% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP。発動者のバンド編成がパワフルタイプのみの場合はスコアが105%UP",
+            "Score increased by 80% for {0} secs. If the Band is all Powerful Types, Score increased by 105%",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ。發動者的樂團編成只有ＰＯＷＥＲＦＵＬ屬性成員時ＳＣＯＲＥ１０５％ＵＰ",
+            "{0}秒内  得分提升80%。\n发动者的队伍成员全部为Powerful属性的情况下，\n得分提升105%",
+            "{0}초간 스코어가 80% 올라간다. \n발동한 사람의 밴드가 파워풀 타입으로만 편성된 경우, 스코어가 105% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 105,
+            "unificationActivateConditionType": "POWERFUL",
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "56": {
+        "simpleDescription": [
+            "スコア105%UP|スコア80%UP",
+            "Score Boost 105% | \nScore Boost 80%",
+            "ＳＣＯＲＥ１０５％ＵＰ|ＳＣＯＲＥ８０％ＵＰ",
+            "得分提升105%|得分提升80%",
+            "스코어 105% UP|스코어 80% UP"
+        ],
+        "description": [
+            "{0}秒間  スコアが80%UP。発動者のバンド編成がピュアタイプのみの場合はスコアが105%UP",
+            "Score increased by 80% for {0} secs. If the Band is all Pure Types, Score increased by 105%",
+            "{0}秒中 ＳＣＯＲＥ８０％ＵＰ。發動者的樂團編成只有ＰＵＲＥ屬性成員時ＳＣＯＲＥ１０５％ＵＰ",
+            "{0}秒内  得分提升80%。\n发动者的队伍成员全部为Pure属性的情况下，\n得分提升105%",
+            "{0}초간 스코어가 80% 올라간다. \n발동한 사람의 밴드가 퓨어 타입으로만 편성된 경우, 스코어가 105% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 105,
+            "unificationActivateConditionType": "PURE",
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        80,
+                        80,
+                        80,
+                        80,
+                        80
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "57": {
+        "simpleDescription": [
+            "ライフ回復＆減少無効\n&スコアがUP",
+            "Energy Recovery +\nNo Loss & Score UP",
+            "ＬＩＦＥ回復＆減少無效\n＆ＳＣＯＲＥ ＵＰ",
+            "生命回复&减少无效\n&得分提升",
+            "라이프 회복＆감소 무효\n&스코어 UP"
+        ],
+        "description": [
+            "ライフが{0}回復し、{1}秒間 BAD以下でもライフが減少しなくなる。さらに{1}秒間 スコアが40%UP、GREAT以下を出すまではスコアが100%UPする",
+            "Restore {0} Energy, and for {1} seconds, BAD or lower will not deplete Energy. For {1} seconds, Score increases by 40%, or 100% until scoring GREAT or lower.",
+            "ＬＩＦＥ{0}回復，{1}秒中評價為ＢＡＤ以下也不會減少ＬＩＦＥ。{1}秒中ＳＣＯＲＥ４０％ＵＰ，直到出現ＧＲＥＡＴ以下的評價前ＳＣＯＲＥ１００％ＵＰ",
+            "生命回复{0}\n{1}秒内 BAD以下时不会减少生命。\n且{1}秒内 得分提升40% \n到GREAT以下出现为止得分提升100%",
+            "라이프가 {0} 회복되고, {1}초간 BAD 이하에서도 라이프가 감소하지 않는다. 게다가 {1}초간 스코어가 40% 올라가고, GREAT 이하가 나올 때까지 스코어가 100% 올라간다"
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "damage": {
+                    "activateEffectValue": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "none"
+                },
+                "score_continued_note_judge": {
+                    "activateEffectValue": [
+                        100,
+                        100,
+                        100,
+                        100,
+                        100
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                },
+                "score": {
+                    "activateEffectValue": [
+                        40,
+                        40,
+                        40,
+                        40,
+                        40
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        },
+        "onceEffect": {
+            "onceEffectType": "life",
+            "onceEffectValueType": "real_value",
+            "onceEffectValue": [
+                300,
+                330,
+                370,
+                410,
+                450
+            ]
+        }
+    },
+    "58": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア125%UP|PERFECTのみ\nスコア110%UP",
+            "PERFECT Only\nScore 125% UP | PERFECT Only\nScore 110% UP",
+            "ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１２５％ＵＰ|ＰＥＲＦＥＣＴ時\nＳＣＯＲＥ１１０％ＵＰ",
+            "仅在PERFECT时\n得分提升125%|仅在PERFECT时\n得分提升110%",
+            "PERFECT일 때만\n스코어 125% UP|PERFECT일 때만\n스코어 110% UP"
+        ],
+        "description": [
+            "{0}秒間 PERFECTのときのみ、スコアが110%UP。発動者のバンド編成がRAISE A SUILENのみの場合はPERFECTのときのみ、スコアが125%UP",
+            "For {0} seconds, Score increased by 110% for PERFECT. If the band is made up of only RAISE A SUILEN Members, Score increases by 125%.",
+            "{0}秒中評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１１０％ＵＰ。發動者的樂團編成只有RAISE A SUILEN成員，且評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１２５％ＵＰ",
+            "{0}秒内 仅在PERFECT时，得分提升110%。\n发动者的队伍编队内仅有RAISE A SUILEN乐队成员的\n情况下，仅在PERFECT时，得分提升125%",
+            "{0}초간 PERFECT일 때만 스코어가 110% 올라간다. 발동한 사람의 밴드가 RAISE A SUILEN으로만 편성된 경우, PERFECT일 때만 스코어가 125% 올라간다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "unificationActivateEffectValue": 125,
+            "unificationActivateConditionBandId": 18,
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        110,
+                        110,
+                        110,
+                        110,
+                        110
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "59": {
+        "simpleDescription": [
+            "スコア125％UP＆\nGREAT以下スコア0",
+            "Score Boost 125% & \nGREAT or Lower 0",
+            "ＳＣＯＲＥ１２５％ＵＰ＆\nＧＲＥＡＴ以下ＳＣＯＲＥ為０",
+            "得分提升125%&GREAT以下0分",
+            "스코어 125％UP＆\nGREAT 이하 스코어 0"
+        ],
+        "description": [
+            "{0}秒間  PERFECTのときのみスコアが125％UPし、GREAT以下がすべてスコア0になる",
+            "For {0} seconds, Score increased by 125% for PERFECT. No Score for GREAT or lower.",
+            "{0}秒內 僅於獲得ＰＥＲＦＥＣＴ評價時ＳＣＯＲＥ１２５％ＵＰ，評價為ＧＲＥＡＴ以下時獲得ＳＣＯＲＥ全部為０",
+            "{0}秒内 仅在PERFECT时 得分提升125%\nGREAT及以下分数均为0",
+            "{0}초간 PERFECT일 때만 스코어가 125％ 올라가고, GREAT 이하는 모두 스코어가 0이 된다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score_only_perfect": {
+                    "activateEffectValue": [
+                        125,
+                        125,
+                        125,
+                        null,
+                        125
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "60": {
+        "simpleDescription": [
+            "ライフ0にならない\n＆スコア90％UP",
+            "Fail Guard &\nScore Boost 90%",
+            "ＬＩＦＥ不會歸０\n＆ＳＣＯＲＥ９０％ＵＰ",
+            "生命值不会变为0\n＆得分提升90％",
+            "라이프 0이 되지 않음\n＆스코어 90％UP"
+        ],
+        "description": [
+            "{0}秒間 スコアが90%UPし、ダメージを受けてもライフが0にならない",
+            "For {0} seconds, Score increased by 90%, and Energy stays above 0 regardless of damage taken.",
+            "{0}秒內 ＳＣＯＲＥ９０％ＵＰ，即使受到損傷ＬＩＦＥ也不會歸０",
+            "{0}秒内 得分提升90%，\n即使受到伤害生命值也不会变为0",
+            "{0}초간 스코어가 90% 올라가고, 데미지를 입어도 라이프가 0이 되지 않는다."
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        90,
+                        90,
+                        90,
+                        90,
+                        90
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                },
+                "never_die": {
+                    "activateEffectValue": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "none"
+                }
+            }
+        }
+    },
+    "61": {
+        "simpleDescription": [
+            "スコア100％UP＆\nPERFECT毎0.5％UP",
+            "Score Boost 100% &\n+0.5% per PERFECT",
+            "ＳＣＯＲＥ１００％ＵＰ＆\n每獲得一個ＰＥＲＦＥＣＴ評價再提升0.5％",
+            "得分提升100％＆\n每次PERFECT追加提升0.5％",
+            "스코어 100％UP＆\nPERFECT 때마다 0.5％UP"
+        ],
+        "description": [
+            "{0}秒間 スコアが100%UPし、さらにPERFECTを出すたびに、スコアUPの値が0.5%ずつUP（最大150%まで）",
+            "For {0} seconds, Score increased by 100%. Score further increased by 0.5% for every PERFECT (stacks up to 150%).",
+            "{0}秒內 ＳＣＯＲＥ１００％ＵＰ，且每獲得一個ＰＥＲＦＥＣＴ評價，ＳＣＯＲＥ提升倍率會再0.5％ＵＰ（最高１５０％）",
+            "{0}秒内 得分提升100%，\n并且在每次PERFECT时，得分追加提升0.5%\n（最大150%）",
+            "{0}초간 스코어가 100% 올라간다. 게다가 PERFECT 판정을 낼 때마다, 스코어 상승치가 0.5%씩 올라간다. (최대 150%까지)"
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        100,
+                        100,
+                        100,
+                        100,
+                        100
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                },
+                "score_rate_up_with_perfect": {
+                    "activateEffectValue": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "62": {
+        "simpleDescription": [
+            "スコア125％UP＆\nGREAT以下スコア1/2",
+            "Score Boost 125% &\nGREAT or Lower Halved",
+            "ＳＣＯＲＥ１２５％ＵＰ＆\nＧＲＥＡＴ以下ＳＣＯＲＥ１／２",
+            "得分提升125％＆\nGREAT以下得分1/2",
+            "스코어 125％ UP＆\nGREAT 이상 스코어 1/2"
+        ],
+        "description": [
+            "{0}秒間  PERFECTのときのみスコアが125％UP。GREAT以下のスコアは1/2になる",
+            "For {0} seconds, Score increased by 125% for PERFECT. Halved Score for GREAT or lower",
+            "{0}秒中評價為ＰＥＲＦＥＣＴ時，ＳＣＯＲＥ１２５％ＵＰ，評價為ＧＲＥＡＴ以下時獲得ＳＣＯＲＥ全部為1/2",
+            "{0}秒内 仅在PERFECT时得分提升125%。\nGREAT以下得分全部为1/2",
+            "{0}초간 PERFECT일 때만 스코어가 125％ 올라간다。GREAT 이하인 스코어는 1/2가 된다"
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score_under_great_half": {
+                    "activateEffectValue": [
+                        125,
+                        125,
+                        125,
+                        125,
+                        125
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "63": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア100%UP",
+            "PERFECT Only Score 100% UP",
+            null,
+            null,
+            null
+        ],
+        "description": [
+            "{0}秒間  PERFECTのときのみ、スコアが100%UPする",
+            "PERFECT Notes Score increased by 100% for {0} secs",
+            null,
+            "{0}秒内 仅在PERFECT时 得分提升100%。",
+            null
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        100,
+                        null,
+                        null,
+                        null,
+                        null
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "64": {
+        "simpleDescription": [
+            "判定強化(大)\n＆スコア40%ＵＰ",
+            "Note Boost (M) & Score Boost 40%",
+            null,
+            null,
+            null
+        ],
+        "description": [
+            "{0}秒間  GOOD以上がすべてPERFECTになり、スコアが40％UPする",
+            "GOOD and higher becomes PERFECT and Score increased by 40% for {0} secs",
+            null,
+            "{0}秒内  GOOD以上全部变为PERFECT\n得分提升40%",
+            null
+        ],
+        "duration": [
+            5,
+            5.6,
+            6.2,
+            6.8,
+            7.5
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        40,
+                        null,
+                        null,
+                        null,
+                        null
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                },
+                "judge": {
+                    "activateEffectValue": [
+                        0,
+                        null,
+                        null,
+                        null,
+                        null
+                    ],
+                    "activateEffectValueType": "real_value",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "65": {
+        "simpleDescription": [
+            "ライフ450回復\n＆スコア40%ＵＰ",
+            "450 Life Recovery & Score Boost 40%",
+            null,
+            null,
+            null
+        ],
+        "description": [
+            "ライフが{0}回復し、{1}秒間  スコアが40%UPする",
+            "{0} Life Recovery and Score increased by 40% for {1} secs",
+            null,
+            "生命回复（{0}）\n{1}秒内  得分提升40%",
+            null
+        ],
+        "duration": [
+            5,
+            5.6,
+            6.2,
+            6.8,
+            7.5
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        40,
+                        null,
+                        null,
+                        null,
+                        null
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        },
+        "onceEffect": {
+            "onceEffectType": "life",
+            "onceEffectValueType": "real_value",
+            "onceEffectValue": [
+                300,
+                330,
+                370,
+                410,
+                450
+            ]
+        }
+    },
+    "66": {
+        "simpleDescription": [
+            "スコア130%ＵＰ",
+            null,
+            null,
+            null,
+            null
+        ],
+        "description": [
+            "{0}秒間  スコアが130%UPする",
+            "Score increased by 130% for {0} secs",
+            null,
+            "{0}秒内  得分提升130%",
+            null
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        130,
+                        null,
+                        null,
+                        null,
+                        null
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        }
+    },
+    "67": {
+        "simpleDescription": [
+            "判定強化(特大)\n＆スコア110%ＵＰ",
+            "Note Boost (L) & Score Boost 110%",
+            null,
+            null,
+            null
+        ],
+        "description": [
+            "{0}秒間  BAD以上がすべてPERFECTになり、スコアが110％UPする",
+            "BAD and higher becomes PERFECT and Score increased by 110% for {0} secs",
+            null,
+            "{0}秒内  BAD以上全部变为PERFECT\n得分提升110%",
+            null
+        ],
+        "duration": [
+            5,
+            5.6,
+            6.2,
+            6.8,
+            7.5
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        110,
+                        null,
+                        null,
+                        null,
+                        null
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                },
+                "judge": {
+                    "activateEffectValue": [
+                        0,
+                        null,
+                        null,
+                        null,
+                        null
+                    ],
+                    "activateEffectValueType": "real_value",
+                    "activateCondition": "bad"
+                }
+            }
+        }
+    },
+    "68": {
+        "simpleDescription": [
+            "ライフ750回復\n＆スコア110%ＵＰ",
+            "750 Life Recovery & Score Boost 110%",
+            null,
+            null,
+            null
+        ],
+        "description": [
+            "ライフが{0}回復し、{1}秒間  スコアが110%UPする",
+            "{0} Life Recovery and Score increased by 110% for {1} secs",
+            null,
+            "生命回复（{0}）\n{1}秒内  得分提升110%",
+            null
+        ],
+        "duration": [
+            5,
+            5.6,
+            6.2,
+            6.8,
+            7.5
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        110,
+                        null,
+                        null,
+                        null,
+                        null
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "good"
+                }
+            }
+        },
+        "onceEffect": {
+            "onceEffectType": "life",
+            "onceEffectValueType": "real_value",
+            "onceEffectValue": [
+                500,
+                560,
+                620,
+                680,
+                750
+            ]
+        }
+    },
+    "69": {
+        "simpleDescription": [
+            "PERFECTのみ\nスコア150%UP",
+            "PERFECT Only Score 150% UP",
+            null,
+            null,
+            null
+        ],
+        "description": [
+            "{0}秒間  PERFECTのときのみ、スコアが150%UPする",
+            "PERFECT Notes Score increased by 150% for {0} secs",
+            null,
+            "仅在PERFECT时\n得分提升150%",
+            null
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score": {
+                    "activateEffectValue": [
+                        150,
+                        null,
+                        null,
+                        null,
+                        null
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    },
+    "70": {
+        "simpleDescription": [
+            "スコア150％UP＆\nGREAT以下スコア1/2",
+            "Score Boost 150% & GREAT or Lower Halved",
+            null,
+            null,
+            null
+        ],
+        "description": [
+            "{0}秒間  PERFECTのときのみスコアが150％UP。GREAT以下のスコアは1/2になる",
+            "For {0} seconds, Score increased by 150% for PERFECT. Halved Score for GREATER or lower",
+            null,
+            "{0}秒内 仅在PERFECT时得分提升150%。\nGREAT以下得分全部为1/2",
+            null
+        ],
+        "duration": [
+            5,
+            5.5,
+            6,
+            6.5,
+            7
+        ],
+        "activationEffect": {
+            "activateEffectTypes": {
+                "score_under_great_half": {
+                    "activateEffectValue": [
+                        150,
+                        null,
+                        null,
+                        null,
+                        null
+                    ],
+                    "activateEffectValueType": "rate",
+                    "activateCondition": "perfect"
+                }
+            }
+        }
+    }
+}
