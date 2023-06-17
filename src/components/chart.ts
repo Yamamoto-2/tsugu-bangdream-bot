@@ -38,13 +38,13 @@ export async function drawTimeLineChart({
     end,
     setStartToZero = false,
     data
-}:drawTimeLineChartOptions) {
+}: drawTimeLineChartOptions) {
     /*
     for (var i = 0; i < data['datasets'].length; i++) {
         console.log(data['datasets'][i]['data'])
     }
     */
-   const yMax = Math.max(...data['datasets'].map((dataset:any) => Math.max(...dataset['data'].map((data:any) => data['y']))))
+    const yMax = Math.max(...data['datasets'].map((dataset: any) => Math.max(...dataset['data'].map((data: any) => data['y']))))
     var options = {
         plugins: {
             legend: {
@@ -67,7 +67,7 @@ export async function drawTimeLineChart({
             },
             y: {
                 min: 0,
-                max: yMax * 1.1,
+                max: (yMax + 1000) * 1.1,
             }
         }
     }
@@ -76,12 +76,12 @@ export async function drawTimeLineChart({
         data: data,
         options: options
     }
-    try{
+    try {
         const image = await chartJSNodeCanvas.renderToBuffer(configuration as any);
         return await loadImage(image);
     }
-    catch(e){
+    catch (e) {
         console.log(e)
-        return loadImage(assetsRootPath+'/err.png')
+        return loadImage(assetsRootPath + '/err.png')
     }
 }
