@@ -7,11 +7,10 @@ import express from 'express';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    const { user, playerId, server, useEasyBG } = req.body;
+    const { playerId, server, useEasyBG } = req.body;
 
     // 检查类型是否正确
     if (
-        !isTsuguUser(user) ||
         typeof playerId !== 'number' ||
         (!isServer(server) && server != undefined) ||
         typeof useEasyBG !== 'boolean'
@@ -21,14 +20,14 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const result = await commandSearchPlayer(user, playerId, server, useEasyBG);
+        const result = await commandSearchPlayer( playerId, server, useEasyBG);
         res.send(listToBase64(result));
     } catch (e) {
         res.status(400).send([{ type: 'string', string: '内部错误' }]);
     }
 });
 
-export async function commandSearchPlayer(user: tsuguUser, playerId: number, server = user.server_mode, useEasyBG: boolean): Promise<Array<Buffer | string>> {
+export async function commandSearchPlayer(playerId: number, server:Server, useEasyBG: boolean): Promise<Array<Buffer | string>> {
 
     return await drawPlayerDetail(playerId, server, useEasyBG)
 
