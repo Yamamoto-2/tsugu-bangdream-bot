@@ -4,8 +4,29 @@ import { isInteger } from "./utils"
 import { drawSongDetail } from "../view/songDetail"
 import { Song } from "../types/Song"
 import { Server } from "../types/Server"
+import { listToBase64, isServerList } from './utils';
+import express from 'express';
 
-export async function commandSong(default_servers:Server[], text: string): Promise<Array<Buffer | string>> {
+const router = express.Router();
+
+router.post('/', async (req, res) => {
+    const { default_servers, text } = req.body;
+
+    // 检查类型是否正确
+    if (
+        !isServerList(default_servers) ||
+        typeof text !== 'string'
+    ) {
+        res.status(400).send('错误: 参数类型不正确');
+        return;
+    }
+
+
+    const result = await commandSong(default_servers, text);
+    res.send(listToBase64(result));
+});
+
+export async function commandSong(default_servers: Server[], text: string): Promise<Array<Buffer | string>> {
     if (!text) {
         return ['错误: 请输入关键词或卡片ID']
     }
@@ -19,3 +40,5 @@ export async function commandSong(default_servers:Server[], text: string): Promi
     }
     return await drawSongList(fuzzySearchResult, default_servers)
 }
+
+export { router as searchSongRouter }

@@ -23,6 +23,12 @@ var statusName = {
 
 export async function drawCutoffListOfEvent(eventId: number, server: Server):Promise<Array<Buffer | string>> {
     var event = new Event(eventId)
+    if(!event.isExist){
+        return ['活动不存在']
+    }
+    if(event.startAt[server] == undefined){
+        return ['活动在该服务器不存在']
+    }
     var all = []
     all.push(drawTitle('档线列表', `${serverNameFullList[server]}`))
     all.push(await drawEventDatablock(event))

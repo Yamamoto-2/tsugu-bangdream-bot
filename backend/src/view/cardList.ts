@@ -2,7 +2,7 @@ import { Card } from "../types/Card";
 import { Attribute } from "../types/Attribute";
 import { Character } from "../types/Character";
 import mainAPI from "../types/_Main"
-import { match } from "../commands/fuzzySearch"
+import { match } from "../routers/fuzzySearch"
 import { Canvas, createCanvas, Image, loadImage } from 'canvas'
 import { drawCardIcon } from "../components/card"
 import { drawDatablock, drawDatablockHorizontal } from '../components/dataBlock';

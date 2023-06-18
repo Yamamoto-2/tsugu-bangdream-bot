@@ -1,6 +1,6 @@
 import { Card } from "../types/Card";
 import mainAPI from "../types/_Main"
-import { match } from "../commands/fuzzySearch"
+import { match } from "../routers/fuzzySearch"
 import { Canvas, createCanvas, Image, loadImage } from 'canvas'
 import { drawDatablock, drawDatablockHorizontal } from '../components/dataBlock';
 import { line } from '../components/list';

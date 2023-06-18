@@ -12,7 +12,7 @@ import { Band } from '../types/Band';
 import { changeTimefomantMonthDay } from '../components/list/time';
 import { stackImage, stackImageHorizontal } from '../components/utils';
 import { drawBandInList } from '../components/list/band';
-import { config } from '../commands/fuzzySearch'
+import { config } from '../routers/fuzzySearch'
 
 const rightListWidth = 500
 const rightListLine: Canvas = drawDottedLine({
