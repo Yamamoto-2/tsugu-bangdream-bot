@@ -106,8 +106,8 @@ export async function commandBindPlayer(backendUrl:string,session: Session<'tsug
         playerBinding.user_id = session.userId
         curServer.bindingStatus = BindingStatus.Success
         curServer.verifyCode = undefined
-        return h.image(commandSearchPlayer(backendUrl, playerBinding, curServer.gameID, serverName, useEasyBG)[0],'image/png') 
-        return
+        const result = await commandSearchPlayer(backendUrl, playerBinding, curServer.gameID, serverName, useEasyBG)
+        return h.image(result[0] as Buffer,'image/png') 
     }
     else {
         curServer.gameID = 0
@@ -168,7 +168,8 @@ export async function commandPlayerInfo(backendUrl: string, session: Session<'ts
         return `错误: 未检测到${serverNameFullList[server]}的玩家数据`
     }
     else {
-        return h.image(commandSearchPlayer(backendUrl, playerBinding, curServer.gameID, serverName, useEasyBG)[0],'image/png') 
+        const result = await commandSearchPlayer(backendUrl, playerBinding, curServer.gameID, serverName, useEasyBG)
+        return h.image(result[0] as Buffer,'image/png') 
     }
 }
 
