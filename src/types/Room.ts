@@ -1,10 +1,9 @@
 import { BandoriStationurl, tsuguUser } from "../config";
 import { Player } from "./Player";
 import { unescape } from "querystring";
-import { getServerByName } from "./Server";
+import { Server, getServerByName } from "./Server";
 import { getJsonAndSave } from "../api/downloader";
 import {BindingStatus} from "../config"
-import { Server } from "./Server";
 
 
 //栈函数
@@ -81,7 +80,6 @@ export class Room {
         }
     }
 }
-
 
 //房间栈
 const roomStack = new Stack<Room>(100)

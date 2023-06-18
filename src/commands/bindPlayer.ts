@@ -2,7 +2,7 @@ import { Database, Random, Session, h } from "koishi";
 import { bindingPlayerPromptWaitingTime, serverNameFullList, BindingStatus } from "../config";
 import { Server, getServerByName } from "../types/Server";
 import { Player } from "../types/Player";
-import { drawPlayerDetail } from "../view/playerDetail";
+import { commandSearchPlayer } from "./searchPlayer";
 
 var rand = new Random()
 
@@ -106,7 +106,7 @@ export async function commandBindPlayer(session: Session<'tsugu', never>, server
         playerBinding.user_id = session.userId
         curServer.bindingStatus = BindingStatus.Success
         curServer.verifyCode = undefined
-        return h.image(await drawPlayerDetail(player.playerId, server, useEasyBG)[0], 'image/png')
+        return
     }
     else {
         curServer.gameID = 0
@@ -149,7 +149,7 @@ export async function commandUnbindPlayer(session: Session<'tsugu', never>, serv
         return `错误: 未检测到${serverNameFullList[server]}的玩家数据`
     }
 }
-export async function commandPlayerInfo(session: Session<'tsugu', never>, serverName: string, useEasyBG: boolean) {
+export async function commandPlayerInfo(badkendUrl: string, session: Session<'tsugu', never>, serverName: string, useEasyBG: boolean) {
     const playerBinding = session.user.tsugu
     let server: Server
     if (!serverName) {
@@ -167,7 +167,7 @@ export async function commandPlayerInfo(session: Session<'tsugu', never>, server
         return `错误: 未检测到${serverNameFullList[server]}的玩家数据`
     }
     else {
-        return  h.image(await drawPlayerDetail(curServer.gameID, server, useEasyBG)[0], 'image/png')
+        return h.image(commandSearchPlayer(badkendUrl, playerBinding, curServer.gameID, serverName, useEasyBG)[0],'image/png') 
     }
 }
 

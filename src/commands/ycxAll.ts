@@ -1,8 +1,7 @@
-import { drawCutoffListOfEvent } from '../view/cutoffListOfEvent'
 import { Server, getServerByName } from '../types/Server';
-import { getPresentEvent } from '../types/Event'
+import { getDataFromBackend } from './utils'
 
-export async function commandYcxAll(server_mode:Server, serverName: string, eventId: number):Promise<Array<Buffer | string>> {
+export async function commandYcxAll(backendUrl: string, server_mode: Server, serverName: string, eventId: number): Promise<Array<Buffer | string>> {
     let server: Server
     if (!serverName) {
         server = server_mode
@@ -14,9 +13,9 @@ export async function commandYcxAll(server_mode:Server, serverName: string, even
         return ['错误: 服务器不存在']
     }
 
-    if (!eventId) {
-        eventId = getPresentEvent(server).eventId
-    }
-    return drawCutoffListOfEvent(eventId, server)
+    return await getDataFromBackend(`${backendUrl}/ycxAll`, {
+        server,
+        eventId
+    })
 
 }

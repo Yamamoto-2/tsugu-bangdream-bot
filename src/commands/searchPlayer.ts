@@ -1,9 +1,9 @@
-import { drawPlayerDetail } from "../view/playerDetail";
 import { Server, getServerByName } from "../types/Server";
 import { tsuguUser } from "../config";
-import { isInteger } from './utils'
+import {getDataFromBackend} from './utils'
 
-export async function commandSearchPlayer(user: tsuguUser, playerId: number, serverName: string, useEasyBG: boolean): Promise<Array<Buffer | string>> {
+
+export async function commandSearchPlayer(backendUrl:string,user: tsuguUser, playerId: number, serverName: string, useEasyBG: boolean): Promise<Array<Buffer | string>> {
     let server: Server
     if (!serverName) {
         server = user.server_mode
@@ -14,6 +14,10 @@ export async function commandSearchPlayer(user: tsuguUser, playerId: number, ser
     if (server == undefined) {
         return ['错误: 服务器不存在']
     }
-    return await drawPlayerDetail(playerId, server, useEasyBG)
-    return ['错误: 请输入正确的卡池ID']
+    
+    return await getDataFromBackend(`${backendUrl}/searchPlayer`, {
+        server,
+        playerId,
+        useEasyBG
+    })
 }

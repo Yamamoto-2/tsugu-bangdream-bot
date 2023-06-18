@@ -78,12 +78,16 @@ export async function drawRoonInList(room: Room) {
     ctxUp.fillStyle = '#a8a8a8'
     ctxUp.fillRect(200, 0, 5, height)
     let list = [canvasUp]
-
-    if (room.player?.isExist) {
-        list.push(line)
-        list.push(await drawPlayerDetailInRoomList(room.player))
+    if(room.player?.id != undefined){
+        const player = new Player(room.player.id,room.player.server)
+        await player.initFull()
+        if (player.isExist) {
+            list.push(line)
+            list.push(await drawPlayerDetailInRoomList(player))
+        }
+        return (drawDatablock({ list: list }))
     }
-    return (drawDatablock({ list: list }))
+
 }
 
 async function drawPlayerDetailInRoomList(player: Player) {

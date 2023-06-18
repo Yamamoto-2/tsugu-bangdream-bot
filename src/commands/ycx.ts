@@ -1,8 +1,8 @@
-import { drawCutoffDetail } from '../view/cutoffDetail'
-import { Server, getServerByName } from '../types/Server';
-import { getPresentEvent } from '../types/Event'
 
-export async function commandYcx(server_mode:Server, tier: number, serverName: string, eventId: number):Promise<Array<Buffer | string>> {
+import { Server, getServerByName} from "../types/Server"
+import {getDataFromBackend} from './utils'
+
+export async function commandYcx(backendUrl:string,server_mode:Server, tier: number, serverName: string, eventId: number):Promise<Array<Buffer | string>> {
     if (!tier) {
         return ['请输入排名']
     }
@@ -16,10 +16,9 @@ export async function commandYcx(server_mode:Server, tier: number, serverName: s
     if (server == undefined) {
         return ['错误: 服务器不存在']
     }
-
-    if (!eventId) {
-        eventId = getPresentEvent(server).eventId
-    }
-    return await drawCutoffDetail(eventId, tier, server)
-
+    return await getDataFromBackend(`${backendUrl}/ycx`, {
+        server,
+        tier,
+        eventId
+    })
 }

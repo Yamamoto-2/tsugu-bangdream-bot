@@ -4,14 +4,13 @@ import { listToBase64 } from './utils';
 import express from 'express';
 const router = express.Router();
 
-router.get('/:cardId', async (req, res) => {
-  const cardId = parseInt(req.params.cardId, 10);
+router.post('/', async (req, res) => {
+  const { cardId} = req.body;
 
   if (isNaN(cardId)) {
     res.status(400).send('错误: 卡片ID必须为有效数字');
     return;
   }
-
   try {
     const images = await commandGetCardIllustration(cardId);
     res.send(listToBase64(images));

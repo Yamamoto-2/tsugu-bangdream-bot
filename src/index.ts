@@ -43,12 +43,16 @@ declare module 'koishi' {
 export interface Config {
   useEasyBG: boolean,
   bandoriStationToken: string,
+  badkendUrl: string,
+  uesLocalDatabase: boolean
 }
 
 
 export const Config = Schema.object({
   useEasyBG: Schema.boolean().default(false).description('是否使用简易背景，启用这将大幅提高速度'),
-  bandoriStationToken: Schema.string().description('BandoriStationToken, 用于发送车牌，可以去 bandoristation.com 申请。缺失的情况下，车牌将无法被同步到服务器')
+  bandoriStationToken: Schema.string().description('BandoriStationToken, 用于发送车牌，可以去 https://github.com/maborosh/BandoriStation/wiki/API%E6%8E%A5%E5%8F%A3#%E6%8F%90%E4%BA%A4%E6%88%BF%E9%97%B4%E6%95%B0%E6%8D%AE 申请。缺失的情况下，车牌将无法被同步到服务器'),
+  badkendUrl: Schema.string().default('http://127.0.0.1:8080').description('服务器地址，用于处理指令。如果没有自建后端服务器，请不要修改'),
+  uesLocalDatabase: Schema.boolean().default(true).description('是否使用本地数据库，数据库包括玩家绑定数据，群数据等')
 })
 
 function paresMessageList(list?: Array<Buffer | string>): Array<Element | string> {
@@ -183,7 +187,7 @@ export function apply(ctx: Context, config: Config) {
     .shortcut(/^(.+服)玩家状态$/, { args: ['$1'] })
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
-      return await commandPlayerInfo(session, serverName, config.useEasyBG)
+      return await commandPlayerInfo(config.badkendUrl, session, serverName, config.useEasyBG)
     })
 
   //其他
@@ -203,7 +207,7 @@ export function apply(ctx: Context, config: Config) {
     .example('查玩家 40474621 jp : 查询日服玩家ID为40474621的玩家信息')
     .userFields(['tsugu'])
     .action(async ({ session }, playerId, serverName) => {
-      const list = await commandSearchPlayer(session.user.tsugu, playerId, serverName, config.useEasyBG)
+      const list = await commandSearchPlayer(config.badkendUrl, session.user.tsugu, playerId, serverName, config.useEasyBG)
       return (paresMessageList(list))
     })
   ctx.command("查卡 <word:text>", "查卡").alias('查卡牌')
@@ -212,14 +216,14 @@ export function apply(ctx: Context, config: Config) {
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
       const default_servers = session.user.tsugu.default_server
-      const list = await commandCard(default_servers, text, config.useEasyBG)
+      const list = await commandCard(config.badkendUrl, default_servers, text, config.useEasyBG)
       return (paresMessageList(list))
     })
   ctx.command('查卡面 <cardId:number>', '查卡面').alias('查卡插画', '查插画')
     .usage('根据卡片ID查询卡片插画').example('查卡面 1399 :返回1399号卡牌的插画')
     .userFields(['tsugu'])
     .action(async ({ session }, cardId) => {
-      const list = await commandGetCardIllustration(cardId)
+      const list = await commandGetCardIllustration(config.badkendUrl, cardId)
       return paresMessageList(list)
     })
   ctx.command('查角色 <word:text>', '查角色').usage('根据关键词或角色ID查询角色信息')
@@ -227,7 +231,7 @@ export function apply(ctx: Context, config: Config) {
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
       const default_servers = session.user.tsugu.default_server
-      const list = await commandCharacter(default_servers, text)
+      const list = await commandCharacter(config.badkendUrl, default_servers, text)
       return paresMessageList(list)
     })
 
@@ -236,7 +240,7 @@ export function apply(ctx: Context, config: Config) {
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
       const default_servers = session.user.tsugu.default_server
-      const list = await commandEvent(default_servers, text, config.useEasyBG)
+      const list = await commandEvent(config.badkendUrl, default_servers, text, config.useEasyBG)
       return paresMessageList(list)
     })
   ctx.command("查曲 <word:text>", "查曲").usage('根据关键词或曲目ID查询曲目信息')
@@ -244,7 +248,7 @@ export function apply(ctx: Context, config: Config) {
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
       const default_servers = session.user.tsugu.default_server
-      const list = await commandSong(default_servers, text)
+      const list = await commandSong(config.badkendUrl, default_servers, text)
       return paresMessageList(list)
     })
   ctx.command('查询效率表 <word:text>', '查询效率表').usage('查询指定服务器的歌曲效率表，如果没有服务器名的话，服务器为用户的默认服务器')
@@ -252,7 +256,7 @@ export function apply(ctx: Context, config: Config) {
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
       const default_servers = session.user.tsugu.default_server
-      const list = await commandSongMeta(default_servers, text)
+      const list = await commandSongMeta(config.badkendUrl, default_servers, text)
       return paresMessageList(list)
 
     })
@@ -260,7 +264,7 @@ export function apply(ctx: Context, config: Config) {
     .userFields(['tsugu'])
     .action(async ({ session }, gachaId) => {
       const default_servers = session.user.tsugu.default_server
-      const list = await commandGacha(default_servers, gachaId, config.useEasyBG)
+      const list = await commandGacha(config.badkendUrl, default_servers, gachaId, config.useEasyBG)
       return paresMessageList(list)
     })
 
@@ -269,7 +273,7 @@ export function apply(ctx: Context, config: Config) {
     .userFields(['tsugu'])
     .action(async ({ session }, tier, eventId, serverName) => {
       const server_mode = session.user.tsugu.server_mode
-      const list = await commandYcx(server_mode, tier, serverName, eventId)
+      const list = await commandYcx(config.badkendUrl, server_mode, tier, serverName, eventId)
       return paresMessageList(list)
     })
   ctx.command("ycxall [eventId:number] [serverName]", "查询所有档位的预测线").usage("查询所有档位的预测线，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动\n可用档线:\n'jp': [100, 500, 1000, 2000, 5000, 10000],\n'tw': [100, 500],\n'en': [50, 100, 300, 500, 1000, 2000, 2500],\n'kr': [100],\n'cn': [50, 100, 300, 500, 1000, 2000]")
@@ -278,7 +282,7 @@ export function apply(ctx: Context, config: Config) {
     .userFields(['tsugu'])
     .action(async ({ session }, eventId, serverName) => {
       const server_mode = session.user.tsugu.server_mode
-      const list = await commandYcxAll(server_mode, serverName, eventId)
+      const list = await commandYcxAll(config.badkendUrl, server_mode, serverName, eventId)
       return paresMessageList(list)
     })
 
@@ -290,7 +294,7 @@ export function apply(ctx: Context, config: Config) {
     .action(async ({ session }, times, gachaId) => {
       const default_server = session.user.tsugu.default_server[0]
       const status = session.channel?.tsugu_gacha ?? true
-      const list = await commandGachaSimulate(default_server, status, times, gachaId)
+      const list = await commandGachaSimulate(config.badkendUrl, default_server, status, times, gachaId)
       return (paresMessageList(list))
     })
 

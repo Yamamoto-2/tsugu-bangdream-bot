@@ -27,9 +27,6 @@ router.post('/', async (req, res) => {
 });
 
 export async function commandCard(default_servers: Server[], text: string, useEasyBG: boolean): Promise<Array<string | Buffer>> {
-    if (!text) {
-        return ['错误: 请输入关键词或卡片ID']
-    }
     if (isInteger(text)) {
         return await drawCardDetail(parseInt(text), default_servers, useEasyBG)
     }
