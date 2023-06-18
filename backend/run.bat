@@ -1,2 +1,2 @@
-ts-node app.ts
+ts-node .\src\app.ts
 pause
