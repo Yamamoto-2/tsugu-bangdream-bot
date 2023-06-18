@@ -21,9 +21,12 @@ router.post('/', async (req, res) => {
         return;
     }
 
-
-    const result = await commandEvent(default_servers, text, useEasyBG);
-    res.send(listToBase64(result));
+    try {
+        const result = await commandEvent(default_servers, text, useEasyBG);
+        res.send(listToBase64(result));
+    } catch (e) {
+        res.status(400).send([{ type: 'string', string: '内部错误' }]);
+    }
 });
 
 export async function commandEvent(default_servers: Server[], text: string, useEasyBG: boolean): Promise<Array<Buffer | string>> {

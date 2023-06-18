@@ -20,9 +20,12 @@ router.post('/', async (req, res) => {
         return;
     }
 
-
-    const result = await commandCharacter(default_servers, text);
-    res.send(listToBase64(result));
+    try {
+        const result = await commandCharacter(default_servers, text);
+        res.send(listToBase64(result));
+    } catch (e) {
+        res.status(400).send([{ type: 'string', string: '内部错误' }]);
+    }
 });
 
 export async function commandCharacter(default_servers: Server[], text: string): Promise<Array<Buffer | string>> {

@@ -22,9 +22,12 @@ router.post('/', async (req, res) => {
         return;
     }
 
-
-    const result = await commandCard(default_servers, text, useEasyBG);
-    res.send(listToBase64(result));
+    try {
+        const result = await commandCard(default_servers, text, useEasyBG);
+        res.send(listToBase64(result));
+    } catch (e) {
+        res.status(400).send([{ type: 'string', string: '内部错误' }]);
+    }
 });
 
 export async function commandCard(default_servers: Server[], text: string, useEasyBG: boolean): Promise<Array<string | Buffer>> {

@@ -20,9 +20,12 @@ router.post('/', async (req, res) => {
         return;
     }
 
-
-    const result = await commandSearchPlayer(user, playerId, server, useEasyBG);
-    res.send(listToBase64(result));
+    try {
+        const result = await commandSearchPlayer(user, playerId, server, useEasyBG);
+        res.send(listToBase64(result));
+    } catch (e) {
+        res.status(400).send([{ type: 'string', string: '内部错误' }]);
+    }
 });
 
 export async function commandSearchPlayer(user: tsuguUser, playerId: number, server = user.server_mode, useEasyBG: boolean): Promise<Array<Buffer | string>> {

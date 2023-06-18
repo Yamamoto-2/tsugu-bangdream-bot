@@ -8,18 +8,20 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     const { roomList } = req.body;
-    console.log(req.body)
-    let tempRoomlist:Room[]
+    let tempRoomlist: Room[]
     // 检查类型是否正确
-    try{
+    try {
         tempRoomlist = getRoomList(roomList)
-    }catch(e) {
+    } catch (e) {
         res.status(400).send('错误: 参数类型不正确');
         return;
     }
-
-    const result = await commandRoomList(tempRoomlist);
-    res.send(listToBase64(result));
+    try {
+        const result = await commandRoomList(tempRoomlist);
+        res.send(listToBase64(result));
+    } catch (e) {
+        res.status(400).send([{ type: 'string', string: '内部错误' }]);
+    }
 });
 
 export async function commandRoomList(roomList: Room[]): Promise<Array<string | Buffer>> {
@@ -30,7 +32,7 @@ export async function commandRoomList(roomList: Room[]): Promise<Array<string | 
 }
 
 function getRoomList(roomList: any) {
-    const result:Room[] = []
+    const result: Room[] = []
     for (let i = 0; i < roomList.length; i++) {
         const room = roomList[i];
 

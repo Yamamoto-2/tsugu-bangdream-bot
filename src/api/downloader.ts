@@ -5,7 +5,9 @@ import * as fs from 'fs';
 const errUrl: string[] = [];
 
 export async function download(url: string, directory?: string, fileName?: string, cacheTime = 0): Promise<Buffer> {
-  createDirIfNonExist(directory);
+  if(directory != undefined && fileName != undefined){
+    createDirIfNonExist(directory);
+  }
   try {
     if (errUrl.includes(url)) {
       throw new Error("downloadFile: errUrl.includes(url)");

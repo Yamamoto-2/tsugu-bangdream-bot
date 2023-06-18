@@ -5,7 +5,9 @@ import * as fs from 'fs';
 const errUrl: string[] = [];
 
 export async function download(url: string, directory?: string, fileName?: string, cacheTime = 0): Promise<Buffer> {
-  createDirIfNonExist(directory);
+  if(directory != undefined && fileName != undefined){
+    createDirIfNonExist(directory);
+  }
   try {
     if (errUrl.includes(url)) {
       throw new Error("downloadFile: errUrl.includes(url)");
@@ -75,7 +77,9 @@ function getLastModifiedTime(directory?: string, fileName?: string): Date | null
 
 export async function getJsonAndSave(url: string, directory?: string, fileName?: string, cacheTime = 0): Promise<object> {
   try {
-    createDirIfNonExist(directory);
+    if(directory != undefined && fileName != undefined){
+      createDirIfNonExist(directory);
+    }
     const fileExists = directory && fileName && fs.existsSync(path.join(directory, fileName));
     if (fileExists && cacheTime > 0) {
       const cacheFilePath = path.join(directory, `${fileName}`);

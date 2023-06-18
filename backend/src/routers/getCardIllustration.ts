@@ -5,7 +5,7 @@ import express from 'express';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-  const { cardId} = req.body;
+  const { cardId } = req.body;
 
   if (isNaN(cardId)) {
     res.status(400).send('错误: 卡片ID必须为有效数字');
