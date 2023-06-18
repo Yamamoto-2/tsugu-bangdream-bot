@@ -110,9 +110,7 @@ export function apply(ctx: Context, config: Config) {
     const number = checkLeftDigits(session.content)
     if (number != 0) {
       await session.observeUser(['tsugu'])
-      const user = session.user['tsugu'] as tsuguUser
-      console.log(session)
-      await queryRoomNumber(user, number, session.content, config.bandoriStationToken)
+      await queryRoomNumber(session as Session<'tsugu', never>, number, session.content, config.bandoriStationToken)
     }
   })
   //群相关

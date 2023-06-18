@@ -1,6 +1,7 @@
 import { Room, submitRoomNumber } from "../types/Room";
 import * as fs from 'fs'
 import { carKeywordPath, tsuguUser, Channel } from "../config";
+import { Session } from 'koishi'
 
 interface Config {
     [type: string]: string[];
@@ -14,7 +15,8 @@ function loadConfig(): Config {
 const config = loadConfig();
 
 
-export async function queryRoomNumber(user: tsuguUser, number: number, raw_message: string, bandoriStationToken?: string) {
+export async function queryRoomNumber(session: Session<'tsugu', never>, number: number, raw_message: string, bandoriStationToken?: string) {
+    const user = session.user.tsugu
     if (!user.car) {
         return
     }
@@ -43,6 +45,7 @@ export async function queryRoomNumber(user: tsuguUser, number: number, raw_messa
             source: platform,
             userId: user.user_id,
             time: Date.now(),
+            userName:session.username,
             bandoriStationToken
         }, user)
     }
