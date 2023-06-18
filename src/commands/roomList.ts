@@ -7,9 +7,10 @@ export async function commandRoomList (backendUrl:string,keyword?:string):Promis
     if (tempRoomList.length == 0) {
         return ['myc']
     }
-    let roomList:Room[] = []
+    console.log(tempRoomList)
+    let roomList= []
     for (let i = 0; i < tempRoomList.length; i++) {
-        const room = roomList[i]
+        const room = tempRoomList[i]
         if (keyword != undefined) {
             if (!room.rawMessage.includes(keyword)) {
                 continue
@@ -20,6 +21,7 @@ export async function commandRoomList (backendUrl:string,keyword?:string):Promis
     if(roomList.length == 0 && keyword != undefined){
         return [`没有找到包含 ${keyword} 的房间`]
     }
+    console.log(roomList)
     return await getDataFromBackend(`${backendUrl}/roomList`, {
         roomList
     })

@@ -76,6 +76,20 @@ function getLastModifiedTime(directory?: string, fileName?: string): Date | null
 export async function getJsonAndSave(url: string, directory?: string, fileName?: string, cacheTime = 0): Promise<object> {
   try {
     createDirIfNonExist(directory);
+    const fileExists = directory && fileName && fs.existsSync(path.join(directory, fileName));
+    if (fileExists && cacheTime > 0) {
+      const cacheFilePath = path.join(directory, `${fileName}`);
+      const cacheStat = fs.statSync(cacheFilePath);
+      const currentTime = new Date().getTime();
+      const lastModifiedTime = new Date(cacheStat.mtime).getTime();
+      const elapsedTime = currentTime - lastModifiedTime;
+      if (elapsedTime < cacheTime * 1000) {
+        const cachedData = fs.readFileSync(cacheFilePath, 'utf-8');
+        const cachedJson = JSON.parse(cachedData);
+        console.log(`Using cached JSON data for "${url}"`);
+        return cachedJson;
+      }
+    }
     const lastModifiedTime = getLastModifiedTime(directory, fileName);
     const headers = lastModifiedTime ? { 'If-Modified-Since': lastModifiedTime.toUTCString() } : {};
     const response = await axios.get(url, { headers, responseType: 'arraybuffer' });

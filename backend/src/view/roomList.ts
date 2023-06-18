@@ -13,6 +13,7 @@ export async function drawRoomList(roomList:Room[]):Promise<Array<Buffer | strin
         const room = roomList[i]
         all.push(await drawRoonInList(room))
     }
+    console.log(all)
     var buffer = await outputFinalBuffer({
         imageList: all,
         useEasyBG: true,

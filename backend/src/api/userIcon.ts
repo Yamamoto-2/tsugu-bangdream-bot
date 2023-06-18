@@ -1,8 +1,8 @@
-import * as fs from 'fs';
 import * as path from 'path';
-import { assetsRootPath, cacheRootPath } from "../config";
+import { assetsRootPath } from "../config";
 import { Image, loadImage } from 'canvas';
-import https from 'https';
+import { download } from './downloader';
+
 
 async function loadIconUndefined(): Promise<Image> {
     const iconPath = path.join(assetsRootPath, 'iconUndefined.png');
@@ -20,7 +20,7 @@ export async function getQQUserIcon(Id: number): Promise<Image> {
     try {
         const imageUrl = `https://q1.qlogo.cn/g?b=qq&nk=${Id}&s=640`;
         const filename = `${Id}.png`;
-        const iconPath = await download(imageUrl, path.join(cacheRootPath, 'qqIcon'), filename, true);
+        const iconPath = await download(imageUrl);
         const icon = await loadImage(iconPath);
         QQUserIconCache[Id] = icon;
         return icon;
@@ -40,7 +40,7 @@ export async function getBandoriStationUserIcon(avatar: string): Promise<Image> 
 
     try {
         const imageUrl = `https://asset.bandoristation.com/images/user-avatar/${avatar}`;
-        const iconPath = await download(imageUrl, path.join(cacheRootPath, 'asset.bandoristation.com'), avatar, true);
+        const iconPath = await download(imageUrl);
         const icon = await loadImage(iconPath);
         BandoriStationUserIconCache[avatar] = icon;
         return icon;
@@ -51,32 +51,3 @@ export async function getBandoriStationUserIcon(avatar: string): Promise<Image> 
     }
 }
 
-function download(url: string, outputDir: string, filename: string, overwrite: boolean): Promise<Buffer> {
-    return new Promise((resolve, reject) => {
-      const filePath = path.join(outputDir, filename);
-  
-      // 检查文件是否已存在
-      const fileExists = fs.existsSync(filePath);
-      if (fileExists && !overwrite) {
-        const fileData = fs.readFileSync(filePath);
-        resolve(fileData);
-        return;
-      }
-  
-      https.get(url, (response: any) => {
-        const chunks: any[] = [];
-        response.on('data', (chunk: any) => {
-          chunks.push(chunk);
-        });
-  
-        response.on('end', () => {
-          const fileData = Buffer.concat(chunks);
-          fs.writeFileSync(filePath, fileData);
-          resolve(fileData);
-        });
-      }).on('error', (err: any) => {
-        fs.unlinkSync(filePath);
-        reject(err);
-      });
-    });
-  }

@@ -87,7 +87,7 @@ export async function drawRoonInList(room: Room) {
         }
         return (drawDatablock({ list: list }))
     }
-
+    return (drawDatablock({ list: list }))
 }
 
 async function drawPlayerDetailInRoomList(player: Player) {

@@ -7,7 +7,10 @@ export function isInteger(char: string): boolean {
 }
 
 export function isServer(server: any): boolean {
-    return Object.values(Server).includes(server)
+    if(typeof server == 'number'){
+        server = server.toString()
+    }
+    return Object.keys(Server).includes(server)
 }
 
 export function isServerList(default_servers: Array<any>): boolean {
@@ -49,6 +52,7 @@ export function listToBase64(list: Array<Buffer | string>): Array<{ type: 'strin
             })
         }
     }
+    
     return result
 }
 

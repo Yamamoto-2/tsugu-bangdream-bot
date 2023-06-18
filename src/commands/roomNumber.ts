@@ -18,6 +18,7 @@ export async function queryRoomNumber(user: tsuguUser, number: number, raw_messa
     if (!user.car) {
         return
     }
+    console.log(user)
     let isCar = false
     for (let i = 0; i < config['car'].length; i++) {
         const element = config['car'][i];

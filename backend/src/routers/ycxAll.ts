@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
     // 检查类型是否正确
     if (
         !isServerList(server) ||
-        typeof eventId !== 'number'
+        (typeof eventId !== 'number' && eventId !== undefined)
     ) {
         res.status(400).send('错误: 参数类型不正确');
         return;
@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
     res.send(listToBase64(result));
 });
 
-export async function commandYcxAll(server: Server, eventId: number): Promise<Array<Buffer | string>> {
+export async function commandYcxAll(server: Server, eventId?: number): Promise<Array<Buffer | string>> {
 
     if (!eventId) {
         eventId = getPresentEvent(server).eventId

@@ -8,7 +8,7 @@ var rand = new Random()
 
 
 
-export async function commandBindPlayer(session: Session<'tsugu', never>, serverName: string, useEasyBG: boolean) {
+export async function commandBindPlayer(backendUrl:string,session: Session<'tsugu', never>, serverName: string, useEasyBG: boolean) {
     const playerBinding = session.user.tsugu
 
     // 获得待绑定的服务器
@@ -106,6 +106,7 @@ export async function commandBindPlayer(session: Session<'tsugu', never>, server
         playerBinding.user_id = session.userId
         curServer.bindingStatus = BindingStatus.Success
         curServer.verifyCode = undefined
+        return h.image(commandSearchPlayer(backendUrl, playerBinding, curServer.gameID, serverName, useEasyBG)[0],'image/png') 
         return
     }
     else {
@@ -149,7 +150,7 @@ export async function commandUnbindPlayer(session: Session<'tsugu', never>, serv
         return `错误: 未检测到${serverNameFullList[server]}的玩家数据`
     }
 }
-export async function commandPlayerInfo(badkendUrl: string, session: Session<'tsugu', never>, serverName: string, useEasyBG: boolean) {
+export async function commandPlayerInfo(backendUrl: string, session: Session<'tsugu', never>, serverName: string, useEasyBG: boolean) {
     const playerBinding = session.user.tsugu
     let server: Server
     if (!serverName) {
@@ -167,7 +168,7 @@ export async function commandPlayerInfo(badkendUrl: string, session: Session<'ts
         return `错误: 未检测到${serverNameFullList[server]}的玩家数据`
     }
     else {
-        return h.image(commandSearchPlayer(badkendUrl, playerBinding, curServer.gameID, serverName, useEasyBG)[0],'image/png') 
+        return h.image(commandSearchPlayer(backendUrl, playerBinding, curServer.gameID, serverName, useEasyBG)[0],'image/png') 
     }
 }
 

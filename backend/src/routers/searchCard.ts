@@ -9,6 +9,7 @@ import express from 'express';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
+    console.log(req.body)
     const { default_servers, text, useEasyBG } = req.body;
 
     // 检查类型是否正确

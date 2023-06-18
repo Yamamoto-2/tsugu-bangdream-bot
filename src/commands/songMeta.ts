@@ -15,6 +15,6 @@ export async function commandSongMeta(backendUrl:string,default_servers:Server[]
     }
     return await getDataFromBackend(`${backendUrl}/songMeta`, {
         default_servers,
-        text
+        server
     })
 }   
