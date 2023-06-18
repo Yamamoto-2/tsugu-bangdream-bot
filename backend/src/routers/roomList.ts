@@ -1,5 +1,5 @@
 import { drawRoomList } from '../view/roomList';
-import { listToBase64, isServerList } from './utils';
+import { listToBase64, isServerList, isServer } from './utils';
 import { Room } from '../types/Room';
 import { Player } from '../types/Player';
 import express from 'express';
@@ -45,10 +45,12 @@ function getRoomList(roomList: any) {
             avanter: room.avanter,
             userName: room.userName
         })
-        if (room.player != undefined) {
-            const tempPlayer = new Player(room.player.playerId, room.player.server)
-            tempPlayer.initFull()
-            tempRoom.setPlayer(tempPlayer)
+        if (room.player?.id != undefined) {
+            if(isServer(room.player.server)){
+                const tempPlayer = new Player(room.player.playerId,room.player.server )
+                tempPlayer.initFull()
+                tempRoom.setPlayer(tempPlayer)
+            }
         }
         result.push(tempRoom)
     }
