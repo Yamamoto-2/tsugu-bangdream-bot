@@ -44,15 +44,13 @@ export interface Config {
   useEasyBG: boolean,
   bandoriStationToken: string,
   backendUrl: string,
-  uesLocalDatabase: boolean
 }
 
 
 export const Config = Schema.object({
-  useEasyBG: Schema.boolean().default(false).description('是否使用简易背景，启用这将大幅提高速度'),
-  bandoriStationToken: Schema.string().description('BandoriStationToken, 用于发送车牌，可以去 https://github.com/maborosh/BandoriStation/wiki/API%E6%8E%A5%E5%8F%A3#%E6%8F%90%E4%BA%A4%E6%88%BF%E9%97%B4%E6%95%B0%E6%8D%AE 申请。缺失的情况下，车牌将无法被同步到服务器'),
-  backendUrl: Schema.string().default('http://127.0.0.1:8080').description('服务器地址，用于处理指令。如果没有自建后端服务器，请不要修改'),
-  uesLocalDatabase: Schema.boolean().default(true).description('是否使用本地数据库，数据库包括玩家绑定数据，群数据等')
+  useEasyBG: Schema.boolean().default(false).description('是否使用简易背景，启用这将大幅提高速度，关闭将使部分界面效果更美观'),
+  bandoriStationToken: Schema.string().description('BandoriStationToken, 用于发送车牌，可以去 https://github.com/maborosh/BandoriStation/wiki/API%E6%8E%A5%E5%8F%A3 申请。缺失情况下，视为Tsugu车牌'),
+  backendUrl: Schema.string().default('http://tsugubot.com:8080').description('服务器地址，用于处理指令。如果有自建服务器，可以改成自建服务器地址'),
 })
 
 function paresMessageList(list?: Array<Buffer | string>): Array<Element | string> {

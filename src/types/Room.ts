@@ -190,8 +190,8 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
         }
     }
     roomStack.push(room)
-    if(bandoriStationToken == undefined){
-        return
+    if(bandoriStationToken == ''){
+        bandoriStationToken = 'ZtV4EX2K9Onb'
     }
     if(source == 'qq'){
         const url = `${BandoriStationurl}index.php?function=submit_room_number&number=${number}&user_id=${userId}&raw_message=${encodeURIComponent(rawMessage)}&source=Tsugu&token=${bandoriStationToken}`
