@@ -11,7 +11,8 @@ import { searchSongRouter } from './routers/searchSong';
 import { songMetaRouter } from './routers/songMeta';
 import { ycxRouter } from './routers/ycx';
 import { ycxAllRouter } from './routers/ycxAll';
-
+import { lsycxRouter } from './routers/lsycx';
+ 
 const app = express();
 
 app.use(express.json());
@@ -27,6 +28,7 @@ app.use('/searchSong', searchSongRouter);
 app.use('/songMeta', songMetaRouter);
 app.use('/ycx', ycxRouter);
 app.use('/ycxAll', ycxAllRouter);
+app.use('lsycxRouter', lsycxRouter)
 
 //404
 app.use((req, res) => {

@@ -288,6 +288,7 @@ export function getPresentEvent(server: Server, time?: number) {
     return new Event(eventList[eventList.length - 1])
 }
 
+//根据服务器，将活动列表排序
 export function sortEventList(tempEventList: Event[], defaultServerList: Server[] = globalDefaultServer) {
     tempEventList.sort((a, b) => {
         for (var i = 0; i < defaultServerList.length; i++) {
@@ -300,4 +301,23 @@ export function sortEventList(tempEventList: Event[], defaultServerList: Server[
             }
         }
     })
+}
+
+//通过活动与服务器，获得活动类型相同的 前5期活动
+export function getSameTypeEventListByEventAndServer(event: Event, server: Server) {
+    const eventIdList: Array<number> = Object.keys(mainAPI['events']).map(Number)
+    var eventList: Array<Event> = []
+    for (var i = 0; i < eventIdList.length; i++) {
+        var tempEvent = new Event(eventIdList[i])
+        tempEventList.push(tempEvent)
+    }
+    var tempEventList: Event[] = []
+    for (var i = 0; i < eventList.length; i++) {
+        var tempEvent = eventList[i]
+        if (tempEvent.eventType == event.eventType && tempEvent.startAt[server] != null) {
+            tempEventList.push(tempEvent)
+        }
+    }
+    sortEventList(tempEventList, [server])
+    return tempEventList.slice(0, 5)
 }

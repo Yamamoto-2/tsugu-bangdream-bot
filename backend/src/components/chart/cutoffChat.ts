@@ -1,9 +1,10 @@
 import { createCanvas } from 'canvas';
 import { Cutoff } from "../../types/Cutoff";
 import { drawTimeLineChart, getColor } from "../chart";
+import { Event } from '../../types/Event';
+import { Server } from '../../types/Server';
 
-
-export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = false) {
+export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = false, server: Server = Server['jp']) {
     //setStartToZero:是否将开始时间设置为0
     var datasets = []
     var time = new Date().getTime()
@@ -12,10 +13,21 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
     }
     var onlyOne = cutoffList.length == 1
     for (let i = 0; i < cutoffList.length; i++) {
+
         const cutoff = cutoffList[i];
+
+        let lableName: string
+        if (setStartToZero) {
+            const tempEvent = new Event(cutoff.eventId)
+            lableName = `${tempEvent.eventName[server]} T${cutoff.tier}`
+        }
+        else{
+            lableName = `T${cutoff.tier}`
+        }
+
         const tempColor = getColor(i)
         datasets.push({
-            label: `T${cutoff.tier}`,
+            label: lableName,
             data: cutoff.getChartData(setStartToZero),
             borderWidth: 5,
             borderColor: [`${tempColor} 1)`],
@@ -80,7 +92,7 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
         return await drawTimeLineChart({ data, start: new Date(0), end: new Date(longestTime), setStartToZero })
     }
     else {
-        return await drawTimeLineChart({ data, start: new Date(cutoffList[0].startAt), end: new Date(cutoffList[0].endAt), setStartToZero})
+        return await drawTimeLineChart({ data, start: new Date(cutoffList[0].startAt), end: new Date(cutoffList[0].endAt), setStartToZero })
     }
 
 }
