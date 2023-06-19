@@ -11,6 +11,7 @@ import { drawPlayerCardInList } from './playerCardIconList'
 import { drawDegree } from '../degree'
 import { Degree } from "../../types/Degree";
 import { resizeImage } from "../utils";
+import { getServerByServerId } from '../../types/Server'
 
 
 
@@ -78,8 +79,9 @@ export async function drawRoonInList(room: Room) {
     ctxUp.fillStyle = '#a8a8a8'
     ctxUp.fillRect(200, 0, 5, height)
     let list = [canvasUp]
-    if(room.player?.id != undefined){
-        const player = new Player(room.player.id,room.player.server)
+    if (room.player != undefined) {
+        console.log(room)
+        const player = new Player(room.player.id, room.player.server)
         await player.initFull()
         if (player.isExist) {
             list.push(line)
@@ -97,11 +99,11 @@ async function drawPlayerDetailInRoomList(player: Player) {
     ctx.drawImage(cardIconList, -20, 10)
     //画综合力
     const stat = await player.calcStat()
-    let statText:string
-    if(player.profile.publishTotalDeckPowerFlg){
+    let statText: string
+    if (player.profile.publishTotalDeckPowerFlg) {
         statText = `综合力: ${Math.floor(stat.performance + stat.technique + stat.visual)}`
     }
-    else{
+    else {
         statText = `综合力: 未公开`
     }
     const statTextImage = drawText({
