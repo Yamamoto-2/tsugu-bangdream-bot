@@ -2,6 +2,7 @@ import { drawPlayerDetail } from "../view/playerDetail";
 import { Server, getServerByName } from "../types/Server";
 import { tsuguUser } from "../config";
 import { listToBase64, isTsuguUser, isServer } from './utils';
+import { getServerByServerId } from '../types/Server'
 import express from 'express';
 
 const router = express.Router();
@@ -22,15 +23,15 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const result = await commandSearchPlayer( playerId, server, useEasyBG);
+        const result = await commandSearchPlayer(playerId, getServerByServerId(server), useEasyBG);
         res.send(listToBase64(result));
     } catch (e) {
         console.log(e)
-    res.status(400).send([{ type: 'string', string: '内部错误' }]);
+        res.status(400).send([{ type: 'string', string: '内部错误' }]);
     }
 });
 
-export async function commandSearchPlayer(playerId: number, server:Server, useEasyBG: boolean): Promise<Array<Buffer | string>> {
+export async function commandSearchPlayer(playerId: number, server: Server, useEasyBG: boolean): Promise<Array<Buffer | string>> {
 
     return await drawPlayerDetail(playerId, server, useEasyBG)
 

@@ -10,6 +10,16 @@ export enum Server {
     jp, en, tw, cn, kr
 }
 
+export function getServerByServerId (serverId: number): Server {
+    //如果是string,转换为number
+    if (typeof serverId == 'string') {
+        serverId = Number(serverId)
+    }
+    //
+    // 根据服务器id获取对应服务器
+    return serverList[serverId]
+}
+
 export function getServerByName(name: string): Server {
     // 根据服务器名获取对应服务器
     let server: Server

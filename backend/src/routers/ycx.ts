@@ -1,5 +1,5 @@
 import { drawCutoffDetail } from '../view/cutoffDetail'
-import { Server, getServerByName } from '../types/Server';
+import { Server, getServerByServerId } from '../types/Server';
 import { getPresentEvent } from '../types/Event'
 import { listToBase64, isServer } from './utils';
 import express from 'express';
@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
         return;
     }
     try {
-        const result = await commandYcx(server, tier, eventId);
+        const result = await commandYcx(getServerByServerId(server), tier, eventId);
         res.send(listToBase64(result));
     } catch (e) {
         console.log(e)

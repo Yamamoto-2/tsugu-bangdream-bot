@@ -2,12 +2,13 @@ import { drawRoomList } from '../view/roomList';
 import { listToBase64, isServerList, isServer } from './utils';
 import { Room } from '../types/Room';
 import { Player } from '../types/Player';
+import {getServerByServerId} from '../types/Server'
 import express from 'express';
 
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    console.log(req.baseUrl, req.body)
+    console.log(req.baseUrl, JSON.stringify(req.body));
 
     const { roomList } = req.body;
     let tempRoomlist: Room[]
@@ -51,7 +52,7 @@ function getRoomList(roomList: any) {
         if (room.player?.id != undefined) {
             let server = room.player.server
             if (isServer(server)) {
-                const tempPlayer = new Player(room.player.playerId, server)
+                const tempPlayer = new Player(room.player.id, getServerByServerId(server))
                 tempPlayer.initFull()
                 tempRoom.setPlayer(tempPlayer)
             }

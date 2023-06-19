@@ -1,5 +1,5 @@
 import { drawSongMetaList } from '../view/songMetaList'
-import { Server, getServerByName } from '../types/Server'
+import { Server, getServerByServerId } from '../types/Server'
 import { listToBase64, isServerList, isServer } from './utils';
 import express from 'express';
 
@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const result = await commandSongMeta(default_servers, server);
+        const result = await commandSongMeta(default_servers, getServerByServerId(server));
         res.send(listToBase64(result));
     } catch (e) {
         console.log(e)

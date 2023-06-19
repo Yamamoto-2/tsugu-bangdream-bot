@@ -1,5 +1,5 @@
 import { drawCutoffComprare } from '../view/cutoffCompare'
-import { Server, getServerByName } from '../types/Server';
+import { Server, getServerByServerId } from '../types/Server';
 import { getPresentEvent } from '../types/Event'
 import { listToBase64, isServer } from './utils';
 import express from 'express';
@@ -20,11 +20,11 @@ router.post('/', async (req, res) => {
         return;
     }
     try {
-        const result = await commandLsYcx(server, tier, eventId);
+        const result = await commandLsYcx(getServerByServerId(server), tier, eventId);
         res.send(listToBase64(result));
     } catch (e) {
         console.log(e)
-    res.status(400).send([{ type: 'string', string: '内部错误' }]);
+        res.status(400).send([{ type: 'string', string: '内部错误' }]);
     }
 });
 export async function commandLsYcx(server: Server, tier: number, eventId?: number): Promise<Array<Buffer | string>> {
