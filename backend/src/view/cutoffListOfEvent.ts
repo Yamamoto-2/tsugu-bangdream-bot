@@ -58,7 +58,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server):Pro
     for (var i in tierList) {
         var tempCutoff = new Cutoff(eventId, server, tierList[i])
         await tempCutoff.initFull()
-        if (status == 'in_progress') {
+        if (tempCutoff.status == 'in_progress') {
             tempCutoff.predict()
         }
         cutoffList.push(tempCutoff)
@@ -67,7 +67,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server):Pro
     for (var i in cutoffList) {
         const cutoff = cutoffList[i]
         let cutoffContent: string[] = []
-        if (status == 'in_progress') {
+        if (cutoff.status == 'in_progress') {
             let predictText: string
             if (cutoff.predictEP == null || cutoff.predictEP == 0) {
                 predictText = '?'
@@ -79,7 +79,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server):Pro
             cutoffContent.push(`最新分数线: ${cutoff.latestCutoff.ep.toString()}\n`)
             cutoffContent.push(`更新时间:${changeTimefomant(cutoff.latestCutoff.time)}`)
         }
-        else if (status == 'ended') {
+        else if (cutoff.status == 'ended') {
             cutoffContent.push(`最终分数线:${cutoff.latestCutoff.ep.toString()}\n`)
         }
 

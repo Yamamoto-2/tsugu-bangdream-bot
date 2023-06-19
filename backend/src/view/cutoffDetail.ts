@@ -39,20 +39,10 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
 
     //状态
     var time = new Date().getTime()
-    var status = ''
-    if (time < cutoff.startAt) {
-        status = 'not_start'
-    }
-    else if (time > cutoff.endAt) {
-        status = 'ended'
-    }
-    else {
-        status = 'in_progress'
-    }
 
 
     //如果活动在进行中    
-    if (status == 'in_progress') {
+    if (cutoff.status == 'in_progress') {
         cutoff.predict()
         if (cutoff.predictEP == null || cutoff.predictEP == 0) {
             var predictText = '?'
@@ -86,10 +76,10 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
         list.push(line)
 
     }
-    else if (status == 'ended') {
+    else if (cutoff.status == 'ended') {
         list.push(drawList({
             key: '状态',
-            text: statusName[status]
+            text: statusName[cutoff.status]
         }))
         list.push(line)
 

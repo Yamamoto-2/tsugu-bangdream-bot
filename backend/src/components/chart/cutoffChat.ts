@@ -37,7 +37,7 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
             fill: onlyOne
         })
 
-        if (time < cutoff.endAt) {
+        if (cutoff.status == 'in_progress') {
             if (cutoff.predictEP != null && cutoff.predictEP != 0) {
                 let data = []
                 if (setStartToZero) {
