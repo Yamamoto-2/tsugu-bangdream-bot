@@ -5,10 +5,12 @@ import express from 'express';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
+  console.log(req.baseUrl, req.body)
+
   const { cardId } = req.body;
 
   if (isNaN(cardId)) {
-    res.status(400).send('错误: 卡片ID必须为有效数字');
+    res.status(400).send([{ type: 'string', string: '内部错误' }]);
     return;
   }
   try {

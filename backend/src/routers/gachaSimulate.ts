@@ -7,6 +7,8 @@ import express from 'express';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
+  console.log(req.baseUrl, req.body)
+  
   const { default_server, status, times, gachaId } = req.body;
 
   // 检查类型是否正确
@@ -16,14 +18,15 @@ router.post('/', async (req, res) => {
     (times !== undefined && typeof times !== 'number') ||
     (gachaId !== undefined && typeof gachaId !== 'number')
   ) {
-    res.status(400).send('错误: 参数类型不正确');
+    res.status(404).send('错误: 参数类型不正确');
     return;
   }
   try {
     const result = await commandGachaSimulate(default_server, status, times, gachaId);
     res.send(listToBase64(result));
-  }catch(e){
-    res.status(400).send([{type:'string',string:'内部错误'}]);
+  } catch (e) {
+    console.log(e)
+    res.status(400).send([{ type: 'string', string: '内部错误' }]);
   }
 });
 

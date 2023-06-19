@@ -9,6 +9,8 @@ import express from 'express';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
+    console.log(req.baseUrl, req.body)
+
     const { default_servers, text } = req.body;
 
     // 检查类型是否正确
@@ -16,7 +18,7 @@ router.post('/', async (req, res) => {
         !isServerList(default_servers) ||
         typeof text !== 'string'
     ) {
-        res.status(400).send('错误: 参数类型不正确');
+        res.status(404).send('错误: 参数类型不正确');
         return;
     }
 
@@ -24,7 +26,8 @@ router.post('/', async (req, res) => {
         const result = await commandCharacter(default_servers, text);
         res.send(listToBase64(result));
     } catch (e) {
-        res.status(400).send([{ type: 'string', string: '内部错误' }]);
+        console.log(e)
+    res.status(400).send([{ type: 'string', string: '内部错误' }]);
     }
 });
 

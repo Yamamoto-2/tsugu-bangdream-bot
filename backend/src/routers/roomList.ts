@@ -7,20 +7,23 @@ import express from 'express';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
+    console.log(req.baseUrl, req.body)
+
     const { roomList } = req.body;
     let tempRoomlist: Room[]
     // 检查类型是否正确
     try {
         tempRoomlist = getRoomList(roomList)
     } catch (e) {
-        res.status(400).send('错误: 参数类型不正确');
+        console.log(req.url + ' ' + req.body);
         return;
     }
     try {
         const result = await commandRoomList(tempRoomlist);
         res.send(listToBase64(result));
     } catch (e) {
-        res.status(400).send([{ type: 'string', string: '内部错误' }]);
+        console.log(e)
+    res.status(400).send([{ type: 'string', string: '内部错误' }]);
     }
 });
 

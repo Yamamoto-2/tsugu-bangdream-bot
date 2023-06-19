@@ -7,22 +7,24 @@ import express from 'express';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
+    console.log(req.baseUrl, req.body)
+
     const { server, tier, eventId } = req.body;
-    console.log(req.body)
     // 检查类型是否正确
     if (
         !isServer(server) ||
         typeof tier !== 'number' ||
         (typeof eventId !== 'number' && eventId !== undefined)
     ) {
-        res.status(400).send('错误: 参数类型不正确');
+        res.status(404).send('错误: 参数类型不正确');
         return;
     }
     try {
         const result = await commandYcx(server, tier, eventId);
         res.send(listToBase64(result));
     } catch (e) {
-        res.status(400).send([{ type: 'string', string: '内部错误' }]);
+        console.log(e)
+    res.status(400).send([{ type: 'string', string: '内部错误' }]);
     }
 });
 
