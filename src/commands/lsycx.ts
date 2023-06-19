@@ -2,7 +2,7 @@
 import { Server, getServerByName } from "../types/Server"
 import { getDataFromBackend } from './utils'
 
-export async function commandYcx(backendUrl: string, server_mode: Server, tier: number, serverName: string, eventId: number): Promise<Array<Buffer | string>> {
+export async function commandLsycx(backendUrl: string, server_mode: Server, tier: number, serverName: string, eventId: number): Promise<Array<Buffer | string>> {
     if (!tier) {
         return ['请输入排名']
     }
@@ -16,7 +16,7 @@ export async function commandYcx(backendUrl: string, server_mode: Server, tier: 
     if (server == undefined) {
         return ['错误: 服务器不存在']
     }
-    return await getDataFromBackend(`${backendUrl}/ycx`, {
+    return await getDataFromBackend(`${backendUrl}/lsycx`, {
         server,
         tier,
         eventId
