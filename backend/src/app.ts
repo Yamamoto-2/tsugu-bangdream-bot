@@ -28,7 +28,7 @@ app.use('/searchSong', searchSongRouter);
 app.use('/songMeta', songMetaRouter);
 app.use('/ycx', ycxRouter);
 app.use('/ycxAll', ycxAllRouter);
-app.use('lsycxRouter', lsycxRouter)
+app.use('/lsycx', lsycxRouter)
 
 //404
 app.use((req, res) => {

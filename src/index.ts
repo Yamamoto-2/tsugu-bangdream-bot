@@ -6,6 +6,7 @@ import { commandGacha } from './commands/searchGacha'
 import { commandYcx } from './commands/ycx'
 import { commandSearchPlayer } from './commands/searchPlayer'
 import { commandYcxAll } from './commands/ycxAll'
+import { commandLsycx } from './commands/lsycx'
 import { commandGachaSimulate } from './commands/gachaSimulate'
 import { commandGetCardIllustration } from './commands/getCardIllustration'
 import { commandCharacter } from './commands/searchCharacter'
@@ -149,7 +150,7 @@ export function apply(ctx: Context, config: Config) {
     .usage('开始玩家数据绑定流程，请不要在"绑定玩家"指令后添加玩家ID。省略服务器名时，默认为绑定到你当前的主服务器。请在获得临时验证数字后，将玩家签名改为该数字，并回复你的玩家ID')
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
-      return await commandBindPlayer(config.backendUrl,session, serverName, config.useEasyBG)
+      return await commandBindPlayer(config.backendUrl, session, serverName, config.useEasyBG)
     })
   ctx.command('解除绑定 [serverName:text]', '解除当前服务器的玩家绑定')
     .alias('解绑玩家')
@@ -282,7 +283,14 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandYcxAll(config.backendUrl, server_mode, serverName, eventId)
       return paresMessageList(list)
     })
-
+  ctx.command("lsycx <tier:number> [eventId:number] [serverName]", "查询指定档位的预测线").usage("查询指定档位的预测线，与最近的4期活动类型相同的活动的档线数据，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动\n可用档线:\n'jp': [100, 500, 1000, 2000, 5000, 10000],\n'tw': [100, 500],\n'en': [50, 100, 300, 500, 1000, 2000, 2500],\n'kr': [100],\n'cn': [50, 100, 300, 500, 1000, 2000]")
+    .example('lsycx 1000 :返回默认服务器当前活动的档线与预测线，与最近的4期活动类型相同的活动的档线数据').example('lsycx 1000 177 jp:返回日服177号活动1000档位档线与最近的4期活动类型相同的活动的档线数据')
+    .userFields(['tsugu'])
+    .action(async ({ session }, tier, eventId, serverName) => {
+      const server_mode = session.user.tsugu.server_mode
+      const list = await commandLsycx(config.backendUrl, server_mode, tier, serverName, eventId)
+      return paresMessageList(list)
+    })
 
   ctx.command('抽卡模拟 [times:number] [gachaId:number]').usage('模拟抽卡，如果没有卡池ID的话，卡池为当前活动的卡池')
     .example('抽卡模拟:模拟抽卡10次').example('抽卡模拟 300 922 :模拟抽卡300次，卡池为922号卡池')
