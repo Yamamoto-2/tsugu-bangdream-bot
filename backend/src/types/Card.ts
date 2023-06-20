@@ -189,7 +189,7 @@ export class Card {
                 await this.initFull()
             }
             */
-            await this.initFull(false)
+            await this.initFull()
 
         }
         const stat: Stat = {
