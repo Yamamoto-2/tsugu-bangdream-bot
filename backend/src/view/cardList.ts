@@ -191,13 +191,19 @@ async function drawCardListLine(cardList: Card[]) {
     //排序，稀有度高的在前面，其中技能加成高的在前面
     cardList.sort((a, b) => {
         if (a.rarity > b.rarity) {
-            return -1
+            return -1;
+        } else if (a.rarity < b.rarity) {
+            return 1;
+        } else {
+            if (a.scoreUpMaxValue > b.scoreUpMaxValue) {
+                return -1;
+            } else if (a.scoreUpMaxValue < b.scoreUpMaxValue) {
+                return 1;
+            } else {
+                return 0;
+            }
         }
-        if (a.scoreUpMaxValue > b.scoreUpMaxValue) {
-            return -1
-        }
-        return 0
-    })
+    });
     //画卡牌，从左到右，宽度120，间隔20
     for (let i = 0; i < cardList.length; i++) {
         const tempCard = cardList[i];
