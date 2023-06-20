@@ -227,11 +227,16 @@ export class Player {
 
     }
     server: Server;
+
+    isInitfull: boolean = false;
     constructor(playerId: number, server: Server) {
         this.playerId = playerId;
         this.server = server;
     }
     async initFull(cache: boolean = false) {
+        if (this.isInitfull){
+             return
+            }
         var cacheTime = cache ? 1 / 0 : 0;
         try {
             var playerData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/player/${Server[this.server]}/${this.playerId}?mode=2`, cacheTime);
@@ -293,6 +298,7 @@ export class Player {
                 }
             }
         }
+        this.isInitfull = true;
 
     }
     async calcStat(event?: Event): Promise<Stat> {

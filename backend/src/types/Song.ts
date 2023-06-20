@@ -89,6 +89,8 @@ export class Song {
         }
     }
 
+    isInitfull = false
+
     constructor(songId: number) {
         this.songId = songId
         const songData = mainAPI['songs'][songId.toString()]
@@ -123,6 +125,9 @@ export class Song {
 
     }
     async initFull() {
+        if(this.isInitfull){
+            return
+        }
         if (this.isExist == false) {
             return
         }
@@ -152,6 +157,8 @@ export class Song {
             arranger: songData['arranger'],
         }
         this.howToGet = songData['howToGet']
+        
+        this.isInitfull = true
     }
     async getData() {
         const songData = await callAPIAndCacheResponse(`https://bestdori.com/api/songs/${this.songId}.json`)

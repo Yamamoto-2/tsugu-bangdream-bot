@@ -104,7 +104,7 @@ export class Event {
     attribute: string[] 
     bandId: string[] 
 
-
+    isInitfull: boolean = false
 
     constructor(eventId: number) {
         this.eventId = eventId
@@ -147,6 +147,10 @@ export class Event {
         }
     }
     async initFull(update: boolean = true) {
+        if(this.isInitFull){
+            return
+        }
+
         if (this.isExist == false) {
             return
         }
@@ -186,7 +190,7 @@ export class Event {
             this.eventCharacterParameterBonus = eventData['eventCharacterParameterBonus']
         }
 
-
+        this.isInitfull = true
     }
     async getData(update: boolean = true) {
         var time = update ? 0 : 1 / 0

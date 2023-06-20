@@ -16,6 +16,7 @@ export class Costume {
     data: Object;
     cards: Array<number>;
     sdResourceName: string;
+    isInitfull: boolean = false;
     constructor(costumeId: number) {
         this.costumeId = costumeId
         const costumeData = mainAPI['costumes'][costumeId.toString()]
@@ -30,7 +31,9 @@ export class Costume {
         this.publishedAt = stringToNumberArray(costumeData['publishedAt']);
     }
     async initFull() {
-        //https://bestdori.com/api/costumes/36.json
+        if (this.isInitfull) {
+            return
+        }
         var costumeData = await callAPIAndCacheResponse(`https://bestdori.com/api/costumes/${this.costumeId}.json`)
         this.data = costumeData
         this.isExist = true;
@@ -40,6 +43,7 @@ export class Costume {
         this.publishedAt = stringToNumberArray(costumeData['publishedAt']);
         this.cards = costumeData['cards'];
         this.sdResourceName = costumeData['sdResourceName'];
+        this.isInitfull = true;
     }
     async getSdchara(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
         if (!defaultServerList) defaultServerList = globalDefaultServer

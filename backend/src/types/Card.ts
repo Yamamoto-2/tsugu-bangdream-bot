@@ -104,6 +104,9 @@ export class Card {
         this.scoreUpMaxValue = skill.scoreUpMaxValue
     }
     async initFull(update: boolean = true) {
+        if(this.isInitFull){
+            return
+        }
         if (this.isExist == false) {
             return
         }
@@ -151,6 +154,7 @@ export class Card {
         if (cardDataCache[this.cardId.toString()] == undefined) {
             cardDataCache[this.cardId.toString()] = cardData
         }
+        this.isInitFull = true;
     }
     async getData(update: boolean = true) {
         var time = update ? 0 : 1 / 0
@@ -297,7 +301,7 @@ export class Card {
     }
     async getSource() {
         if (!this.isInitFull) {
-            await this.initFull(false)
+            await this.initFull()
         }
         var releaseEvent: Array<Array<number>> = []
         var releaseGacha: Array<Array<number>> = []

@@ -252,7 +252,7 @@ export async function getEventGachaAndCardList(event: Event, server: Server) {
         if (tempGacha.type == 'birthday') {
             continue
         }
-        await tempGacha.initFull(false)
+        await tempGacha.initFull()
         var tempCardList = tempGacha.pickUpCardId
         /*
         //检查是否有超过7张稀有度2的卡牌，发布了太多2星卡的卡池会被跳过

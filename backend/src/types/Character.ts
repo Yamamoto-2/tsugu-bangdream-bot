@@ -54,6 +54,9 @@ export class Character {
         this.isExist = true;
     }
     async initFull(update: boolean = true) {
+        if (this.isInitFull) {
+            return
+        }
         if (this.isExist == false) {
             return
         }
@@ -64,8 +67,6 @@ export class Character {
         else {
             var characterData = await this.getData(update)
         }
-        this.isInitFull = true;
-
         this.data = characterData
         this.characterType = characterData["characterType"];
         this.characterName = characterData["characterName"];
@@ -87,6 +88,7 @@ export class Character {
         if (characterDataCache[this.characterId.toString()] == undefined) {
             characterDataCache[this.characterId.toString()] = characterData
         }
+        this.isInitFull = true;
     }
     async getData(update: boolean = true) {
         var time = update ? 0 : 1 / 0

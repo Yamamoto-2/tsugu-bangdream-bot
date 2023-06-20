@@ -71,6 +71,7 @@ export class Gacha {
     }
     //用于计算
     pickUpCardId: Array<number>;
+    isInitFull = false;
 
     constructor(gachaId: number) {
         this.gachaId = gachaId
@@ -90,6 +91,9 @@ export class Gacha {
         this.newCards = gachaData['newCards']
     }
     async initFull(update: boolean = true) {
+        if(this.isInitFull){
+            return
+        }
         if (this.isExist == false) {
             return
         }
@@ -121,6 +125,7 @@ export class Gacha {
         this.information = gachaData['information'];
         //加载pickUpCardId
         this.getGachaPickUpCardId()
+        this.isInitFull = true
     }
     async getData(update: boolean = true) {
         var time = update ? 0 : 1 / 0

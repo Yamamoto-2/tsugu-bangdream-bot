@@ -26,6 +26,7 @@ export class Cutoff {
     startAt: number;
     endAt: number;
     status: 'not_start' | 'in_progress' | 'ended';
+    isInitfull: boolean = false;
     constructor(eventId: number, server: Server, tier: number) {
         const event = new Event(eventId)
         //如果活动不存在，直接返回
@@ -60,6 +61,9 @@ export class Cutoff {
         }
     }
     async initFull() {
+        if (this.isInitfull) {
+            return
+        }
         const cutoffData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`)
         if (cutoffData == undefined) {
             this.isExist = false;
@@ -94,6 +98,7 @@ export class Cutoff {
         if (this.status == 'in_progress') {
             this.predict()
         }
+        this.isInitfull = true
     }
     predict(): number {
         if (this.isExist == false) {
