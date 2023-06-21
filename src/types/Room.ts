@@ -190,7 +190,7 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
         }
     }
     roomStack.push(room)
-    if(bandoriStationToken == ''){
+    if(bandoriStationToken == '' || bandoriStationToken == undefined){
         bandoriStationToken = 'ZtV4EX2K9Onb'
     }
     if(source == 'qq'){
