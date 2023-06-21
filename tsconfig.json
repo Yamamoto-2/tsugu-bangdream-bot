@@ -10,10 +10,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "jsx": "react-jsx",
-    "jsxImportSource": "@satorijs/element",
-    "emitDeclarationOnly": true,
-    "sourceMap": false,
+    "jsx": "react-jsx"
   },
   "include": [
     "src",
