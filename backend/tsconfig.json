@@ -1,21 +1,23 @@
 {
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "lib",
+    "outDir": "./dist",
     "target": "es2020",
     "module": "commonjs",
     "declaration": true,
-    "composite": true,
-    "incremental": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "jsx": "react-jsx",
-    "jsxImportSource": "@satorijs/element",
-    "emitDeclarationOnly": true,
-    "sourceMap": false,
+    "allowJs": true
   },
   "include": [
     "src",
+    "assets",
+    "config"
   ],
+  "exclude": [
+    "node_modules",
+    "**/*.cjs"
+  ]
 }
