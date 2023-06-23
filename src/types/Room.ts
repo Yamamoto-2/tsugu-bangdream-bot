@@ -92,14 +92,18 @@ export async function queryAllRoom(): Promise<Room[]> {
     const localNumberList = roomList.map((room) => {
         return room.number
     })
-    const roomListBandoriStation = await queryRoomNumberFromBandoriStation()
-    for (let i = 0; i < roomListBandoriStation.length; i++) {
-        const room = roomListBandoriStation[i];
-        if (!localNumberList.includes(room.number)) {
-            roomList.push(room)
+    try{
+        const roomListBandoriStation = await queryRoomNumberFromBandoriStation()
+        for (let i = 0; i < roomListBandoriStation.length; i++) {
+            const room = roomListBandoriStation[i];
+            if (!localNumberList.includes(room.number)) {
+                roomList.push(room)
+            }
         }
     }
-
+    catch(e){
+        console.log(e)
+    }
 
     //按时间排序
     roomList.sort((a, b) => {
