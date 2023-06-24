@@ -103,6 +103,7 @@ export class Gacha {
         }
         else {
             gachaData = await this.getData(update)
+            gachaDataCache[this.gachaId.toString()] = gachaData
         }
 
         this.isExist = true;

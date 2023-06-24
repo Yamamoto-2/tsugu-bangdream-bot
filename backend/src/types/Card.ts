@@ -116,6 +116,7 @@ export class Card {
         }
         else {
             var cardData = await this.getData(update)
+            cardDataCache[this.cardId.toString()] = cardData
         }
         this.isInitFull = true;
         this.data = cardData

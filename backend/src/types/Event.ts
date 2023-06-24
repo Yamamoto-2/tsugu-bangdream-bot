@@ -159,6 +159,7 @@ export class Event {
         }
         else {
             var eventData = await this.getData(update)
+            eventDataCache[this.eventId.toString()] = eventData
         }
         this.isInitFull = true;
         this.eventType = eventData['eventType'];

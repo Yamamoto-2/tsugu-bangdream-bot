@@ -66,6 +66,7 @@ export class Character {
         }
         else {
             var characterData = await this.getData(update)
+            characterDataCache[this.characterId.toString()] = characterData
         }
         this.data = characterData
         this.characterType = characterData["characterType"];
