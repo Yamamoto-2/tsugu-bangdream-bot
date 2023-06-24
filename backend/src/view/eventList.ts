@@ -105,7 +105,7 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
                 imageList: all,
                 useEasyBG: true
             })
-            tempImageList.push(buffer, 'image/png')
+            tempImageList.push(buffer)
             times += 1
         }
         return tempImageList
