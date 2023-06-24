@@ -89,7 +89,7 @@ export async function getJsonAndSave(url: string, directory?: string, fileName?:
       const elapsedTime = currentTime - lastModifiedTime;
       if (elapsedTime < cacheTime) {
         const cachedData = fs.readFileSync(cacheFilePath, 'utf-8');
-        const cachedJson = JSON.parse(cachedData);
+        const cachedJson = JSON.parse(cachedData).data; // Extract the JSON data from the cached object
         console.log(`Using cached JSON data for "${url}"`);
         return cachedJson;
       }
@@ -101,7 +101,7 @@ export async function getJsonAndSave(url: string, directory?: string, fileName?:
     if (response.status === 304 && directory && fileName) {
       const cacheFilePath = path.join(directory, `${fileName}`);
       const cachedData = fs.readFileSync(cacheFilePath, 'utf-8');
-      const cachedJson = JSON.parse(cachedData);
+      const cachedJson = JSON.parse(cachedData).data; // Extract the JSON data from the cached object
       console.log(`Using cached JSON data for "${url}"`);
       return cachedJson;
     }
@@ -124,3 +124,4 @@ export async function getJsonAndSave(url: string, directory?: string, fileName?:
     throw new Error(`Failed to download and parse JSON file from "${url}". Error: ${e.message}`);
   }
 }
+
