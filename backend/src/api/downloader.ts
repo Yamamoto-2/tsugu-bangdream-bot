@@ -5,7 +5,7 @@ import * as fs from 'fs';
 const errUrl: string[] = [];
 
 export async function download(url: string, directory?: string, fileName?: string, cacheTime = 0): Promise<Buffer> {
-  if(directory != undefined && fileName != undefined){
+  if (directory != undefined && fileName != undefined) {
     createDirIfNonExist(directory);
   }
   try {
@@ -20,7 +20,7 @@ export async function download(url: string, directory?: string, fileName?: strin
       const currentTime = new Date().getTime();
       const lastModifiedTime = new Date(cacheStat.mtime).getTime();
       const elapsedTime = currentTime - lastModifiedTime;
-      if (elapsedTime < cacheTime * 1000) {
+      if (elapsedTime < cacheTime) {
         const cachedData = fs.readFileSync(cacheFilePath);
         console.log(`Using cached data for "${url}"`);
         return cachedData;
@@ -30,7 +30,7 @@ export async function download(url: string, directory?: string, fileName?: strin
     const lastModifiedTime = getLastModifiedTime(directory, fileName);
     const headers = lastModifiedTime ? { 'If-Modified-Since': lastModifiedTime.toUTCString() } : {};
     const response = await axios.get(url, { headers, responseType: 'arraybuffer' });
-    
+
     if (response.status === 304 && directory && fileName) {
       const cacheFilePath = path.join(directory, `${fileName}`);
       const cachedData = fs.readFileSync(cacheFilePath);
@@ -77,7 +77,7 @@ function getLastModifiedTime(directory?: string, fileName?: string): Date | null
 
 export async function getJsonAndSave(url: string, directory?: string, fileName?: string, cacheTime = 0): Promise<object> {
   try {
-    if(directory != undefined && fileName != undefined){
+    if (directory != undefined && fileName != undefined) {
       createDirIfNonExist(directory);
     }
     const fileExists = directory && fileName && fs.existsSync(path.join(directory, fileName));
@@ -87,7 +87,7 @@ export async function getJsonAndSave(url: string, directory?: string, fileName?:
       const currentTime = new Date().getTime();
       const lastModifiedTime = new Date(cacheStat.mtime).getTime();
       const elapsedTime = currentTime - lastModifiedTime;
-      if (elapsedTime < cacheTime * 1000) {
+      if (elapsedTime < cacheTime) {
         const cachedData = fs.readFileSync(cacheFilePath, 'utf-8');
         const cachedJson = JSON.parse(cachedData);
         console.log(`Using cached JSON data for "${url}"`);
