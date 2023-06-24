@@ -315,6 +315,9 @@ export function getSameTypeEventListByEventAndServer(event: Event, server: Serve
     for (var i = 0; i < eventIdList.length; i++) {
         var tempEvent = new Event(eventIdList[i])
         if (tempEvent.eventType == event.eventType && tempEvent.startAt[server] != null) {
+            if(tempEvent.startAt[server] >= event.startAt[server]){
+                continue
+            }
             tempEventList.push(tempEvent)
         }
     }
