@@ -13,7 +13,7 @@ const height = 800
 export async function drawCharacterHalfBlock(character: Character, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     const canvas = createCanvas(250, 800)
     const ctx = canvas.getContext('2d')
-    await character.initFull()
+    await character.initFull(false)
     //底部圆角矩形
     let color: string
     if (character.colorCode) {

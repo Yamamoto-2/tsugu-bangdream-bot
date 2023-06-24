@@ -233,7 +233,7 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     return [buffer];
 }
 
-export async function getEventGachaAndCardList(event: Event, server: Server) {
+export async function getEventGachaAndCardList(event: Event, server: Server, useCache = false) {
     var gachaList: Gacha[] = []
     var gachaIdList = []//用于去重
     if (event.startAt[server] == null) {
@@ -252,7 +252,7 @@ export async function getEventGachaAndCardList(event: Event, server: Server) {
         if (tempGacha.type == 'birthday') {
             continue
         }
-        await tempGacha.initFull()
+        await tempGacha.initFull(!useCache)
         var tempCardList = tempGacha.pickUpCardId
         /*
         //检查是否有超过7张稀有度2的卡牌，发布了太多2星卡的卡池会被跳过
