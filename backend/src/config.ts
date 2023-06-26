@@ -1,6 +1,8 @@
 import * as path from 'path';
 import { Server } from './types/Server';
 
+
+
 export const projectRoot: string = path.resolve(path.dirname(__dirname));
 export const assetsRootPath: string = path.join(projectRoot, '/assets');
 export const configPath: string = path.join(projectRoot, '/config');
@@ -42,23 +44,31 @@ export const serverNameFullList = [
     '韩服'
 ]
 
+export const tierListOfServer = {
+    'jp': [20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 5000, 10000, 20000, 30000, 50000],
+    'tw': [100, 500],
+    'en': [50, 100, 300, 500, 1000, 2000, 2500],
+    'kr': [100],
+    'cn': [50, 100, 300, 500, 1000, 2000]
+}
+
 export enum BindingStatus {
     None, Verifying, Success, Failed
 }
 
-export interface tsuguUser{
+export interface tsuguUser {
     user_id: string,
     platform: string,
     server_mode: Server,
     default_server: Server[],
     car: boolean,
     server_list: {
-      gameID: number,
-      verifyCode?: number,
-      bindingStatus: BindingStatus
+        gameID: number,
+        verifyCode?: number,
+        bindingStatus: BindingStatus
     }[]
 }
 
 export interface Channel {
     tsugu_gacha: boolean
-  }
+}

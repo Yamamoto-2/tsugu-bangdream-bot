@@ -6,12 +6,12 @@ import { changeTimefomant } from '../components/list/time';
 import { Server } from '../types/Server';
 import { drawTitle } from '../components/title'
 import { outputFinalBuffer } from '../image/output'
-import { Cutoff, tierListOfServer } from "../types/Cutoff";
+import { Cutoff } from "../types/Cutoff";
 import { drawCutoffChart } from '../components/chart/cutoffChat'
 import { serverNameFullList } from '../config';
 import { drawEventDatablock } from '../components/dataBlock/event';
 import { drawTips } from '../components/tips'
-import { assetsRootPath } from '../config';
+import { assetsRootPath, tierListOfServer } from '../config';
 import * as path from 'path'
 
 

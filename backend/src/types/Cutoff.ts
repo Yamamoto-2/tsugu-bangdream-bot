@@ -1,17 +1,9 @@
 import { callAPIAndCacheResponse } from '../api/getApi';
 import mainAPI from './_Main';
-import { Bestdoriurl } from '../config';
+import { Bestdoriurl ,tierListOfServer} from '../config';
 import { Server } from './Server';
 import { Event } from './Event';
 import { predict } from '../api/cutoff.cjs'
-
-export const tierListOfServer = {
-    'jp': [100, 500, 1000, 2000, 5000, 10000],
-    'tw': [100, 500],
-    'en': [50, 100, 300, 500, 1000, 2000, 2500],
-    'kr': [100],
-    'cn': [50, 100, 300, 500, 1000, 2000]
-}
 
 export class Cutoff {
     eventId: number;

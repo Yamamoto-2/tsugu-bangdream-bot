@@ -15,10 +15,23 @@ import { queryRoomNumber } from './commands/roomNumber'
 import { commandRoomList } from './commands/roomList'
 import { commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer, commandSwitchCarMode } from './commands/bindPlayer'
 import { Server } from './types/Server'
-import { globalDefaultServer, BindingStatus, tsuguUser } from './config'
+import { globalDefaultServer, BindingStatus, tsuguUser, tierListOfServer } from './config'
 import { checkLeftDigits } from './utils'
 
 export const name = 'tsugu-bangdream-bot'
+
+//将tierListOfServer转换为文字，server:tier,tier,tier
+function tierListOfServerToString(): string {
+  let tierListString = ''
+  for (var i in tierListOfServer) {
+    tierListString += i + ' : '
+    for (var j in tierListOfServer[i]) {
+      tierListString += tierListOfServer[i][j] + ', '
+    }
+    tierListString += '\n'
+  }
+  return tierListString
+}
 
 
 declare module 'koishi' {
@@ -266,7 +279,7 @@ export function apply(ctx: Context, config: Config) {
       return paresMessageList(list)
     })
 
-  ctx.command("ycx <tier:number> [eventId:number] [serverName]", "查询指定档位的预测线").usage("查询指定档位的预测线，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动\n可用档线:\n'jp': [100, 500, 1000, 2000, 5000, 10000],\n'tw': [100, 500],\n'en': [50, 100, 300, 500, 1000, 2000, 2500],\n'kr': [100],\n'cn': [50, 100, 300, 500, 1000, 2000]")
+  ctx.command("ycx <tier:number> [eventId:number] [serverName]", "查询指定档位的预测线").usage(`查询指定档位的预测线，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动\n可用档线:\n:\n${tierListOfServerToString()}`)
     .example('ycx 1000 :返回默认服务器当前活动1000档位的档线与预测线').example('ycx 1000 177 jp:返回日服177号活动1000档位的档线与预测线')
     .userFields(['tsugu'])
     .action(async ({ session }, tier, eventId, serverName) => {
@@ -274,7 +287,7 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandYcx(config.backendUrl, server_mode, tier, serverName, eventId)
       return paresMessageList(list)
     })
-  ctx.command("ycxall [eventId:number] [serverName]", "查询所有档位的预测线").usage("查询所有档位的预测线，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动\n可用档线:\n'jp': [100, 500, 1000, 2000, 5000, 10000],\n'tw': [100, 500],\n'en': [50, 100, 300, 500, 1000, 2000, 2500],\n'kr': [100],\n'cn': [50, 100, 300, 500, 1000, 2000]")
+  ctx.command("ycxall [eventId:number] [serverName]", "查询所有档位的预测线").usage(`查询所有档位的预测线，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动\n可用档线:\n${tierListOfServerToString()}`)
     .example('ycxall :返回默认服务器当前活动所有档位的档线与预测线').example('ycxall 177 jp:返回日服177号活动所有档位的档线与预测线')
     .alias('myycx')
     .userFields(['tsugu'])
@@ -283,7 +296,7 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandYcxAll(config.backendUrl, server_mode, serverName, eventId)
       return paresMessageList(list)
     })
-  ctx.command("lsycx <tier:number> [eventId:number] [serverName]", "查询指定档位的预测线").usage("查询指定档位的预测线，与最近的4期活动类型相同的活动的档线数据，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动\n可用档线:\n'jp': [100, 500, 1000, 2000, 5000, 10000],\n'tw': [100, 500],\n'en': [50, 100, 300, 500, 1000, 2000, 2500],\n'kr': [100],\n'cn': [50, 100, 300, 500, 1000, 2000]")
+  ctx.command("lsycx <tier:number> [eventId:number] [serverName]", "查询指定档位的预测线").usage(`查询指定档位的预测线，与最近的4期活动类型相同的活动的档线数据，如果没有服务器名的话，服务器为用户的默认服务器。如果没有活动ID的话，活动为当前活动\n可用档线:\n${tierListOfServerToString()}`)
     .example('lsycx 1000 :返回默认服务器当前活动的档线与预测线，与最近的4期活动类型相同的活动的档线数据').example('lsycx 1000 177 jp:返回日服177号活动1000档位档线与最近的4期活动类型相同的活动的档线数据')
     .userFields(['tsugu'])
     .action(async ({ session }, tier, eventId, serverName) => {
