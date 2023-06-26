@@ -13,32 +13,41 @@ export async function download(url: string, directory?: string, fileName?: strin
       throw new Error("downloadFile: errUrl.includes(url)");
     }
 
-    const fileExists = directory && fileName && fs.existsSync(path.join(directory, fileName));
-    if (fileExists && cacheTime > 0) {
-      const cacheFilePath = path.join(directory, `${fileName}`);
-      const cacheStat = fs.statSync(cacheFilePath);
-      const currentTime = new Date().getTime();
-      const lastModifiedTime = new Date(cacheStat.mtime).getTime();
-      const elapsedTime = currentTime - lastModifiedTime;
-      if (elapsedTime < cacheTime) {
+    let eTag: string | undefined;
+    const cacheFilePath = path.join(directory || '', `${fileName || ''}`);
+    if (fileName && directory) {
+      const eTagFilePath = path.join(directory, `${fileName}.etag`);
+      eTag = fs.existsSync(eTagFilePath) ? fs.readFileSync(eTagFilePath, 'utf-8') : undefined;
+      if (fs.existsSync(cacheFilePath)) {
+        const stat = fs.statSync(cacheFilePath);
+        const now = Date.now();
+        if (now - stat.mtimeMs < cacheTime * 1000) {
+          console.log(`Cache time for "${url}" has not expired. Using cached file.`);
+          const cachedData = fs.readFileSync(cacheFilePath);
+          return cachedData;
+        }
+      }
+    }
+    const headers = eTag ? { 'If-None-Match': eTag } : {};
+    let response;
+    try {
+      response = await axios.get(url, { headers, responseType: 'arraybuffer' });
+    } catch (error) {
+      if (error.response && error.response.status === 304) {
+        console.log(`ETag matches for "${url}". Using cached file.`);
         const cachedData = fs.readFileSync(cacheFilePath);
-        console.log(`Using cached data for "${url}"`);
         return cachedData;
+      } else {
+        throw error;
       }
     }
 
-    const lastModifiedTime = getLastModifiedTime(directory, fileName);
-    const headers = lastModifiedTime ? { 'If-Modified-Since': lastModifiedTime.toUTCString() } : {};
-    const response = await axios.get(url, { headers, responseType: 'arraybuffer' });
-
-    if (response.status === 304 && directory && fileName) {
-      const cacheFilePath = path.join(directory, `${fileName}`);
-      const cachedData = fs.readFileSync(cacheFilePath);
-      console.log(`Using cached data for "${url}"`);
-      return cachedData;
-    }
-
     const fileBuffer = Buffer.from(response.data, 'binary');
+
+    const newETag = response.headers.etag;
+    if (newETag && directory && fileName) {
+      fs.writeFileSync(path.join(directory, `${fileName}.etag`), newETag);
+    }
 
     if (directory && fileName) {
       fs.writeFileSync(path.join(directory, fileName), fileBuffer);
@@ -66,62 +75,58 @@ function createDirIfNonExist(filepath: string) {
   }
 }
 
-function getLastModifiedTime(directory?: string, fileName?: string): Date | null {
-  if (directory && fileName && fs.existsSync(path.join(directory, fileName))) {
-    const cacheFilePath = path.join(directory, `${fileName}`);
-    const cacheStat = fs.statSync(cacheFilePath);
-    return cacheStat.mtime;
-  }
-  return null;
-}
-
 export async function getJsonAndSave(url: string, directory?: string, fileName?: string, cacheTime = 0): Promise<object> {
   try {
     if (directory != undefined && fileName != undefined) {
       createDirIfNonExist(directory);
     }
-    const fileExists = directory && fileName && fs.existsSync(path.join(directory, fileName));
-    if (fileExists && cacheTime > 0) {
-      const cacheFilePath = path.join(directory, `${fileName}`);
-      const cacheStat = fs.statSync(cacheFilePath);
-      const currentTime = new Date().getTime();
-      const lastModifiedTime = new Date(cacheStat.mtime).getTime();
-      const elapsedTime = currentTime - lastModifiedTime;
-      if (elapsedTime < cacheTime) {
-        const cachedData = fs.readFileSync(cacheFilePath, 'utf-8');
-        const cachedJson = JSON.parse(cachedData).data; // Extract the JSON data from the cached object
-        console.log(`Using cached JSON data for "${url}"`);
-        return cachedJson;
+    let eTag: string | undefined;
+    const cacheFilePath = path.join(directory || '', `${fileName || ''}`);
+    if (fileName && directory) {
+      const eTagFilePath = path.join(directory, `${fileName}.etag`);
+      eTag = fs.existsSync(eTagFilePath) ? fs.readFileSync(eTagFilePath, 'utf-8') : undefined;
+      if (fs.existsSync(cacheFilePath)) {
+        const stat = fs.statSync(cacheFilePath);
+        const now = Date.now();
+        if (now - stat.mtimeMs < cacheTime * 1000) {
+          console.log(`Cache time for "${url}" has not expired. Using cached JSON data.`);
+          const cachedData = fs.readFileSync(cacheFilePath, 'utf-8');
+          const cachedJson = JSON.parse(cachedData);
+          return cachedJson;
+        }
       }
     }
-    const lastModifiedTime = getLastModifiedTime(directory, fileName);
-    const headers = lastModifiedTime ? { 'If-Modified-Since': lastModifiedTime.toUTCString() } : {};
-    const response = await axios.get(url, { headers, responseType: 'arraybuffer' });
-
-    if (response.status === 304 && directory && fileName) {
-      const cacheFilePath = path.join(directory, `${fileName}`);
-      const cachedData = fs.readFileSync(cacheFilePath, 'utf-8');
-      const cachedJson = JSON.parse(cachedData).data; // Extract the JSON data from the cached object
-      console.log(`Using cached JSON data for "${url}"`);
-      return cachedJson;
+    const headers = eTag ? { 'If-None-Match': eTag } : {};
+    let response;
+    try {
+      response = await axios.get(url, { headers, responseType: 'arraybuffer' });
+    } catch (error) {
+      if (error.response && error.response.status === 304) {
+        console.log(`ETag matches for "${url}". Using cached JSON data.`);
+        const cachedData = fs.readFileSync(cacheFilePath, 'utf-8');
+        const cachedJson = JSON.parse(cachedData);
+        return cachedJson;
+      } else {
+        throw error;
+      }
     }
 
     const fileBuffer = Buffer.from(response.data, 'binary');
     const fileContent = fileBuffer.toString('utf-8');
     const jsonObject = JSON.parse(fileContent);
 
-    if (cacheTime > 0 && directory && fileName) {
-      const cacheFilePath = path.join(directory, `${fileName}`);
-      const cacheData = {
-        timestamp: Date.now(),
-        data: jsonObject
-      };
-      fs.writeFileSync(cacheFilePath, JSON.stringify(cacheData));
+    const newETag = response.headers.etag;
+    if (newETag && directory && fileName) {
+      fs.writeFileSync(path.join(directory, `${fileName}.etag`), newETag);
     }
-    console.log(`Parsed JSON file from "${url}"`);
+
+    if (directory && fileName) {
+      fs.writeFileSync(path.join(directory, fileName), fileContent);
+    }
+
+    console.log(`Downloaded JSON data from "${url}"`);
     return jsonObject;
   } catch (e) {
-    throw new Error(`Failed to download and parse JSON file from "${url}". Error: ${e.message}`);
+    throw new Error(`Failed to download JSON data from "${url}". Error: ${e.message}`);
   }
 }
-
