@@ -16,8 +16,12 @@ async function downloadFile(url: string, IgnoreErr: boolean = true, overwrite= f
     const cacheDir = getCacheDirectory(url);
     const fileName = getFileNameFromUrl(url);
     const data = await download(url, cacheDir, fileName, cacheTime);
+    if(data.toString().startsWith("<!DOCTYPE html>")){
+      throw new Error("downloadFile: data.toString().startsWith(\"<!DOCTYPE html>\")");
+    }
     return data
   } catch (e) {
+    console.log(e)
     errUrl.push(url);
     if (url.includes('.png') && IgnoreErr) {
       return fs.readFileSync(path.join(assetsRootPath, 'err.png'));
