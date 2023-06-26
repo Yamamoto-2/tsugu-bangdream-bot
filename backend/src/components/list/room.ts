@@ -43,7 +43,7 @@ export async function drawRoonInList(room: Room) {
     const timeNow = new Date().getTime()
     //头像
     let Icon: Image
-    if (room.avanter != undefined) {
+    if (room.avanter != undefined && room.avanter != '') {
         Icon = await getBandoriStationUserIcon(room.avanter)
     }
     else if (room.source = 'qq') {
