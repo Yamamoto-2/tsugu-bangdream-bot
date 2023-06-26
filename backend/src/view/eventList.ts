@@ -60,32 +60,39 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
         return ['没有搜索到符合条件的活动']
     }
 
-    //按照开始时间排序
+    // 按照开始时间排序
     sortEventList(tempEventList)
 
-    var tempEventImageList: Canvas[] = []
-    var eventImageListHorizontal: Canvas[] = []
-    var tempH = 0
-    for (var i = 0; i < tempEventList.length; i++) {
-        var tempImage = await drawEventInList(tempEventList[i], defaultServerList)
-        tempH += tempImage.height
-        if (tempH > maxHeight) {
-            tempEventImageList.pop()
-            eventImageListHorizontal.push(stackImage(tempEventImageList))
-            eventImageListHorizontal.push(line2)
-            tempEventImageList = []
-            tempH = tempImage.height
-        }
-        tempEventImageList.push(tempImage)
-        tempEventImageList.push(line)
-        if (i == tempEventList.length - 1) {
-            tempEventImageList.pop()
-            eventImageListHorizontal.push(stackImage(tempEventImageList))
-            eventImageListHorizontal.push(line2)
-        }
-    }
-    eventImageListHorizontal.pop()
+    var eventPromises: Promise<{ index: number, image: Canvas }>[] = [];
+    var tempH = 0;
 
+    for (var i = 0; i < tempEventList.length; i++) {
+        eventPromises.push(drawEventInList(tempEventList[i], defaultServerList).then(image => ({ index: i, image: image })));
+    }
+
+    var eventResults = await Promise.all(eventPromises);
+
+    eventResults.sort((a, b) => a.index - b.index);
+
+    var tempEventImageList: Canvas[] = [];
+    var eventImageListHorizontal: Canvas[] = [];
+
+    for (var i = 0; i < eventResults.length; i++) {
+        var tempImage = eventResults[i].image;
+        tempH += tempImage.height;
+        if (tempH > maxHeight) {
+            if (tempEventImageList.length > 0) {
+                eventImageListHorizontal.push(stackImage(tempEventImageList));
+                eventImageListHorizontal.push(line2);
+            }
+            tempEventImageList = [];
+            tempH = tempImage.height;
+        }
+        tempEventImageList.push(tempImage);
+        tempEventImageList.push(line);
+    }
+
+    eventImageListHorizontal.pop();
 
     if (eventImageListHorizontal.length > maxColumns) {
         let times = 0

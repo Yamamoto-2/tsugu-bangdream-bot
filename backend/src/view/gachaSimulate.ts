@@ -17,6 +17,9 @@ export async function drawRandomGacha(gacha: Gacha, times: number = 10, server: 
     if (times > 10000) {
         return ['错误: 抽卡次数过多, 请不要超过10000次']
     }
+    if(!gacha.isExist){
+        return ['错误: 该卡池不存在']
+    }
     await gacha.initFull()
     let gachaImage: Canvas;
     if (times <= 10) {
@@ -33,38 +36,53 @@ export async function drawRandomGacha(gacha: Gacha, times: number = 10, server: 
         })
     }
     else {
-        const gachaList: { [cardId: number]: number } = {}
+        const gachaList: { [cardId: number]: number } = {};
+        const promises: Promise<void>[] = [];
+        
         for (let i = 0; i < times; i++) {
-            const card = getGachaRandomCard(gacha, i)
-            if (!gachaList[card.cardId]) {
-                gachaList[card.cardId] = 1
-            }
-            else {
-                gachaList[card.cardId]++
-            }
+          promises.push(
+            (async () => {
+              const card = getGachaRandomCard(gacha, i);
+              if (!gachaList[card.cardId]) {
+                gachaList[card.cardId] = 1;
+              } else {
+                gachaList[card.cardId]++;
+              }
+            })()
+          );
         }
-        const cardImageList: Canvas[] = []
-        const cardIdList = Object.keys(gachaList)
+        
+        await Promise.all(promises);
+        
+        const cardImageList: Canvas[] = [];
+        const cardIdList = Object.keys(gachaList);
         cardIdList.sort((a, b) => {
-            const cardA = new Card(parseInt(a))
-            const cardB = new Card(parseInt(b))
-            return cardB.rarity - cardA.rarity
-        })
+          const cardA = new Card(parseInt(a));
+          const cardB = new Card(parseInt(b));
+          return cardB.rarity - cardA.rarity;
+        });
+        
+        const cardPromises: Promise<Canvas>[] = [];
         for (let i = 0; i < cardIdList.length; i++) {
-            const cardId = cardIdList[i];
-            if (Object.prototype.hasOwnProperty.call(gachaList, cardId)) {
-                const card = new Card(parseInt(cardId))
-                const cardImage = await drawGachaCard(card, gachaList[cardId])
-                cardImageList.push(cardImage)
-            }
+          const cardId = cardIdList[i];
+          if (Object.prototype.hasOwnProperty.call(gachaList, cardId)) {
+            const card = new Card(parseInt(cardId));
+            cardPromises.push(drawGachaCard(card, gachaList[cardId]));
+          }
         }
+        
+        const cardImageResults = await Promise.all(cardPromises);
+        cardImageList.push(...cardImageResults);
+        
         gachaImage = drawTextWithImages({
-            textSize: 115,
-            lineHeight: 115,
-            content: cardImageList,
-            maxWidth: maxWidth,
-            spacing: 0,
-        })
+          textSize: 115,
+          lineHeight: 115,
+          content: cardImageList,
+          maxWidth: maxWidth,
+          spacing: 0,
+        });
+        
+
     }
 
     const all = []

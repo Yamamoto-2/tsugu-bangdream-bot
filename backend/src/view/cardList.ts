@@ -75,6 +75,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
     })
     //如果角色数量大于5，则颜色作为X轴，角色作为Y轴
     if (characterIdList.length > 5) {
+        let promise = []
         var tempAttributeImageList: Canvas[] = []//每一个颜色的所有角色的列
         for (let i = 0; i < attributeList.length; i++) {
             const attribute = attributeList[i];
@@ -82,10 +83,10 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
             for (let j = 0; j < characterIdList.length; j++) {
                 const characterId = characterIdList[j];
                 var tempAttributeCardList = getCardListByAttributeAndCharacterId(tempCardList, attribute, characterId);
-                tempAttributeCardImageList.push(await drawCardListLine(tempAttributeCardList));
+                promise.push(tempAttributeCardImageList.push(await drawCardListLine(tempAttributeCardList)));
                 //画角色头像
                 if (i == 0) {
-                    characterIconImageList.push(await drawCharacterIcon(characterId));
+                    promise.push(characterIconImageList.push(await drawCharacterIcon(characterId)));
                 }
             }
             tempAttributeImageList.push(stackImage(
@@ -93,6 +94,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
             ));
 
         }
+        await Promise.all(promise)
         const characterIconImage = stackImage(characterIconImageList);
         tempAttributeImageList.unshift(characterIconImage);
         cardListImage = drawDatablockHorizontal({
@@ -130,6 +132,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
     }
     else {
         var tempCardImageList: Canvas[] = []//总列
+        let promise = []
         for (let i = 0; i < characterIdList.length; i++) {
             const characterId = characterIdList[i];
             let icon = true
@@ -137,18 +140,19 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
                 const attribute = attributeList[j];
                 var tempAttributeCardList = getCardListByAttributeAndCharacterId(tempCardList, attribute, characterId);
                 if (tempAttributeCardList.length != 0) {
-                    tempCardImageList.push(await drawCardListLine(tempAttributeCardList));
+                    promise.push(tempCardImageList.push(await drawCardListLine(tempAttributeCardList)));
                     //画角色头像
                     if (icon) {
-                        characterIconImageList.push(await drawCharacterIcon(characterId));
+                        promise.push(characterIconImageList.push(await drawCharacterIcon(characterId)));
                         icon = false
                     }
                     else {
-                        characterIconImageList.push(await drawCharacterIcon(null));
+                        promise.push(characterIconImageList.push(await drawCharacterIcon(null)));
                     }
                 }
             }
         }
+        await Promise.all(promise)
         const cardListImageWithoutCharacterIcon = await stackImage(
             tempCardImageList,
         )

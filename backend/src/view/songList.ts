@@ -67,28 +67,35 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
     }
 
 
-    var tempSongImageList: Canvas[] = []
-    var songImageListHorizontal: Canvas[] = []
+    var tempSongImageList: Canvas[] = [];
+    var songImageListHorizontal: Canvas[] = [];
     var tempH = 0;
+    var songPromises: Promise<Canvas>[] = [];
+    
     for (let i = 0; i < tempSongList.length; i++) {
-        var tempImage = await drawSongInList(tempSongList[i], undefined, undefined, defaultServerList)
-        tempH += tempImage.height
-        if (tempH > maxHeight) {
-            tempSongImageList.pop()
-            songImageListHorizontal.push(stackImage(tempSongImageList))
-            songImageListHorizontal.push(line2)
-            tempSongImageList = []
-            tempH = tempImage.height
-        }
-        tempSongImageList.push(tempImage)
-        tempSongImageList.push(line)
-        if (i == tempSongList.length - 1) {
-            tempSongImageList.pop()
-            songImageListHorizontal.push(stackImage(tempSongImageList))
-            songImageListHorizontal.push(line2)
-        }
+      songPromises.push(drawSongInList(tempSongList[i], undefined, undefined, defaultServerList));
     }
-    songImageListHorizontal.pop()
+    
+    var songImages = await Promise.all(songPromises);
+    
+    for (let i = 0; i < songImages.length; i++) {
+      var tempImage = songImages[i];
+      tempH += tempImage.height;
+      if (tempH > maxHeight) {
+        break;
+      }
+      tempSongImageList.push(tempImage);
+      tempSongImageList.push(line);
+    }
+    
+    var songImageListHorizontal: Canvas[] = [];
+    if (tempSongImageList.length > 0) {
+      songImageListHorizontal.push(stackImage(tempSongImageList));
+      songImageListHorizontal.push(line2);
+    }
+    
+    songImageListHorizontal.pop();
+    
 
     var songListImage = drawDatablockHorizontal({
         list: songImageListHorizontal
