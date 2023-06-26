@@ -40,7 +40,11 @@ async function commandGachaSimulate(
 
   if (status) {
     if (!gachaId) {
-      gacha = getPresentGachaList(default_server)[0];
+      const gachaList = getPresentGachaList(default_server)
+      if(gachaList.length === 0){
+        return ['错误: 该服务器没有正在进行的卡池']
+      }
+      gacha = gachaList[0];
     } else {
       gacha = new Gacha(gachaId);
       if (!gacha.isExist) {
