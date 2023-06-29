@@ -106,7 +106,8 @@ export class Cutoff {
         }
         try {
             var result = predict(cutoff_ts, start_ts, end_ts, this.rate)
-        } catch {
+        } catch(e) {
+            console.log(e)
             this.predictEP = 0
             return this.predictEP
         }

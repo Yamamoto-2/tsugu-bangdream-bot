@@ -24,8 +24,8 @@ var regression = function(data){
         sumperc += data[i]["percent"]
         sumep += data[i]["ep"]
     }
-    avg_percentage = sumperc / data.length
-    avg_pt = sumep / data.length
+    let avg_percentage = sumperc / data.length
+    let avg_pt = sumep / data.length
     var z = 0, w = 0
     for(var i = 0;i<data.length;i++){
         z += (data[i]["percent"] - avg_percentage) * (data[i]["ep"] - avg_pt)
