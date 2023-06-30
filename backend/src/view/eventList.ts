@@ -90,6 +90,11 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
         }
         tempEventImageList.push(tempImage);
         tempEventImageList.push(line);
+        //最后一张图
+        if (i == eventResults.length - 1) {
+            eventImageListHorizontal.push(stackImage(tempEventImageList));
+            eventImageListHorizontal.push(line2);
+        }
     }
 
     eventImageListHorizontal.pop();
