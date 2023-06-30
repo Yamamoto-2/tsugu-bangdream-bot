@@ -310,9 +310,9 @@ export function apply(ctx: Context, config: Config) {
     .userFields(['tsugu'])
     .channelFields(['tsugu_gacha'])
     .action(async ({ session }, times, gachaId) => {
-      const default_server = session.user.tsugu.default_server[0]
+      const server_mode = session.user.tsugu.server_mode
       const status = session.channel?.tsugu_gacha ?? true
-      const list = await commandGachaSimulate(config.backendUrl, default_server, status, times, gachaId)
+      const list = await commandGachaSimulate(config.backendUrl, server_mode, status, times, gachaId)
       return (paresMessageList(list))
     })
 
