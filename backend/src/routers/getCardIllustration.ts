@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
   const { cardId } = req.body;
 
   if (isNaN(cardId)) {
-    res.status(400).send([{ type: 'string', string: '内部错误' }]);
+    res.send([{ type: 'string', string: '内部错误' }]);
     return;
   }
   try {

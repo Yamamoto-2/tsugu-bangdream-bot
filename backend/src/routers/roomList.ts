@@ -2,7 +2,7 @@ import { drawRoomList } from '../view/roomList';
 import { listToBase64, isServerList, isServer } from './utils';
 import { Room } from '../types/Room';
 import { Player } from '../types/Player';
-import {getServerByServerId} from '../types/Server'
+import { getServerByServerId } from '../types/Server'
 import express from 'express';
 
 const router = express.Router();
@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
         res.send(listToBase64(result));
     } catch (e) {
         console.log(e)
-    res.status(400).send([{ type: 'string', string: '内部错误' }]);
+        res.send([{ type: 'string', string: '内部错误' }]);
     }
 });
 

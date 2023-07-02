@@ -34,13 +34,17 @@ async function sendPostRequest(url: string, data: any): Promise<Object> {
     if (axios.isAxiosError(error)) {
       // 处理由 Axios 抛出的错误
       console.error('Axios Error:', error.message);
+      return [{
+        type: 'string',
+        string: '后端服务器连接出错'
+      }];
     } else {
       // 处理其他错误
       console.error('Error:', error.message);
     }
     return [{
       type: 'string',
-      string: error.message
+      string: '内部错误'
     }];
   }
 }
