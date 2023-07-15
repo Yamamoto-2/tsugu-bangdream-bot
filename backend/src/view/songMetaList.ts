@@ -30,7 +30,7 @@ export async function drawSongMetaList(server: Server):Promise<Array<Buffer | st
         imageList.push(await drawMetaRankListDatablock(element, server))
     }
     var all = []
-    all.push(drawTitle('查询', `${serverNameFullList[server]} 效率排行榜`))
+    all.push(drawTitle('查询', `${serverNameFullList[server]} 分数排行榜`))
     all.push(stackImageHorizontal(imageList))
     var buffer = await outputFinalBuffer({
         imageList: all,
@@ -48,7 +48,7 @@ async function drawMetaRankListDatablock(Fever: boolean, server: Server): Promis
         let difficultyId = metaRanking[i].difficulty
         let precent = metaRanking[i].meta / maxMeta * 100
         precent = Math.round(precent * 100) / 100
-        list.push(await drawSongInList(song, difficultyId, `相对效率: ${precent}% #${metaRanking[i].rank + 1}`))
+        list.push(await drawSongInList(song, difficultyId, `相对分数: ${precent}% #${metaRanking[i].rank + 1}`))
         list.push(line)
     }
     list.pop()

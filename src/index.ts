@@ -262,8 +262,8 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandSong(config.backendUrl, default_servers, text)
       return paresMessageList(list)
     })
-  ctx.command('查询效率表 <word:text>', '查询效率表').usage('查询指定服务器的歌曲效率表，如果没有服务器名的话，服务器为用户的默认服务器')
-    .alias('查效率表', '查询效率榜', '查效率榜')
+  ctx.command('查询分数表 <word:text>', '查询分数表').usage('查询指定服务器的歌曲分数表，如果没有服务器名的话，服务器为用户的默认服务器')
+    .alias('查分数表', '查询分数榜', '查分数榜')
     .userFields(['tsugu'])
     .action(async ({ session }, text) => {
       const default_servers = session.user.tsugu.default_server
