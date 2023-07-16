@@ -44,7 +44,17 @@ async function commandGachaSimulate(
       if(gachaList.length === 0){
         return ['错误: 该服务器没有正在进行的卡池']
       }
-      gacha = gachaList[0];
+      //获取gachaList中第一个type != 'birthday'的嘎查
+      for (let i = 0; i < gachaList.length; i++) {
+        const element = gachaList[i];
+        if(element.type !== 'birthday'){
+          gacha = element
+          break
+        }
+      }
+      if(!gacha){
+        return ['错误: 该服务器没有正在进行的卡池']
+      }
     } else {
       gacha = new Gacha(gachaId);
       if (!gacha.isExist) {
