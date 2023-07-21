@@ -7,16 +7,15 @@ const mainAPI: object = {}//main对象,用于存放所有api数据,数据来源�
 
 //加载mainAPI
 async function loadMainAPI(useCache: boolean = false) {
-    const promiseAll = []
-    for (const key in BestdoriapiPath) {
-        if(useCache){
-            promiseAll.push(mainAPI[key] = await callAPIAndCacheResponse(Bestdoriurl + BestdoriapiPath[key],1/0))
+    const promiseAll = Object.keys(BestdoriapiPath).map(async (key) => {
+        if (useCache) {
+            return mainAPI[key] = await callAPIAndCacheResponse(Bestdoriurl + BestdoriapiPath[key], 1/0);
+        } else {
+            return mainAPI[key] = await callAPIAndCacheResponse(Bestdoriurl + BestdoriapiPath[key]);
         }
-        else{
-            promiseAll.push(mainAPI[key] = await callAPIAndCacheResponse(Bestdoriurl + BestdoriapiPath[key]))
-        }
-    }
-    await Promise.all(promiseAll)
+    });
+
+    await Promise.all(promiseAll);
     
     var cardsCNfix = await readJSON(path.join(configPath,'cardsCNfix.json'))
     for(var key in cardsCNfix){
