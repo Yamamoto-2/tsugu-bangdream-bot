@@ -1,29 +1,31 @@
-import { drawSongMetaList } from '../view/songMetaList'
-import { Server, getServerByServerId } from '../types/Server'
+import { drawSongMetaList } from '../view/songMetaList';
+import { Server, getServerByServerId } from '../types/Server';
 import { listToBase64, isServerList, isServer } from './utils';
 import express from 'express';
+import { body, validationResult } from 'express-validator';
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-    console.log(req.baseUrl, req.body)
+router.post('/', [
+    // Define validation rules for request body
+    body('default_servers').custom(isServerList),
+    body('server').custom(isServer),
+], async (req, res) => {
+    console.log(req.baseUrl, req.body);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.send([{ type: 'string', string: '参数错误' }]);
+    }
 
     const { default_servers, server } = req.body;
-
-    // 检查类型是否正确
-    if (
-        !isServerList(default_servers) ||
-        !isServer(server)
-    ) {
-        res.status(404).send('错误: 参数类型不正确');
-        return;
-    }
 
     try {
         const result = await commandSongMeta(default_servers, getServerByServerId(server));
         res.send(listToBase64(result));
     } catch (e) {
-        console.log(e)
+        console.log(e);
         res.send([{ type: 'string', string: '内部错误' }]);
     }
 });

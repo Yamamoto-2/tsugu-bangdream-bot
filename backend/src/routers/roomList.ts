@@ -1,31 +1,42 @@
 import { drawRoomList } from '../view/roomList';
-import { listToBase64, isServerList, isServer } from './utils';
+import { listToBase64, isServer } from './utils';
 import { Room } from '../types/Room';
 import { Player } from '../types/Player';
-import { getServerByServerId } from '../types/Server'
+import { getServerByServerId } from '../types/Server';
 import express from 'express';
+import { body, validationResult } from 'express-validator';
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-    console.log(req.baseUrl, JSON.stringify(req.body));
+router.post('/', [
+  // Define validation rules for the request body
+  body('roomList').isArray().notEmpty(),
+], async (req, res) => {
+  console.log(req.baseUrl, JSON.stringify(req.body));
 
-    const { roomList } = req.body;
-    let tempRoomlist: Room[]
-    // 检查类型是否正确
-    try {
-        tempRoomlist = getRoomList(roomList)
-    } catch (e) {
-        console.log(req.url + ' ' + req.body);
-        return;
-    }
-    try {
-        const result = await commandRoomList(tempRoomlist);
-        res.send(listToBase64(result));
-    } catch (e) {
-        console.log(e)
-        res.send([{ type: 'string', string: '内部错误' }]);
-    }
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.send([{ type: 'string', string: '车牌格式错误' }]);
+  }
+
+  const { roomList } = req.body;
+  let tempRoomlist: Room[];
+  // 检查类型是否正确
+  try {
+    tempRoomlist = getRoomList(roomList);
+  } catch (e) {
+    console.log(req.url + ' ' + req.body);
+    res.send([{ type: 'string', string: '车牌格式错误' }]);
+    return;
+  }
+  try {
+    const result = await commandRoomList(tempRoomlist);
+    res.send(listToBase64(result));
+  } catch (e) {
+    console.log(e);
+    res.send([{ type: 'string', string: '内部错误' }]);
+  }
 });
 
 export async function commandRoomList(roomList: Room[]): Promise<Array<string | Buffer>> {

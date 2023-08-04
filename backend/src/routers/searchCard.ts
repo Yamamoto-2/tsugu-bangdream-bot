@@ -1,36 +1,38 @@
-import { drawCardDetail } from '../view/cardDetail'
-import { drawCardList } from '../view/cardList'
-import { isInteger } from './utils'
-import { fuzzySearch } from './fuzzySearch'
-import { Server } from '../types/Server'
-import { listToBase64, isServerList } from './utils';
 import express from 'express';
+import { body, validationResult } from 'express-validator';
+import { drawCardDetail } from '../view/cardDetail';
+import { drawCardList } from '../view/cardList';
+import { isInteger, isServerList, listToBase64 } from './utils';
+import { fuzzySearch } from './fuzzySearch';
+import { Server } from '../types/Server';
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-    console.log(req.baseUrl, req.body)
-
-    const { default_servers, text, useEasyBG } = req.body;
-
-    // 检查类型是否正确
-    if (
-        !isServerList(default_servers) ||
-        typeof text !== 'string' ||
-        typeof useEasyBG !== 'boolean'
-    ) {
-        res.status(404).send('错误: 参数类型不正确');
-        return;
+router.post(
+    '/',
+    [
+        body('default_servers').custom(isServerList),
+        body('text').isString(),
+        body('useEasyBG').isBoolean(),
+    ],
+    async (req, res) => {
+        console.log(req.baseUrl, req.body);
+        // Check for validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.send([{ type: 'string', string: '参数错误' }]);
+        }
+        const { default_servers, text, useEasyBG } = req.body;
+        try {
+            const result = await commandCard(default_servers, text, useEasyBG);
+            res.send(listToBase64(result));
+        } catch (e) {
+            console.log(e);
+            res.send([{ type: 'string', string: '内部错误' }]);
+        }
     }
+);
 
-    try {
-        const result = await commandCard(default_servers, text, useEasyBG);
-        res.send(listToBase64(result));
-    } catch (e) {
-        console.log(e)
-        res.send([{ type: 'string', string: '内部错误' }]);
-    }
-});
 
 export async function commandCard(default_servers: Server[], text: string, useEasyBG: boolean): Promise<Array<string | Buffer>> {
     if (isInteger(text)) {

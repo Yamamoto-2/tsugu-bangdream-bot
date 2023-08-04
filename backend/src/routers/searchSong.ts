@@ -1,36 +1,43 @@
-import { drawSongList } from "../view/songList"
-import { fuzzySearch } from "./fuzzySearch"
-import { isInteger } from "./utils"
-import { drawSongDetail } from "../view/songDetail"
-import { Song } from "../types/Song"
-import { Server } from "../types/Server"
-import { listToBase64, isServerList } from './utils';
 import express from 'express';
+import { body, validationResult } from 'express-validator';
+import { drawSongList } from '../view/songList';
+import { fuzzySearch } from './fuzzySearch';
+import { isInteger, listToBase64, isServerList } from './utils';
+import { drawSongDetail } from '../view/songDetail';
+import { Song } from '../types/Song';
+import { Server } from '../types/Server';
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-    console.log(req.baseUrl, req.body)
+router.post(
+    '/',
+    [
+        // Express-validator checks for type validation
+        body('default_servers').custom(isServerList),
+        body('text').isString(),
+    ],
+    async (req, res) => {
+        console.log(req.baseUrl, req.body);
 
-    const { default_servers, text } = req.body;
+        // Check for validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.send([{ type: 'string', string: '参数错误' }]);
+        }
 
-    // 检查类型是否正确
-    if (
-        !isServerList(default_servers) ||
-        typeof text !== 'string'
-    ) {
-        res.status(404).send('错误: 参数类型不正确');
-        return;
+
+        const { default_servers, text } = req.body;
+
+        try {
+            const result = await commandSong(default_servers, text);
+            res.send(listToBase64(result));
+        } catch (e) {
+            console.log(e);
+            res.send([{ type: 'string', string: '内部错误' }]);
+        }
     }
+);
 
-    try {
-        const result = await commandSong(default_servers, text);
-        res.send(listToBase64(result));
-    } catch (e) {
-        console.log(e)
-        res.send([{ type: 'string', string: '内部错误' }]);
-    }
-});
 
 export async function commandSong(default_servers: Server[], text: string): Promise<Array<Buffer | string>> {
     if (!text) {

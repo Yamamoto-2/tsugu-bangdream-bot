@@ -1,19 +1,27 @@
-import { Card } from "../types/Card";
-import { Canvas, createCanvas, Image } from "canvas";
-import { listToBase64 } from './utils';
 import express from 'express';
+import { body, validationResult } from 'express-validator';
+import { Card } from '../types/Card';
+import { createCanvas } from 'canvas';
+import { listToBase64 } from './utils';
+
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-  console.log(req.baseUrl, req.body)
+router.post('/', [
+  // Define validation rules using express-validator
+  body('cardId').isNumeric().withMessage('cardId must be a number'),
+], async (req, res) => {
+  console.log(req.baseUrl, req.body);
+
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.send([{ type: 'string', string: '参数错误' }]);
+  }
 
   const { cardId } = req.body;
 
-  if (isNaN(cardId)) {
-    res.send([{ type: 'string', string: '内部错误' }]);
-    return;
-  }
   try {
+    // Ensure cardId is a valid number (no need to check isNaN again)
     const images = await commandGetCardIllustration(cardId);
     res.send(listToBase64(images));
   } catch (error) {

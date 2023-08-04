@@ -1,37 +1,50 @@
+import express from 'express';
+import { body, validationResult } from 'express-validator';
 import { drawRandomGacha } from '../view/gachaSimulate';
 import { Gacha, getPresentGachaList } from '../types/Gacha';
 import { Server } from '../types/Server';
 import { listToBase64, isServer } from './utils';
-import express from 'express';
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-  console.log(req.baseUrl, req.body)
-  
-  const { default_server, status, times, gachaId } = req.body;
+// Route handling the POST request with validation using express-validator
+router.post(
+  '/',
+  [
+    body('server_mode').custom((value) => {
+      if (!isServer(value)) {
+        throw new Error('default_server must be a Server');
+      }
+      return true;
+    }),
+    body('status').isBoolean(),
+    body('times').optional().isInt(),
+    body('gachaId').optional().isInt(),
+  ],
+  async (req, res) => {
+    console.log(req.baseUrl, req.body);
 
-  // 检查类型是否正确
-  if (
-    !isServer(default_server) ||
-    typeof status !== 'boolean' ||
-    (times !== undefined && typeof times !== 'number') ||
-    (gachaId !== undefined && typeof gachaId !== 'number')
-  ) {
-    res.status(404).send('错误: 参数类型不正确');
-    return;
+    // Check for validation errors
+    const errors = validationResult(req);
+    console.log(errors)
+    if (!errors.isEmpty()) {
+      return res.send([{ type: 'string', string: '参数错误' }]);
+    }
+
+    const { server_mode, status, times, gachaId } = req.body;
+
+    try {
+      const result = await commandGachaSimulate(server_mode, status, times, gachaId);
+      res.send(listToBase64(result));
+    } catch (e) {
+      console.log(e);
+      res.send([{ type: 'string', string: '内部错误' }]);
+    }
   }
-  try {
-    const result = await commandGachaSimulate(default_server, status, times, gachaId);
-    res.send(listToBase64(result));
-  } catch (e) {
-    console.log(e)
-    res.send([{ type: 'string', string: '内部错误' }]);
-  }
-});
+);
 
 async function commandGachaSimulate(
-  default_server: Server,
+  server_mode: Server,
   status: boolean,
   times?: number,
   gachaId?: number
@@ -40,19 +53,19 @@ async function commandGachaSimulate(
 
   if (status) {
     if (!gachaId) {
-      const gachaList = getPresentGachaList(default_server)
-      if(gachaList.length === 0){
+      const gachaList = getPresentGachaList(server_mode)
+      if (gachaList.length === 0) {
         return ['错误: 该服务器没有正在进行的卡池']
       }
       //获取gachaList中第一个type != 'birthday'的嘎查
       for (let i = 0; i < gachaList.length; i++) {
         const element = gachaList[i];
-        if(element.type !== 'birthday'){
+        if (element.type !== 'birthday') {
           gacha = element
           break
         }
       }
-      if(!gacha){
+      if (!gacha) {
         return ['错误: 该服务器没有正在进行的卡池']
       }
     } else {
@@ -61,7 +74,7 @@ async function commandGachaSimulate(
         return ['错误: 该卡池不存在'];
       }
     }
-    return await drawRandomGacha(gacha, times || 10, default_server);
+    return await drawRandomGacha(gacha, times || 10, server_mode);
   }
 
   return [];
