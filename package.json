@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-tsugu-bangdream-bot",
   "description": "BanG Dream！少女乐团派对 多功能bot",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "contributors": [
     "Yamamoto <1810972564qq@gmail.com>",
     "DreamPrism <dreamprism01@gmail.com>",
@@ -31,9 +31,6 @@
   ],
   "peerDependencies": {
     "koishi": "^4.11.9"
-  },
-  "devDependencies": {},
-  "dependencies": {
   },
   "koishi": {
     "description": {
