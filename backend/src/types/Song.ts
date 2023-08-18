@@ -4,9 +4,9 @@ import { downloadFile } from '../api/downloadFile'
 import { getServerByPriority, Server } from './Server'
 import mainAPI from './_Main'
 import { globalDefaultServer } from '../config'
-import {stringToNumberArray} from './utils'
+import { stringToNumberArray } from './utils'
 
-interface difficulty {
+export const difficultyName = {
     0: "easy",
     1: "normal",
     2: "hard",
@@ -14,7 +14,7 @@ interface difficulty {
     4: "special"
 }
 
-var tagNameList = {
+const tagNameList = {
     'normal': '原创曲',
     'anime': '翻唱曲',
     'extra': 'EXTRA歌曲',
@@ -31,7 +31,7 @@ export class Song {
     publishedAt: Array<number | null>;
     closedAt: Array<number | null>;
     difficulty: {
-        [difficulty: number]: {
+        [difficultyId: number]: {
             playLevel: number,
             multiLiveScoreMap?: object,
             notesQuantity?: number,
@@ -45,10 +45,10 @@ export class Song {
     };
     length: number;
     notes: {
-        [difficulty: number]: number
+        [difficultyId: number]: number
     };
     bpm: {
-        [difficulty: number]: Array<{
+        [difficultyId: number]: Array<{
             bpm: number,
             start: number,
             end: number
@@ -79,7 +79,7 @@ export class Song {
     hasMeta = false;
 
     meta: {
-        [difficulty: number]: {
+        [difficultyId: number]: {
             [skillDuration: number]: [
                 withoutFeverWithoutSkill: number,
                 withoutFeverWithSkill: number,
@@ -105,8 +105,8 @@ export class Song {
         this.bandId = songData['bandId']
         this.jacketImage = songData['jacketImage']
         this.musicTitle = songData['musicTitle']
-        this.publishedAt =  stringToNumberArray(songData['publishedAt'])
-        this.closedAt =  stringToNumberArray(songData['closedAt'])
+        this.publishedAt = stringToNumberArray(songData['publishedAt'])
+        this.closedAt = stringToNumberArray(songData['closedAt'])
         this.difficulty = songData['difficulty']
         this.length = songData['length']
         this.notes = songData['notes']
@@ -125,7 +125,7 @@ export class Song {
 
     }
     async initFull() {
-        if(this.isInitfull){
+        if (this.isInitfull) {
             return
         }
         if (this.isExist == false) {
@@ -139,8 +139,8 @@ export class Song {
         this.bandId = songData['bandId']
         this.jacketImage = songData['jacketImage']
         this.musicTitle = songData['musicTitle']
-        this.publishedAt =  stringToNumberArray(songData['publishedAt'])
-        this.closedAt =  stringToNumberArray(songData['closedAt'])
+        this.publishedAt = stringToNumberArray(songData['publishedAt'])
+        this.closedAt = stringToNumberArray(songData['closedAt'])
         this.difficulty = songData['difficulty']
         this.length = songData['length']
         this.notes = songData['notes']
@@ -157,7 +157,7 @@ export class Song {
             arranger: songData['arranger'],
         }
         this.howToGet = songData['howToGet']
-        
+
         this.isInitfull = true
     }
     async getData() {
@@ -168,17 +168,26 @@ export class Song {
         return Math.ceil(this.songId / 10) * 10
     }
     async getSongJacketImage(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
+        const jacketImageUrl = this.getSongJacketImageURL(defaultServerList)
+        var jacketImageBuffer = await downloadFile(jacketImageUrl)
+        return await loadImage(jacketImageBuffer)
+    }
+    getSongJacketImageURL(defaultServerList: Server[] = globalDefaultServer): string {
         if (!defaultServerList) defaultServerList = globalDefaultServer
         var server = getServerByPriority(this.publishedAt)
         var jacketImageName = this.jacketImage[this.jacketImage.length - 1]
-        var jacketImageBuffer = await downloadFile(`https://bestdori.com/assets/${Server[server]}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`)
-        return await loadImage(jacketImageBuffer)
+        var jacketImageUrl = `https://bestdori.com/assets/${Server[server]}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`
+        return jacketImageUrl
     }
     getTagName(): string {
         if (this.tag == undefined) {
             return this.tag
         }
         return tagNameList[this.tag]
+    }
+    async getSongChart(difficultyId: number): Promise<Object> {
+        const songChart = await callAPIAndCacheResponse(`https://bestdori.com/api/charts/${this.songId}/${difficultyName[difficultyId]}.json`)
+        return songChart
     }
 
     /*
@@ -194,15 +203,15 @@ export class Song {
     然后乘上队伍综合力就行
     */
 
-    calcMeta(withFever: boolean, difficulty: number, scoreUpMaxValue: number = 100, skillDuration: number = 7, accruacy: number = 100): number {
+    calcMeta(withFever: boolean, difficultyId: number, scoreUpMaxValue: number = 100, skillDuration: number = 7, accruacy: number = 100): number {
         if (this.hasMeta == false) {
             return 0
         }
         if (withFever) {
-            var skillParameter = this.meta[difficulty][skillDuration][2] + (100 + scoreUpMaxValue) / 100 * this.meta[difficulty][skillDuration][3]
+            var skillParameter = this.meta[difficultyId][skillDuration][2] + (100 + scoreUpMaxValue) / 100 * this.meta[difficultyId][skillDuration][3]
         }
         else {
-            var skillParameter = this.meta[difficulty][skillDuration][0] + (100 + scoreUpMaxValue) / 100 * this.meta[difficulty][skillDuration][1]
+            var skillParameter = this.meta[difficultyId][skillDuration][0] + (100 + scoreUpMaxValue) / 100 * this.meta[difficultyId][skillDuration][1]
         }
         var scoreParameter = skillParameter * (1.1 * accruacy / 100 + 0.8 * (1 - accruacy / 100))
         return scoreParameter
@@ -218,7 +227,7 @@ export function getPresentSongList(server: Server, start: number = Date.now(), e
         if (Object.prototype.hasOwnProperty.call(songListMain, songId)) {
             const song = new Song(parseInt(songId))
             // 检查活动的发布时间和结束时间是否在指定范围内
-            if( song.publishedAt[server] == null){
+            if (song.publishedAt[server] == null) {
                 continue
             }
             if (song.publishedAt[server] <= end && song.publishedAt[server] >= start) {

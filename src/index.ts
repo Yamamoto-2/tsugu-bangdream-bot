@@ -14,6 +14,7 @@ import { commandSongMeta } from './commands/songMeta'
 import { queryRoomNumber } from './commands/roomNumber'
 import { commandRoomList } from './commands/roomList'
 import { commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer, commandSwitchCarMode } from './commands/bindPlayer'
+import {commandSongChart} from './commands/songChart'
 import { Server } from './types/Server'
 import { globalDefaultServer, BindingStatus, tsuguUser, tierListOfServer } from './config'
 import { checkLeftDigits } from './utils'
@@ -198,6 +199,8 @@ export function apply(ctx: Context, config: Config) {
     .shortcut(/^(.+服)玩家状态$/, { args: ['$1'] })
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
+      console.log(session)
+      console.log(session.user.tsugu)
       return await commandPlayerInfo(config.backendUrl, session, serverName, config.useEasyBG)
     })
 
@@ -260,6 +263,14 @@ export function apply(ctx: Context, config: Config) {
     .action(async ({ session }, text) => {
       const default_servers = session.user.tsugu.default_server
       const list = await commandSong(config.backendUrl, default_servers, text)
+      return paresMessageList(list)
+    })
+    ctx.command("查铺面 <songId:number> [difficultyText:text]", "查铺面").usage('根据曲目ID与难度查询铺面信息')
+    .example('查铺面 1 :返回1号曲的所有铺面').example('查曲 1 export :返回1号曲的export难度铺面')
+    .userFields(['tsugu'])
+    .action(async ({ session }, songId,difficultyText) => {
+      const default_servers = session.user.tsugu.default_server
+      const list = await commandSongChart(config.backendUrl, default_servers, songId, difficultyText)
       return paresMessageList(list)
     })
   ctx.command('查询分数表 <word:text>', '查询分数表').usage('查询指定服务器的歌曲分数表，如果没有服务器名的话，服务器为用户的默认服务器')

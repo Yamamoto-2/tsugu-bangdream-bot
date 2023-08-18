@@ -1,5 +1,5 @@
 const Canvas = require("canvas")
-
+const config = require("../config")
 /**
  * @typedef {object} BestdoriNote
  * @property {"BPM" | "Long" | "Slide" | "Single" | "Directional"} type
@@ -131,7 +131,8 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
     })
 
     const offset = 8;
-    const infoAreaWidth = 240;
+    //const infoAreaWidth = 240;
+    const infoAreaWidth = 0;
     const laneWidth = 32; // 轨道宽度需要包括分割线宽度；分割线平均占用其左右两侧轨道的空间。
     const splitLineWidth = 2;
     const blockDistance = 72; // 块与块之前的空隙；注意，这个数值是每块左右各占用的宽度。
@@ -165,18 +166,18 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
 
     // 读取音符图片
     const img_notes = {
-        Single: await Canvas.loadImage(__public_dir + '/img/bestdori/note/Single.png'),
-        SingleOff: await Canvas.loadImage(__public_dir + '/img/bestdori/note/SingleOff.png'),
-        Flick: await Canvas.loadImage(__public_dir + '/img/bestdori/note/Flick.png'),
-        FlickTop: await Canvas.loadImage(__public_dir + '/img/bestdori/note/FlickTop.png'),
-        Skill: await Canvas.loadImage(__public_dir + '/img/bestdori/note/Skill.png'),
-        Long: await Canvas.loadImage(__public_dir + '/img/bestdori/note/Long.png'),
-        Tick: await Canvas.loadImage(__public_dir + '/img/bestdori/note/Tick.png'),
-        Sim: await Canvas.loadImage(__public_dir + '/img/bestdori/note/Sim.png'),
-        LeftArrow: await Canvas.loadImage(__public_dir + '/img/bestdori/note/LeftArrow.png'),
-        LeftArrowEnd: await Canvas.loadImage(__public_dir + '/img/bestdori/note/LeftArrowEnd.png'),
-        RightArrow: await Canvas.loadImage(__public_dir + '/img/bestdori/note/RightArrow.png'),
-        RightArrowEnd: await Canvas.loadImage(__public_dir + '/img/bestdori/note/RightArrowEnd.png'),
+        Single: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/Single.png'),
+        SingleOff: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/SingleOff.png'),
+        Flick: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/Flick.png'),
+        FlickTop: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/FlickTop.png'),
+        Skill: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/Skill.png'),
+        Long: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/Long.png'),
+        Tick: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/Tick.png'),
+        Sim: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/Sim.png'),
+        LeftArrow: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/LeftArrow.png'),
+        LeftArrowEnd: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/LeftArrowEnd.png'),
+        RightArrow: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/RightArrow.png'),
+        RightArrowEnd: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/RightArrowEnd.png'),
     }
     // 读取封面
     const coverImg = await (async () => {
@@ -184,7 +185,7 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
             if (typeof cover === "string" || Buffer.isBuffer(cover)) return await Canvas.loadImage(cover)
             else throw new Error()
         } catch (e) {
-            return await Canvas.loadImage(__public_dir + '/img/bestdori/jacket.png')
+            return await Canvas.loadImage(config.assetsRootPath + '/SongChart/jacket.png')
         }
     })()
 
@@ -199,7 +200,7 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
     ctx.fillStyle = "#000"
     ctx.fillRect(0, 0, width, height);
     ctx.restore()
-
+    /*
     // 画封面
     ctx.drawImage(coverImg, 8, 8, infoAreaWidth - 16, infoAreaWidth - 16)
 
@@ -235,32 +236,33 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(
-        `${$util.capitalize(diff)} ${level}`,
+        `${diff} ${level}`,
         8 + coverWidth - 52,
         8 + coverWidth,
         128)
     ctx.restore();
-
+    
     // 写标题、艺术家、作者和版权信息
     ctx.save();
     let endPos;
     ctx.fillStyle = '#FFF';
     ctx.font = '18px "Microsoft Yahei UI"';
-    endPos = $util.Canvas.fillTextInArea(ctx, title, 8, infoAreaWidth, infoAreaWidth - 16, height - infoAreaWidth, 22);
+    endPos = Canvas.fillTextInArea(ctx, title, 8, infoAreaWidth, infoAreaWidth - 16, height - infoAreaWidth, 22);
     ctx.font = '16px "Microsoft Yahei UI"';
-    endPos = $util.Canvas.fillTextInArea(ctx, artist, 8, endPos.y + 8, infoAreaWidth - 16, height - infoAreaWidth, 20);
+    endPos = Canvas.fillTextInArea(ctx, artist, 8, endPos.y + 8, infoAreaWidth - 16, height - infoAreaWidth, 20);
     if (author) {
         ctx.font = '14px "Microsoft Yahei UI"';
-        endPos = $util.Canvas.fillTextInArea(ctx, author, 8, endPos.y + 8, infoAreaWidth - 16, height - infoAreaWidth, 18);
+        endPos = Canvas.fillTextInArea(ctx, author, 8, endPos.y + 8, infoAreaWidth - 16, height - infoAreaWidth, 18);
     }
+    
     const copyrightText =
-        `本图片由Hikawa Sayo Bot于${$util.dateFormat('YYYY-mm-dd HH:MM:SS', new Date())}生成，由 @ReiKohaku 编写。\r` +
+        `本图片由Hikawa Sayo Bot生成，由 @ReiKohaku 编写。\r` +
         `本功能（Bestdori 谱面预览图生成）所使用的资源均来自 Bestdori（https://bestdori.com/），\r` +
         `由此产生的责任与纠纷，同开发者无关；开发者不保证服务的稳定性和准确性。\r` +
         `本功能仅供学习交流使用，禁止以此进行商业应用，或用于非法用途。`;
     ctx.font = '12px "Microsoft Yahei UI"';
     ctx.fillStyle = '#999';
-    $util.Canvas.fillTextInArea(
+    Canvas.fillTextInArea(
         ctx,
         copyrightText,
         8,
@@ -269,7 +271,7 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
         height - 8,
         16);
     ctx.restore();
-
+    */
     // 画轨道
     for (let i = 0; i < colCount; i++) {
         ctx.save()
@@ -329,7 +331,7 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
         const y = height - (i * heightPerSecond) % height;
         adaptText(18, y);
         ctx.fillText(
-            `${Math.floor(i / 60)}:${$util.pad(i % 60)}`,
+            `${Math.floor(i / 60)}:${(i % 60)}`,
             x - 8,
             y);
     }
@@ -457,6 +459,6 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
             //
         }
     })
-    return canvas.toBuffer()
+    return canvas
 }
 module.exports.DrawPreview = DrawPreview

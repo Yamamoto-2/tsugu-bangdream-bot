@@ -12,6 +12,7 @@ import { songMetaRouter } from './routers/songMeta';
 import { ycxRouter } from './routers/ycx';
 import { ycxAllRouter } from './routers/ycxAll';
 import { lsycxRouter } from './routers/lsycx';
+import { songChartRouter } from './routers/songChart';
  
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/searchGacha', searchGachaRouter);
 app.use('/searchPlayer', searchPlayerRouter);
 app.use('/searchSong', searchSongRouter);
 app.use('/songMeta', songMetaRouter);
+app.use('/songChart', songChartRouter);
 app.use('/ycx', ycxRouter);
 app.use('/ycxAll', ycxAllRouter);
 app.use('/lsycx', lsycxRouter)
