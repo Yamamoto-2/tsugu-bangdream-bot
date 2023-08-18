@@ -40,9 +40,7 @@ router.post(
 
 
 export async function commandSong(default_servers: Server[], text: string): Promise<Array<Buffer | string>> {
-    if (!text) {
-        return ['错误: 请输入关键词或卡片ID']
-    }
+
     if (isInteger(text)) {
         return await drawSongDetail(new Song(parseInt(text)), default_servers)
     }

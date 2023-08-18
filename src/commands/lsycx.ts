@@ -3,9 +3,6 @@ import { Server, getServerByName } from "../types/Server"
 import { getDataFromBackend } from './utils'
 
 export async function commandLsycx(backendUrl: string, server_mode: Server, tier: number, serverName: string, eventId: number): Promise<Array<Buffer | string>> {
-    if (!tier) {
-        return ['请输入排名']
-    }
     let server: Server
     if (!serverName) {
         server = server_mode

@@ -34,9 +34,7 @@ router.post('/', [
 });
 
 export async function commandEvent(default_servers: Server[], text: string, useEasyBG: boolean): Promise<Array<Buffer | string>> {
-    if (!text) {
-        return ['错误: 请输入关键词或活动ID']
-    }
+
     if (isInteger(text)) {
         return await drawEventDetail(parseInt(text), default_servers, useEasyBG)
     }
