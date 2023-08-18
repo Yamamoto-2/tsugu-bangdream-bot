@@ -43,7 +43,8 @@
     "jimp": "^0.22.8",
     "level": "^8.0.0",
     "moment": "^2.29.4",
-    "validator": "^13.9.0"
+    "validator": "^13.9.0",
+    "xlsx": "^0.18.5"
   },
   "koishi": {
     "description": {

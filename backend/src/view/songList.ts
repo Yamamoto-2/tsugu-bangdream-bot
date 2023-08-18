@@ -1,6 +1,6 @@
 import { Song } from "../types/Song";
 import mainAPI from "../types/_Main"
-import { match } from "../routers/fuzzySearch"
+import { match, checkRelationList } from "../routers/fuzzySearch"
 import { Canvas, createCanvas, Image, loadImage } from 'canvas'
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
@@ -58,6 +58,15 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
         if (numberOfNotReleasedServer == defaultServerList.length) {
             isMatch = false;
         }
+
+        //如果有数字关系词，则判断关系词
+        if (matches._relationStr != undefined) {
+            //如果之后范围的话则直接判断
+            if (isMatch || Object.keys(matches).length == 1) {
+                isMatch = checkRelationList(tempSong.songId, matches._relationStr)
+            }
+        }
+
         if (isMatch) {
             tempSongList.push(tempSong);
         }

@@ -1,3 +1,21 @@
+import * as XLSX from 'xlsx';
+
+export async function readExcelFile(filePath: string): Promise<any[]> {
+    // 读取Excel文件
+    const workbook = XLSX.readFile(filePath);
+
+    // 获取工作表的名字
+    const sheetName = workbook.SheetNames[0];
+
+    // 获取工作表
+    const worksheet = workbook.Sheets[sheetName];
+
+    // 将工作表转换为JSON
+    const json = XLSX.utils.sheet_to_json(worksheet);
+
+    return json;
+}
+
 //将string[]转变为number[]
 export function stringToNumberArray(stringArray: Array<string | null>): number[] {
     let numberArray: number[] = []
@@ -5,7 +23,7 @@ export function stringToNumberArray(stringArray: Array<string | null>): number[]
         if (stringArray[i] == null) {
             numberArray.push(null)
         }
-        else{
+        else {
             numberArray.push(Number(stringArray[i]))
         }
     }

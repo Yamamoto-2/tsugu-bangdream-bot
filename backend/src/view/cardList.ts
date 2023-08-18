@@ -2,7 +2,7 @@ import { Card } from "../types/Card";
 import { Attribute } from "../types/Attribute";
 import { Character } from "../types/Character";
 import mainAPI from "../types/_Main"
-import { match } from "../routers/fuzzySearch"
+import { match, checkRelationList } from "../routers/fuzzySearch"
 import { Canvas, createCanvas, Image, loadImage } from 'canvas'
 import { drawCardIcon } from "../components/card"
 import { drawDatablock, drawDatablockHorizontal } from '../components/dataBlock';
@@ -36,6 +36,15 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         if (numberOfNotReleasedServer == defaultServerList.length) {
             isMatch = false;
         }
+
+        //如果有数字关系词，则判断关系词
+        if (matches._relationStr != undefined) {
+            //如果之后范围的话则直接判断
+            if (isMatch || Object.keys(matches).length == 1) {
+                isMatch = checkRelationList(tempCard.cardId, matches._relationStr)
+            }
+        }
+
         if (isMatch) {
             tempCardList.push(tempCard);
         }
@@ -102,7 +111,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         })
         if (cardListImage.width > maxWidth) {
             let times = 0
-            let tempImageList:Array<Buffer|string> = []
+            let tempImageList: Array<Buffer | string> = []
             tempImageList.push('卡牌列表过长，已经拆分输出')
             for (let i = 0; i < tempAttributeImageList.length; i++) {
 

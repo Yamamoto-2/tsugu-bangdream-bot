@@ -74,6 +74,7 @@ export class Song {
     howToGet: Array<string | null>
     //用于模糊搜索
     songLevels: string[] = []
+    nickname: string | null = null;
 
     //meta数据
     hasMeta = false;
@@ -111,6 +112,7 @@ export class Song {
         this.length = songData['length']
         this.notes = songData['notes']
         this.bpm = songData['bpm']
+        this.nickname = songData['nickname']
         for (let i in this.difficulty) {
             this.songLevels.push(this.difficulty[i].playLevel.toString())
         }
