@@ -265,8 +265,8 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandSong(config.backendUrl, default_servers, text)
       return paresMessageList(list)
     })
-    ctx.command("查铺面 <songId:number> [difficultyText:text]", "查铺面").usage('根据曲目ID与难度查询铺面信息')
-    .example('查铺面 1 :返回1号曲的所有铺面').example('查曲 1 export :返回1号曲的export难度铺面')
+    ctx.command("查谱面 <songId:number> [difficultyText:text]", "查谱面").usage('根据曲目ID与难度查询铺面信息')
+    .example('查谱面 1 :返回1号曲的所有铺面').example('查谱面 1 expert :返回1号曲的expert难度铺面')
     .userFields(['tsugu'])
     .action(async ({ session }, songId,difficultyText) => {
       const default_servers = session.user.tsugu.default_server
