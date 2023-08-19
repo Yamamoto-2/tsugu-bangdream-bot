@@ -169,7 +169,7 @@ export function match(matches: { [key: string]: string[] }, target: any, numberT
     }
   }
   //如果在config中所有类型都不符合的情况下，检查others
-  if (!match && matches.others) {
+  if (!match && matches.others && Object.keys(matches).length == 1) {
     for (let i = 0; i < matches.others.length; i++) {
       for (let key in target) {
         //如果是string
