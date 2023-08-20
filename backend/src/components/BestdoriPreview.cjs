@@ -131,8 +131,7 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
     })
 
     const offset = 8;
-    //const infoAreaWidth = 240;
-    const infoAreaWidth = 0;
+    const infoAreaWidth = 240;
     const laneWidth = 32; // 轨道宽度需要包括分割线宽度；分割线平均占用其左右两侧轨道的空间。
     const splitLineWidth = 2;
     const blockDistance = 72; // 块与块之前的空隙；注意，这个数值是每块左右各占用的宽度。
@@ -200,7 +199,7 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
     ctx.fillStyle = "#000"
     ctx.fillRect(0, 0, width, height);
     ctx.restore()
-    /*
+    
     // 画封面
     ctx.drawImage(coverImg, 8, 8, infoAreaWidth - 16, infoAreaWidth - 16)
 
@@ -227,6 +226,7 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
         expert: 'rgb(199, 96, 96)',
         special: 'rgb(195, 96, 199)'
     }
+    
     ctx.save();
     ctx.fillStyle = colorList[diff];
     const coverWidth = infoAreaWidth - 16;
@@ -241,7 +241,7 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
         8 + coverWidth,
         128)
     ctx.restore();
-    
+    /*
     // 写标题、艺术家、作者和版权信息
     ctx.save();
     let endPos;
