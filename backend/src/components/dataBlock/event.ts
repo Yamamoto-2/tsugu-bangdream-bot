@@ -9,6 +9,7 @@ import { createCanvas, Image, Canvas } from 'canvas';
 import { drawBannerImageCanvas } from './utils'
 
 export async function drawEventDatablock(event: Event, topLeftText?: string) {
+    await event.initFull()
     var list = []
     var eventBannerImage = await event.getBannerImage()
     var eventBannerImageCanvas = drawBannerImageCanvas(eventBannerImage)

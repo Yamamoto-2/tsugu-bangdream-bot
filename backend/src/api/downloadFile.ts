@@ -21,6 +21,7 @@ async function downloadFile(url: string, IgnoreErr: boolean = true, overwrite= f
     }
     return data
   } catch (e) {
+    console.log(url)
     console.log(e)
     errUrl.push(url);
     if (url.includes('.png') && IgnoreErr) {
