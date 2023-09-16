@@ -82,7 +82,9 @@ export class Character {
         this.profile = characterData["profile"];
         //修复学年类型错误
         for (var i = 0; i < this.profile.schoolYear.length; i++) {
-            this.profile.schoolYear[i] = this.profile.schoolYear[i].toString()
+            if(this.profile.schoolYear[i] != null){
+                this.profile.schoolYear[i] = this.profile.schoolYear[i].toString()
+            }
         }
 
         //缓存数据
