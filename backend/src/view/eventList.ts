@@ -7,10 +7,10 @@ import { line } from '../components/list';
 import { stackImage, stackImageHorizontal, resizeImage } from '../components/utils'
 import { drawTitle } from '../components/title';
 import { outputFinalBuffer } from '../image/output'
-import { Server, getIcon } from '../types/Server'
+import { Server, getIcon, getServerByName } from '../types/Server'
 import { Event, sortEventList } from '../types/Event';
 import { drawCardListInList } from '../components/list/cardIconList';
-import { changeTimefomant } from '../components/list/time';
+import { GetProbablyTimeDifference, changeTimefomant } from '../components/list/time';
 import { drawTextWithImages } from '../components/text';
 import { getEventGachaAndCardList } from './eventDetail'
 import { drawDottedLine } from '../image/dottedLine'
@@ -155,7 +155,12 @@ async function drawEventInList(event: Event, defaultServerList: Server[] = globa
     var numberOfServer = Math.min(defaultServerList.length, 2)
     for (var i = 0; i < numberOfServer; i++) {
         let server = defaultServerList[i]
-        content.push(await getIcon(server), `${changeTimefomant(event.startAt[server])} - ${changeTimefomant(event.endAt[server])}\n`)
+        if (server == getServerByName('cn') && event.startAt[server] == null) {
+            content.push(await getIcon(server), `${changeTimefomant(GetProbablyTimeDifference(event.eventId))} (预计开放时间)\n`)
+        }
+        else {
+            content.push(await getIcon(server), `${changeTimefomant(event.startAt[server])} - ${changeTimefomant(event.endAt[server])}\n`)
+        }
     }
     //活动加成
     //属性

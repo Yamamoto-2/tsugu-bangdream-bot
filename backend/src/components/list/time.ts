@@ -19,7 +19,7 @@ export async function drawTimeInList({
         const element = content[i];
         if (element == null) {
             if(i==3&&key=="开始时间"){
-                formatedTimeList.push(changeTimefomant(GetProbablyTimeDifference(eventId))+"(预计开放时间)")
+                formatedTimeList.push(changeTimefomant(GetProbablyTimeDifference(eventId))+" (预计开放时间)")
             }
             formatedTimeList.push(null)
             continue
@@ -30,7 +30,7 @@ export async function drawTimeInList({
     return canvas
 }
 //获取当前活动与查询活动的大致时间差(国服)
-function GetProbablyTimeDifference(eventId:number):number{
+export function GetProbablyTimeDifference(eventId:number):number{
     var currentEvent = getPresentEvent(getServerByName("cn"));
     var diff = eventId - currentEvent.eventId;
     var timeStamp = currentEvent.startAt[3] + 1000*60*60*24*9*diff;
