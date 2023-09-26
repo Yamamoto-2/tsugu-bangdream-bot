@@ -1,20 +1,26 @@
 import { globalDefaultServer } from '../../config';
-import { Server } from '../../types/Server';
+import { getPresentEvent } from '../../types/Event';
+import { Server, getServerByName } from '../../types/Server';
 import { drawListByServerList } from '../list'
 import { Canvas } from 'canvas'
 
 interface timeInListOptions {
     key?: string;
-    content: Array<number | null>
+    content: Array<number | null>;
+    eventId?:number;
 }
 export async function drawTimeInList({
     key,
-    content
+    content,
+    eventId
 }: timeInListOptions, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     var formatedTimeList: Array<string> = []
     for (let i = 0; i < content.length; i++) {
         const element = content[i];
         if (element == null) {
+            if(i==3&&key=="开始时间"){
+                formatedTimeList.push(changeTimefomant(GetProbablyTimeDifference(eventId))+"(预计开放时间)")
+            }
             formatedTimeList.push(null)
             continue
         }
@@ -22,6 +28,13 @@ export async function drawTimeInList({
     }
     var canvas = await drawListByServerList(formatedTimeList, key, defaultServerList)
     return canvas
+}
+//获取当前活动与查询活动的大致时间差(国服)
+function GetProbablyTimeDifference(eventId:number):number{
+    var currentEvent = getPresentEvent(getServerByName("cn"));
+    var diff = eventId - currentEvent.eventId;
+    var timeStamp = currentEvent.startAt[3] + 1000*60*60*24*9*diff;
+    return timeStamp;
 }
 
 export function changeTimefomant(timeStamp: number | null) {//时间戳到年月日 精确到分钟
