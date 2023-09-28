@@ -36,7 +36,7 @@ export async function queryRoomNumber(session: Session<'tsugu', never>, number: 
     }
     if (isCar) {
         let platform = user.platform
-        if (platform == 'onebot') {
+        if (platform == 'onebot'  || platform == 'red') {
             platform = 'qq'
         }
         await submitRoomNumber({

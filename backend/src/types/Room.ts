@@ -169,7 +169,7 @@ function decode(text: string): string {
 
 //向BandoriStation提交房间号
 export async function submitRoomNumber({ number, rawMessage, source, userId, time, userName,bandoriStationToken }: RoomOption,user:tsuguUser) {
-    if (source == 'onebot') {
+    if (source == 'onebot' || source == 'red') {
         source = 'qq'
     }
     const room = new Room({
