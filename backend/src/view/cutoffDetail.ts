@@ -103,7 +103,7 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
 
     all.push(drawTips({
         text: '想给我们提供数据?\n可以在B站 @Tsugu_Official 的置顶动态留言\n或者在群238052000中提供数据\n也可以扫描右侧二维码进行上传\n手机可以长按图片扫描二维码\n我们会尽快将数据上传至服务器',
-        image: await loadImage(path.join(assetsRootPath, 'shimowendang.png'))
+        image: await loadImage(path.join(assetsRootPath, 'tsugu.png'))
     }))
 
     var buffer = await outputFinalBuffer({
