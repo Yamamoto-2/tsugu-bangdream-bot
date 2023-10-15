@@ -35,7 +35,9 @@ async function loadMainAPI(useCache: boolean = false) {
     const songNickname = await readExcelFile(path.join(configPath, 'nickname_song.xlsx'))
     for ( let i = 0; i < songNickname.length; i++) {
         const element = songNickname[i];
-        mainAPI['songs'][element['Id'].toString()]['nickname'] = element['Nickname']
+        if(mainAPI['songs'][element['Id'].toString()]){
+            mainAPI['songs'][element['Id'].toString()]['nickname'] = element['Nickname']
+        }
     }
 
 }
