@@ -5,3 +5,5 @@
 *.ico -text
 *.gif -text
 *.webp -text
+*.xlsx -text
+*.ttf -text
