@@ -19,10 +19,10 @@ var statusName = {
 
 export async function drawCutoffEventTop(eventId:number,server:Server):Promise<Array<Buffer|string>>{
     var eventTop = new EventTop(eventId,server);
-    if(!eventTop.isExist){
-        return [`错误: ${serverNameFullList[server]} 活动不存在`];
-    }
     await eventTop.initFull();
+    if(!eventTop.isExist){
+        return [`错误: ${serverNameFullList[server]} 活动不存在或数据不足`];
+    }
     var all =[];
     all.push(drawTitle('档线',`${serverNameFullList[server]} 10档线`));
     var list:Array<Image | Canvas>=[];

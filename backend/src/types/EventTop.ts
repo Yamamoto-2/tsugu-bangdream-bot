@@ -51,6 +51,9 @@ export class EventTop{
         }
     }
     async initFull(){
+        if (!this.isExist){
+            return
+        }
         if(this.isInitfull){
             return;
         }
@@ -76,6 +79,10 @@ export class EventTop{
             ranking:number,
             currentPt:number
         }[];
+        if(this.points.length == 0 || this.users.length == 0){//如果没有数据，返回不存在
+            this.isExist = false
+            return
+        }
         var latestRanking = this.getLatestRanking();
         for(let i =0;i<this.users.length;i++){
             for(let j =0;j<latestRanking.length;j++){
