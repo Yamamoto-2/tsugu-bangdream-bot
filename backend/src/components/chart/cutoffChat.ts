@@ -3,6 +3,7 @@ import { Cutoff } from "../../types/Cutoff";
 import { drawTimeLineChart, getColor } from "../chart";
 import { Event } from '../../types/Event';
 import { Server } from '../../types/Server';
+import { EventTop } from '../../types/EventTop';
 
 export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = false, server: Server = Server['jp']) {
     //setStartToZero:是否将开始时间设置为0
@@ -95,4 +96,32 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
         return await drawTimeLineChart({ data, start: new Date(cutoffList[0].startAt), end: new Date(cutoffList[0].endAt), setStartToZero })
     }
 
+}
+export async function drawEventTopChart(eventTop : EventTop, setStartToZero = false, server: Server = Server['jp']) {
+    var datasets =[]
+    var time = new Date().getTime()
+    if (eventTop == undefined) {
+        return (createCanvas(1, 1))
+    }
+    var allData = eventTop.getChartData();
+    function removeBraces(text:string):string{
+        var newText = text.replace(/\[[^\]]*\]/g, "");
+        return newText;
+    }
+    for(const key in allData){
+        const tempColor = getColor(undefined);
+        datasets.push({
+            label:removeBraces(eventTop.getUserNameById(Number(key))),
+            data:allData[key],
+            borderWidth:4,
+            borderColor: [`${tempColor} 1)`],
+            backgroundColor: [`${tempColor} 0.2)`],
+            pointBackgroundColor: `${tempColor} 0)`,
+            pointBorderColor: `${tempColor} 0)`,
+            pointStyle:false,
+            fill:false
+        })
+    }
+    var data = {datasets:datasets}
+    return await drawTimeLineChart({data,start:new Date(eventTop.startAt),end:new Date(eventTop.endAt),setStartToZero})
 }

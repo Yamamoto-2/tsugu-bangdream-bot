@@ -4,6 +4,7 @@ import { getPresentEvent } from '../types/Event';
 import { listToBase64, isServer } from './utils';
 import { body, validationResult } from 'express-validator';
 import express from 'express';
+import { drawCutoffEventTop } from '../view/cutoffEventTop';
 
 const router = express.Router();
 
@@ -41,6 +42,9 @@ export async function commandYcx(server: Server, tier: number, eventId?: number)
     }
     if (!eventId) {
         eventId = getPresentEvent(server).eventId
+    }
+    if(tier == 10){
+        return await drawCutoffEventTop(eventId,server);
     }
     return await drawCutoffDetail(eventId, tier, server)
 
