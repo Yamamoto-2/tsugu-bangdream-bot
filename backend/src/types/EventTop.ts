@@ -131,6 +131,7 @@ export class EventTop{
             result.push({uid:element.uid,point:element.value});
             index ++;
         }
+        result.sort((a,b)=>b.point-a.point)
         return result;
     }
     getUserByUid(id:number):{
