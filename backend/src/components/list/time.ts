@@ -18,7 +18,7 @@ export async function drawTimeInList({
     for (let i = 0; i < content.length; i++) {
         const element = content[i];
         if (element == null) {
-            if(i==3&&key=="开始时间"){
+            if(i==3&&key=="开始时间"&&eventId!=undefined){
                 formatedTimeList.push(changeTimefomant(GetProbablyTimeDifference(eventId))+" (预计开放时间)")
             }
             formatedTimeList.push(null)
