@@ -145,7 +145,13 @@ export class Gacha {
     async getGachaBGImage(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
         if (!defaultServerList) defaultServerList = globalDefaultServer
         var server = getServerByPriority(this.publishedAt)
-        var BGImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/bg.png`)
+        let BGImageBuffer:Buffer
+        try{
+            BGImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/bg.png`,false)
+        }
+        catch(e){
+            BGImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/bg1.png`)
+        }
         return await loadImage(BGImageBuffer)
     }
     async getGachaLogo(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
