@@ -8,7 +8,7 @@ var rand = new Random()
 
 
 
-export async function commandBindPlayer(backendUrl:string,session: Session<'tsugu', never>, serverName: string, useEasyBG: boolean) {
+export async function commandBindPlayer(backendUrl: string, session: Session<'tsugu', never>, serverName: string, useEasyBG: boolean) {
     const playerBinding = session.user.tsugu
 
     // 获得待绑定的服务器
@@ -41,10 +41,7 @@ export async function commandBindPlayer(backendUrl:string,session: Session<'tsug
     // 获得验证码
     const tempID = curServer.bindingStatus == BindingStatus.None ? rand.int(10000, 99999) : curServer.verifyCode
 
-    if (curServer.bindingStatus == BindingStatus.None)
-        await session.send(`请将你的评论(个性签名)改为${tempID}后，直接发送你的玩家id`)
-    else
-        await session.send(`你的上次绑定尝试(玩家ID:${curServer.gameID}, 验证码:${curServer.verifyCode})失败，发送\"y\"以自动重试，发送\"n\"以取消`)
+    await session.send(`正在绑定${serverNameFullList[server]}账号，请将你的\n评论(个性签名)\n或者\n你的当前使用的卡组的卡组名(乐队编队名称)\n改为${tempID}后，直接发送你的玩家id`)
 
     // 等待下一步录入
     const input = await session.prompt(bindingPlayerPromptWaitingTime)
@@ -98,7 +95,7 @@ export async function commandBindPlayer(backendUrl:string,session: Session<'tsug
         curServer.gameID = 0
         return `错误: 不存在玩家${playerId}`
     }
-    else if (player.profile.introduction == tempID.toString()) {
+    else if (player.profile.mainUserDeck.deckName == tempID.toString() || player.profile.introduction == tempID.toString()) {
         // 修改玩家绑定信息
         // 清除验证码，将绑定状态设为 Success
         session.send(`绑定${serverNameFullList[server]}玩家${playerId}成功, 正在生成玩家状态图片`)
@@ -107,13 +104,13 @@ export async function commandBindPlayer(backendUrl:string,session: Session<'tsug
         curServer.bindingStatus = BindingStatus.Success
         curServer.verifyCode = undefined
         const result = await commandSearchPlayer(backendUrl, playerBinding, curServer.gameID, serverName, useEasyBG)
-        return h.image(result[0] as Buffer,'image/png') 
+        return h.image(result[0] as Buffer, 'image/png')
     }
     else {
         curServer.gameID = 0
         curServer.bindingStatus = BindingStatus.None
         curServer.verifyCode = undefined
-        return '错误: 签名与验证码不匹配'
+        return `错误: \n评论为: "${player.profile.introduction}", \n卡组名为: "${player.profile.mainUserDeck.deckName}", \n都与验证码不匹配`
     }
 }
 
@@ -169,7 +166,7 @@ export async function commandPlayerInfo(backendUrl: string, session: Session<'ts
     }
     else {
         const result = await commandSearchPlayer(backendUrl, playerBinding, curServer.gameID, serverName, useEasyBG)
-        return h.image(result[0] as Buffer,'image/png') 
+        return h.image(result[0] as Buffer, 'image/png')
     }
 }
 
