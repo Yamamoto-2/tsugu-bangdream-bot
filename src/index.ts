@@ -14,7 +14,7 @@ import { commandSongMeta } from './commands/songMeta'
 import { queryRoomNumber } from './commands/roomNumber'
 import { commandRoomList } from './commands/roomList'
 import { commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer, commandSwitchCarMode } from './commands/bindPlayer'
-import {commandSongChart} from './commands/songChart'
+import { commandSongChart } from './commands/songChart'
 import { Server } from './types/Server'
 import { globalDefaultServer, BindingStatus, tsuguUser, tierListOfServer } from './config'
 import { checkLeftDigits } from './utils'
@@ -51,7 +51,8 @@ declare module 'koishi' {
     }
   }
   interface Channel {
-    tsugu_gacha: boolean
+    tsugu_gacha: boolean,
+    tsugu_run: boolean,
   }
 }
 
@@ -59,6 +60,7 @@ export interface Config {
   useEasyBG: boolean,
   bandoriStationToken: string,
   backendUrl: string,
+  noSpace: boolean,
 }
 
 
@@ -66,6 +68,8 @@ export const Config = Schema.object({
   useEasyBG: Schema.boolean().default(false).description('是否使用简易背景，启用这将大幅提高速度，关闭将使部分界面效果更美观'),
   bandoriStationToken: Schema.string().description('BandoriStationToken, 用于发送车牌，可以去 https://github.com/maborosh/BandoriStation/wiki/API%E6%8E%A5%E5%8F%A3 申请。缺失情况下，视为Tsugu车牌'),
   backendUrl: Schema.string().default('http://tsugubot.com:8080').description('服务器地址，用于处理指令。如果有自建服务器，可以改成自建服务器地址'),
+  noSpace: Schema.boolean().default(false).description('是否启用无需空格触发大部分指令，启用这将方便一些用户使用习惯，但会增加bot误判概率，仍然建议使用空格'),
+
 })
 
 function paresMessageList(list?: Array<Buffer | string>): Array<Element | string> {
@@ -87,9 +91,6 @@ function paresMessageList(list?: Array<Buffer | string>): Array<Element | string
   return messageList
 }
 
-
-
-
 export function apply(ctx: Context, config: Config) {
   // 扩展 user 表存储玩家绑定数据
   ctx.model.extend('user',
@@ -110,22 +111,44 @@ export function apply(ctx: Context, config: Config) {
           ]
       }
     })
-
-
   // 扩展 channel 表存储群聊中的查卡开关
   ctx.model.extend("channel",
     {
-      tsugu_gacha: { type: 'boolean', initial: true }
+      tsugu_gacha: { type: 'boolean', initial: true },
+      tsugu_run: { type: 'boolean', initial: true },
     })
-
   //判断是否为车牌
   ctx.middleware(async (session, next) => {
     const number = checkLeftDigits(session.content)
     if (number != 0) {
       await session.observeUser(['tsugu'])
       await queryRoomNumber(session as Session<'tsugu', never>, number, session.content, config.bandoriStationToken)
+    } else {
+      return next();
     }
   })
+  // 使得打指令不需要加空格
+  ctx.middleware((session, next) => {
+    // console.log(session.content);
+    if (config.noSpace) {
+      // 查卡面 一定要放在 查卡 前面
+      const keywords = ['查询玩家', '查卡面', '查玩家', '查卡', '查角色', '查活动', '查分数表', '查询分数榜', '查分数榜', '查曲', '查谱面', , '查卡池', '查询分数表', 'ycx', 'ycxall', 'lsycx', '抽卡模拟', '绑定玩家', '解除绑定', '主服务器', '设置默认服务器', '玩家状态', '开启车牌转发', '关闭车牌转发'];
+      // 检查会话内容是否以列表中的任何一个词语开头
+      const keyword = keywords.find(keyword => session.content.startsWith(keyword));
+
+      if (keyword) {
+        if (session.content[keyword.length] === ' ') {
+          return next();
+        } else {
+          const content_cut = session.content.slice(keyword.length);
+          return session.execute(`${keyword} ${content_cut}`, next);
+        }
+      }
+    }
+    else {
+      return next();
+    }
+  });
   //群相关
   ctx.command("抽卡 <word:text>", '开关群聊抽卡功能').usage('开关群聊抽卡功能，需要管理员权限')
     .example('开启抽卡 :开启群聊抽卡功能').example('关闭抽卡 :关闭群聊抽卡功能')
@@ -138,7 +161,7 @@ export function apply(ctx: Context, config: Config) {
       const eventMemberRoles = session.event.member.roles || [];
       const authorRoles = session.author.roles || [];
       // 合并两个角色列表并去重
-      const roles = Array.from(new Set([...eventMemberRoles, ...authorRoles])); 
+      const roles = Array.from(new Set([...eventMemberRoles, ...authorRoles]));
       // 检查是否有所需角色
       const hasRequiredRole = roles.includes('admin') || roles.includes('owner');
       // 检查用户是否有足够的权限：authority > 1 或者角色是 admin 或 owner
@@ -158,7 +181,40 @@ export function apply(ctx: Context, config: Config) {
       } else {
         return "您没有权限执行此操作";
       }
-    })    
+    })
+  ctx.command("swc <word:text>", '开关本频道tsugu')
+    .usage('[试验性功能]\n发送swc查看当前开关状态\n使用swc on @tsugu 开启tsugu，使用swc off @tsugu 关闭tsugu，试验性功能需要管理员权限')
+    .channelFields(["tsugu_run"])
+    .userFields(['authority'])
+    .action(async ({ session }, text) => {
+      if (session.event.message.content == 'swc'){
+        return `当前tsugu运行状态为 ${session.channel.tsugu_run}`
+      }
+      // 获取 session.event.member.roles 和 session.author.roles
+      const eventMemberRoles = session.event.member.roles || [];
+      const authorRoles = session.author.roles || [];
+      // 合并两个角色列表并去重
+      const roles = Array.from(new Set([...eventMemberRoles, ...authorRoles]));
+
+      // 检查是否有所需角色
+      const hasRequiredRole = roles.includes('admin') || roles.includes('owner');
+
+      // 检查用户是否有足够的权限：authority > 1 或者角色是 admin 或 owner
+      if (session.user.authority > 1 || hasRequiredRole) {
+        if (session.content.includes('on') && session.content.includes(session.selfId)) {
+          session.channel.tsugu_run = true;
+          return '开启成功';
+        }
+        else if (session.content.includes('off') && session.content.includes(session.selfId)) {
+          session.channel.tsugu_run = false;
+          return '关闭成功';
+        } else {
+          return '无效指令';
+        }
+      } else {
+        return '您没有权限执行此操作';
+      }
+    })
   //玩家相关
   ctx.command('开启车牌转发', '开启车牌转发')
     .userFields(['tsugu'])
@@ -276,10 +332,10 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandSong(config.backendUrl, default_servers, text)
       return paresMessageList(list)
     })
-    ctx.command("查谱面 <songId:number> [difficultyText:text]", "查谱面").usage('根据曲目ID与难度查询铺面信息')
+  ctx.command("查谱面 <songId:number> [difficultyText:text]", "查谱面").usage('根据曲目ID与难度查询铺面信息')
     .example('查谱面 1 :返回1号曲的所有铺面').example('查谱面 1 expert :返回1号曲的expert难度铺面')
     .userFields(['tsugu'])
-    .action(async ({ session }, songId,difficultyText) => {
+    .action(async ({ session }, songId, difficultyText) => {
       const default_servers = session.user.tsugu.default_server
       const list = await commandSongChart(config.backendUrl, default_servers, songId, difficultyText)
       return paresMessageList(list)
@@ -337,5 +393,26 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandGachaSimulate(config.backendUrl, server_mode, status, times, gachaId)
       return (paresMessageList(list))
     })
-
+    ctx.on('command/before-execute', (argv) => {
+      const { command, session } = argv;
+      const now_channel = session.channelId;
+    
+      // 其他逻辑代码继续执行
+      async function getChannelData() {
+        const channel_get = await ctx.database.get('channel', { id: now_channel });
+        if (channel_get[0]?.tsugu_run === false) {
+          const keywords = ['查询玩家', '查卡面', '查玩家', '查卡', '查角色', '查活动', '查分数表', '查询分数榜', '查分数榜', '查曲', '查谱面', '查卡池', '查询分数表', 'ycx', 'ycxall', 'lsycx', '抽卡模拟', '绑定玩家', '解除绑定', '主服务器', '设置默认服务器', '玩家状态', '开启车牌转发', '关闭车牌转发'];
+          const messageContent = session.event.message.content;
+    
+          // 检查消息是否以数组中的任意一个词开始
+          const startsWithKeyword = keywords.some(keyword => messageContent.startsWith(keyword));
+          if (startsWithKeyword) {
+            console.log('尝试关闭');
+            return '';
+          }
+        }
+      }
+      return getChannelData(); // 将结果返回给原始的命令执行过程
+    });
+    
 }
