@@ -134,18 +134,25 @@ export function apply(ctx: Context, config: Config) {
     .channelFields(["tsugu_gacha"])
     .userFields(['authority'])
     .action(async ({ session }, text) => {
-      const roles = session?.author.roles
-      if (session.user.authority > 1 || roles?.includes('admin') || roles?.includes('owner')) {
+      // console.log(session.event.member.roles);
+      const roles = session.event.member.roles;
+      const isAuthorizedByRole = roles.includes('admin') || roles.includes('owner');
+      // 检查用户是否有足够的权限：authority > 1 或者角色是 admin 或 owner
+      if (session.user.authority > 1 || isAuthorizedByRole) {
         switch (text) {
           case "on":
           case "开启":
-            session.channel.tsugu_gacha = true
-            return "开启成功"
+            session.channel.tsugu_gacha = true;
+            return "开启成功";
           case "off":
           case "关闭":
-            session.channel.tsugu_gacha = false
-            return "关闭成功"
+            session.channel.tsugu_gacha = false;
+            return "关闭成功";
+          default:
+            return "无效指令";
         }
+      } else {
+        return "您没有权限执行此操作";
       }
     })
   //玩家相关
