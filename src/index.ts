@@ -134,11 +134,15 @@ export function apply(ctx: Context, config: Config) {
     .channelFields(["tsugu_gacha"])
     .userFields(['authority'])
     .action(async ({ session }, text) => {
-      // console.log(session.event.member.roles);
-      const roles = session.event.member.roles;
-      const isAuthorizedByRole = roles.includes('admin') || roles.includes('owner');
+      // 获取 session.event.member.roles 和 session.author.roles
+      const eventMemberRoles = session.event.member.roles || [];
+      const authorRoles = session.author.roles || [];
+      // 合并两个角色列表并去重
+      const roles = Array.from(new Set([...eventMemberRoles, ...authorRoles])); 
+      // 检查是否有所需角色
+      const hasRequiredRole = roles.includes('admin') || roles.includes('owner');
       // 检查用户是否有足够的权限：authority > 1 或者角色是 admin 或 owner
-      if (session.user.authority > 1 || isAuthorizedByRole) {
+      if (session.user.authority > 1 || hasRequiredRole) {
         switch (text) {
           case "on":
           case "开启":
@@ -154,7 +158,7 @@ export function apply(ctx: Context, config: Config) {
       } else {
         return "您没有权限执行此操作";
       }
-    })
+    })    
   //玩家相关
   ctx.command('开启车牌转发', '开启车牌转发')
     .userFields(['tsugu'])
