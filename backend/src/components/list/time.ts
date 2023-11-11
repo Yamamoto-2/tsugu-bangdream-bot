@@ -3,11 +3,12 @@ import { getPresentEvent } from '../../types/Event';
 import { Server, getServerByName } from '../../types/Server';
 import { drawListByServerList } from '../list'
 import { Canvas } from 'canvas'
+import * as moment from 'moment'
 
 interface timeInListOptions {
     key?: string;
     content: Array<number | null>;
-    eventId?:number;
+    eventId?: number;
 }
 export async function drawTimeInList({
     key,
@@ -18,8 +19,8 @@ export async function drawTimeInList({
     for (let i = 0; i < content.length; i++) {
         const element = content[i];
         if (element == null) {
-            if(i==3&&key=="开始时间"&&eventId!=undefined){
-                formatedTimeList.push(changeTimefomant(GetProbablyTimeDifference(eventId))+" (预计开放时间)")
+            if (i == 3 && key == "开始时间" && eventId != undefined) {
+                formatedTimeList.push(changeTimefomant(GetProbablyTimeDifference(eventId)) + " (预计开放时间)")
             }
             formatedTimeList.push(null)
             continue
@@ -30,10 +31,10 @@ export async function drawTimeInList({
     return canvas
 }
 //获取当前活动与查询活动的大致时间差(国服)
-export function GetProbablyTimeDifference(eventId:number):number{
+export function GetProbablyTimeDifference(eventId: number): number {
     var currentEvent = getPresentEvent(getServerByName("cn"));
     var diff = eventId - currentEvent.eventId;
-    var timeStamp = currentEvent.startAt[3] + 1000*60*60*24*9*diff;
+    var timeStamp = currentEvent.startAt[3] + 1000 * 60 * 60 * 24 * 9 * diff;
     return timeStamp;
 }
 
@@ -55,10 +56,30 @@ export function changeTimefomant(timeStamp: number | null) {//时间戳到年月
 }
 
 export function changeTimefomantMonthDay(timeStamp: number | null) {//获取生日的月与日
+    function toJapanTime(dateString) {
+        // 创建一个新的Date实例，表示当前时间。
+        let date = new Date(dateString);
+
+        // 获取本地时间与UTC的时间差（分钟）。
+        let offset = date.getTimezoneOffset() * 60000;
+
+        // 将本地时间转换为UTC时间。
+        let utcTime = date.getTime() + offset;
+
+        // 日本时区的偏移量是UTC+9。
+        let japanTimeOffset = 9 * 60 * 60 * 1000;
+
+        // 将UTC时间转换为日本时间。
+        let japanTime = new Date(utcTime + japanTimeOffset);
+
+        // 返回日本时间的字符串表示。
+        return japanTime;
+    }
+
     if (timeStamp == null) {
         return '?'
     }
-    var date = new Date(Math.floor(timeStamp / 1000) * 1000)
+    var date = toJapanTime(timeStamp)
     var nMinutes: string
     if (date.getMinutes() < 10) {
         nMinutes = "0" + date.getMinutes().toString()
@@ -67,7 +88,7 @@ export function changeTimefomantMonthDay(timeStamp: number | null) {//获取生�
     else {
         nMinutes = date.getMinutes().toString()
     }
-    var temp =  (date.getMonth() + 1).toString() + "月" + date.getDate().toString() + "日 "
+    var temp = (date.getMonth() + 1).toString() + "月" + date.getDate().toString() + "日 "
     return temp
 }
 
@@ -75,7 +96,7 @@ export function changeTimePeriodFormat(period: number): string {//时间戳的�
     if (period == null) {
         return '?'
     }
-    
+
     var months = Math.floor(period / (1000 * 60 * 60 * 24 * 30));
     var days = Math.floor((period % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
     var hours = Math.floor((period % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -97,6 +118,6 @@ export function changeTimePeriodFormat(period: number): string {//时间戳的�
         temp += minutes.toString() + "分钟";
     }
     temp += seconds.toString() + "秒";
-    
+
     return temp;
 }
