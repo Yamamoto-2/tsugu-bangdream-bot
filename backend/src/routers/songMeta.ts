@@ -31,7 +31,7 @@ router.post('/', [
 });
 
 export async function commandSongMeta(default_servers: Server[], server: Server): Promise<Array<Buffer | string>> {
-    if (!server) {
+    if (server == undefined) {
         server = default_servers[0]
     }
     return await drawSongMetaList(server)
