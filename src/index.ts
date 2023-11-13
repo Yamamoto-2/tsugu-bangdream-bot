@@ -61,6 +61,8 @@ export interface Config {
   bandoriStationToken: string,
   backendUrl: string,
   noSpace: boolean,
+  reply: boolean,
+  at: boolean,
 }
 
 
@@ -68,6 +70,8 @@ export const Config = Schema.object({
   useEasyBG: Schema.boolean().default(false).description('是否使用简易背景，启用这将大幅提高速度，关闭将使部分界面效果更美观'),
   bandoriStationToken: Schema.string().description('BandoriStationToken, 用于发送车牌，可以去 https://github.com/maborosh/BandoriStation/wiki/API%E6%8E%A5%E5%8F%A3 申请。缺失情况下，视为Tsugu车牌'),
   backendUrl: Schema.string().default('http://tsugubot.com:8080').description('服务器地址，用于处理指令。如果有自建服务器，可以改成自建服务器地址'),
+  reply: Schema.boolean().default(false).description('消息是否回复用户'),
+  at: Schema.boolean().default(false).description('消息是否@用户'),
   noSpace: Schema.boolean().default(false).description('是否启用无需空格触发大部分指令，启用这将方便一些用户使用习惯，但会增加bot误判概率，仍然建议使用空格'),
 
 })
@@ -414,5 +418,22 @@ export function apply(ctx: Context, config: Config) {
       }
       return getChannelData(); // 将结果返回给原始的命令执行过程
     });
-    
+
+    ctx.on('command/before-execute', (argv1) => {
+      const { command, session } = argv1;
+      const quote = h('quote', { id: session.event.message.id });
+      const atUser = h('at', { id: session.event.user.id });
+      ctx.before('send', (argv2) => {
+        const { event } = argv2;
+        if (config.reply){
+          argv2.elements = [quote, ...argv2.elements];
+        }
+        if (config.at){
+          argv2.elements = [atUser, ...argv2.elements];
+        }  
+      })
+    })
+
 }
+
+
