@@ -191,7 +191,7 @@ export function apply(ctx: Context, config: Config) {
     .channelFields(["tsugu_run"])
     .userFields(['authority'])
     .action(async ({ session }, text) => {
-      if (session.event.message.content == 'swc'){
+      if (session.event.message.content == 'swc') {
         return `当前tsugu运行状态为 ${session.channel.tsugu_run}`
       }
       // 获取 session.event.member.roles 和 session.author.roles
@@ -397,43 +397,36 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandGachaSimulate(config.backendUrl, server_mode, status, times, gachaId)
       return (paresMessageList(list))
     })
-    ctx.on('command/before-execute', (argv) => {
-      const { command, session } = argv;
-      const now_channel = session.channelId;
-    
-      // 其他逻辑代码继续执行
-      async function getChannelData() {
-        const channel_get = await ctx.database.get('channel', { id: now_channel });
-        if (channel_get[0]?.tsugu_run === false) {
-          const keywords = ['查询玩家', '查卡面', '查玩家', '查卡', '查角色', '查活动', '查分数表', '查询分数榜', '查分数榜', '查曲', '查谱面', '查卡池', '查询分数表', 'ycx', 'ycxall', 'lsycx', '抽卡模拟', '绑定玩家', '解除绑定', '主服务器', '设置默认服务器', '玩家状态', '开启车牌转发', '关闭车牌转发'];
-          const messageContent = session.event.message.content;
-    
-          // 检查消息是否以数组中的任意一个词开始
-          const startsWithKeyword = keywords.some(keyword => messageContent.startsWith(keyword));
-          if (startsWithKeyword) {
-            console.log('尝试关闭');
-            return '';
-          }
+  ctx.on('command/before-execute', (argv) => {
+    const { command, session } = argv;
+    const now_channel = session.channelId;
+
+    // 其他逻辑代码继续执行
+    async function getChannelData() {
+      const channel_get = await ctx.database.get('channel', { id: now_channel });
+      if (channel_get[0]?.tsugu_run === false) {
+        const keywords = ['查询玩家', '查卡面', '查玩家', '查卡', '查角色', '查活动', '查分数表', '查询分数榜', '查分数榜', '查曲', '查谱面', '查卡池', '查询分数表', 'ycx', 'ycxall', 'lsycx', '抽卡模拟', '绑定玩家', '解除绑定', '主服务器', '设置默认服务器', '玩家状态', '开启车牌转发', '关闭车牌转发'];
+        const messageContent = session.event.message.content;
+
+        // 检查消息是否以数组中的任意一个词开始
+        const startsWithKeyword = keywords.some(keyword => messageContent.startsWith(keyword));
+        if (startsWithKeyword) {
+          console.log('尝试关闭');
+          return '';
         }
       }
-      return getChannelData(); // 将结果返回给原始的命令执行过程
-    });
-
-    ctx.on('command/before-execute', (argv1) => {
-      const { command, session } = argv1;
-      const quote = h('quote', { id: session.event.message.id });
-      const atUser = h('at', { id: session.event.user.id });
-      ctx.before('send', (argv2) => {
-        const { event } = argv2;
-        if (config.reply){
-          argv2.elements = [quote, ...argv2.elements];
-        }
-        if (config.at){
-          argv2.elements = [atUser, ...argv2.elements];
-        }  
-      })
-    })
-
+    }
+    return getChannelData(); // 将结果返回给原始的命令执行过程
+  });
+// 为bot添加回复/at功能
+  ctx.before('send', (session, options) => { // options 包含来自 user 的上文 session
+    if (config.at) {
+      session.elements.unshift(h('at', { id: options.session.event.user.id }));
+    }
+    if (config.reply) {
+      session.elements.unshift(h('quote', { id: options.session.event.message.id }));
+    }
+  })
 }
 
 
