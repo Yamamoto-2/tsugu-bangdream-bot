@@ -1,6 +1,6 @@
 import { BestdoriapiPath, Bestdoriurl, configPath } from '../config'
 import { callAPIAndCacheResponse } from '../api/getApi'
-import { readJSON } from '../utils'
+import { readJSON } from './utils'
 import { readExcelFile } from './utils'
 import * as path from 'path'
 
