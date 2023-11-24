@@ -15,7 +15,7 @@ router.post(
         // Express-validator checks for type validation
         body('default_servers').custom(isServerList),
         body('songId').isInt(),
-        body('difficultyText').optional().isString(),
+        body('difficultyText').isString(),
     ],
     async (req, res) => {
         console.log(req.baseUrl, req.body);
@@ -40,30 +40,14 @@ router.post(
 );
 
 
-export async function commandSongChart(default_servers: Server[], songId: number,difficultyText?:string): Promise<Array<Buffer | string>> {
-    if(difficultyText){
-        difficultyText = difficultyText.toLowerCase()
-        var fuzzySearchResult = fuzzySearch(difficultyText.split(' '))
-        console.log(fuzzySearchResult)
-        if(fuzzySearchResult.difficulty === undefined){
-            return ['错误: 不正确的难度关键词,可以使用以下关键词:easy,normal,hard,expert,special']
-        }
-        return await drawSongChart(songId,parseInt(fuzzySearchResult.difficulty[0]), default_servers)
+export async function commandSongChart(default_servers: Server[], songId: number, difficultyText?: string): Promise<Array<Buffer | string>> {
+    difficultyText = difficultyText.toLowerCase()
+    var fuzzySearchResult = fuzzySearch(difficultyText.split(' '))
+    console.log(fuzzySearchResult)
+    if (fuzzySearchResult.difficulty === undefined) {
+        return ['错误: 不正确的难度关键词,可以使用以下关键词:easy,normal,hard,expert,special']
     }
-    else{
-        const song = new Song(songId)
-        if (!song.isExist) {
-            return ['歌曲不存在']
-        }
-        await song.initFull()
-        const difficultyList = Object.keys(song.difficulty)
-        const result = []
-        for (const difficultyId of difficultyList) {
-            result.push(await drawSongChart(songId, parseInt(difficultyId), default_servers)[0])
-        }
-        return result
-    }
-
+    return await drawSongChart(songId, parseInt(fuzzySearchResult.difficulty[0]), default_servers)
 }
 
 export { router as songChartRouter }
