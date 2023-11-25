@@ -17,6 +17,7 @@ async function downloadFile(url: string, IgnoreErr: boolean = true, overwrite= f
     const fileName = getFileNameFromUrl(url);
     const data = await download(url, cacheDir, fileName, cacheTime);
     if(data.toString().startsWith("<!DOCTYPE html>")){
+      fs.unlinkSync(path.join(cacheDir, fileName));
       throw new Error("downloadFile: data.toString().startsWith(\"<!DOCTYPE html>\")");
     }
     return data
