@@ -7,7 +7,7 @@ var width = 800
 var height = 800
 const chartJSNodeCanvas = new ChartJSNodeCanvas({
     width, height, chartCallback: (ChartJS) => {
-        ChartJS.defaults.font.family = 'old';
+        ChartJS.defaults.font.family = 'old,Microsoft Yahei';
     }
 });
 
