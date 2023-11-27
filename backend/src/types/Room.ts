@@ -186,7 +186,7 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
     if (server != undefined) {
         const curServer = user.server_list[server]
         if (curServer.bindingStatus == BindingStatus.Success) {
-            const player = new Player(curServer.gameID,server)
+            const player = new Player(curServer.playerId,server)
             await player.initFull()
             room.setPlayer(player)
         }

@@ -36,8 +36,14 @@ export function getServerByName(name: string): Server {
 }
 
 export async function getIcon(server: Server): Promise<Image> {
-    const iconBuffer = await downloadFileCache(`https://bestdori.com/res/icon/${Server[server]}.svg`)
-    return (await loadImage(iconBuffer))
+    if(server == Server.tw){
+        return (await loadImage('./assets/tw.png'))
+    }
+    else{
+        const iconBuffer = await downloadFileCache(`https://bestdori.com/res/icon/${Server[server]}.svg`)
+        return (await loadImage(iconBuffer))
+    }
+    
 }
 
 export function getServerByPriority(content: Array<any>, defaultServerList: Server[] = globalDefaultServer) {

@@ -1,4 +1,25 @@
 import { tierListOfServer } from './config'
+import { h, Element } from 'koishi'
+
+// 将messageList转换为Array<Element | string>  用于session.send
+export function paresMessageList(list?: Array<Buffer | string>): Array<Element | string> {
+    if (!list) {
+        return []
+    }
+    let messageList = []
+    for (let i = 0; i < list.length; i++) {
+        parseMessage(list[i])
+    }
+    function parseMessage(message: Buffer | string) {
+        if (typeof message == 'string') {
+            messageList.push(message)
+        }
+        else if (message instanceof Buffer) {
+            messageList.push(h.image(message, 'image/png'))
+        }
+    }
+    return messageList
+}
 
 //将tierListOfServer转换为文字，server:tier,tier,tier
 export function tierListOfServerToString(): string {

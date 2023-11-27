@@ -1,13 +1,21 @@
 import { Server } from "../types/Server";
 import { tsuguUser } from "../config";
 
+export function generateVerifyCode(): number {
+    let verifyCode: number;
+    do {
+        verifyCode = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
+    } while (verifyCode.toString().includes('64') || verifyCode.toString().includes('89'));
+    return verifyCode
+}
+
 export function isInteger(char: string): boolean {
     const regex = /^-?[1-9]\d*$/;
     return regex.test(char);
 }
 
 export function isServer(server: any): boolean {
-    if(typeof server == 'number'){
+    if (typeof server == 'number') {
         server = server.toString()
     }
     return Object.keys(Server).includes(server)
@@ -52,7 +60,7 @@ export function listToBase64(list: Array<Buffer | string>): Array<{ type: 'strin
             })
         }
     }
-    
+
     return result
 }
 
@@ -68,7 +76,7 @@ export function isTsuguUser(obj: any): obj is tsuguUser {
         Array.isArray(obj.server_list) &&
         obj.server_list.every(
             (item: any) =>
-                typeof item.gameID === 'number' &&
+                typeof item.playerId === 'number' &&
                 typeof item.bindingStatus === 'object' &&
                 (typeof item.verifyCode === 'number' || item.verifyCode === undefined)
         )

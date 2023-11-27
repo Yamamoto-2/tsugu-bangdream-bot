@@ -35,21 +35,24 @@ export const tierListOfServer = {
 }
 
 export enum BindingStatus {
-    None, Verifying, Success, Failed
+    None, Verifying, Success
 }
 
-export interface tsuguUser{
+export interface tsuguUser {
     user_id: string,
     platform: string,
     server_mode: Server,
     default_server: Server[],
     car: boolean,
-    server_list: {
-      gameID: number,
-      verifyCode?: number,
-      bindingStatus: BindingStatus
-    }[]
+    server_list: tsuguUserServerInList[]
 }
+
+export interface tsuguUserServerInList {
+    playerId: number,
+    bindingStatus: BindingStatus,
+    verifyCode?: number
+}
+
 
 export interface Channel {
     tsugu_gacha: boolean
