@@ -134,8 +134,8 @@ export async function queryAllRoom(): Promise<Room[]> {
 
 //从BandoriStation获取房间号
 export async function queryRoomNumberFromBandoriStation(): Promise<Room[]> {
-    const Data = await getJsonAndSave(BandoriStationurl + '?function=query_room_number')
-    const response = Data['response']
+    const Data = await axios.default.post(BandoriStationurl, { function: 'query_room_number' })
+    const response = Data.data?.response
     const roomList: Room[] = []
     for (let i = 0; i < response.length; i++) {
         const roomData = response[i];
@@ -171,7 +171,7 @@ function decode(text: string): string {
 }
 
 //提交房间号
-export async function submitRoomNumber({ number, rawMessage, source, userId, time, userName, bandoriStationToken }: RoomOption, user: tsuguUser) {
+export async function submitRoomNumber({ number, rawMessage, source, userId, time, userName, bandoriStationToken }: RoomOption, user?: tsuguUser) {
     if (source == 'onebot' || source == 'red') {
         source = 'qq'
     }
@@ -185,13 +185,15 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
     })
 
     //玩家数据
-    const server = user.server_mode
-    if (server != undefined) {
-        const curServer = user.server_list[server]
-        if (curServer.bindingStatus == BindingStatus.Success) {
-            const player = new Player(curServer.playerId, server)
-            await player.initFull()
-            room.setPlayer(player)
+    if (user) {
+        const server = user.server_mode
+        if (server != undefined) {
+            const curServer = user.server_list[server]
+            if (curServer.bindingStatus == BindingStatus.Success) {
+                const player = new Player(curServer.playerId, server)
+                await player.initFull()
+                room.setPlayer(player)
+            }
         }
     }
     roomStack.push(room)
@@ -209,9 +211,8 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
         token: bandoriStationToken
     }
     try {
-    await axios.default.post(url, data)
+        await axios.default.post(url, data)
     } catch (e) {
         console.log(e)
     }
 }
-
