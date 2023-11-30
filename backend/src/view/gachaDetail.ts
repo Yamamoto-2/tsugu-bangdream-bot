@@ -14,8 +14,9 @@ import { drawEventDatablock } from '../components/dataBlock/event';
 import { drawGashaPaymentMethodInList } from '../components/list/gachaPaymentMethod';
 import { drawGachaRateInList } from '../components/list/gachaRate';
 import { globalDefaultServer, serverNameFullList } from '../config';
+import { drawGachaPickupInList } from '../components/list/gachaPickUp'
 
-export async function drawGachaDetail(gachaId: number, defaultServerList: Server[] = globalDefaultServer,useEasyBG:boolean): Promise<Array<Buffer | string>>{
+export async function drawGachaDetail(gachaId: number, defaultServerList: Server[] = globalDefaultServer, useEasyBG: boolean): Promise<Array<Buffer | string>> {
     const gacha = new Gacha(gachaId)
     if (!gacha.isExist) {
         return ['错误: 卡池不存在']
@@ -63,8 +64,6 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
     list.push(await drawListByServerList(gacha.description, '描述', defaultServerList))
     list.push(line)
 
-
-
     var server = getServerByPriority(gacha.publishedAt, defaultServerList)
 
     //支付方法
@@ -73,37 +72,10 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
 
     //概率分布
     list.push(await drawGachaRateInList(gacha, server))
+    list.push(line)
 
     //卡池pickUp
-    var pickUpCardIdList = []
-    var details = gacha.details[server]
-    for (var cardId in details) {
-        if (details[cardId].pickUp == true) {
-            pickUpCardIdList.push(parseInt(cardId))
-        }
-    }
-    //卡池pickUp 去除重复
-    pickUpCardIdList = Array.from(new Set(pickUpCardIdList))
-    var pickUpCardList = []
-    for (var i = 0; i < pickUpCardIdList.length; i++) {
-        var card = new Card(pickUpCardIdList[i])
-        pickUpCardList.push(card)
-    }
-    //如果pickUp卡牌数量不为0
-    if (pickUpCardList.length != 0) {
-        list.push(line)
-        list.push(await drawCardListInList({
-            key: 'PickUp',
-            cardList: pickUpCardList,
-            trainingStatus: false,
-            cardIdVisible: true,
-            cardTypeVisible: true,
-            skillTypeVisible: true,
-        }))
-    }
-
-
-
+    list.push(await drawGachaPickupInList(gacha, server))
 
     var listImage = drawDatablock({ list })
     var all = []
@@ -134,7 +106,7 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
         imageList: all,
         useEasyBG: useEasyBG,
         BGimage: gachaBGImage,
-        text:'Gacha'
+        text: 'Gacha'
     })
     return [buffer]
 }
