@@ -12,7 +12,7 @@ dotenv.config();
 const router = express.Router();
 let userDB: UserDB
 if (process.env.LOCAL_DB == 'true') {
-    userDB = new UserDB(process.env.MONGODB_URI, 'tsugu');
+    userDB = new UserDB(process.env.MONGODB_URI, process.env.MONGODB_DATABASE_NAME);
     console.log(`user: 已连接至数据库: ${process.env.MONGODB_URI}`);
 }
 router.use(bodyParser.json());
