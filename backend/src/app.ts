@@ -14,6 +14,7 @@ import { ycxAllRouter } from './routers/ycxAll';
 import { lsycxRouter } from './routers/lsycx';
 import { songChartRouter } from './routers/songChart';
 import { userRouter } from './routers/user'
+import { stationRouter } from './routers/station'
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -37,9 +38,18 @@ app.use('/ycxAll', ycxAllRouter);
 app.use('/lsycx', lsycxRouter)
 if (process.env.LOCAL_DB == 'true') {
     app.use('/user', userRouter);
+    app.use('/station', stationRouter);
 }
-else{
+else {
     app.use('/user', (req, res) => {
+        console.log(req.url, req.body);
+        res.status(404).send({
+            status: 'fail',
+            data: '错误: 服务器未启用数据库'
+        });
+    });
+    app.use('/station', (req, res) => {
+        console.log(req.url, req.body);
         res.status(404).send({
             status: 'fail',
             data: '错误: 服务器未启用数据库'

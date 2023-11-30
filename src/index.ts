@@ -11,7 +11,7 @@ import { commandGachaSimulate } from './commands/gachaSimulate'
 import { commandGetCardIllustration } from './commands/getCardIllustration'
 import { commandCharacter } from './commands/searchCharacter'
 import { commandSongMeta } from './commands/songMeta'
-import { queryRoomNumber } from './commands/roomNumber'
+import { roomNumber } from './commands/roomNumber'
 import { commandRoomList } from './commands/roomList'
 import { commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer, commandSwitchCarMode } from './commands/user'
 import { commandSongChart } from './commands/songChart'
@@ -73,7 +73,7 @@ export const Config = Schema.intersect([
   Schema.union([
     Schema.object({
       RemoteDBSwitch: Schema.const(true).required(),
-      RemoteDBHost: Schema.string().description('数据库服务器地址').default('http://tsugubot.com:8080'),
+      RemoteDBHost: Schema.string().default('http://tsugubot.com:8080').description('后端服务器地址，用于处理用户数据库。如果有自建服务器，可以改成自建服务器地址。默认为Tsugu公共后端服务器。如果你在本机部署后端，请写 "http://127.0.0.1:3000"')
     }),
     Schema.object({}),
   ]),
@@ -137,7 +137,8 @@ export function apply(ctx: Context, config: Config) {
     const number = checkLeftDigits(session.content)
     if (number != 0) {
       await session.observeUser(['tsugu'])
-      await queryRoomNumber(session as Session<'tsugu', never>, number, session.content, config.bandoriStationToken)
+      const tsuguUserData = await observeUserTsugu(session)
+      await roomNumber(config, session as Session<'tsugu', never>, tsuguUserData, number, session.content, config.bandoriStationToken)
       return next();
     } else {
       return next();
@@ -146,7 +147,6 @@ export function apply(ctx: Context, config: Config) {
 
   // 使得打指令不需要加空格
   ctx.middleware((session, next) => {
-    // console.log(session.content);
     if (config.noSpace) {
       // 查卡面 一定要放在 查卡 前面
       const keywords = ['查询玩家', '查卡面', '查玩家', '查卡', '查角色', '查活动', '查分数表', '查询分数榜', '查分数榜', '查曲', '查谱面', , '查卡池', '查询分数表', 'ycx', 'ycxall', 'lsycx', '抽卡模拟', '绑定玩家', '解除绑定', '主服务器', '设置默认服务器', '玩家状态', '开启车牌转发', '关闭车牌转发'];
@@ -279,8 +279,6 @@ export function apply(ctx: Context, config: Config) {
     .shortcut(/^(.+服)玩家状态$/, { args: ['$1'] })
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
-      console.log(session)
-      console.log(session.user.tsugu)
       return await commandPlayerInfo(config, session, serverName, config.useEasyBG)
     })
 
@@ -291,7 +289,7 @@ export function apply(ctx: Context, config: Config) {
     .example('ycm : 获取所有车牌')
     .example('ycm 大分: 获取所有车牌，其中包含"大分"关键词的车牌')
     .action(async ({ session }, keyword) => {
-      const list = await commandRoomList(config.backendUrl, keyword)
+      const list = await commandRoomList(config, keyword)
       return (paresMessageList(list))
     })
   ctx.command('查玩家 <playerId:number> [serverName:text]', '查询玩家信息')

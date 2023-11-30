@@ -1,53 +1,63 @@
 import { Room, submitRoomNumber } from "../types/Room";
 import * as fs from 'fs'
-import { carKeywordPath, tsuguUser, Channel } from "../config";
+import { carKeywordPath, tsuguUser, Config } from "../config";
 import { Session } from 'koishi'
+import * as axios from 'axios'
 
-interface Config {
+interface CarKeyword {
     [type: string]: string[];
 }
 
-function loadConfig(): Config {
+function loadConfig(): CarKeyword {
     const fileContent = fs.readFileSync(carKeywordPath, 'utf-8');
     return JSON.parse(fileContent);
 }
 
-const config = loadConfig();
+const carKeywordConfig = loadConfig();
 
-
-export async function queryRoomNumber(session: Session<'tsugu', never>, number: number, raw_message: string, bandoriStationToken?: string) {
-    const user = session.user.tsugu
+export async function roomNumber(config:Config,session: Session<'tsugu', never>,user:tsuguUser, number: number, raw_message: string, bandoriStationToken?: string) {
     if (!user.car) {
         return
     }
     console.log(user)
     let isCar = false
-    for (let i = 0; i < config['car'].length; i++) {
-        const element = config['car'][i];
+    for (let i = 0; i < carKeywordConfig['car'].length; i++) {
+        const element = carKeywordConfig['car'][i];
         if (raw_message.indexOf(element) != -1) {
             isCar = true
         }
     }
-    for (let i = 0; i < config['fake'].length; i++) {
-        const element = config['fake'][i];
+    for (let i = 0; i < carKeywordConfig['fake'].length; i++) {
+        const element = carKeywordConfig['fake'][i];
         if (raw_message.indexOf(element) != -1) {
             isCar = false
         }
     }
     if (isCar) {
-        let platform = user.platform
-        if (platform == 'onebot'  || platform == 'red') {
-            platform = 'qq'
+        if(config.RemoteDBSwitch){
+            const res = await axios.default.post(`${config.RemoteDBHost}/station/submitRoomNumber`,{
+                number: number,
+                rawMessage: raw_message,
+                platform: user.platform,
+                user_id: user.user_id,
+                userName: session.username,
+                time: Date.now(),
+                bandoriStationToken
+            })
+            console.log(res.data?.data)
         }
-        await submitRoomNumber({
-            number: number,
-            rawMessage: raw_message,
-            source: platform,
-            userId: user.user_id,
-            time: Date.now(),
-            userName:session.username,
-            bandoriStationToken
-        }, user)
+        else{
+            let platform = user.platform
+            await submitRoomNumber({
+                number: number,
+                rawMessage: raw_message,
+                source: platform,
+                userId: user.user_id,
+                time: Date.now(),
+                userName:session.username,
+                bandoriStationToken
+            }, user)
+        }
     }
 }
 

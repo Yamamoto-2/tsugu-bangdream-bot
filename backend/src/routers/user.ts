@@ -13,7 +13,7 @@ const router = express.Router();
 let userDB: UserDB
 if (process.env.LOCAL_DB == 'true') {
     userDB = new UserDB(process.env.MONGODB_URI, 'tsugu');
-    console.log(`已连接至数据库: ${process.env.MONGODB_URI}`);
+    console.log(`user: 已连接至数据库: ${process.env.MONGODB_URI}`);
 }
 router.use(bodyParser.json());
 

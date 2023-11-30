@@ -171,7 +171,7 @@ function decode(text: string): string {
 }
 
 //提交房间号
-export async function submitRoomNumber({ number, rawMessage, source, userId, time, userName, bandoriStationToken }: RoomOption, user: tsuguUser) {
+export async function submitRoomNumber({ number, rawMessage, source, userId, time, userName, bandoriStationToken }: RoomOption, user?: tsuguUser) {
     if (source == 'onebot' || source == 'red') {
         source = 'qq'
     }
@@ -185,13 +185,15 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
     })
 
     //玩家数据
-    const server = user.server_mode
-    if (server != undefined) {
-        const curServer = user.server_list[server]
-        if (curServer.bindingStatus == BindingStatus.Success) {
-            const player = new Player(curServer.playerId, server)
-            await player.initFull()
-            room.setPlayer(player)
+    if(user){
+        const server = user.server_mode
+        if (server != undefined) {
+            const curServer = user.server_list[server]
+            if (curServer.bindingStatus == BindingStatus.Success) {
+                const player = new Player(curServer.playerId, server)
+                await player.initFull()
+                room.setPlayer(player)
+            }
         }
     }
     roomStack.push(room)
