@@ -56,7 +56,7 @@ export async function drawPlayerBandRankInList(player: Player, key?: string): Pr
             BandDetails[i] = [bandRankMap[i].toString()]
         }
         else {
-            BandDetails[i] = ['0']
+            BandDetails[i] = ['?']
         }
     }
     return drawBandDetailsInList(BandDetails, key)
