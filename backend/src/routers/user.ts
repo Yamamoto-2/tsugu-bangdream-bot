@@ -23,7 +23,7 @@ router.use(bodyParser.json());
 router.post('/getUserData',
     [
         body('platform').isString(),
-        body('user_id').exists(),
+        body('user_id').isString(),
     ],
     async (req: Request, res: Response) => {
         console.log(req.url, req.body);
@@ -109,7 +109,7 @@ function isPartialTsuguUser(obj: any): obj is Partial<tsuguUser> {
 router.post('/changeUserData',
     [
         body('platform').isString(),
-        body('user_id').exists(),
+        body('user_id').isString(),
         body('update').custom(isPartialTsuguUser),
     ],
     async (req: Request, res: Response) => {
@@ -129,7 +129,7 @@ router.post('/changeUserData',
 router.post('/bindPlayerRequest',
     [
         body('platform').isString(),
-        body('user_id').exists(),
+        body('user_id').isString(),
         body('server').custom(isServer),
         body('bindType').isBoolean(), //true为绑定，false为解绑
     ], async (req: Request, res: Response) => {
@@ -171,7 +171,7 @@ router.post('/bindPlayerRequest',
 router.post('/bindPlayerVerification',
     [
         body('platform').isString(),
-        body('user_id').exists(),
+        body('user_id').isString(),
         body('server').custom(isServer),
         body('playerId').isInt(),
         body('bindType').isBoolean(), //true为绑定，false为解绑
@@ -220,7 +220,8 @@ router.post('/bindPlayerVerification',
                 //删除验证码
                 delete curServer.verifyCode
                 userDB.updateServerList(platform, user_id, server, curServer)
-                res.status(400).json({ status: 'failed', data: `错误: 验证码错误` });
+                const text = `错误: \n评论为: "${player.profile.introduction}", \n卡组名为: "${player.profile.mainUserDeck.deckName}", \n都与验证码不匹配`
+                res.status(400).json({ status: 'failed', data: text });
                 return
             }
             //如果为绑定玩家，修改绑定状态
