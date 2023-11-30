@@ -3,7 +3,8 @@ import { Player } from "./Player";
 import { unescape } from "querystring";
 import { Server, getServerByName } from "./Server";
 import { getJsonAndSave } from "../api/downloader";
-import {BindingStatus} from "../config"
+import { BindingStatus } from "../config"
+import * as axios from 'axios'
 
 
 //栈函数
@@ -58,9 +59,9 @@ export class Room {
     source: string;
     userId: string;
     time: number;
-    player:{
-        id:number;
-        server:Server;
+    player: {
+        id: number;
+        server: Server;
     };
     avanter?: string;
     userName?: string;
@@ -92,7 +93,7 @@ export async function queryAllRoom(): Promise<Room[]> {
     const localNumberList = roomList.map((room) => {
         return room.number
     })
-    try{
+    try {
         const roomListBandoriStation = await queryRoomNumberFromBandoriStation()
         for (let i = 0; i < roomListBandoriStation.length; i++) {
             const room = roomListBandoriStation[i];
@@ -101,7 +102,7 @@ export async function queryAllRoom(): Promise<Room[]> {
             }
         }
     }
-    catch(e){
+    catch (e) {
         console.log(e)
     }
 
@@ -147,7 +148,7 @@ export async function queryRoomNumberFromBandoriStation(): Promise<Room[]> {
             userId: roomData['user_info']['user_id'],
             time: roomData['time'],
             avanter: roomData['user_info']['avatar']
-            
+
         })
         if (roomData['user_info']?.['bandori_player_brief_info']?.['user_id'] != undefined) {
             const player = new Player(
@@ -169,8 +170,8 @@ function decode(text: string): string {
     return unescape(text.replace(/\%u/g, "%u"))
 }
 
-//向BandoriStation提交房间号
-export async function submitRoomNumber({ number, rawMessage, source, userId, time, userName,bandoriStationToken }: RoomOption,user:tsuguUser) {
+//提交房间号
+export async function submitRoomNumber({ number, rawMessage, source, userId, time, userName, bandoriStationToken }: RoomOption, user: tsuguUser) {
     if (source == 'onebot' || source == 'red') {
         source = 'qq'
     }
@@ -188,23 +189,29 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
     if (server != undefined) {
         const curServer = user.server_list[server]
         if (curServer.bindingStatus == BindingStatus.Success) {
-            const player = new Player(curServer.gameID,server)
+            const player = new Player(curServer.playerId, server)
             await player.initFull()
             room.setPlayer(player)
         }
     }
     roomStack.push(room)
-    if(bandoriStationToken == '' || bandoriStationToken == undefined){
+    if (bandoriStationToken == '' || bandoriStationToken == undefined) {
         bandoriStationToken = 'ZtV4EX2K9Onb'
     }
-    if(source == 'qq'){
-        const url = `${BandoriStationurl}index.php?function=submit_room_number&number=${number}&user_id=${userId}&raw_message=${encodeURIComponent(rawMessage)}&source=Tsugu&token=${bandoriStationToken}`
-        try {
-            const Data = await getJsonAndSave(url)
-            return Data
-        } catch (e) {
-            console.log(e)
-        }
+
+    const url = `${BandoriStationurl}index.php`
+    const data = {
+        function: 'submit_room_number',
+        number: number,
+        user_id: userId,
+        raw_message: rawMessage,
+        source: 'Tsugu',
+        token: bandoriStationToken
+    }
+    try {
+    await axios.default.post(url, data)
+    } catch (e) {
+        console.log(e)
     }
 }
 
