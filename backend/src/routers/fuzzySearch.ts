@@ -2,11 +2,11 @@ import * as fs from 'fs';
 import { fuzzySearchPath } from '../config';
 import { isInteger } from './utils'
 
-interface Config {
+interface fuzzySearchConfig {
   [type: string]: { [key: string]: string[] };
 }
 
-function loadConfig(): Config {
+function loadConfig(): fuzzySearchConfig {
   const fileContent = fs.readFileSync(fuzzySearchPath, 'utf-8');
   console.log('loaded fuzzy search config');
   return JSON.parse(fileContent);
@@ -21,7 +21,7 @@ function extractLvNumber(str: string): number | null {
   return null;
 }
 
-export let config: Config = loadConfig();
+export let config: fuzzySearchConfig = loadConfig();
 //用于模糊搜索
 export function fuzzySearch(keywordList: string[]): { [key: string]: string[] } {
 
