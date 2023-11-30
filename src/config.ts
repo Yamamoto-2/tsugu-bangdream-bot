@@ -53,7 +53,13 @@ export interface tsuguUserServerInList {
     verifyCode?: number
 }
 
-
 export interface Channel {
     tsugu_gacha: boolean
-  }
+}
+
+export interface Config {
+    useEasyBG: boolean,
+    backendUrl: string,
+    RemoteDBSwitch: boolean,
+    RemoteDBHost: string,
+}

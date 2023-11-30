@@ -1,28 +1,19 @@
 import { Session, h } from "koishi";
-import { bindingPlayerPromptWaitingTime, serverNameFullList, BindingStatus } from "../config";
 import { Server, getServerByName } from "../types/Server";
 import { Player } from "../types/Player";
-import { tsuguUser } from "../config";
+import { tsuguUser, bindingPlayerPromptWaitingTime, serverNameFullList, BindingStatus, Config } from "../config";
 import { commandSearchPlayer } from "./searchPlayer";
-import { generateVerifyCode } from './utils'
-import { paresMessageList } from '../utils'
-import { getRemoteDBUserData, changeUserData, bindPlayerRequest, bindPlayerVerify } from '../api/remoteDB'
+import { generateVerifyCode } from './utils';
+import { paresMessageList } from '../utils';
+import { getRemoteDBUserData, changeUserData, bindPlayerRequest, bindPlayerVerify } from '../api/remoteDB';
 
-interface Config {
-    useEasyBG: boolean,
-    backendUrl: string,
-    RemoteDBSwitch: boolean,
-    RemoteDBHost: string,
-}
-
-async function getUser(session: Session<'tsugu', never>, config: Config): Promise<tsuguUser> {
+export async function getUser(session: Session<'tsugu', never>, config: Config): Promise<tsuguUser> {
     let user: tsuguUser
-
     // 如果开启了远程数据库，则从远程数据库获取用户数据
     if (config.RemoteDBSwitch) {
-        const tempData = await getRemoteDBUserData(config.RemoteDBHost, session.platform, session.userId)
-        if (tempData?.status != 'success') {
-            throw new Error(tempData?.data as string)
+    const tempData = await getRemoteDBUserData(config.RemoteDBHost, session.platform, session.userId)
+    if (tempData?.status != 'success') {
+        throw new Error(tempData?.data as string)
         }
         user = tempData.data as tsuguUser
     }
