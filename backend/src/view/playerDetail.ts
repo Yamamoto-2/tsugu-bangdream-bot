@@ -11,6 +11,7 @@ import { drawStatInList } from '../components/list/stat';
 import { drawDatablock } from '../components/dataBlock';
 import { drawPlayerBandRankInList, drawPlayerStageChallengeRankInList, drawPlayerDeckTotalRatingInList } from '../components/list/bandDetail'
 import { drawPlayerDifficultyDetailInList } from '../components/list/difficultyDetail'
+import {drawCharacterRankInList} from '../components/list/characterDetail'
 
 let BGDefaultImage: Image
 async function loadImageOnce() {
@@ -63,7 +64,7 @@ export async function drawPlayerDetail(playerId: number, server: Server,useEasyB
     }
     //stageChallenge完成情况
     if (player.profile.publishStageChallengeAchievementConditionsFlg && player.profile.publishStageChallengeFriendRankingFlg) {
-        list.push(await drawPlayerStageChallengeRankInList(player, 'StageChallenge达成情况'))
+        list.push(await drawPlayerStageChallengeRankInList(player, '舞台挑战 达成情况'))
         list.push(line)
     }
     //乐队编成等级
@@ -77,6 +78,11 @@ export async function drawPlayerDetail(playerId: number, server: Server,useEasyB
             key: 'High Score Rating',
             text: player.calcHSR().toString()
         }))
+        list.push(line)
+    }
+    //角色等级
+    if(player.profile.publishCharacterRankFlg){
+        list.push(await drawCharacterRankInList(player,'角色等级'))
         list.push(line)
     }
 
