@@ -113,6 +113,13 @@ export function apply(ctx: Context, config: Config) {
   async function observeUserTsugu(session: Session): Promise<tsuguUser> {
     async function getLocalUserData(session: Session): Promise<tsuguUser> {
       const localResult = await session.observeUser(['tsugu'])
+      //兼容旧版数据库
+      for(let i = 0;i<localResult.tsugu.server_list.length;i++){
+        if(localResult.tsugu.server_list[i]['gameID'] == undefined){
+          localResult.tsugu.server_list[i]['playerId'] = localResult.tsugu.server_list[i]['gameID']
+          delete localResult.tsugu.server_list[i]['gameID']
+        }
+      }
       return localResult.tsugu
     }
     if (config.RemoteDBSwitch) {
