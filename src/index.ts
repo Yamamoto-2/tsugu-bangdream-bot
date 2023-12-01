@@ -67,7 +67,7 @@ export const Config = Schema.intersect([
     at: Schema.boolean().default(false).description('消息是否@用户'),
     noSpace: Schema.boolean().default(false).description('是否启用无需空格触发大部分指令，启用这将方便一些用户使用习惯，但会增加bot误判概率，仍然建议使用空格'),
 
-    backendUrl: Schema.string().required(true).default('http://tsugubot.com:8080').description('后端服务器地址，用于处理指令。如果有自建服务器，可以改成自建服务器地址。默认为Tsugu公共后端服务器。如果你在本机部署后端，请写 "http://127.0.0.1:3000"'),
+    backendUrl: Schema.string().required(false).default('http://tsugubot.com:8080').description('后端服务器地址，用于处理指令。如果有自建服务器，可以改成自建服务器地址。默认为Tsugu公共后端服务器。如果你在本机部署后端，请写 "http://127.0.0.1:3000"'),
     RemoteDBSwitch: Schema.boolean().default(false).description('是否使用独立后端的数据库。启用后，所有用户数据与车牌数据将使用远程数据库而不是koishi数据库'),
   }).description('Tsugu BangDream Bot 配置'),
   Schema.union([
@@ -166,6 +166,9 @@ export function apply(ctx: Context, config: Config) {
           const content_cut = session.content.slice(keyword.length);
           return session.execute(`${keyword} ${content_cut}`, next);
         }
+      }
+      else {
+        return next();
       }
     }
     else {
