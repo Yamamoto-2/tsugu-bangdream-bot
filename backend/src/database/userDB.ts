@@ -17,6 +17,9 @@ export class UserDB {
   }
 
   private getKey(platform: string, userId: string): string {
+    if(platform == 'onebot') {
+      platform = 'red';
+    }
     return `${platform}:${userId}`;
   }
 
