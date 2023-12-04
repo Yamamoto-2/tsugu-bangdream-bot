@@ -35,17 +35,14 @@ async function commandGetCardIllustration(cardId: number): Promise<Array<Buffer 
     return ['错误: 该卡不存在']
   }
   const trainingStatusList = card.getTrainingStatusList();
-  const imageList = []
+  const imageList = [];
   for (let i = 0; i < trainingStatusList.length; i++) {
     const element = trainingStatusList[i];
-    const Illustration = await card.getCardIllustrationImage(element);
-    const tempCanvas = createCanvas(Illustration.width, Illustration.height);
-    const ctx = tempCanvas.getContext("2d");
-    ctx.drawImage(Illustration, 0, 0);
-    const buffer = tempCanvas.toBuffer("image/png");
-    imageList.push(buffer)
+    const illustration = await card.getCardIllustrationImageBuffer(element);
+    // 直接添加插图到列表中，不需要绘制到Canvas
+    imageList.push(illustration);
   }
-  return imageList
+  return imageList;
 }
 
 export { router as cardIllustrationRouter }
