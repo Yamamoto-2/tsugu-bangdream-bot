@@ -1,9 +1,9 @@
 import express from 'express';
 import { validationResult, body } from 'express-validator';
-import { drawCutoffComprare } from '../view/cutoffCompare';
-import { Server, getServerByServerId } from '../types/Server';
-import { getPresentEvent } from '../types/Event';
-import { listToBase64, isServer } from './utils';
+import { drawCutoffComprare } from '@/view/cutoffCompare';
+import { Server, getServerByServerId } from '@/types/Server';
+import { getPresentEvent } from '@/types/Event';
+import { listToBase64, isServer } from '@/routers/utils';
 
 const router = express.Router();
 

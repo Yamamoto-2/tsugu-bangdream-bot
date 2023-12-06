@@ -1,7 +1,7 @@
-import { globalDefaultServer } from '../../config';
-import { Character } from '../../types/Character'
-import { Server, getServerByPriority } from '../../types/Server'
-import { drawList } from '../list'
+import { globalDefaultServer } from '@/config';
+import { Character } from '@/types/Character'
+import { Server, getServerByPriority } from '@/types/Server'
+import { drawList } from '@/components/list'
 import { Canvas, Image } from 'canvas'
 
 interface CharacterInListOptions {

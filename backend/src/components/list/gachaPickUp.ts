@@ -1,9 +1,9 @@
-import { Gacha } from "../../types/Gacha"
-import { Server } from "../../types/Server"
-import { drawList, line } from "../list"
-import { drawCardListInList } from './cardIconList'
-import { Card } from "../../types/Card"
-import { stackImage } from '../utils'
+import { Gacha } from "@/types/Gacha"
+import { Server } from "@/types/Server"
+import { drawList, line } from "@/components/list"
+import { drawCardListInList } from '@/components/list/cardIconList'
+import { Card } from "@/types/Card"
+import { stackImage } from '@/components/utils'
 import { Canvas } from 'canvas'
 
 export async function drawGachaPickupInList(gacha: Gacha, server: Server, key?: string): Promise<Canvas> {

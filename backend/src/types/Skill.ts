@@ -1,5 +1,5 @@
 import { Canvas } from 'canvas'
-import mainAPI from './_Main'
+import mainAPI from '@/types/_Main'
 
 
 export class Skill {

@@ -1,9 +1,9 @@
-import { callAPIAndCacheResponse } from '../api/getApi';
-import mainAPI from './_Main';
-import { Bestdoriurl ,tierListOfServer} from '../config';
-import { Server } from './Server';
-import { Event } from './Event';
-import { predict } from '../api/cutoff.cjs'
+import { callAPIAndCacheResponse } from '@/api/getApi';
+import mainAPI from '@/types/_Main';
+import { Bestdoriurl ,tierListOfServer} from '@/config';
+import { Server } from '@/types/Server';
+import { Event } from '@/types/Event';
+import { predict } from '@/api/cutoff.cjs'
 
 export class Cutoff {
     eventId: number;

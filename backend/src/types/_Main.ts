@@ -1,7 +1,7 @@
-import { BestdoriapiPath, Bestdoriurl, configPath } from '../config'
-import { callAPIAndCacheResponse } from '../api/getApi'
-import { readJSON } from './utils'
-import { readExcelFile } from './utils'
+import { BestdoriapiPath, Bestdoriurl, configPath } from '@/config'
+import { callAPIAndCacheResponse } from '@/api/getApi'
+import { readJSON } from '@/types/utils'
+import { readExcelFile } from '@/types/utils'
 import * as path from 'path'
 
 const mainAPI: object = {}//main对象,用于存放所有api数据,数据来源于Bestdori网站

@@ -1,10 +1,10 @@
-import { callAPIAndCacheResponse } from '../api/getApi';
-import mainAPI from './_Main';
+import { callAPIAndCacheResponse } from '@/api/getApi';
+import mainAPI from '@/types/_Main';
 import { Image, loadImage } from 'canvas'
-import { downloadFileCache } from '../api/downloadFileCache'
-import { Server, getServerByPriority, serverList } from './Server';
-import { Event, getPresentEvent } from './Event';
-import { globalDefaultServer } from '../config';
+import { downloadFileCache } from '@/api/downloadFileCache'
+import { Server, getServerByPriority, serverList } from '@/types/Server';
+import { Event, getPresentEvent } from '@/types/Event';
+import { globalDefaultServer } from '@/config';
 
 let gachaDataCache = {}
 

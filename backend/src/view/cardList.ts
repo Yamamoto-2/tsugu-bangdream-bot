@@ -1,17 +1,15 @@
-import { Card } from "../types/Card";
-import { Attribute } from "../types/Attribute";
-import { Character } from "../types/Character";
-import mainAPI from "../types/_Main"
-import { match, checkRelationList } from "../routers/fuzzySearch"
+import { Card } from "@/types/Card";
+import { Character } from "@/types/Character";
+import mainAPI from "@/types/_Main"
+import { match, checkRelationList } from "@/routers/fuzzySearch"
 import { Canvas, createCanvas, Image, loadImage } from 'canvas'
-import { drawCardIcon } from "../components/card"
-import { drawDatablock, drawDatablockHorizontal } from '../components/dataBlock';
-import { stackImage, stackImageHorizontal } from '../components/utils'
-import { drawRoundedRect } from "../image/drawRect";
-import { drawTitle } from '../components/title';
-import { outputFinalBuffer } from '../image/output'
-import { Server } from '../types/Server'
-import { globalDefaultServer } from '../config';
+import { drawCardIcon } from "@/components/card"
+import { drawDatablockHorizontal } from '@/components/dataBlock';
+import { stackImage } from '@/components/utils'
+import { drawTitle } from '@/components/title';
+import { outputFinalBuffer } from '@/image/output'
+import { Server } from '@/types/Server'
+import { globalDefaultServer } from '@/config';
 
 const maxWidth = 7000
 

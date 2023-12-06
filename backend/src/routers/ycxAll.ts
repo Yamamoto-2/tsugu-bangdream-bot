@@ -1,7 +1,7 @@
-import { drawCutoffListOfEvent } from '../view/cutoffListOfEvent';
-import { Server, getServerByServerId } from '../types/Server';
-import { getPresentEvent } from '../types/Event';
-import { listToBase64, isServerList } from './utils';
+import { drawCutoffListOfEvent } from '@/view/cutoffListOfEvent';
+import { Server, getServerByServerId } from '@/types/Server';
+import { getPresentEvent } from '@/types/Event';
+import { listToBase64, isServerList } from '@/routers/utils';
 import express from 'express';
 import { body, validationResult } from 'express-validator';
 

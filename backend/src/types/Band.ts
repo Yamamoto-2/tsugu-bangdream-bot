@@ -1,8 +1,8 @@
-import mainAPI from './_Main';
-import { Character } from './Character';
+import mainAPI from '@/types/_Main';
+import { Character } from '@/types/Character';
 import { Image, loadImage } from 'canvas'
-import { downloadFileCache } from '../api/downloadFileCache';
-import { formatNumber } from './utils';
+import { downloadFileCache } from '@/api/downloadFileCache';
+import { formatNumber } from '@/types/utils';
 
 export class Band {
     bandId: number;

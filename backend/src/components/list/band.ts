@@ -1,6 +1,6 @@
-import { Band } from '../../types/Band'
-import { Server, getServerByPriority } from '../../types/Server'
-import { drawList } from '../list'
+import { Band } from '@/types/Band'
+import { Server, getServerByPriority } from '@/types/Server'
+import { drawList } from '@/components/list'
 import { Canvas, Image } from 'canvas'
 
 interface BandInListOptions {

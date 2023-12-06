@@ -1,7 +1,7 @@
-import { drawList } from '../list'
+import { drawList } from '@/components/list'
 import { Canvas } from 'canvas'
-import { drawCardIcon } from '../card'
-import { Card } from '../../types/Card'
+import { drawCardIcon } from '@/components/card'
+import { Card } from '@/types/Card'
 
 interface CardIconInListOptions {
     key?: string;

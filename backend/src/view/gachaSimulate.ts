@@ -1,23 +1,21 @@
-import { Gacha, getPresentGachaList } from "../types/Gacha";
-import { Card } from "../types/Card";
-import { drawCardIcon } from "../components/card";
-import { drawTitle } from "../components/title";
+import { Gacha } from "@/types/Gacha";
+import { Card } from "@/types/Card";
+import { drawCardIcon } from "@/components/card";
+import { drawTitle } from "@/components/title";
 import { createCanvas, Canvas, Image, loadImage } from 'canvas';
-import { drawTextWithImages, drawText } from "../components/text";
-import { outputFinalBuffer } from '../image/output'
-import { getServerByPriority, Server } from "../types/Server";
-import { drawDatablock } from "../components/dataBlock";
-import { drawRoundedRectWithText } from "../image/drawRect";
-import { resizeImage } from "../components/utils";
-import { drawGachaDatablock } from "../components/dataBlock/gacha";
-
+import { drawTextWithImages, drawText } from "@/components/text";
+import { outputFinalBuffer } from '@/image/output'
+import { getServerByPriority, Server } from "@/types/Server";
+import { drawDatablock } from "@/components/dataBlock";
+import { resizeImage } from "@/components/utils";
+import { drawGachaDatablock } from "@/components/dataBlock/gacha";
 
 const maxWidth = 230 * 5
 export async function drawRandomGacha(gacha: Gacha, times: number = 10, server: Server): Promise<Array<Buffer | string>> {
     if (times > 10000) {
         return ['错误: 抽卡次数过多, 请不要超过10000次']
     }
-    if(!gacha.isExist){
+    if (!gacha.isExist) {
         return ['错误: 该卡池不存在']
     }
     await gacha.initFull()
@@ -38,50 +36,50 @@ export async function drawRandomGacha(gacha: Gacha, times: number = 10, server: 
     else {
         const gachaList: { [cardId: number]: number } = {};
         const promises: Promise<void>[] = [];
-        
+
         for (let i = 0; i < times; i++) {
-          promises.push(
-            (async () => {
-              const card = getGachaRandomCard(gacha, i);
-              if (!gachaList[card.cardId]) {
-                gachaList[card.cardId] = 1;
-              } else {
-                gachaList[card.cardId]++;
-              }
-            })()
-          );
+            promises.push(
+                (async () => {
+                    const card = getGachaRandomCard(gacha, i);
+                    if (!gachaList[card.cardId]) {
+                        gachaList[card.cardId] = 1;
+                    } else {
+                        gachaList[card.cardId]++;
+                    }
+                })()
+            );
         }
-        
+
         await Promise.all(promises);
-        
+
         const cardImageList: Canvas[] = [];
         const cardIdList = Object.keys(gachaList);
         cardIdList.sort((a, b) => {
-          const cardA = new Card(parseInt(a));
-          const cardB = new Card(parseInt(b));
-          return cardB.rarity - cardA.rarity;
+            const cardA = new Card(parseInt(a));
+            const cardB = new Card(parseInt(b));
+            return cardB.rarity - cardA.rarity;
         });
-        
+
         const cardPromises: Promise<Canvas>[] = [];
         for (let i = 0; i < cardIdList.length; i++) {
-          const cardId = cardIdList[i];
-          if (Object.prototype.hasOwnProperty.call(gachaList, cardId)) {
-            const card = new Card(parseInt(cardId));
-            cardPromises.push(drawGachaCard(card, gachaList[cardId]));
-          }
+            const cardId = cardIdList[i];
+            if (Object.prototype.hasOwnProperty.call(gachaList, cardId)) {
+                const card = new Card(parseInt(cardId));
+                cardPromises.push(drawGachaCard(card, gachaList[cardId]));
+            }
         }
-        
+
         const cardImageResults = await Promise.all(cardPromises);
         cardImageList.push(...cardImageResults);
-        
+
         gachaImage = drawTextWithImages({
-          textSize: 115,
-          lineHeight: 115,
-          content: cardImageList,
-          maxWidth: maxWidth,
-          spacing: 0,
+            textSize: 115,
+            lineHeight: 115,
+            content: cardImageList,
+            maxWidth: maxWidth,
+            spacing: 0,
         });
-        
+
 
     }
 

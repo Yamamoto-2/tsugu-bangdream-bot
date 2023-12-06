@@ -1,12 +1,12 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import bodyParser from 'body-parser';
-import { tsuguUser, BindingStatus } from '../config';
-import { UserDB } from '../database/userDB';
-import { Player } from '../types/Player';
-import { Server } from '../types/Server';
+import { tsuguUser, BindingStatus } from '@/config';
+import { UserDB } from '@/database/userDB';
+import { Player } from '@/types/Player';
+import { Server } from '@/types/Server';
 import * as dotenv from 'dotenv';
-import { generateVerifyCode } from './utils'
+import { generateVerifyCode } from '@/routers/utils'
 dotenv.config();
 
 const router = express.Router();

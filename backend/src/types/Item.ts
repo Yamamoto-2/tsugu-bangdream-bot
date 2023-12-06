@@ -1,10 +1,10 @@
 import { Image, loadImage } from 'canvas'
-import { downloadFileCache } from '../api/downloadFileCache'
-import { Server, getServerByPriority } from './Server';
-import { formatNumber } from './utils';
+import { downloadFileCache } from '@/api/downloadFileCache'
+import { Server, getServerByPriority } from '@/types/Server';
+import { formatNumber } from '@/types/utils';
 
-import mainAPI from './_Main'
-import { globalDefaultServer } from '../config';
+import mainAPI from '@/types/_Main'
+import { globalDefaultServer } from '@/config';
 
 
 const typeNameList = {

@@ -1,10 +1,10 @@
 import { Canvas, Image, createCanvas } from 'canvas';
-import { drawRoundedRectWithText } from '../image/drawRect';
-import { drawText, drawTextWithImages } from './text';
-import { drawDottedLine } from '../image/dottedLine'
-import { Server, getServerByPriority, getIcon } from '../types/Server'
-import { stackImageHorizontal } from './utils';
-import { globalDefaultServer } from '../config';
+import { drawRoundedRectWithText } from '@/image/drawRect';
+import { drawText, drawTextWithImages } from '@/components/text';
+import { drawDottedLine } from '@/image/dottedLine'
+import { Server, getServerByPriority, getIcon } from '@/types/Server'
+import { stackImageHorizontal } from '@/components/utils';
+import { globalDefaultServer } from '@/config';
 
 //表格用默认虚线
 export const line: Canvas = drawDottedLine({

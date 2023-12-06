@@ -1,6 +1,6 @@
 import { Canvas, Image, createCanvas } from 'canvas';
-import { drawRoundedRect } from '../image/drawRect';
-import { drawText } from './text';
+import { drawRoundedRect } from '@/image/drawRect';
+import { drawText } from '@/components/text';
 
 interface datablockOptions {
     list: Array<Canvas | Image>

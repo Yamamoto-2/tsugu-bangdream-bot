@@ -1,11 +1,11 @@
-import { globalDefaultServer } from '../../config';
-import { Character } from '../../types/Character'
-import { Server, getServerByPriority } from '../../types/Server'
-import { drawImageListCenter } from '../list'
+import { globalDefaultServer } from '@/config';
+import { Character } from '@/types/Character'
+import { Server, getServerByPriority } from '@/types/Server'
+import { drawImageListCenter } from '@/components/list'
 import { Canvas, createCanvas } from 'canvas'
-import { drawRoundedRect } from '../../image/drawRect';
-import { resizeImage, stackImage } from '../utils';
-import { drawText } from '../text';
+import { drawRoundedRect } from '@/image/drawRect';
+import { resizeImage, stackImage } from '@/components/utils';
+import { drawText } from '@/components/text';
 
 const width = 250
 const height = 800

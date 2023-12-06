@@ -1,8 +1,8 @@
-import { Card } from "../../types/Card";
-import { Player } from "../../types/Player";
+import { Card } from "@/types/Card";
+import { Player } from "@/types/Player";
 import { Canvas } from 'canvas';
-import { drawCardIcon } from "../card";
-import {drawList} from '../list'
+import { drawCardIcon } from "@/components/card";
+import {drawList} from '@/components/list'
 
 export async function drawPlayerCardInList(player: Player,key?:string,cardIdVisible = false,lineHeight = 184): Promise<Canvas> {
     let textSize = lineHeight / 200 * 180

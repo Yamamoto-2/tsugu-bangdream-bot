@@ -1,10 +1,10 @@
-import { callAPIAndCacheResponse } from '../api/getApi';
-import { downloadFile } from '../api/downloadFile';
-import { Bestdoriurl, globalDefaultServer } from '../config';
-import mainAPI from './_Main';
-import { Server, getServerByPriority } from './Server';
+import { callAPIAndCacheResponse } from '@/api/getApi';
+import { downloadFile } from '@/api/downloadFile';
+import { Bestdoriurl, globalDefaultServer } from '@/config';
+import mainAPI from '@/types/_Main';
+import { Server, getServerByPriority } from '@/types/Server';
 import { Image, loadImage } from 'canvas';
-import {stringToNumberArray} from './utils'
+import {stringToNumberArray} from '@/types/utils'
 
 export class Costume {
     costumeId: number;

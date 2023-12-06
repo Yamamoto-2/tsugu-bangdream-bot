@@ -1,8 +1,8 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
-import { Card } from '../types/Card';
+import { Card } from '@/types/Card';
 import { createCanvas } from 'canvas';
-import { listToBase64 } from './utils';
+import { listToBase64 } from '@/routers/utils';
 
 const router = express.Router();
 

@@ -1,9 +1,9 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
-import { drawRandomGacha } from '../view/gachaSimulate';
-import { Gacha, getPresentGachaList } from '../types/Gacha';
-import { Server } from '../types/Server';
-import { listToBase64, isServer } from './utils';
+import { drawRandomGacha } from '@/view/gachaSimulate';
+import { Gacha, getPresentGachaList } from '@/types/Gacha';
+import { Server } from '@/types/Server';
+import { listToBase64, isServer } from '@/routers/utils';
 
 const router = express.Router();
 

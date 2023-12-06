@@ -1,10 +1,10 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
-import { drawCardDetail } from '../view/cardDetail';
-import { drawCardList } from '../view/cardList';
-import { isInteger, isServerList, listToBase64 } from './utils';
-import { fuzzySearch } from './fuzzySearch';
-import { Server } from '../types/Server';
+import { drawCardDetail } from '@/view/cardDetail';
+import { drawCardList } from '@/view/cardList';
+import { isInteger, isServerList, listToBase64 } from '@/routers/utils';
+import { fuzzySearch } from '@/routers/fuzzySearch';
+import { Server } from '@/types/Server';
 
 const router = express.Router();
 

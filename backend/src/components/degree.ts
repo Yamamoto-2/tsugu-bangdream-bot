@@ -1,7 +1,7 @@
-import { globalDefaultServer } from "../config"
-import { Degree } from "../types/Degree"
-import { Server, getServerByPriority } from "../types/Server"
-import { Canvas, createCanvas, Image } from 'canvas'
+import { globalDefaultServer } from "@/config"
+import { Degree } from "@/types/Degree"
+import { Server, getServerByPriority } from "@/types/Server"
+import { Canvas, createCanvas } from 'canvas'
 
 export async function drawDegree(degree: Degree, server: Server, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     // 如果服务器没有这个牌子，换一个有这个牌子的服务器

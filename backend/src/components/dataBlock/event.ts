@@ -1,12 +1,10 @@
-import { Event } from "../../types/Event";
-import { drawListWithLine, drawList } from "../list";
-import { drawDatablock } from '../dataBlock'
-import { drawCharacterInList } from '../list/character'
-import { drawAttributeInList } from "../list/attribute";
-import { drawTimeInList } from "../list/time";
-import { drawText } from "../text";
-import { createCanvas, Image, Canvas } from 'canvas';
-import { drawBannerImageCanvas } from './utils'
+import { Event } from "@/types/Event";
+import { drawListWithLine, drawList } from "@/components/list";
+import { drawDatablock } from '@/components/dataBlock'
+import { drawCharacterInList } from '@/components/list/character'
+import { drawAttributeInList } from "@/components/list/attribute";
+import { Canvas } from 'canvas';
+import { drawBannerImageCanvas } from '@/components/dataBlock/utils'
 
 export async function drawEventDatablock(event: Event, topLeftText?: string) {
     await event.initFull()

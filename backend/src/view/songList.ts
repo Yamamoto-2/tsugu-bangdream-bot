@@ -1,15 +1,15 @@
-import { Song } from "../types/Song";
-import mainAPI from "../types/_Main"
-import { match, checkRelationList } from "../routers/fuzzySearch"
-import { Canvas, createCanvas, Image, loadImage } from 'canvas'
-import { drawTitle } from '../components/title';
-import { outputFinalBuffer } from '../image/output'
-import { drawDatablockHorizontal } from "../components/dataBlock";
-import { drawSongInList } from '../components/list/song';
-import { drawDottedLine } from '../image/dottedLine';
-import { stackImage } from '../components/utils';
-import { Server } from '../types/Server';
-import { globalDefaultServer } from '../config';
+import { Song } from "@/types/Song";
+import mainAPI from "@/types/_Main"
+import { match, checkRelationList } from "@/routers/fuzzySearch"
+import { Canvas } from 'canvas'
+import { drawTitle } from '@/components/title';
+import { outputFinalBuffer } from '@/image/output'
+import { drawDatablockHorizontal } from "@/components/dataBlock";
+import { drawSongInList } from '@/components/list/song';
+import { drawDottedLine } from '@/image/dottedLine';
+import { stackImage } from '@/components/utils';
+import { Server } from '@/types/Server';
+import { globalDefaultServer } from '@/config';
 
 const maxHeight = 6000
 
@@ -80,13 +80,13 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
     var songImageListHorizontal: Canvas[] = [];
     var tempH = 0;
     var songPromises: Promise<Canvas>[] = [];
-    
+
     for (let i = 0; i < tempSongList.length; i++) {
-      songPromises.push(drawSongInList(tempSongList[i], undefined, undefined, defaultServerList));
+        songPromises.push(drawSongInList(tempSongList[i], undefined, undefined, defaultServerList));
     }
-    
+
     var songImages = await Promise.all(songPromises);
-    
+
     for (let i = 0; i < songImages.length; i++) {
         var tempImage = songImages[i];
         tempH += tempImage.height
@@ -105,9 +105,9 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
             songImageListHorizontal.push(line2)
         }
     }
-    
+
     songImageListHorizontal.pop();
-    
+
 
     var songListImage = drawDatablockHorizontal({
         list: songImageListHorizontal

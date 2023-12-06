@@ -1,13 +1,13 @@
-import { Player } from '../../types/Player';
-import { drawImageListCenter } from "../list";
-import { drawDatablock } from '../dataBlock'
-import { drawText, drawTextWithImages } from "../text";
+import { Player } from '@/types/Player';
+import { drawImageListCenter } from "@/components/list";
+import { drawDatablock } from '@/components/dataBlock'
+import { drawText, drawTextWithImages } from "@/components/text";
 import { createCanvas, Image, Canvas } from 'canvas';
-import { drawDegree } from '../degree';
-import { Degree } from '../../types/Degree';
-import { Card } from '../../types/Card';
-import { drawTitle } from '../title';
-import { getIcon } from '../../types/Server';
+import { drawDegree } from '@/components/degree';
+import { Degree } from '@/types/Degree';
+import { Card } from '@/types/Card';
+import { drawTitle } from '@/components/title';
+import { getIcon } from '@/types/Server';
 
 export async function drawPlayerDetailBlockWithIllust(player: Player): Promise<Canvas> {
     var list: Array<Canvas | Image> = []

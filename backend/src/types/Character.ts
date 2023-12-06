@@ -1,8 +1,8 @@
-import mainAPI from './_Main'
-import { callAPIAndCacheResponse } from '../api/getApi'
+import mainAPI from '@/types/_Main'
+import { callAPIAndCacheResponse } from '@/api/getApi'
 import { Image, loadImage } from 'canvas'
-import { downloadFileCache } from '../api/downloadFileCache'
-import { formatNumber } from './utils';
+import { downloadFileCache } from '@/api/downloadFileCache'
+import { formatNumber } from '@/types/utils';
 
 let characterDataCache = {}
 

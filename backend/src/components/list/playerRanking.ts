@@ -1,12 +1,12 @@
 import { Canvas, createCanvas, loadImage } from 'canvas'
-import { resizeImage } from "../utils"
-import { Card } from '../../types/Card';
-import { drawCardIcon } from '../card';
-import { drawDegree } from '../degree';
-import { Server } from '../../types/Server';
-import { Degree } from '../../types/Degree';
-import { drawText } from '../text';
-import { downloadFileCache } from '../../api/downloadFileCache';
+import { resizeImage } from "@/components/utils"
+import { Card } from '@/types/Card';
+import { drawCardIcon } from '@/components/card';
+import { drawDegree } from '@/components/degree';
+import { Server } from '@/types/Server';
+import { Degree } from '@/types/Degree';
+import { drawText } from '@/components/text';
+import { downloadFileCache } from '@/api/downloadFileCache';
 
 interface User{
     uid:number,

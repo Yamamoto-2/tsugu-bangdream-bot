@@ -1,17 +1,17 @@
-import { Room } from "../../types/Room";
-import { Player } from "../../types/Player";
-import { getQQUserIcon, getBandoriStationUserIcon } from "../../api/userIcon"
+import { Room } from "@/types/Room";
+import { Player } from "@/types/Player";
+import { getQQUserIcon, getBandoriStationUserIcon } from "@/api/userIcon"
 import { Canvas, Image, createCanvas, loadImage } from 'canvas';
-import { drawDatablock } from "../dataBlock";
-import { drawList, line, drawListWithLine } from "../list";
-import { drawText } from "../text";
-import { stackImage, stackImageHorizontal } from "../utils";
-import { changeTimefomant } from './time'
-import { drawPlayerCardInList } from './playerCardIconList'
-import { drawDegree } from '../degree'
-import { Degree } from "../../types/Degree";
-import { resizeImage } from "../utils";
-import { getServerByServerId } from '../../types/Server'
+import { drawDatablock } from "@/components/dataBlock";
+import { drawList, line, drawListWithLine } from "@/components/list";
+import { drawText } from "@/components/text";
+import { stackImage, stackImageHorizontal } from "@/components/utils";
+import { changeTimefomant } from '@/components/list/time'
+import { drawPlayerCardInList } from '@/components/list/playerCardIconList'
+import { drawDegree } from '@/components/degree'
+import { Degree } from "@/types/Degree";
+import { resizeImage } from "@/components/utils";
+import { getServerByServerId } from '@/types/Server'
 
 
 

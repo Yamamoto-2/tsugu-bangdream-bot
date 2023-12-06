@@ -1,6 +1,6 @@
 import { MongoClient, ObjectId } from 'mongodb';
-import { tsuguUser, BindingStatus, globalServerPriority, globalDefaultServer, tsuguUserServerInList } from '../config';
-import { Server } from '../types/Server';
+import { tsuguUser, BindingStatus, globalServerPriority, globalDefaultServer, tsuguUserServerInList } from '@/config';
+import { Server } from '@/types/Server';
 
 export class UserDB {
   private client: MongoClient;

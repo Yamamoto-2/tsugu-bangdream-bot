@@ -1,9 +1,9 @@
 import { Canvas, createCanvas, Image } from 'canvas';
-import { drawText } from "../text";
-import { drawList } from "../list";
-import { stackImage } from '../utils'
-import { drawRoundedRect } from "../../image/drawRect";
-import { Card, Stat, limitBreakRankStat } from "../../types/Card";
+import { drawText } from "@/components/text";
+import { drawList } from "@/components/list";
+import { stackImage } from '@/components/utils'
+import { drawRoundedRect } from "@/image/drawRect";
+import { Card, Stat, limitBreakRankStat } from "@/types/Card";
 
 export const statConfig = {
     performance: { color: '#f76da1', name: '演出' },

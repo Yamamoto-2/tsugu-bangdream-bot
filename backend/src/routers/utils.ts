@@ -1,5 +1,5 @@
-import { Server } from "../types/Server";
-import { tsuguUser } from "../config";
+import { Server } from "@/types/Server";
+import { tsuguUser } from "@/config";
 
 export function generateVerifyCode(): number {
     let verifyCode: number;

@@ -1,6 +1,6 @@
 import { Canvas, Image, createCanvas, loadImage } from 'canvas';
-import { CreateBG, CreateBGEazy } from './BG';
-import { assetsRootPath } from '../config';
+import { CreateBG, CreateBGEazy } from '@/image/BG';
+import { assetsRootPath } from '@/config';
 import * as path from 'path';
 var BGDefaultImage: Image
 async function loadImageOnce() {

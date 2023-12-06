@@ -1,6 +1,6 @@
-import { drawSongMetaList } from '../view/songMetaList';
-import { Server, getServerByServerId } from '../types/Server';
-import { listToBase64, isServerList, isServer } from './utils';
+import { drawSongMetaList } from '@/view/songMetaList';
+import { Server, getServerByServerId } from '@/types/Server';
+import { listToBase64, isServerList, isServer } from '@/routers/utils';
 import express from 'express';
 import { body, validationResult } from 'express-validator';
 

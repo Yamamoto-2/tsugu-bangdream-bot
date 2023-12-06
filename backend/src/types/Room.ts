@@ -1,9 +1,9 @@
-import { BandoriStationurl, tsuguUser } from "../config";
-import { Player } from "./Player";
+import { BandoriStationurl, tsuguUser } from "@/config";
+import { Player } from "@/types/Player";
 import { unescape } from "querystring";
-import { Server, getServerByName } from "./Server";
-import { getJsonAndSave } from "../api/downloader";
-import { BindingStatus } from "../config"
+import { Server, getServerByName } from "@/types/Server";
+import { getJsonAndSave } from "@/api/downloader";
+import { BindingStatus } from "@/config"
 import * as axios from 'axios'
 
 

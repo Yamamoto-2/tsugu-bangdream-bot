@@ -1,14 +1,14 @@
-import { Character } from "../types/Character";
-import mainAPI from "../types/_Main"
-import { match } from "../routers/fuzzySearch"
+import { Character } from "@/types/Character";
+import mainAPI from "@/types/_Main"
+import { match } from "@/routers/fuzzySearch"
 import { Canvas } from 'canvas'
-import { drawDatablock, } from '../components/dataBlock';
-import { drawTitle } from '../components/title';
-import { outputFinalBuffer } from '../image/output'
-import { Server } from '../types/Server'
-import { globalDefaultServer } from '../config';
-import { drawCharacterHalfBlock } from '../components/dataBlock/characterHalf'
-import { drawList } from '../components/list'
+import { drawDatablock, } from '@/components/dataBlock';
+import { drawTitle } from '@/components/title';
+import { outputFinalBuffer } from '@/image/output'
+import { Server } from '@/types/Server'
+import { globalDefaultServer } from '@/config';
+import { drawCharacterHalfBlock } from '@/components/dataBlock/characterHalf'
+import { drawList } from '@/components/list'
 import { drawCharacterDetail } from './characterDetail'
 
 const maxWidth = 1370

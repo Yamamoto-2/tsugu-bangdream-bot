@@ -1,7 +1,7 @@
-import { globalDefaultServer } from '../../config';
-import { getPresentEvent } from '../../types/Event';
-import { Server, getServerByName } from '../../types/Server';
-import { drawListByServerList } from '../list'
+import { globalDefaultServer } from '@/config';
+import { getPresentEvent } from '@/types/Event';
+import { Server, getServerByName } from '@/types/Server';
+import { drawListByServerList } from '@/components/list'
 import { Canvas } from 'canvas'
 import * as moment from 'moment'
 

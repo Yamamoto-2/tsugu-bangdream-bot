@@ -1,11 +1,11 @@
-import { drawList } from '../list'
+import { drawList } from '@/components/list'
 import { Canvas } from 'canvas'
-import { drawDegree } from '../degree'
-import { Degree } from '../../types/Degree'
-import { Server, getServerByPriority } from '../../types/Server'
-import { Event } from '../../types/Event'
-import { stackImage } from '../utils'
-import { globalDefaultServer } from '../../config'
+import { drawDegree } from '@/components/degree'
+import { Degree } from '@/types/Degree'
+import { Server, getServerByPriority } from '@/types/Server'
+import { Event } from '@/types/Event'
+import { stackImage } from '@/components/utils'
+import { globalDefaultServer } from '@/config'
 
 interface DegreeListInListOptions {
     key?: string;
