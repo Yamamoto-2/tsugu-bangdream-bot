@@ -1,7 +1,7 @@
 import * as path from 'path';
-import { assetsRootPath } from '../config';
-import { getCacheDirectory, getFileNameFromUrl } from './utils';
-import { download } from './downloader';
+import { assetsRootPath } from '@/config';
+import { getCacheDirectory, getFileNameFromUrl } from '@/api/utils';
+import { download } from '@/api/downloader';
 import { Buffer } from 'buffer';
 import * as fs from 'fs';
 

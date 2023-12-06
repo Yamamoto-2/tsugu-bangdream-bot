@@ -1,20 +1,18 @@
-import { getPresentEvent } from '../types/Event';
-import { Card } from '../types/Card'
-import { drawList, line, drawListByServerList, drawListMerge } from '../components/list';
-import { drawDatablock } from '../components/dataBlock'
+import { getPresentEvent } from '@/types/Event';
+import { drawList, line, drawListByServerList, drawListMerge } from '@/components/list';
+import { drawDatablock } from '@/components/dataBlock'
 import { Image, Canvas, createCanvas } from 'canvas'
-import { drawBannerImageCanvas } from '../components/dataBlock/utils'
-import { drawTimeInList } from '../components/list/time';
-import { drawCardListInList } from '../components/list/cardIconList'
-import { Gacha } from '../types/Gacha'
-import { Server, getServerByPriority } from '../types/Server';
-import { drawTitle } from '../components/title'
-import { outputFinalBuffer } from '../image/output'
-import { drawEventDatablock } from '../components/dataBlock/event';
-import { drawGashaPaymentMethodInList } from '../components/list/gachaPaymentMethod';
-import { drawGachaRateInList } from '../components/list/gachaRate';
-import { globalDefaultServer, serverNameFullList } from '../config';
-import { drawGachaPickupInList } from '../components/list/gachaPickUp'
+import { drawBannerImageCanvas } from '@/components/dataBlock/utils'
+import { drawTimeInList } from '@/components/list/time';
+import { Gacha } from '@/types/Gacha'
+import { Server, getServerByPriority } from '@/types/Server';
+import { drawTitle } from '@/components/title'
+import { outputFinalBuffer } from '@/image/output'
+import { drawEventDatablock } from '@/components/dataBlock/event';
+import { drawGashaPaymentMethodInList } from '@/components/list/gachaPaymentMethod';
+import { drawGachaRateInList } from '@/components/list/gachaRate';
+import { globalDefaultServer, serverNameFullList } from '@/config';
+import { drawGachaPickupInList } from '@/components/list/gachaPickUp'
 
 export async function drawGachaDetail(gachaId: number, defaultServerList: Server[] = globalDefaultServer, useEasyBG: boolean): Promise<Array<Buffer | string>> {
     const gacha = new Gacha(gachaId)

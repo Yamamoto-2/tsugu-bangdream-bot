@@ -1,5 +1,5 @@
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
-import { assetsRootPath } from '../config';
+import { assetsRootPath } from '@/config';
 import { registerFont, loadImage } from 'canvas';
 import 'chartjs-adapter-moment';
 registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })

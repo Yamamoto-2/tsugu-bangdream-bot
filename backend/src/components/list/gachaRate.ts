@@ -1,7 +1,7 @@
-import { drawRarityInList } from './rarity'
-import { Gacha } from '../../types/Gacha'
-import { Server } from '../../types/Server'
-import { stackImage } from '../utils'
+import { drawRarityInList } from '@/components/list/rarity'
+import { Gacha } from '@/types/Gacha'
+import { Server } from '@/types/Server'
+import { stackImage } from '@/components/utils'
 import { Canvas } from 'canvas'
 
 export async function drawGachaRateInList(gacha: Gacha, server: Server): Promise<Canvas> {

@@ -1,9 +1,9 @@
-import { Song, difficultyName } from '../types/Song'
-import { Band } from '../types/Band'
-import * as BestdoriPreview from '../components/BestdoriPreview.cjs'
-import { getServerByPriority } from '../types/Server'
-import { Server } from '../types/Server'
-import { globalDefaultServer, serverNameFullList } from '../config';
+import { Song, difficultyName } from '@/types/Song'
+import { Band } from '@/types/Band'
+import * as BestdoriPreview from '@/components/BestdoriPreview.cjs'
+import { getServerByPriority } from '@/types/Server'
+import { Server } from '@/types/Server'
+import { globalDefaultServer, serverNameFullList } from '@/config';
 
 export async function drawSongChart(songId: number, difficultyId: number, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
     const song = new Song(songId)
@@ -11,7 +11,7 @@ export async function drawSongChart(songId: number, difficultyId: number, defaul
         return ['歌曲不存在']
     }
     await song.initFull()
-    if(!song.difficulty[difficultyId]) {
+    if (!song.difficulty[difficultyId]) {
         return ['难度不存在']
     }
     const server = getServerByPriority(song.publishedAt, defaultServerList)

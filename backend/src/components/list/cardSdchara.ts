@@ -1,7 +1,7 @@
-import { Costume } from "../../types/Costume";
-import { Card } from "../../types/Card";
+import { Costume } from "@/types/Costume";
+import { Card } from "@/types/Card";
 import { Canvas, createCanvas } from 'canvas';
-import { drawList } from '../list'
+import { drawList } from '@/components/list'
 
 export async function drawSdcharaInList(card: Card): Promise<Canvas> {
     const costumeId = card.costumeId

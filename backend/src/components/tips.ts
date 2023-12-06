@@ -1,6 +1,6 @@
 import { Canvas, Image, createCanvas } from 'canvas'
-import { drawText } from "./text"
-import { resizeImage } from "./utils"
+import { drawText } from "@/components/text"
+import { resizeImage } from "@/components/utils"
 
 const line2 = createCanvas(1000, 3)
 const ctx2 = line2.getContext('2d')

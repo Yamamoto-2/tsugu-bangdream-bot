@@ -1,5 +1,5 @@
-import { Attribute } from '../../types/Attribute'
-import { drawList } from '../list'
+import { Attribute } from '@/types/Attribute'
+import { drawList } from '@/components/list'
 import { Canvas, Image } from 'canvas'
 
 interface AttributeInListOptions {

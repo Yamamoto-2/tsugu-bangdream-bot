@@ -1,9 +1,9 @@
 import { createCanvas } from 'canvas';
-import { Cutoff } from "../../types/Cutoff";
-import { drawTimeLineChart, getColor } from "../chart";
-import { Event } from '../../types/Event';
-import { Server } from '../../types/Server';
-import { EventTop } from '../../types/EventTop';
+import { Cutoff } from "@/types/Cutoff";
+import { drawTimeLineChart, getColor } from "@/components/chart";
+import { Event } from '@/types/Event';
+import { Server } from '@/types/Server';
+import { EventTop } from '@/types/EventTop';
 
 export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = false, server: Server = Server['jp']) {
     //setStartToZero:是否将开始时间设置为0

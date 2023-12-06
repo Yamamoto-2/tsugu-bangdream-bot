@@ -1,17 +1,17 @@
-import { getPresentEvent } from '../types/Event';
-import { drawList, line, drawListByServerList, drawTipsInList, drawListMerge } from '../components/list';
-import { drawDatablock } from '../components/dataBlock'
+import { getPresentEvent } from '@/types/Event';
+import { drawList, line, drawListByServerList, drawListMerge } from '@/components/list';
+import { drawDatablock } from '@/components/dataBlock'
 import { Image, Canvas } from 'canvas'
-import { drawTimeInList } from '../components/list/time';
-import { Server } from '../types/Server';
-import { drawTitle } from '../components/title'
-import { outputFinalBuffer } from '../image/output'
-import { Song } from '../types/Song'
-import { drawSongDataBlock } from '../components/dataBlock/song';
-import { Band } from '../types/Band';
-import { drawEventDatablock } from '../components/dataBlock/event';
-import { drawSongMetaListDataBlock } from '../components/dataBlock/songMetaList'
-import { globalDefaultServer, serverNameFullList } from '../config';
+import { drawTimeInList } from '@/components/list/time';
+import { Server } from '@/types/Server';
+import { drawTitle } from '@/components/title'
+import { outputFinalBuffer } from '@/image/output'
+import { Song } from '@/types/Song'
+import { drawSongDataBlock } from '@/components/dataBlock/song';
+import { Band } from '@/types/Band';
+import { drawEventDatablock } from '@/components/dataBlock/event';
+import { drawSongMetaListDataBlock } from '@/components/dataBlock/songMetaList'
+import { globalDefaultServer, serverNameFullList } from '@/config';
 
 export async function drawSongDetail(song: Song, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
     if (song.isExist == false) {

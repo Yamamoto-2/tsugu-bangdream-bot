@@ -1,4 +1,4 @@
-import { downloadFile } from './downloadFile'
+import { downloadFile } from '@/api/downloadFile'
 
 const cache: { [url: string]: Buffer } = {};
 

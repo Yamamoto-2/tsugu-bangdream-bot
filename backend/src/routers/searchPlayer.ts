@@ -1,7 +1,7 @@
-import { drawPlayerDetail } from "../view/playerDetail";
-import { Server } from "../types/Server";
-import { listToBase64, isServer } from './utils';
-import { getServerByServerId } from '../types/Server';
+import { drawPlayerDetail } from "@/view/playerDetail";
+import { Server } from "@/types/Server";
+import { listToBase64, isServer } from '@/routers/utils';
+import { getServerByServerId } from '@/types/Server';
 import express from 'express';
 import { body, validationResult } from 'express-validator'; // Import express-validator functions
 

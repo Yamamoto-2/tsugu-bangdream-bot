@@ -1,7 +1,7 @@
-import { Server } from "./Server";
-import { Event } from './Event';
-import { callAPIAndCacheResponse } from "../api/getApi";
-import { Bestdoriurl } from "../config";
+import { Server } from "@/types/Server";
+import { Event } from '@/types/Event';
+import { callAPIAndCacheResponse } from "@/api/getApi";
+import { Bestdoriurl } from "@/config";
 
 
 export class EventTop{

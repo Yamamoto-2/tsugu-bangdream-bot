@@ -1,20 +1,20 @@
 import express from 'express';
-import { gachaSimulateRouter } from './routers/gachaSimulate';
-import { cardIllustrationRouter } from './routers/getCardIllustration';
-import { roomListRouter } from './routers/roomList';
-import { searchCardRouter } from './routers/searchCard';
-import { searchCharacterRouter } from './routers/searchCharacter';
-import { searchEventRouter } from './routers/searchEvent';
-import { searchGachaRouter } from './routers/searchGacha';
-import { searchPlayerRouter } from './routers/searchPlayer';
-import { searchSongRouter } from './routers/searchSong';
-import { songMetaRouter } from './routers/songMeta';
-import { ycxRouter } from './routers/ycx';
-import { ycxAllRouter } from './routers/ycxAll';
-import { lsycxRouter } from './routers/lsycx';
-import { songChartRouter } from './routers/songChart';
-import { userRouter } from './routers/user'
-import { stationRouter } from './routers/station'
+import { gachaSimulateRouter } from '@/routers/gachaSimulate';
+import { cardIllustrationRouter } from '@/routers/getCardIllustration';
+import { roomListRouter } from '@/routers/roomList';
+import { searchCardRouter } from '@/routers/searchCard';
+import { searchCharacterRouter } from '@/routers/searchCharacter';
+import { searchEventRouter } from '@/routers/searchEvent';
+import { searchGachaRouter } from '@/routers/searchGacha';
+import { searchPlayerRouter } from '@/routers/searchPlayer';
+import { searchSongRouter } from '@/routers/searchSong';
+import { songMetaRouter } from '@/routers/songMeta';
+import { ycxRouter } from '@/routers/ycx';
+import { ycxAllRouter } from '@/routers/ycxAll';
+import { lsycxRouter } from '@/routers/lsycx';
+import { songChartRouter } from '@/routers/songChart';
+import { userRouter } from '@/routers/user'
+import { stationRouter } from '@/routers/station'
 import * as dotenv from 'dotenv';
 dotenv.config();
 

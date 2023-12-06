@@ -1,13 +1,13 @@
-import { Song, getMetaRanking } from "../types/Song";
-import { Canvas, createCanvas, Image, loadImage } from 'canvas'
-import { drawTitle } from '../components/title';
-import { outputFinalBuffer } from '../image/output'
-import { drawSongInList } from '../components/list/song';
-import { drawDottedLine } from '../image/dottedLine';
-import {  stackImageHorizontal } from '../components/utils';
-import { Server} from '../types/Server';
-import { serverNameFullList } from '../config';
-import { drawDatablock } from '../components/dataBlock'
+import { Song, getMetaRanking } from "@/types/Song";
+import { Canvas } from 'canvas'
+import { drawTitle } from '@/components/title';
+import { outputFinalBuffer } from '@/image/output'
+import { drawSongInList } from '@/components/list/song';
+import { drawDottedLine } from '@/image/dottedLine';
+import { stackImageHorizontal } from '@/components/utils';
+import { Server } from '@/types/Server';
+import { serverNameFullList } from '@/config';
+import { drawDatablock } from '@/components/dataBlock'
 
 // 紧凑化虚线分割
 const line = drawDottedLine({
@@ -22,7 +22,7 @@ const line = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawSongMetaList(server: Server):Promise<Array<Buffer | string>> {
+export async function drawSongMetaList(server: Server): Promise<Array<Buffer | string>> {
     const feverMode = [true, false]
     const imageList = []
     for (let i = 0; i < feverMode.length; i++) {

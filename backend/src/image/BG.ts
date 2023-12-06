@@ -1,8 +1,8 @@
-import { createBlurredTrianglePattern } from "./BG/BG_triangle";
-import { scatterImages } from "./BG/BG_starScatter";
-import { drawTextOnCanvas } from "./BG/BG_text";
+import { createBlurredTrianglePattern } from "@/image/BG/BG_triangle";
+import { scatterImages } from "@/image/BG/BG_starScatter";
+import { drawTextOnCanvas } from "@/image/BG/BG_text";
 import { createCanvas, loadImage, Image, Canvas } from 'canvas';
-import { assetsRootPath } from '../config'
+import { assetsRootPath } from '@/config'
 import * as path from 'path';
 
 interface BGOptions {

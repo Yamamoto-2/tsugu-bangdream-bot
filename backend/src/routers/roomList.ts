@@ -1,8 +1,8 @@
-import { drawRoomList } from '../view/roomList';
-import { listToBase64, isServer } from './utils';
-import { Room } from '../types/Room';
-import { Player } from '../types/Player';
-import { getServerByServerId } from '../types/Server';
+import { drawRoomList } from '@/view/roomList';
+import { listToBase64, isServer } from '@/routers/utils';
+import { Room } from '@/types/Room';
+import { Player } from '@/types/Player';
+import { getServerByServerId } from '@/types/Server';
 import express from 'express';
 import { body, validationResult } from 'express-validator';
 

@@ -1,17 +1,17 @@
-import { Canvas, createCanvas, Image, loadImage } from 'canvas'
-import { outputFinalBuffer } from '../image/output'
-import { Server } from '../types/Server'
-import { Player } from '../types/Player';
-import { drawPlayerDetailBlockWithIllust } from '../components/dataBlock/playerDetail'
-import { assetsRootPath } from '../config'
+import { Canvas, Image, loadImage } from 'canvas'
+import { outputFinalBuffer } from '@/image/output'
+import { Server } from '@/types/Server'
+import { Player } from '@/types/Player';
+import { drawPlayerDetailBlockWithIllust } from '@/components/dataBlock/playerDetail'
+import { assetsRootPath } from '@/config'
 import * as path from 'path'
-import { drawPlayerCardInList } from '../components/list/playerCardIconList'
-import { line, drawList, drawTipsInList} from '../components/list'
-import { drawStatInList } from '../components/list/stat';
-import { drawDatablock } from '../components/dataBlock';
-import { drawPlayerBandRankInList, drawPlayerStageChallengeRankInList, drawPlayerDeckTotalRatingInList } from '../components/list/bandDetail'
-import { drawPlayerDifficultyDetailInList } from '../components/list/difficultyDetail'
-import {drawCharacterRankInList} from '../components/list/characterDetail'
+import { drawPlayerCardInList } from '@/components/list/playerCardIconList'
+import { line, drawList, drawTipsInList } from '@/components/list'
+import { drawStatInList } from '@/components/list/stat';
+import { drawDatablock } from '@/components/dataBlock';
+import { drawPlayerBandRankInList, drawPlayerStageChallengeRankInList, drawPlayerDeckTotalRatingInList } from '@/components/list/bandDetail'
+import { drawPlayerDifficultyDetailInList } from '@/components/list/difficultyDetail'
+import { drawCharacterRankInList } from '@/components/list/characterDetail'
 
 let BGDefaultImage: Image
 async function loadImageOnce() {
@@ -19,7 +19,7 @@ async function loadImageOnce() {
 }
 loadImageOnce()
 
-export async function drawPlayerDetail(playerId: number, server: Server,useEasyBG:boolean):Promise<Array<Buffer | string>>  {
+export async function drawPlayerDetail(playerId: number, server: Server, useEasyBG: boolean): Promise<Array<Buffer | string>> {
     var player = new Player(playerId, server)
     await player.initFull()
     if (!player.isExist) {
@@ -39,7 +39,7 @@ export async function drawPlayerDetail(playerId: number, server: Server,useEasyB
         var stat = await player.calcStat()
         list.push(await drawStatInList(stat))
         list.push(drawTipsInList({
-            text:'因为无法获得角色等级加成，综合力可能会出现偏差'
+            text: '因为无法获得角色等级加成，综合力可能会出现偏差'
         }))
         list.push(line)
     }
@@ -81,8 +81,8 @@ export async function drawPlayerDetail(playerId: number, server: Server,useEasyB
         list.push(line)
     }
     //角色等级
-    if(player.profile.publishCharacterRankFlg){
-        list.push(await drawCharacterRankInList(player,'角色等级'))
+    if (player.profile.publishCharacterRankFlg) {
+        list.push(await drawCharacterRankInList(player, '角色等级'))
         list.push(line)
     }
 

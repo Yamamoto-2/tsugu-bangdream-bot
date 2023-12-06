@@ -1,10 +1,10 @@
-import { drawCutoffDetail } from '../view/cutoffDetail';
-import { Server, getServerByServerId } from '../types/Server';
-import { getPresentEvent } from '../types/Event';
-import { listToBase64, isServer } from './utils';
+import { drawCutoffDetail } from '@/view/cutoffDetail';
+import { Server, getServerByServerId } from '@/types/Server';
+import { getPresentEvent } from '@/types/Event';
+import { listToBase64, isServer } from '@/routers/utils';
 import { body, validationResult } from 'express-validator';
 import express from 'express';
-import { drawCutoffEventTop } from '../view/cutoffEventTop';
+import { drawCutoffEventTop } from '@/view/cutoffEventTop';
 
 const router = express.Router();
 

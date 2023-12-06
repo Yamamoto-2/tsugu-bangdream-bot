@@ -1,13 +1,13 @@
-import { Player } from "../../types/Player";
+import { Player } from "@/types/Player";
 import { Canvas, createCanvas, Image, loadImage } from 'canvas';
-import { drawList } from '../list'
-import { resizeImage } from "../utils";
-import { Band } from "../../types/Band";
-import { drawTextWithImages } from "../text";
-import { starList } from './rarity'
-import mainAPI from "../../types/_Main";
-import { Bestdoriurl } from "../../config";
-import { assetsRootPath } from "../../config";
+import { drawList } from '@/components/list'
+import { resizeImage } from "@/components/utils";
+import { Band } from "@/types/Band";
+import { drawTextWithImages } from "@/components/text";
+import { starList } from '@/components/list/rarity'
+import mainAPI from "@/types/_Main";
+import { Bestdoriurl } from "@/config";
+import { assetsRootPath } from "@/config";
 import * as path from 'path'
 
 interface drawBandDetailsInListOptions {

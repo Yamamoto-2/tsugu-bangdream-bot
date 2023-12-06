@@ -1,5 +1,5 @@
 const Canvas = require("canvas")
-const config = require("../config")
+const config = require("@/config")
 /**
  * @typedef {object} BestdoriNote
  * @property {"BPM" | "Long" | "Slide" | "Single" | "Directional"} type

@@ -1,25 +1,26 @@
-import { Card } from '../types/Card'
-import { Skill } from '../types/Skill';
-import { drawList, line, drawListByServerList, drawListMerge } from '../components/list';
-import { drawDatablock } from '../components/dataBlock'
-import { drawCardIllustration } from '../components/card';
-import { drawSkillInList } from '../components/list/skill'
-import { drawTimeInList } from '../components/list/time';
-import { drawCardPrefixInList } from '../components/list/cardPrefix'
-import { drawCardStatInList } from '../components/list/stat'
-import { drawCardListInList } from '../components/list/cardIconList'
-import { drawSdcharaInList } from '../components/list/cardSdchara'
-import { drawEventDatablock } from '../components/dataBlock/event';
-import { drawGachaDatablock } from '../components/dataBlock/gacha'
+import { Card } from '@/types/Card'
+import { Skill } from '@/types/Skill';
+import { drawList, line, drawListByServerList, drawListMerge } from '@/components/list';
+import { drawDatablock } from '@/components/dataBlock'
+import { drawCardIllustration } from '@/components/card';
+import { drawSkillInList } from '@/components/list/skill'
+import { drawTimeInList } from '@/components/list/time';
+import { drawCardPrefixInList } from '@/components/list/cardPrefix'
+import { drawCardStatInList } from '@/components/list/stat'
+import { drawCardListInList } from '@/components/list/cardIconList'
+import { drawSdcharaInList } from '@/components/list/cardSdchara'
+import { drawEventDatablock } from '@/components/dataBlock/event';
+import { drawGachaDatablock } from '@/components/dataBlock/gacha'
 import { Image, Canvas, createCanvas } from 'canvas'
-import { Server } from '../types/Server';
-import { drawTitle } from '../components/title';
-import { outputFinalBuffer } from '../image/output'
-import { Event } from '../types/Event';
-import { Gacha } from '../types/Gacha';
-import { globalDefaultServer, serverNameFullList } from '../config';
+import { Server } from '@/types/Server';
+import { drawTitle } from '@/components/title';
+import { outputFinalBuffer } from '@/image/output'
+import { Event } from '@/types/Event';
+import { Gacha } from '@/types/Gacha';
+import { globalDefaultServer, serverNameFullList } from '@/config';
 
-async function drawCardDetail(cardId: number, defaultServerList: Server[] = globalDefaultServer,useEasyBG:boolean): Promise<Array<string|Buffer>> {
+
+async function drawCardDetail(cardId: number, defaultServerList: Server[] = globalDefaultServer, useEasyBG: boolean): Promise<Array<string | Buffer>> {
     const card = new Card(cardId)
     if (!card.isExist) {
         return ['错误: 卡牌不存在']
@@ -161,10 +162,10 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
             gachaIdList.sort((a, b) => {
                 const gachaA = new Gacha(a);
                 const gachaB = new Gacha(b);
-                if(gachaA.publishedAt[server] != gachaB.publishedAt[server]){
+                if (gachaA.publishedAt[server] != gachaB.publishedAt[server]) {
                     return gachaA.publishedAt[server] - gachaB.publishedAt[server];
                 }
-                else{
+                else {
                     return gachaA.gachaId - gachaB.gachaId;
                 }
             })

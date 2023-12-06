@@ -1,4 +1,4 @@
-import { cacheRootPath } from '../config';
+import { cacheRootPath } from '@/config';
 import * as path from 'path';
 
 

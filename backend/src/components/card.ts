@@ -1,13 +1,13 @@
-import { assetsRootPath } from '../config'
-import { setFontStyle } from '../components/text'
-import { Band } from '../types/Band'
-import { Attribute } from '../types/Attribute'
-import { Card } from '../types/Card'
+import { assetsRootPath } from '@/config'
+import { setFontStyle } from '@/components/text'
+import { Band } from '@/types/Band'
+import { Attribute } from '@/types/Attribute'
+import { Card } from '@/types/Card'
 import { Image, Canvas, loadImage, createCanvas } from 'canvas'
-import { downloadFileCache } from '../api/downloadFileCache'
-import { drawCardIconSkill } from './skill'
+import { downloadFileCache } from '@/api/downloadFileCache'
+import { drawCardIconSkill } from '@/components/skill'
 import * as path from 'path'
-import { Skill } from '../types/Skill'
+import { Skill } from '@/types/Skill'
 
 var cardTypeIconList: { [type: string]: Image } = {}
 var starList: { [type: string]: Image } = {}

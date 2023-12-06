@@ -1,5 +1,5 @@
 import { createCanvas, loadImage, Canvas, registerFont } from 'canvas';
-import { assetsRootPath } from '../config';
+import { assetsRootPath } from '@/config';
 
 //指定字体，字号，文本，获取文本宽度
 export function getTextWidth(text: string, textSize: number,font: string ) {

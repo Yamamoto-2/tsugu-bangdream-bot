@@ -1,10 +1,10 @@
-import { downloadFileCache } from '../api/downloadFileCache'
+import { downloadFileCache } from '@/api/downloadFileCache'
 import { loadImage, Image } from 'canvas'
-import { globalDefaultServer, serverNameFullList } from '../config'
+import { globalDefaultServer, serverNameFullList } from '@/config'
+import { globalServerPriority } from '@/config'
 
 //服务器列表，因为有TW而不适用country
 export const serverList: Array<Server> = [0, 1, 2, 3, 4]
-import { globalServerPriority } from '../config'
 
 export enum Server {
     jp, en, tw, cn, kr

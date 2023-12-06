@@ -1,10 +1,10 @@
-import { callAPIAndCacheResponse } from '../api/getApi'
+import { callAPIAndCacheResponse } from '@/api/getApi'
 import { Image, loadImage } from 'canvas'
-import { downloadFile } from '../api/downloadFile'
-import { getServerByPriority, Server } from './Server'
-import mainAPI from './_Main'
-import { globalDefaultServer } from '../config'
-import { stringToNumberArray } from './utils'
+import { downloadFile } from '@/api/downloadFile'
+import { getServerByPriority, Server } from '@/types/Server'
+import mainAPI from '@/types/_Main'
+import { globalDefaultServer } from '@/config'
+import { stringToNumberArray } from '@/types/utils'
 
 export const difficultyName = {
     0: "easy",

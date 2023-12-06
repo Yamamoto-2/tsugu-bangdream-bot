@@ -1,7 +1,5 @@
 import * as path from 'path';
-import { Server } from './types/Server';
-
-
+import { Server } from '@/types/Server';
 
 export const projectRoot: string = path.resolve(path.dirname(__dirname));
 export const assetsRootPath: string = path.join(projectRoot, '/assets');

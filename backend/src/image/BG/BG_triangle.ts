@@ -1,5 +1,5 @@
 import { createCanvas, loadImage, Canvas, Image } from 'canvas';
-import { getBlurredImage } from '../blurImage';
+import { getBlurredImage } from '@/image/blurImage';
 
 interface createBlurredTrianglePatternOptions {
     image: Image,

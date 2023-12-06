@@ -1,11 +1,11 @@
 import { Canvas, createCanvas } from 'canvas'
-import { Band } from "../../types/Band"
-import { Server, getServerByPriority } from "../../types/Server"
-import { Song } from "../../types/Song"
-import { drawText, setFontStyle } from "../text"
-import { resizeImage } from "../utils"
-import { drawDifficulityList, drawDifficulity } from "./difficulty"
-import { globalDefaultServer } from "../../config"
+import { Band } from "@/types/Band"
+import { Server, getServerByPriority } from "@/types/Server"
+import { Song } from "@/types/Song"
+import { drawText, setFontStyle } from "@/components/text"
+import { resizeImage } from "@/components/utils"
+import { drawDifficulityList, drawDifficulity } from "@/components/list/difficulty"
+import { globalDefaultServer } from "@/config"
 
 export async function drawSongInList(song: Song, difficulty?: number, text?: string, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     var server = getServerByPriority(song.publishedAt, defaultServerList)

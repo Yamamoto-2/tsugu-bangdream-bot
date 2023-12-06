@@ -1,6 +1,6 @@
 import * as fs from 'fs';
-import { fuzzySearchPath } from '../config';
-import { isInteger } from './utils'
+import { fuzzySearchPath } from '@/config';
+import { isInteger } from '@/routers/utils'
 
 interface fuzzySearchConfig {
   [type: string]: { [key: string]: string[] };

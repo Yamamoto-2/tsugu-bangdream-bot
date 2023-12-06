@@ -1,6 +1,6 @@
 import * as path from 'path';
-import { getJsonAndSave } from './downloader';
-import { getCacheDirectory, getFileNameFromUrl } from './utils';
+import { getJsonAndSave } from '@/api/downloader';
+import { getCacheDirectory, getFileNameFromUrl } from '@/api/utils';
 
 async function callAPIAndCacheResponse(url: string, cacheTime: number = 0): Promise<object> {
   const cacheDir = getCacheDirectory(url);

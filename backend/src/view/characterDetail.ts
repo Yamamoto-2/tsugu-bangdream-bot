@@ -1,18 +1,19 @@
-import { drawList, line, drawListByServerList, drawListMerge, drawImageListCenter, drawTipsInList } from '../components/list';
-import { drawDatablock } from '../components/dataBlock'
+import { drawList, line, drawListByServerList, drawListMerge, drawImageListCenter, drawTipsInList } from '@/components/list';
+import { drawDatablock } from '@/components/dataBlock'
 import { Image, Canvas, createCanvas } from 'canvas'
-import { Server, getServerByPriority } from '../types/Server';
-import { drawTitle } from '../components/title';
-import { outputFinalBuffer } from '../image/output'
-import { globalDefaultServer, serverNameFullList } from '../config';
-import { Character } from '../types/Character';
-import { drawCharacterHalfBlock } from '../components/dataBlock/characterHalf'
-import { drawDottedLine } from '../image/dottedLine'
-import { Band } from '../types/Band';
-import { changeTimefomantMonthDay } from '../components/list/time';
-import { stackImage, stackImageHorizontal } from '../components/utils';
-import { drawBandInList } from '../components/list/band';
-import { config } from '../routers/fuzzySearch'
+import { Server, getServerByPriority } from '@/types/Server';
+import { drawTitle } from '@/components/title';
+import { outputFinalBuffer } from '@/image/output'
+import { globalDefaultServer, serverNameFullList } from '@/config';
+import { Character } from '@/types/Character';
+import { drawCharacterHalfBlock } from '@/components/dataBlock/characterHalf'
+import { drawDottedLine } from '@/image/dottedLine'
+import { Band } from '@/types/Band';
+import { changeTimefomantMonthDay } from '@/components/list/time';
+import { stackImage, stackImageHorizontal } from '@/components/utils';
+import { drawBandInList } from '@/components/list/band';
+import { config } from '@/routers/fuzzySearch'
+
 
 const rightListWidth = 500
 const rightListLine: Canvas = drawDottedLine({

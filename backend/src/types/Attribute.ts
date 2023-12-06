@@ -1,5 +1,5 @@
 import { loadImage, Image } from 'canvas'
-import { downloadFileCache } from '../api/downloadFileCache'
+import { downloadFileCache } from '@/api/downloadFileCache'
 
 const attributeColor = {
     'happy': '#ff6600',

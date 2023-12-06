@@ -1,23 +1,23 @@
-import { Event } from '../types/Event';
-import { Card } from '../types/Card'
-import { drawList, line, drawListByServerList, drawListMerge } from '../components/list';
-import { drawDatablock } from '../components/dataBlock'
-import { drawGachaDatablock } from '../components/dataBlock/gacha'
+import { Event } from '@/types/Event';
+import { Card } from '@/types/Card'
+import { drawList, line, drawListByServerList, drawListMerge } from '@/components/list';
+import { drawDatablock } from '@/components/dataBlock'
+import { drawGachaDatablock } from '@/components/dataBlock/gacha'
 import { Image, Canvas, createCanvas } from 'canvas'
-import { drawBannerImageCanvas } from '../components/dataBlock/utils'
-import { drawTimeInList } from '../components/list/time';
-import { drawAttributeInList } from '../components/list/attribute'
-import { drawCharacterInList } from '../components/list/character'
-import { statConfig } from '../components/list/stat'
-import { drawCardListInList } from '../components/list/cardIconList'
-import { getPresentGachaList, Gacha } from '../types/Gacha'
-import { Server } from '../types/Server';
-import { drawTitle } from '../components/title'
-import { outputFinalBuffer } from '../image/output'
-import { drawDegreeListOfEvent } from '../components/list/degreeList';
-import { Song, getPresentSongList } from '../types/Song'
-import { drawSongListDataBlock } from '../components/dataBlock/songList';
-import { globalDefaultServer, serverNameFullList } from '../config';
+import { drawBannerImageCanvas } from '@/components/dataBlock/utils'
+import { drawTimeInList } from '@/components/list/time';
+import { drawAttributeInList } from '@/components/list/attribute'
+import { drawCharacterInList } from '@/components/list/character'
+import { statConfig } from '@/components/list/stat'
+import { drawCardListInList } from '@/components/list/cardIconList'
+import { getPresentGachaList, Gacha } from '@/types/Gacha'
+import { Server } from '@/types/Server';
+import { drawTitle } from '@/components/title'
+import { outputFinalBuffer } from '@/image/output'
+import { drawDegreeListOfEvent } from '@/components/list/degreeList';
+import { Song, getPresentSongList } from '@/types/Song'
+import { drawSongListDataBlock } from '@/components/dataBlock/songList';
+import { globalDefaultServer, serverNameFullList } from '@/config';
 
 export async function drawEventDetail(eventId: number, defaultServerList: Server[] = globalDefaultServer,useEasyBG:boolean): Promise<Array<Buffer | string>> {
     const event = new Event(eventId)

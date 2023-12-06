@@ -1,6 +1,6 @@
 import { Canvas, Image, loadImage } from 'canvas'
-import { drawList } from '../list'
-import { assetsRootPath } from '../../config'
+import { drawList } from '@/components/list'
+import { assetsRootPath } from '@/config'
 import * as path from 'path'
 
 interface RarityInListOptions {

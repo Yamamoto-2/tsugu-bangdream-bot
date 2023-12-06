@@ -1,9 +1,9 @@
-import { isInteger } from './utils';
-import { fuzzySearch } from './fuzzySearch';
-import { drawEventDetail } from '../view/eventDetail';
-import { drawEventList } from '../view/eventList';
-import { Server } from '../types/Server';
-import { listToBase64, isServerList } from './utils';
+import { isInteger } from '@/routers/utils';
+import { fuzzySearch } from '@/routers/fuzzySearch';
+import { drawEventDetail } from '@/view/eventDetail';
+import { drawEventList } from '@/view/eventList';
+import { Server } from '@/types/Server';
+import { listToBase64, isServerList } from '@/routers/utils';
 import express from 'express';
 import { validationResult, body } from 'express-validator';
 

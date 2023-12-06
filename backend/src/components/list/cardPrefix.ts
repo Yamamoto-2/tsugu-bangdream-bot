@@ -1,11 +1,11 @@
-import { Card } from '../../types/Card'
+import { Card } from '@/types/Card'
 import { Image, loadImage, Canvas, createCanvas } from 'canvas'
-import { assetsRootPath, globalDefaultServer } from '../../config'
-import { Band } from '../../types/Band'
-import { Character } from '../../types/Character'
-import { Server, getServerByPriority } from '../../types/Server'
-import { setFontStyle } from '../text'
-import { drawRoundedRect } from '../../image/drawRect'
+import { assetsRootPath, globalDefaultServer } from '@/config'
+import { Band } from '@/types/Band'
+import { Character } from '@/types/Character'
+import { Server, getServerByPriority } from '@/types/Server'
+import { setFontStyle } from '@/components/text'
+import { drawRoundedRect } from '@/image/drawRect'
 import * as path from 'path'
 
 var prefixBG: Canvas

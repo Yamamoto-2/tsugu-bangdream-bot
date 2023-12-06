@@ -1,8 +1,8 @@
-import { drawRoomListTitle, drawRoonInList } from "../components/list/room";
-import { outputFinalBuffer } from "../image/output";
-import { Room, queryAllRoom } from "../types/Room";
+import { drawRoomListTitle, drawRoonInList } from "@/components/list/room";
+import { outputFinalBuffer } from "@/image/output";
+import { Room } from "@/types/Room";
 
-export async function drawRoomList(roomList:Room[]):Promise<Array<Buffer | string>> {
+export async function drawRoomList(roomList: Room[]): Promise<Array<Buffer | string>> {
     let all = []
     all.push(await drawRoomListTitle())
     //let roomList = await queryAllRoom()

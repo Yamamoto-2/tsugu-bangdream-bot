@@ -1,11 +1,11 @@
 import express from 'express';
 import { validationResult, body } from 'express-validator';
-import { drawCharacterList } from '../view/characterList';
-import { drawCharacterDetail } from '../view/characterDetail';
-import { isInteger } from './utils';
-import { fuzzySearch } from './fuzzySearch';
-import { Server } from '../types/Server';
-import { listToBase64, isServerList } from './utils';
+import { drawCharacterList } from '@/view/characterList';
+import { drawCharacterDetail } from '@/view/characterDetail';
+import { isInteger } from '@/routers/utils';
+import { fuzzySearch } from '@/routers/fuzzySearch';
+import { Server } from '@/types/Server';
+import { listToBase64, isServerList } from '@/routers/utils';
 
 const router = express.Router();
 

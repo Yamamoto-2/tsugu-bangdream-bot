@@ -1,10 +1,10 @@
-import { Skill } from '../../types/Skill'
-import { Server, getServerByPriority } from '../../types/Server'
-import { drawTipsInList, drawListByServerList } from '../list'
-import { stackImage } from '../utils'
+import { Skill } from '@/types/Skill'
+import { Server, getServerByPriority } from '@/types/Server'
+import { drawTipsInList, drawListByServerList } from '@/components/list'
+import { stackImage } from '@/components/utils'
 import { Canvas } from 'canvas'
-import { Card } from '../../types/Card'
-import { globalDefaultServer } from '../../config'
+import { Card } from '@/types/Card'
+import { globalDefaultServer } from '@/config'
 
 interface SkillInListOptions {
     key?: string;

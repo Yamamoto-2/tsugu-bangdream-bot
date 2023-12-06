@@ -1,9 +1,9 @@
-import { callAPIAndCacheResponse } from '../api/getApi';
-import { Bestdoriurl } from '../config';
-import { Server } from './Server'
-import { Card, addStat, Stat } from './Card'
-import { AreaItem } from './AreaItem';
-import { Event } from './Event';
+import { callAPIAndCacheResponse } from '@/api/getApi';
+import { Bestdoriurl } from '@/config';
+import { Server } from '@/types/Server'
+import { Card, addStat, Stat } from '@/types/Card'
+import { AreaItem } from '@/types/AreaItem';
+import { Event } from '@/types/Event';
 
 /*
 - mode=0 只从缓存取，无需等待队列立即返回缓存数据

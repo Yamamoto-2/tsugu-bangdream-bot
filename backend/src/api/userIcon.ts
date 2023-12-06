@@ -1,7 +1,7 @@
 import * as path from 'path';
-import { assetsRootPath } from "../config";
+import { assetsRootPath } from "@/config";
 import { Image, loadImage } from 'canvas';
-import { download } from './downloader';
+import { download } from '@/api/downloader';
 
 
 async function loadIconUndefined(): Promise<Image> {

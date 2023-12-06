@@ -1,10 +1,10 @@
-import { Player } from "../../types/Player";
+import { Player } from "@/types/Player";
 import { Canvas, createCanvas, Image, loadImage } from 'canvas';
-import { drawList } from '../list'
-import { resizeImage } from "../utils";
-import { drawTextWithImages } from "../text";
-import { Character } from "../../types/Character";
-import mainAPI from '../../types/_Main'
+import { drawList } from '@/components/list'
+import { resizeImage } from "@/components/utils";
+import { drawTextWithImages } from "@/components/text";
+import { Character } from "@/types/Character";
+import mainAPI from '@/types/_Main'
 
 interface drawBandDetailsInListOptions {
      [characterId: number]: Array<Canvas | Image | string>

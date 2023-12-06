@@ -1,21 +1,22 @@
-import { Card } from "../types/Card";
-import mainAPI from "../types/_Main"
-import { match, checkRelationList } from "../routers/fuzzySearch"
-import { Canvas, createCanvas, Image, loadImage } from 'canvas'
-import { drawDatablock, drawDatablockHorizontal } from '../components/dataBlock';
-import { line } from '../components/list';
-import { stackImage, stackImageHorizontal, resizeImage } from '../components/utils'
-import { drawTitle } from '../components/title';
-import { outputFinalBuffer } from '../image/output'
-import { Server, getIcon, getServerByName } from '../types/Server'
-import { Event, sortEventList } from '../types/Event';
-import { drawCardListInList } from '../components/list/cardIconList';
-import { GetProbablyTimeDifference, changeTimefomant } from '../components/list/time';
-import { drawTextWithImages } from '../components/text';
+import { Card } from "@/types/Card";
+import mainAPI from "@/types/_Main"
+import { match, checkRelationList } from "@/routers/fuzzySearch"
+import { Canvas, createCanvas } from 'canvas'
+import { drawDatablock, drawDatablockHorizontal } from '@/components/dataBlock';
+import { line } from '@/components/list';
+import { stackImage, stackImageHorizontal, resizeImage } from '@/components/utils'
+import { drawTitle } from '@/components/title';
+import { outputFinalBuffer } from '@/image/output'
+import { Server, getIcon, getServerByName } from '@/types/Server'
+import { Event, sortEventList } from '@/types/Event';
+import { drawCardListInList } from '@/components/list/cardIconList';
+import { GetProbablyTimeDifference, changeTimefomant } from '@/components/list/time';
+import { drawTextWithImages } from '@/components/text';
 import { getEventGachaAndCardList } from './eventDetail'
-import { drawDottedLine } from '../image/dottedLine'
-import { statConfig } from '../components/list/stat'
-import { globalDefaultServer } from '../config';
+import { drawDottedLine } from '@/image/dottedLine'
+import { statConfig } from '@/components/list/stat'
+import { globalDefaultServer } from '@/config';
+
 
 const maxHeight = 7000
 const maxColumns = 7

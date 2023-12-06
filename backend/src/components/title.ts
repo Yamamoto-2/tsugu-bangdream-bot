@@ -1,6 +1,6 @@
 import { Canvas, loadImage, createCanvas, Image } from 'canvas'
-import { drawText } from './text'
-import { assetsRootPath } from '../config'
+import { drawText } from '@/components/text'
+import { assetsRootPath } from '@/config'
 import * as path from 'path'
 
 var titleImage: Image

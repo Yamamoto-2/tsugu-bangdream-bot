@@ -1,10 +1,6 @@
-import { callAPIAndCacheResponse } from '../api/getApi';
-import { downloadFile } from '../api/downloadFile';
-import { Bestdoriurl } from '../config';
-import mainAPI from './_Main';
-import { Server } from './Server';
-import { Image, loadImage } from 'canvas';
-import { Card, Stat } from './Card';
+import mainAPI from '@/types/_Main';
+import { Server } from '@/types/Server';
+import { Card, Stat } from '@/types/Card';
 
 
 export class AreaItem {

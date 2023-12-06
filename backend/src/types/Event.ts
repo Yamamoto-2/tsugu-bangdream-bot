@@ -1,12 +1,12 @@
-import { callAPIAndCacheResponse } from '../api/getApi';
+import { callAPIAndCacheResponse } from '@/api/getApi';
 import { Image, loadImage } from 'canvas'
-import { downloadFileCache } from '../api/downloadFileCache'
-import { Server, getServerByPriority } from './Server'
-import mainAPI from './_Main';
-import { Attribute } from './Attribute';
-import { Character } from './Character';
-import { globalDefaultServer } from '../config';
-import { stringToNumberArray } from './utils'
+import { downloadFileCache } from '@/api/downloadFileCache'
+import { Server, getServerByPriority } from '@/types/Server'
+import mainAPI from '@/types/_Main';
+import { Attribute } from '@/types/Attribute';
+import { Character } from '@/types/Character';
+import { globalDefaultServer } from '@/config';
+import { stringToNumberArray } from '@/types/utils'
 
 var eventDataCache = {}
 
@@ -100,9 +100,9 @@ export class Event {
     } = {}
 
     //以下用于模糊搜索
-    characterId: string[] 
-    attribute: string[] 
-    bandId: string[] 
+    characterId: string[]
+    attribute: string[]
+    bandId: string[]
 
     isInitfull: boolean = false
 
@@ -123,12 +123,12 @@ export class Event {
         this.characters = eventData['characters'];
         this.rewardCards = eventData['rewardCards'];
         //用于模糊搜索
-        this.characterId =[]
+        this.characterId = []
         for (let i = 0; i < this.characters.length; i++) {
             const element = this.characters[i];
             this.characterId.push(element.characterId.toString())
         }
-        this.attribute =[]
+        this.attribute = []
         for (let i = 0; i < this.attributes.length; i++) {
             const element = this.attributes[i];
             this.attribute.push(element.attribute)
@@ -147,7 +147,7 @@ export class Event {
         }
     }
     async initFull(update: boolean = true) {
-        if(this.isInitFull){
+        if (this.isInitFull) {
             return
         }
 
@@ -214,6 +214,22 @@ export class Event {
         var server = Server.jp
         var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/event/${this.assetBundleName}/topscreen_rip/bg_eventtop.png`)
         return await loadImage(BannerImageBuffer)
+    }
+    async getEventSlideImage(server: Server): Promise<Image[]> {//活动规则轮播图
+        const result: Image[] = []
+        const baseUrl = `https://bestdori.com/assets/${Server[server]}/event/${this.assetBundleName}/slide_rip/`
+        let ruleNumber = 1
+        while (true) {
+            try {
+                const url = `${baseUrl}rule${ruleNumber}.png`
+                const BannerImageBuffer = await downloadFileCache(url, false)
+                result.push(await loadImage(BannerImageBuffer))
+            } catch (e) {
+                break
+            }
+            ruleNumber++
+        }
+        return result
     }
     getTypeName() {
         if (typeName[this.eventType] == undefined) {
@@ -315,7 +331,7 @@ export function getSameTypeEventListByEventAndServer(event: Event, server: Serve
     for (var i = 0; i < eventIdList.length; i++) {
         var tempEvent = new Event(eventIdList[i])
         if (tempEvent.eventType == event.eventType && tempEvent.startAt[server] != null) {
-            if(tempEvent.startAt[server] > event.startAt[server]){
+            if (tempEvent.startAt[server] > event.startAt[server]) {
                 continue
             }
             tempEventList.push(tempEvent)

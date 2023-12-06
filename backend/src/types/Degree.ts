@@ -1,9 +1,8 @@
-import { Server } from './Server';
-import { callAPIAndCacheResponse } from '../api/getApi';
-import { downloadFileCache } from '../api/downloadFileCache'
-import { downloadFile } from '../api/downloadFile';
+import { Server } from '@/types/Server';
+import { downloadFileCache } from '@/api/downloadFileCache'
+import { downloadFile } from '@/api/downloadFile';
 import { Canvas, Image, createCanvas, loadImage } from 'canvas';
-import mainAPI from './_Main';
+import mainAPI from '@/types/_Main';
 
 export class Degree {
     degreeId: number;

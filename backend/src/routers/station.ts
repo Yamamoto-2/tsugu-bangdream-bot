@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import bodyParser from 'body-parser';
-import { UserDB } from '../database/userDB';
-import { Room, submitRoomNumber, queryAllRoom } from '../types/Room';
+import { UserDB } from '@/database/userDB';
+import { Room, submitRoomNumber, queryAllRoom } from '@/types/Room';
 import * as dotenv from 'dotenv';
 dotenv.config();
 

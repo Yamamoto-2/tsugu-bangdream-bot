@@ -1,9 +1,9 @@
 import { Image, Canvas, createCanvas } from 'canvas'
-import { drawList } from '../list'
-import { Gacha } from '../../types/Gacha'
-import { Server } from '../../types/Server'
-import { Item } from '../../types/Item'
-import { stackImage } from '../utils'
+import { drawList } from '@/components/list'
+import { Gacha } from '@/types/Gacha'
+import { Server } from '@/types/Server'
+import { Item } from '@/types/Item'
+import { stackImage } from '@/components/utils'
 
 var behaviorName = {
     "normal": "",
