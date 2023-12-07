@@ -3,7 +3,7 @@ import { callAPIAndCacheResponse } from '@/api/getApi'
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '@/api/downloadFileCache'
 import { formatNumber } from '@/types/utils';
-import { Bestdoriurl } from "@/config.js"
+import { Bestdoriurl } from "@/config"
 
 let characterDataCache = {}
 

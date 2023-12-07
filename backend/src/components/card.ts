@@ -8,7 +8,7 @@ import { downloadFileCache } from '@/api/downloadFileCache'
 import { drawCardIconSkill } from '@/components/skill'
 import * as path from 'path'
 import { Skill } from '@/types/Skill'
-import { Bestdoriurl } from "@/config.js"
+import { Bestdoriurl } from "@/config"
 
 var cardTypeIconList: { [type: string]: Image } = {}
 var starList: { [type: string]: Image } = {}

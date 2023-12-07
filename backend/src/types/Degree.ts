@@ -3,7 +3,7 @@ import { downloadFileCache } from '@/api/downloadFileCache'
 import { downloadFile } from '@/api/downloadFile';
 import { Canvas, Image, createCanvas, loadImage } from 'canvas';
 import mainAPI from '@/types/_Main';
-import { Bestdoriurl } from '@/config.js';
+import { Bestdoriurl } from '@/config';
 
 export class Degree {
     degreeId: number;

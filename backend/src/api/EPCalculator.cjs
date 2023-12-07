@@ -1,4 +1,4 @@
-import { Bestdoriurl } from "@/api/config.js"
+import { Bestdoriurl } from "@/api/config"
 const downloader = require("@/api/downloader.js")
 
 function skillPermute(a, k, results) {

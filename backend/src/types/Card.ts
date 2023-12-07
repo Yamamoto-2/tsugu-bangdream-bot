@@ -10,7 +10,7 @@ import { downloadFileCache } from '@/api/downloadFileCache'
 import mainAPI from '@/types/_Main'
 import { globalDefaultServer } from '@/config'
 import {stringToNumberArray, formatNumber} from '@/types/utils'
-import { Bestdoriurl } from "@/config.js"
+import { Bestdoriurl } from "@/config"
 
 var cardDataCache = {}
 

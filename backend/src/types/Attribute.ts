@@ -1,6 +1,6 @@
 import { loadImage, Image } from 'canvas'
 import { downloadFileCache } from '@/api/downloadFileCache'
-import { Bestdoriurl } from "@/config.js"
+import { Bestdoriurl } from "@/config"
 
 const attributeColor = {
     'happy': '#ff6600',

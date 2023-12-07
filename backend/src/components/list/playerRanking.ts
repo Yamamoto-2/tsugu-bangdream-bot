@@ -7,7 +7,7 @@ import { Server } from '@/types/Server';
 import { Degree } from '@/types/Degree';
 import { drawText } from '@/components/text';
 import { downloadFileCache } from '@/api/downloadFileCache';
-import { Bestdoriurl } from "@/config.js"
+import { Bestdoriurl } from "@/config"
 
 interface User{
     uid:number,
