@@ -1,7 +1,7 @@
 import { downloadFileCache } from '@/api/downloadFileCache'
 import { loadImage, Image } from 'canvas'
 import { globalDefaultServer, serverNameFullList } from '@/config'
-import { globalServerPriority } from '@/config'
+import { globalServerPriority, Bestdoriurl } from '@/config'
 
 //服务器列表，因为有TW而不适用country
 export const serverList: Array<Server> = [0, 1, 2, 3, 4]
@@ -40,7 +40,7 @@ export async function getIcon(server: Server): Promise<Image> {
         return (await loadImage('./assets/tw.png'))
     }
     else{
-        const iconBuffer = await downloadFileCache(`https://bestdori.com/res/icon/${Server[server]}.svg`)
+        const iconBuffer = await downloadFileCache(`${Bestdoriurl}/res/icon/${Server[server]}.svg`)
         return (await loadImage(iconBuffer))
     }
     

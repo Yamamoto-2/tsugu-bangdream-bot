@@ -3,7 +3,7 @@ import { Image, loadImage } from 'canvas'
 import { downloadFile } from '@/api/downloadFile'
 import { getServerByPriority, Server } from '@/types/Server'
 import mainAPI from '@/types/_Main'
-import { globalDefaultServer } from '@/config'
+import { globalDefaultServer, Bestdoriurl } from '@/config'
 import { stringToNumberArray } from '@/types/utils'
 
 export const difficultyName = {
@@ -163,7 +163,7 @@ export class Song {
         this.isInitfull = true
     }
     async getData() {
-        const songData = await callAPIAndCacheResponse(`https://bestdori.com/api/songs/${this.songId}.json`)
+        const songData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/songs/${this.songId}.json`)
         return songData
     }
     getSongRip(): number {
@@ -178,7 +178,7 @@ export class Song {
         if (!defaultServerList) defaultServerList = globalDefaultServer
         var server = getServerByPriority(this.publishedAt)
         var jacketImageName = this.jacketImage[this.jacketImage.length - 1]
-        var jacketImageUrl = `https://bestdori.com/assets/${Server[server]}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`
+        var jacketImageUrl = `${Bestdoriurl}/assets/${Server[server]}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`
         return jacketImageUrl
     }
     getTagName(): string {
@@ -188,7 +188,7 @@ export class Song {
         return tagNameList[this.tag]
     }
     async getSongChart(difficultyId: number): Promise<Object> {
-        const songChart = await callAPIAndCacheResponse(`https://bestdori.com/api/charts/${this.songId}/${difficultyName[difficultyId]}.json`)
+        const songChart = await callAPIAndCacheResponse(`${Bestdoriurl}/api/charts/${this.songId}/${difficultyName[difficultyId]}.json`)
         return songChart
     }
 

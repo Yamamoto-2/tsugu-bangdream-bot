@@ -2,9 +2,8 @@ import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '@/api/downloadFileCache'
 import { Server, getServerByPriority } from '@/types/Server';
 import { formatNumber } from '@/types/utils';
-
 import mainAPI from '@/types/_Main'
-import { globalDefaultServer } from '@/config';
+import { globalDefaultServer, Bestdoriurl } from '@/config';
 
 
 const typeNameList = {
@@ -61,13 +60,13 @@ export class Item {
         }
         server = getServerByPriority(this.name, defaultServerList)
         if (this.typeName == 'material') {
-            var itemImage = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/thumb/material_rip/${this.typeName}${formatNumber(this.resourceId, 3)}.png`)
+            var itemImage = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/thumb/material_rip/${this.typeName}${formatNumber(this.resourceId, 3)}.png`)
         }
         else if (this.typeName == 'star') {
-            var itemImage = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/thumb/common_rip/star.png`)
+            var itemImage = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/thumb/common_rip/star.png`)
         }
         else {
-            var itemImage = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/thumb/common_rip/${this.typeName}${this.resourceId}.png`)
+            var itemImage = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/thumb/common_rip/${this.typeName}${this.resourceId}.png`)
         }
         return await loadImage(itemImage)
     }

@@ -10,6 +10,7 @@ import { downloadFileCache } from '@/api/downloadFileCache'
 import mainAPI from '@/types/_Main'
 import { globalDefaultServer } from '@/config'
 import {stringToNumberArray, formatNumber} from '@/types/utils'
+import { Bestdoriurl } from "@/config.js"
 
 var cardDataCache = {}
 
@@ -159,7 +160,7 @@ export class Card {
     }
     async getData(update: boolean = true) {
         var time = update ? 0 : 1 / 0
-        var cardData = await callAPIAndCacheResponse('https://bestdori.com/api/cards/' + this.cardId + '.json', time)
+        var cardData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/cards/${this.cardId}.json`, time)
         return cardData
     }
 
@@ -263,14 +264,14 @@ export class Card {
         trainingStatus = this.ableToTraining(trainingStatus)
         const trainingString = trainingStatus ? '_after_training' : '_normal'
         var tempServer = this.getFirstReleasedServer()
-        var cardIconImage = await downloadFileCache(`https://bestdori.com/assets/${Server[tempServer]}/thumb/chara/card00${this.getRip()}/${this.resourceSetName}${trainingString}.png`)
+        var cardIconImage = await downloadFileCache(`${Bestdoriurl}/assets/${Server[tempServer]}/thumb/chara/card00${this.getRip()}/${this.resourceSetName}${trainingString}.png`)
         return await loadImage(cardIconImage)
     }
     async getCardIllustrationImage(trainingStatus: boolean): Promise<Image> {
         trainingStatus = this.ableToTraining(trainingStatus)
         const trainingString = trainingStatus ? '_after_training' : '_normal'
         var tempServer = this.getFirstReleasedServer()
-        var CardIllustrationImage = await downloadFile(`https://bestdori.com/assets/${Server[tempServer]}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`)
+        var CardIllustrationImage = await downloadFile(`${Bestdoriurl}/assets/${Server[tempServer]}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`)
         return await loadImage(CardIllustrationImage)
     }
     async getCardIllustrationImageBuffer(trainingStatus: boolean): Promise<string | Buffer> {
@@ -279,7 +280,7 @@ export class Card {
         var tempServer = this.getFirstReleasedServer();
     
         // 假设downloadFile返回文件路径或Buffer
-        var cardIllustration = await downloadFile(`https://bestdori.com/assets/${Server[tempServer]}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`);
+        var cardIllustration = await downloadFile(`${Bestdoriurl}/assets/${Server[tempServer]}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`);
     
         return cardIllustration;
     }
@@ -287,7 +288,7 @@ export class Card {
         trainingStatus = this.ableToTraining(trainingStatus)
         const trainingString = trainingStatus ? '_after_training' : '_normal'
         var tempServer = this.getFirstReleasedServer()
-        var CardIllustrationImage = await downloadFile(`https://bestdori.com/assets/${Server[tempServer]}/characters/resourceset/${this.resourceSetName}_rip/trim${trainingString}.png`)
+        var CardIllustrationImage = await downloadFile(`${Bestdoriurl}/assets/${Server[tempServer]}/characters/resourceset/${this.resourceSetName}_rip/trim${trainingString}.png`)
         return await loadImage(CardIllustrationImage)
     }
     getTypeName() {

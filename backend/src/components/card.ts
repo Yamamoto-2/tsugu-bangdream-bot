@@ -8,6 +8,7 @@ import { downloadFileCache } from '@/api/downloadFileCache'
 import { drawCardIconSkill } from '@/components/skill'
 import * as path from 'path'
 import { Skill } from '@/types/Skill'
+import { Bestdoriurl } from "@/config.js"
 
 var cardTypeIconList: { [type: string]: Image } = {}
 var starList: { [type: string]: Image } = {}
@@ -26,7 +27,7 @@ loadImageOnce()
 
 //根据稀有度与属性，获得图标框
 async function getCardIconFrame(rarity: number, attribute: 'cool' | 'happy' | 'pure' | 'powerful'): Promise<Image> {
-    const baseUrl = 'https://bestdori.com/res/image/card-'
+    const baseUrl = `${Bestdoriurl}/res/image/card-`
     if (rarity == 1) {
         var imageUrl = baseUrl + '1-' + attribute + '.png'
 
@@ -40,7 +41,7 @@ async function getCardIconFrame(rarity: number, attribute: 'cool' | 'happy' | 'p
 
 //根据稀有度与属性，获得插画框
 async function getCardIllustrationFrame(rarity: number, attribute: 'cool' | 'happy' | 'pure' | 'powerful'): Promise<Image> {
-    const baseUrl = 'https://bestdori.com/res/image/frame-'
+    const baseUrl = `${Bestdoriurl}/res/image/frame-`
     if (rarity == 1) {
         var imageUrl = baseUrl + '1-' + attribute + '.png'
 

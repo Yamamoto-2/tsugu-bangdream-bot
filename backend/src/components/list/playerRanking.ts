@@ -1,5 +1,5 @@
 import { Canvas, createCanvas, loadImage } from 'canvas'
-import { resizeImage } from "@/components/utils"
+
 import { Card } from '@/types/Card';
 import { drawCardIcon } from '@/components/card';
 import { drawDegree } from '@/components/degree';
@@ -7,6 +7,7 @@ import { Server } from '@/types/Server';
 import { Degree } from '@/types/Degree';
 import { drawText } from '@/components/text';
 import { downloadFileCache } from '@/api/downloadFileCache';
+import { Bestdoriurl } from "@/config.js"
 
 interface User{
     uid:number,
@@ -37,7 +38,7 @@ export async function drawPlayerRankingInList(user:User,backgroudColor:string = 
         return;
     }
     else if(user.ranking>0&&user.ranking<=3){
-        rankingImage = await loadImage(await downloadFileCache(`https://bestdori.com/res/image/${Server[server]}_${user.ranking}.png`));
+        rankingImage = await loadImage(await downloadFileCache(`${Bestdoriurl}/res/image/${Server[server]}_${user.ranking}.png`));
         ctx.drawImage(rankingImage,12,45,45,21);
     }
     else{

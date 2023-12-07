@@ -4,7 +4,7 @@ import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '@/api/downloadFileCache'
 import { Server, getServerByPriority, serverList } from '@/types/Server';
 import { Event, getPresentEvent } from '@/types/Event';
-import { globalDefaultServer } from '@/config';
+import { globalDefaultServer, Bestdoriurl } from '@/config';
 
 let gachaDataCache = {}
 
@@ -130,12 +130,12 @@ export class Gacha {
     }
     async getData(update: boolean = true) {
         var time = update ? 0 : 1 / 0
-        const gachaData = await callAPIAndCacheResponse(`https://bestdori.com/api/gacha/${this.gachaId}.json`,time)
+        const gachaData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/gacha/${this.gachaId}.json`,time)
         return gachaData
     }
     async getBannerImage(): Promise<Image> {
         try {
-            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/homebanner_rip/${this.bannerAssetBundleName}.png`, false)
+            var BannerImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/jp/homebanner_rip/${this.bannerAssetBundleName}.png`, false)
             return await loadImage(BannerImageBuffer)
         }
         catch (e) {
@@ -147,17 +147,17 @@ export class Gacha {
         var server = getServerByPriority(this.publishedAt)
         let BGImageBuffer:Buffer
         try{
-            BGImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/bg.png`,false)
+            BGImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/bg.png`,false)
         }
         catch(e){
-            BGImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/bg1.png`)
+            BGImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/bg1.png`)
         }
         return await loadImage(BGImageBuffer)
     }
     async getGachaLogo(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
         if (!defaultServerList) defaultServerList = globalDefaultServer
         var server = getServerByPriority(this.publishedAt)
-        var LogoImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/logo.png`)
+        var LogoImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/logo.png`)
         return await loadImage(LogoImageBuffer)
     }
     getEventId() {

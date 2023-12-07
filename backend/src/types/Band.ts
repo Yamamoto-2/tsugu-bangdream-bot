@@ -3,6 +3,7 @@ import { Character } from '@/types/Character';
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '@/api/downloadFileCache';
 import { formatNumber } from '@/types/utils';
+import { Bestdoriurl } from "@/config.js"
 
 export class Band {
     bandId: number;
@@ -38,11 +39,11 @@ export class Band {
         this.members = members
     }
     async getIcon(): Promise<Image>{
-        const iconBuffer = await downloadFileCache(`https://bestdori.com/res/icon/band_${this.bandId}.svg`)
+        const iconBuffer = await downloadFileCache(`${Bestdoriurl}/res/icon/band_${this.bandId}.svg`)
         return (await loadImage(iconBuffer))
     }
     async getLogo(): Promise<Image>{
-        const logoBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/band/logo/${formatNumber(this.bandId,3)}_rip/logoL.png`)
+        const logoBuffer = await downloadFileCache(`${Bestdoriurl}/assets/jp/band/logo/${formatNumber(this.bandId,3)}_rip/logoL.png`)
         return (await loadImage(logoBuffer))
     }
 }

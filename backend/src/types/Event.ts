@@ -5,7 +5,7 @@ import { Server, getServerByPriority } from '@/types/Server'
 import mainAPI from '@/types/_Main';
 import { Attribute } from '@/types/Attribute';
 import { Character } from '@/types/Character';
-import { globalDefaultServer } from '@/config';
+import { globalDefaultServer, Bestdoriurl} from '@/config';
 import { stringToNumberArray } from '@/types/utils'
 
 var eventDataCache = {}
@@ -195,41 +195,48 @@ export class Event {
     }
     async getData(update: boolean = true) {
         var time = update ? 0 : 1 / 0
-        var eventData = await callAPIAndCacheResponse(`https://bestdori.com/api/events/${this.eventId}.json`, time);
+        var eventData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/events/${this.eventId}.json`, time);
         return eventData
     }
     async getBannerImage(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
         if (!defaultServerList) defaultServerList = globalDefaultServer
         var server = getServerByPriority(this.startAt, defaultServerList)
         try {
-            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/homebanner_rip/${this.bannerAssetBundleName}.png`, false)
+            var BannerImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/homebanner_rip/${this.bannerAssetBundleName}.png`, false)
             return await loadImage(BannerImageBuffer)
         } catch (e) {
             var server = Server.jp
-            var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/homebanner_rip/${this.bannerAssetBundleName}.png`)
+            var BannerImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/homebanner_rip/${this.bannerAssetBundleName}.png`)
             return await loadImage(BannerImageBuffer)
         }
     }
     async getEventBGImage(): Promise<Image> {
         var server = Server.jp
-        var BannerImageBuffer = await downloadFileCache(`https://bestdori.com/assets/${Server[server]}/event/${this.assetBundleName}/topscreen_rip/bg_eventtop.png`)
-        return await loadImage(BannerImageBuffer)
+        var BGImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/event/${this.assetBundleName}/topscreen_rip/bg_eventtop.png`)
+        return await loadImage(BGImageBuffer)
     }
-    async getEventSlideImage(server: Server): Promise<Image[]> {//活动规则轮播图
+    //活动规则轮播图
+    async getEventSlideImage(server: Server): Promise<Image[]> {
         const result: Image[] = []
-        const baseUrl = `https://bestdori.com/assets/${Server[server]}/event/${this.assetBundleName}/slide_rip/`
+        const baseUrl = `${Bestdoriurl}/assets/${Server[server]}/event/${this.assetBundleName}/slide_rip/`
         let ruleNumber = 1
         while (true) {
             try {
                 const url = `${baseUrl}rule${ruleNumber}.png`
-                const BannerImageBuffer = await downloadFileCache(url, false)
-                result.push(await loadImage(BannerImageBuffer))
+                const SlideImageBuffer = await downloadFileCache(url, false)
+                result.push(await loadImage(SlideImageBuffer))
             } catch (e) {
                 break
             }
             ruleNumber++
         }
         return result
+    }
+    //活动主界面trim
+    async getEventTopscreenTrimImage(server: Server): Promise<Image> {
+        const url = `${Bestdoriurl}/assets/${Server[server]}/event/${this.assetBundleName}/topscreen_rip/trim_eventtop.png`
+        const TopscreenTrimImageBuffer = await downloadFileCache(url)
+        return await loadImage(TopscreenTrimImageBuffer)
     }
     getTypeName() {
         if (typeName[this.eventType] == undefined) {

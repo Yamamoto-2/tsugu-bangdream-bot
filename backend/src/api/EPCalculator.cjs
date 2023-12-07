@@ -1,3 +1,4 @@
+import { Bestdoriurl } from "@/api/config.js"
 const downloader = require("@/api/downloader.js")
 
 function skillPermute(a, k, results) {
@@ -91,12 +92,12 @@ function chartToNotes(chart) {
 //songID should be int
 //difficulty is a number in 0~4, indicating easy, normal, hard, expert, special
 async function scoreCalc(totalPower, skills, songID, difficulty, multi = false, fever = false, fes = false) {
-    var songInfo = await downloader.getJsonAndSave(`https://bestdori.com/api/songs/${songID}.json`,
+    var songInfo = await downloader.getJsonAndSave(`${Bestdoriurl}/api/songs/${songID}.json`,
         "@/api/data/api/songs/", `${songID}.json`, 86400000)
     var level = songInfo.difficulty[difficulty].playLevel
     var noteCount = songInfo.notes[difficulty]
     difficultyName = ['easy', 'normal', 'hard', 'expert', 'special']
-    var chart = await downloader.getJsonAndSave(`https://bestdori.com/api/charts/${songID}/${difficultyName[difficulty]}.json`,
+    var chart = await downloader.getJsonAndSave(`${Bestdoriurl}/api/charts/${songID}/${difficultyName[difficulty]}.json`,
         "@/api/data/api/songs/notes/", `${songID}.${difficultyName[difficulty]}.json`, 86400000)
     var notes = chartToNotes(chart)
     var baseScore = totalPower * 3 * (1 + (level - 5) * 0.01) / noteCount

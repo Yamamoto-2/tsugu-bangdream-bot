@@ -3,6 +3,7 @@ import { callAPIAndCacheResponse } from '@/api/getApi'
 import { Image, loadImage } from 'canvas'
 import { downloadFileCache } from '@/api/downloadFileCache'
 import { formatNumber } from '@/types/utils';
+import { Bestdoriurl } from "@/config.js"
 
 let characterDataCache = {}
 
@@ -95,19 +96,19 @@ export class Character {
     }
     async getData(update: boolean = true) {
         var time = update ? 0 : 1 / 0
-        var cardData = await callAPIAndCacheResponse('https://bestdori.com/api/characters/' + this.characterId + '.json', time)
+        var cardData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/characters/${this.characterId}.json`, time)
         return cardData
     }
     async getIcon(): Promise<Image> {
-        const iconBuffer = await downloadFileCache(`https://bestdori.com/res/icon/chara_icon_${this.characterId}.png`)
+        const iconBuffer = await downloadFileCache(`${Bestdoriurl}/res/icon/chara_icon_${this.characterId}.png`)
         return (await loadImage(iconBuffer))
     }
     async getIllustration(): Promise<Image> {
-        const illustrationBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/ui/character_kv_image/${formatNumber(this.characterId, 3)}_rip/image.png`)
+        const illustrationBuffer = await downloadFileCache(`${Bestdoriurl}/assets/jp/ui/character_kv_image/${formatNumber(this.characterId, 3)}_rip/image.png`)
         return (await loadImage(illustrationBuffer))
     }
     async getNameBanner(): Promise<Image> {
-        const nameBannerBuffer = await downloadFileCache(`https://bestdori.com/assets/jp/character_name_rip/name_top_chr${formatNumber(this.characterId, 2)}.png`)
+        const nameBannerBuffer = await downloadFileCache(`${Bestdoriurl}/assets/jp/character_name_rip/name_top_chr${formatNumber(this.characterId, 2)}.png`)
         return (await loadImage(nameBannerBuffer))
     }
     getCharacterName(): Array<string | null> {

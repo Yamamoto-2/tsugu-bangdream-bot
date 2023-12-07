@@ -1,5 +1,6 @@
 import { loadImage, Image } from 'canvas'
 import { downloadFileCache } from '@/api/downloadFileCache'
+import { Bestdoriurl } from "@/config.js"
 
 const attributeColor = {
     'happy': '#ff6600',
@@ -21,7 +22,7 @@ export class Attribute {
     }
 
     async getIcon(): Promise<Image> {
-        const iconBuffer = await downloadFileCache(`https://bestdori.com/res/icon/${this.name}.svg`)
+        const iconBuffer = await downloadFileCache(`${Bestdoriurl}/res/icon/${this.name}.svg`)
         return (await loadImage(iconBuffer))
     }
 }
