@@ -12,6 +12,7 @@ import { Band } from '@/types/Band';
 import { drawEventDatablock } from '@/components/dataBlock/event';
 import { drawSongMetaListDataBlock } from '@/components/dataBlock/songMetaList'
 import { globalDefaultServer, serverNameFullList } from '@/config';
+import { formatSeconds } from '@/components/list/time'
 
 export async function drawSongDetail(song: Song, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
     if (song.isExist == false) {
@@ -82,10 +83,10 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
         key: '发布时间',
         content: song.publishedAt
     }, defaultServerList))
-    list.push(line)
 
     //special难度发布时间
     if (song.difficulty['4']?.publishedAt != undefined) {
+        list.push(line)
         list.push(await drawTimeInList({
             key: 'special难度发布时间',
             content: song.difficulty['4'].publishedAt
@@ -133,25 +134,3 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
     return [buffer]
 }
 
-//时间长度转时分秒函数
-function formatSeconds(value: number) {
-    var theTime = value;// 秒
-    var theTime1 = 0;// 分
-    var theTime2 = 0;// 小时
-    if (theTime > 60) {
-        theTime1 = parseInt((theTime / 60).toString());
-        theTime = parseInt((theTime % 60).toString());
-        if (theTime1 > 60) {
-            theTime2 = parseInt((theTime1 / 60).toString());
-            theTime1 = parseInt((theTime1 % 60).toString());
-        }
-    }
-    var result = "" + parseInt(theTime.toString()) + "秒";
-    if (theTime1 > 0) {
-        result = "" + parseInt(theTime1.toString()) + "分" + result;
-    }
-    if (theTime2 > 0) {
-        result = "" + parseInt(theTime2.toString()) + "小时" + result;
-    }
-    return result;
-}

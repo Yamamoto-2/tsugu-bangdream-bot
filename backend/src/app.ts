@@ -15,6 +15,7 @@ import { lsycxRouter } from '@/routers/lsycx';
 import { songChartRouter } from '@/routers/songChart';
 import { userRouter } from '@/routers/user'
 import { stationRouter } from '@/routers/station'
+import { eventPreviewRouter } from '@/routers/article/eventPreview'
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -55,6 +56,9 @@ else {
             data: '错误: 服务器未启用数据库'
         });
     });
+}
+if(process.env.ARTICLE == 'true'){
+    app.use('/eventPreview', eventPreviewRouter);
 }
 
 //404

@@ -19,7 +19,7 @@ import { Song, getPresentSongList } from '@/types/Song'
 import { drawSongListDataBlock } from '@/components/dataBlock/songList';
 import { globalDefaultServer, serverNameFullList } from '@/config';
 
-export async function drawEventDetail(eventId: number, defaultServerList: Server[] = globalDefaultServer,useEasyBG:boolean): Promise<Array<Buffer | string>> {
+export async function drawEventDetail(eventId: number, defaultServerList: Server[] = globalDefaultServer, useEasyBG: boolean): Promise<Array<Buffer | string>> {
     const event = new Event(eventId)
     if (!event.isExist) {
         return ['错误: 活动不存在']
@@ -54,7 +54,7 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     list.push(await drawTimeInList({
         key: '开始时间',
         content: event.startAt,
-        eventId:event.eventId
+        eventId: event.eventId
     }))
     list.push(line)
 
@@ -140,13 +140,6 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     }))
     list.push(line)
 
-
-    //创建最终输出数组
-
-    var all = []
-    all.push(drawTitle('查询', '活动'))
-
-
     var gachaCardList: Card[] = []
     var gachaCardIdList: number[] = []//用于去重
     var gachaImageList: Canvas[] = []
@@ -195,6 +188,11 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     }))
 
     var listImage = drawDatablock({ list })
+    //创建最终输出数组
+
+    var all = []
+    all.push(drawTitle('查询', '活动'))
+
     all.push(listImage)
 
     //歌曲
@@ -290,10 +288,10 @@ export async function getEventGachaAndCardList(event: Event, server: Server, use
         return a.rarity - b.rarity
     })
     gachaList.sort((a, b) => {
-        if( a.publishedAt[server] != b.publishedAt[server]){
+        if (a.publishedAt[server] != b.publishedAt[server]) {
             return a.publishedAt[server] - b.publishedAt[server]
         }
-        else{
+        else {
             return a.gachaId - b.gachaId
         }
     })

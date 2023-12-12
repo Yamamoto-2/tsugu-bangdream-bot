@@ -6,12 +6,14 @@ interface datablockOptions {
     list: Array<Canvas | Image>
     BG?: boolean
     topLeftText?: string
+    opacity?: number
 }
 //组合表格子程序，使用block当做底，通过最大高度换行，默认高度无上限
 export function drawDatablock({
     list,
     BG = true,
-    topLeftText
+    topLeftText,
+    opacity = 0.9
 }: datablockOptions): Canvas {
     const topLeftTextHeight = 70
     //计算高度
@@ -58,6 +60,7 @@ export function drawDatablock({
             })
             ctx.drawImage(textImage, 240 - (textImage.width / 2), 5)
             ctx.drawImage(drawRoundedRect({//画总底，左上角没有圆角
+                opacity,
                 width: maxW + 100,
                 height: allH,
                 radius: [0, 25, 25, 25]
@@ -65,6 +68,7 @@ export function drawDatablock({
         }
         else {
             ctx.drawImage(drawRoundedRect({//画总底
+                opacity,
                 width: maxW + 100,
                 height: allH
             }), 50, 0)
@@ -93,7 +97,7 @@ export function drawDatablock({
     return (tempcanv)
 }
 
-export function drawDatablockHorizontal ({
+export function drawDatablockHorizontal({
     list,
     BG = true,
     topLeftText
@@ -148,7 +152,7 @@ export function drawDatablockHorizontal ({
             ctx.restore();
 
             ctx.drawImage(drawRoundedRect({
-                width: allW-100,
+                width: allW - 100,
                 height: maxH + 100,
                 radius: [25, 0, 25, 25]
             }), topLeftTextHeight, 50);

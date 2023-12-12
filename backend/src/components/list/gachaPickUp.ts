@@ -13,7 +13,6 @@ export async function drawGachaPickupInList(gacha: Gacha, server: Server, key?: 
     }))
     var pickUpCardIdList = []
     var details = gacha.details[server]
-    console.log(details)
     for (var cardId in details) {
         if (details[cardId]['pickup'] == true) {
             pickUpCardIdList.push(parseInt(cardId))
@@ -24,13 +23,15 @@ export async function drawGachaPickupInList(gacha: Gacha, server: Server, key?: 
     var pickUpCardList = {}
     for (var i = 0; i < pickUpCardIdList.length; i++) {
         var card = new Card(pickUpCardIdList[i])
-        if (!pickUpCardList[card.rarity.toString()]) {
-            pickUpCardList[card.rarity.toString()] = {}
-            if (!pickUpCardList[card.rarity.toString()][(details[pickUpCardIdList[i]]['weight']).toString()]) {
-                pickUpCardList[card.rarity.toString()][(details[pickUpCardIdList[i]]['weight']).toString()] = []
+        const rarity = card.rarity.toString()
+        const weight = (details[pickUpCardIdList[i]]['weight']).toString()
+        if (!pickUpCardList[rarity]) {
+            pickUpCardList[rarity] = {}
+            if (!pickUpCardList[rarity][weight]) {
+                pickUpCardList[rarity][weight] = []
             }
         }
-        pickUpCardList[card.rarity.toString()][details[pickUpCardIdList[i]]['weight']].push(card)
+        pickUpCardList[rarity][weight].push(card)
     }
     if (Object.keys(pickUpCardList).length != 0) {
         for (let rarity in pickUpCardList) {

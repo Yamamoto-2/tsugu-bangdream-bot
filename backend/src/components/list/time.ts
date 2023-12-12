@@ -121,3 +121,26 @@ export function changeTimePeriodFormat(period: number): string {//时间戳的�
 
     return temp;
 }
+
+//时间长度转时分秒函数
+export function formatSeconds(value: number) {
+    var theTime = value;// 秒
+    var theTime1 = 0;// 分
+    var theTime2 = 0;// 小时
+    if (theTime > 60) {
+        theTime1 = parseInt((theTime / 60).toString());
+        theTime = parseInt((theTime % 60).toString());
+        if (theTime1 > 60) {
+            theTime2 = parseInt((theTime1 / 60).toString());
+            theTime1 = parseInt((theTime1 % 60).toString());
+        }
+    }
+    var result = "" + parseInt(theTime.toString()) + "秒";
+    if (theTime1 > 0) {
+        result = "" + parseInt(theTime1.toString()) + "分" + result;
+    }
+    if (theTime2 > 0) {
+        result = "" + parseInt(theTime2.toString()) + "小时" + result;
+    }
+    return result;
+}

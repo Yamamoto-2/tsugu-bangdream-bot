@@ -1,6 +1,7 @@
 import { createCanvas, registerFont, Image, Canvas, CanvasRenderingContext2D } from 'canvas';
 import { assetsRootPath } from '@/config';
 registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
+registerFont(assetsRootPath + "/Fonts/FangZhengHeiTi_GBK.ttf", { family: "FangZhengHeiTi" })
 
 interface warpTextOptions {
     text: string,
@@ -8,7 +9,7 @@ interface warpTextOptions {
     maxWidth: number,
     lineHeight?: number
     color?: string,
-    font?: "default" | "old"
+    font?: "FangZhengHeiTi" | "old" | "default"
 }
 
 //画文字,自动换行

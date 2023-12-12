@@ -1,6 +1,6 @@
 import { createCanvas } from 'canvas';
 import { Cutoff } from "@/types/Cutoff";
-import { drawTimeLineChart, getColor } from "@/components/chart";
+import { drawTimeLineChart, getColor } from "@/components/chart_Timeline";
 import { Event } from '@/types/Event';
 import { Server } from '@/types/Server';
 import { EventTop } from '@/types/EventTop';

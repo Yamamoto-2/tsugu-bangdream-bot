@@ -73,7 +73,12 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
     list.push(line)
 
     //卡池pickUp
-    list.push(await drawGachaPickupInList(gacha, server))
+    try{
+        list.push(await drawGachaPickupInList(gacha, server))
+    }
+    catch(e){
+        console.log(e)
+    }
 
     var listImage = drawDatablock({ list })
     var all = []

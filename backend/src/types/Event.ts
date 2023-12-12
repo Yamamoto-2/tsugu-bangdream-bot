@@ -5,7 +5,7 @@ import { Server, getServerByPriority } from '@/types/Server'
 import mainAPI from '@/types/_Main';
 import { Attribute } from '@/types/Attribute';
 import { Character } from '@/types/Character';
-import { globalDefaultServer, Bestdoriurl} from '@/config';
+import { globalDefaultServer, Bestdoriurl } from '@/config';
 import { stringToNumberArray } from '@/types/utils'
 
 var eventDataCache = {}
@@ -211,7 +211,7 @@ export class Event {
         }
     }
     async getEventBGImage(): Promise<Image> {
-        var server = Server.jp
+        var server = getServerByPriority(this.startAt)
         var BGImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/event/${this.assetBundleName}/topscreen_rip/bg_eventtop.png`)
         return await loadImage(BGImageBuffer)
     }
@@ -233,10 +233,16 @@ export class Event {
         return result
     }
     //活动主界面trim
-    async getEventTopscreenTrimImage(server: Server): Promise<Image> {
+    async getEventTopscreenTrimImage(): Promise<Image> {
+        const server = getServerByPriority(this.startAt)
         const url = `${Bestdoriurl}/assets/${Server[server]}/event/${this.assetBundleName}/topscreen_rip/trim_eventtop.png`
         const TopscreenTrimImageBuffer = await downloadFileCache(url)
         return await loadImage(TopscreenTrimImageBuffer)
+    }
+    async getEventLogoImage(server: Server): Promise<Image> {
+        var server = getServerByPriority(this.startAt, [server])
+        var LogoImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/event/${this.assetBundleName}/images_rip/logo.png`)
+        return await loadImage(LogoImageBuffer)
     }
     getTypeName() {
         if (typeName[this.eventType] == undefined) {
