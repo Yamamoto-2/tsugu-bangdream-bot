@@ -32,6 +32,10 @@ export async function drawEventPreviewSongs(eventId: number): Promise<Array<Buff
     const promises = []
     for (let i = 0; i < songList.length; i++) {
         const song = songList[i]
+        //跳过国服已经发布的歌曲
+        if (song.publishedAt[Server.cn] != null) {
+            continue
+        }
         promises.push(drawEventSongDetail(song, [Server.jp, Server.tw], eventBGImage))
     }
     const songImages = await Promise.all(promises)
@@ -40,7 +44,7 @@ export async function drawEventPreviewSongs(eventId: number): Promise<Array<Buff
     return result
 }
 
-async function drawEventSongDetail(song: Song, defaultServerList: Server[] = globalDefaultServer, eventBGImage?:Image): Promise<Buffer | string> {
+async function drawEventSongDetail(song: Song, defaultServerList: Server[] = globalDefaultServer, eventBGImage?: Image): Promise<Buffer | string> {
     if (song.isExist == false) {
         return '错误: 歌曲不存在'
     }

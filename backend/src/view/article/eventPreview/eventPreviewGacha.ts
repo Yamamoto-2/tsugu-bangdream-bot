@@ -95,7 +95,6 @@ async function drawEventGachaDetail(gacha: Gacha, defaultServerList: Server[]): 
 
     var listImage = drawDatablock({ list })
     var all = []
-    all.push(drawTitle('查询', '卡池'))
     all.push(listImage)
 
     const gachaBGImage = await gacha.getGachaBGImage();

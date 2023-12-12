@@ -54,7 +54,7 @@ export async function drawEventPreviewCards(eventId: number): Promise<Array<Buff
     const promises = []
     for (let i = 0; i < cardList.length; i++) {
         const card = cardList[i]
-        promises.push(drawEventCardDetail(card.cardId, [Server.cn, Server.tw, Server.jp], eventBGImage))
+        promises.push(drawEventCardDetail(card.cardId, [Server.cn, Server.jp, Server.tw], eventBGImage))
     }
     const cardImages = await Promise.all(promises)
     result.push(...cardImages)
