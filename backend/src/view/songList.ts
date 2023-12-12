@@ -10,6 +10,7 @@ import { drawDottedLine } from '@/image/dottedLine';
 import { stackImage } from '@/components/utils';
 import { Server } from '@/types/Server';
 import { globalDefaultServer } from '@/config';
+import { drawSongDetail } from "./songDetail";
 
 const maxHeight = 6000
 
@@ -73,6 +74,9 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
     }
     if (tempSongList.length == 0) {
         return ['没有搜索到符合条件的歌曲']
+    }
+    if (tempSongList.length == 1) {
+        return await drawSongDetail(tempSongList[0], defaultServerList)
     }
 
 
