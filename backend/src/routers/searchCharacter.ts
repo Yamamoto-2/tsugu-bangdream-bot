@@ -13,7 +13,7 @@ router.post('/', [
     body('default_servers').custom(isServerList),
     body('text').isString(),
 ], async (req, res) => {
-    console.log(req.baseUrl, req.body);
+    console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
 
     // Check for validation errors
     const errors = validationResult(req);

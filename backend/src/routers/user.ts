@@ -26,7 +26,7 @@ router.post('/getUserData',
         body('user_id').isString(),
     ],
     async (req: Request, res: Response) => {
-        console.log(req.url, req.body);
+        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
         const { platform, user_id } = req.body;
         try {
             let user = await userDB.getUser(platform, user_id);
@@ -113,7 +113,8 @@ router.post('/changeUserData',
         body('update').custom(isPartialTsuguUser),
     ],
     async (req: Request, res: Response) => {
-        console.log(req.url, req.body);
+        req.ip
+        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
         const { platform, user_id, update } = req.body;
         try {
             const updateData = update as Partial<tsuguUser>;
@@ -177,7 +178,7 @@ router.post('/bindPlayerVerification',
         body('bindType').isBoolean(), //true为绑定，false为解绑
     ],
     async (req: Request, res: Response) => {
-        console.log(req.baseUrl, req.body);
+        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
         const { platform, user_id, server, playerId } = req.body;
         try {
             let user = await userDB.getUser(platform, user_id);

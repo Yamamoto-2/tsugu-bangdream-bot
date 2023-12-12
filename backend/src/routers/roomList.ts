@@ -12,7 +12,7 @@ router.post('/', [
   // Define validation rules for the request body
   body('roomList').isArray().notEmpty(),
 ], async (req, res) => {
-  console.log(req.baseUrl, JSON.stringify(req.body));
+  console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
 
   // Check for validation errors
   const errors = validationResult(req);

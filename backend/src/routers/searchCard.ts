@@ -16,7 +16,7 @@ router.post(
         body('useEasyBG').isBoolean(),
     ],
     async (req, res) => {
-        console.log(req.baseUrl, req.body);
+        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
         // Check for validation errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

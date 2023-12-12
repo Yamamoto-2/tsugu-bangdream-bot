@@ -12,7 +12,7 @@ router.post('/', [
     body('server').custom((value) => isServer(value)), // Custom validation for 'server' field
     body('useEasyBG').isBoolean(), // Validation for 'useEasyBG' field
 ], async (req, res) => {
-    console.log(req.baseUrl, req.body);
+    console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

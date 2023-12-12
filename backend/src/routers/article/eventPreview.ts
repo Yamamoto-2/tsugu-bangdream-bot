@@ -14,7 +14,7 @@ const router = express.Router();
 router.post('/eventPreviewBanner', [
     body('eventId').isInt(),
 ], async (req, res) => {
-    console.log(req.baseUrl, JSON.stringify(req.body));
+    console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
     try {
         const result = await drawEventPreviewBanner(req.body.eventId);
         res.send(listToBase64(result));
@@ -28,7 +28,7 @@ router.post('/eventPreviewBanner', [
 router.post('/eventPreviewTitle', [
     body('eventId').isInt(),
 ], async (req, res) => {
-    console.log(req.baseUrl, JSON.stringify(req.body));
+    console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
     try {
         const result = await drawEventPreviewTitle(req.body.eventId);
         res.send(listToBase64(result));
@@ -42,7 +42,7 @@ router.post('/eventPreviewTitle', [
 router.post('/eventPreviewRules', [
     body('eventId').isInt(),
 ], async (req, res) => {
-    console.log(req.baseUrl, JSON.stringify(req.body));
+    console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
     try {
         const result = await drawEventPreviewRules(req.body.eventId);
         res.send(listToBase64(result));
@@ -56,7 +56,7 @@ router.post('/eventPreviewRules', [
 router.post('/eventPreviewCards', [
     body('eventId').isInt(),
 ], async (req, res) => {
-    console.log(req.baseUrl, JSON.stringify(req.body));
+    console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
     try {
         const result = await drawEventPreviewCards(req.body.eventId);
         res.send(listToBase64(result));
@@ -70,7 +70,7 @@ router.post('/eventPreviewCards', [
 router.post('/eventPreviewSongs', [
     body('eventId').isInt(),
 ], async (req, res) => {
-    console.log(req.baseUrl, JSON.stringify(req.body));
+    console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
     try {
         const result = await drawEventPreviewSongs(req.body.eventId);
         res.send(listToBase64(result));
@@ -84,7 +84,7 @@ router.post('/eventPreviewSongs', [
 router.post('/eventPreviewGacha', [
     body('eventId').isInt(),
 ], async (req, res) => {
-    console.log(req.baseUrl, JSON.stringify(req.body));
+    console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
     try {
         const result = await drawEventPreviewGacha(req.body.eventId);
         res.send(listToBase64(result));

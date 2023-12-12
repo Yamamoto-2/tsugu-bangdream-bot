@@ -12,7 +12,7 @@ router.post('/', [
     body('gachaId').isInt(),
     body('useEasyBG').isBoolean(),
 ], async (req, res) => {
-    console.log(req.baseUrl, req.body);
+    console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

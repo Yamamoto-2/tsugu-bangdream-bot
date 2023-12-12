@@ -15,7 +15,7 @@ router.post('/', [
     body('text').isString(),
     body('useEasyBG').isBoolean(),
 ], async (req, res) => {
-    console.log(req.baseUrl, req.body);
+    console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
 
     const { default_servers, text, useEasyBG } = req.body;
 

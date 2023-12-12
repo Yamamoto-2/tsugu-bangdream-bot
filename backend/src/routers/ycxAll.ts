@@ -14,7 +14,7 @@ router.post(
         body('eventId').optional().isInt(), // eventId is optional and must be an integer if provided
     ],
     async (req, res) => {
-        console.log(req.baseUrl, req.body);
+        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
