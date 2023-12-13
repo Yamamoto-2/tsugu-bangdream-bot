@@ -1,8 +1,8 @@
 import { listToBase64 } from '@/routers/utils';
 import express from 'express';
 import { validationResult, body } from 'express-validator';
-import { drawEventPreviewBanner } from '@/view/article/eventPreview/eventPreviewBanner';
 import { drawEventPreviewTitle } from '@/view/article/eventPreview/eventPreviewTitle';
+import { drawEventPreviewDetail } from '@/view/article/eventPreview/eventPreviewDetail';
 import { drawEventPreviewRules } from '@/view/article/eventPreview/eventPreviewRules';
 import { drawEventPreviewCards } from '@/view/article/eventPreview/eventPreviewCards';
 import { drawEventPreviewSongs } from '@/view/article/eventPreview/eventPreviewSongs';
@@ -10,88 +10,35 @@ import { drawEventPreviewGacha } from '@/view/article/eventPreview/eventPreviewG
 
 const router = express.Router();
 
-//eventPreviewBanner
-router.post('/eventPreviewBanner', [
-    body('eventId').isInt(),
-], async (req, res) => {
-    console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
-    try {
-        const result = await drawEventPreviewBanner(req.body.eventId);
-        res.send(listToBase64(result));
-    } catch (e) {
-        console.log(e);
-        res.send([{ type: 'string', string: '内部错误' }]);
-    }
-});
+// Middleware for logging
+const logRequest = (req, res, next) => {
+    console.log(req.ip, `${req.baseUrl}${req.path}`, JSON.stringify(req.body));
+    next();
+};
 
-//eventPreviewTitle
-router.post('/eventPreviewTitle', [
-    body('eventId').isInt(),
-], async (req, res) => {
-    console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
-    try {
-        const result = await drawEventPreviewTitle(req.body.eventId);
-        res.send(listToBase64(result));
-    } catch (e) {
-        console.log(e);
-        res.send([{ type: 'string', string: '内部错误' }]);
-    }
-});
+// Middleware for error handling
+const handleError = (e, res) => {
+    console.log(e);
+    res.send([{ type: 'string', string: '内部错误' }]);
+};
 
-//eventPreviewRules
-router.post('/eventPreviewRules', [
-    body('eventId').isInt(),
-], async (req, res) => {
-    console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
+// Generic route handler
+const handleEventPreview = (drawFunction) => async (req, res) => {
     try {
-        const result = await drawEventPreviewRules(req.body.eventId);
+        const result = await drawFunction(req.body.eventId, req.body.illustration);
         res.send(listToBase64(result));
     } catch (e) {
-        console.log(e);
-        res.send([{ type: 'string', string: '内部错误' }]);
+        handleError(e, res);
     }
-});
+};
 
-//eventPreviewCards
-router.post('/eventPreviewCards', [
-    body('eventId').isInt(),
-], async (req, res) => {
-    console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
-    try {
-        const result = await drawEventPreviewCards(req.body.eventId);
-        res.send(listToBase64(result));
-    } catch (e) {
-        console.log(e);
-        res.send([{ type: 'string', string: '内部错误' }]);
-    }
-});
+// Define route with the specific function
+router.post('/eventPreviewTitle', [logRequest, body('eventId').isInt()], handleEventPreview(drawEventPreviewTitle));
+router.post('/eventPreviewDetail', [logRequest, body('eventId').isInt()], handleEventPreview(drawEventPreviewDetail));
+router.post('/eventPreviewRules', [logRequest, body('eventId').isInt()], handleEventPreview(drawEventPreviewRules));
+router.post('/eventPreviewCards', [logRequest, body('eventId').isInt(),body('illustration').optional().isBoolean()], handleEventPreview(drawEventPreviewCards));
+router.post('/eventPreviewSongs', [logRequest, body('eventId').isInt()], handleEventPreview(drawEventPreviewSongs));
+router.post('/eventPreviewGacha', [logRequest, body('eventId').isInt()], handleEventPreview(drawEventPreviewGacha));
 
-//eventPreviewSongs
-router.post('/eventPreviewSongs', [
-    body('eventId').isInt(),
-], async (req, res) => {
-    console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
-    try {
-        const result = await drawEventPreviewSongs(req.body.eventId);
-        res.send(listToBase64(result));
-    } catch (e) {
-        console.log(e);
-        res.send([{ type: 'string', string: '内部错误' }]);
-    }
-});
-
-//eventPreviewGacha
-router.post('/eventPreviewGacha', [
-    body('eventId').isInt(),
-], async (req, res) => {
-    console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
-    try {
-        const result = await drawEventPreviewGacha(req.body.eventId);
-        res.send(listToBase64(result));
-    } catch (e) {
-        console.log(e);
-        res.send([{ type: 'string', string: '内部错误' }]);
-    }
-});
 
 export { router as eventPreviewRouter }

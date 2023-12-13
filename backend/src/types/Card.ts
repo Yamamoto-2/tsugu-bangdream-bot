@@ -9,7 +9,7 @@ import { downloadFile } from '@/api/downloadFile'
 import { downloadFileCache } from '@/api/downloadFileCache'
 import mainAPI from '@/types/_Main'
 import { globalDefaultServer } from '@/config'
-import {stringToNumberArray, formatNumber} from '@/types/utils'
+import { stringToNumberArray, formatNumber } from '@/types/utils'
 import { Bestdoriurl } from "@/config"
 
 var cardDataCache = {}
@@ -105,7 +105,7 @@ export class Card {
         this.scoreUpMaxValue = skill.scoreUpMaxValue
     }
     async initFull(update: boolean = true) {
-        if(this.isInitFull){
+        if (this.isInitFull) {
             return
         }
         if (this.isExist == false) {
@@ -274,14 +274,11 @@ export class Card {
         var CardIllustrationImage = await downloadFile(`${Bestdoriurl}/assets/${Server[tempServer]}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`)
         return await loadImage(CardIllustrationImage)
     }
-    async getCardIllustrationImageBuffer(trainingStatus: boolean): Promise<string | Buffer> {
+    async getCardIllustrationImageBuffer(trainingStatus: boolean): Promise<Buffer> {
         trainingStatus = this.ableToTraining(trainingStatus);
         const trainingString = trainingStatus ? '_after_training' : '_normal';
         var tempServer = this.getFirstReleasedServer();
-    
-        // 假设downloadFile返回文件路径或Buffer
         var cardIllustration = await downloadFile(`${Bestdoriurl}/assets/${Server[tempServer]}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`);
-    
         return cardIllustration;
     }
     async getCardTrimImage(trainingStatus: boolean): Promise<Image> {

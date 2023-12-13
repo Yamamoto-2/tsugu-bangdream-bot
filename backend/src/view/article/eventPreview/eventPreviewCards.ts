@@ -15,8 +15,8 @@ import { outputFinalBuffer } from '@/image/output'
 import { Event } from '@/types/Event';
 import { drawArticleTitle1 } from '@/components/article/title'
 
-
-export async function drawEventPreviewCards(eventId: number): Promise<Array<Buffer | string>> {
+//illustration: 是否只获取插画
+export async function drawEventPreviewCards(eventId: number, illustration: boolean = false): Promise<Array<Buffer | string>> {
 
     const event = new Event(eventId)
     if (!event.isExist) {
@@ -49,16 +49,32 @@ export async function drawEventPreviewCards(eventId: number): Promise<Array<Buff
     }
     */
 
-    const eventBGImage = await event.getEventBGImage()
-
-    const promises = []
-    for (let i = 0; i < cardList.length; i++) {
-        const card = cardList[i]
-        promises.push(drawEventCardDetail(card.cardId, [Server.cn, Server.jp, Server.tw], eventBGImage))
+    //如果只获取插画
+    if (illustration) {
+        const cardImages: Buffer[] = []
+        for (let i = 0; i < cardList.length; i++) {
+            const card = cardList[i]
+            const trainingStatusList = card.getTrainingStatusList()
+            for(let j=0;j<trainingStatusList.length;j++){
+                const trainingStatus = trainingStatusList[j]
+                cardImages.push(await card.getCardIllustrationImageBuffer(trainingStatus))
+            }
+        }
+        return cardImages
     }
-    const cardImages = await Promise.all(promises)
-    result.push(...cardImages)
-    return result
+    //如果获取全部
+    else {
+        const eventBGImage = await event.getEventBGImage()
+
+        const promises = []
+        for (let i = 0; i < cardList.length; i++) {
+            const card = cardList[i]
+            promises.push(drawEventCardDetail(card.cardId, [Server.cn, Server.jp, Server.tw], eventBGImage))
+        }
+        const cardImages = await Promise.all(promises)
+        result.push(...cardImages)
+        return result
+    }
 }
 
 async function drawEventCardDetail(cardId: number, defaultServerList: Server[], eventBGImage?: Image): Promise<string | Buffer> {
