@@ -1,6 +1,6 @@
 import { callAPIAndCacheResponse } from '@/api/getApi';
 import mainAPI from '@/types/_Main';
-import { Bestdoriurl ,tierListOfServer} from '@/config';
+import { Bestdoriurl, tierListOfServer } from '@/config';
 import { Server } from '@/types/Server';
 import { Event } from '@/types/Event';
 import { predict } from '@/api/cutoff.cjs'
@@ -56,7 +56,18 @@ export class Cutoff {
         if (this.isInitfull) {
             return
         }
-        const cutoffData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`)
+        if (this.isExist == false) {
+            return
+        }
+        let cutoffData
+        //如果cutoff的活动已经结束，则使用缓存
+        const time = new Date().getTime()
+        if (time < this.endAt) {
+            cutoffData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`)
+        }
+        else {
+            cutoffData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`, 1 / 0)
+        }
         if (cutoffData == undefined) {
             this.isExist = false;
             return
@@ -106,7 +117,7 @@ export class Cutoff {
         }
         try {
             var result = predict(cutoff_ts, start_ts, end_ts, this.rate)
-        } catch(e) {
+        } catch (e) {
             console.log(e)
             this.predictEP = 0
             return this.predictEP
