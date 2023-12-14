@@ -64,3 +64,41 @@ export function resizeImage({
     ctx.drawImage(image, 0, 0, width, height)
     return canvas
 }
+interface Color {
+    r: number,
+    g: number,
+    b: number
+}
+
+//用于图表的随机颜色
+const colorList = [
+    { r: 254, g: 65, b: 111 }, { r: 179, g: 49, b: 255 }, { r: 64, g: 87, b: 227 },
+    { r: 68, g: 197, b: 39 }, { r: 0, g: 132, b: 255 }, { r: 255, g: 255, b: 81 },
+    { r: 255, g: 159, b: 64 }, { r: 233, g: 30, b: 99 }, { r: 0, g: 188, b: 212 },
+    { r: 255, g: 193, b: 7 },
+];
+
+function randomRGB(): Color {
+    function generateNumber255() {
+        return Math.floor(Math.random() * 255);
+    };
+    return {
+        r: generateNumber255(),
+        g: generateNumber255(),
+        b: generateNumber255(),
+    };
+}
+
+export function getColor(i?: number, opacity: number = 1): { color: Color, rgbaData: string } {
+    let tempColor: Color
+    if (i < colorList.length) {
+        tempColor = colorList[i];
+    } else {
+        // 当索引超过预定义颜色列表长度时，生成随机颜色
+        tempColor = randomRGB();
+    }
+    return {
+        color: tempColor,
+        rgbaData: `rgba(${tempColor.r},${tempColor.g},${tempColor.b}, ${opacity})`
+    };
+}
