@@ -1,4 +1,4 @@
-import { Event, getSameTypeEventListByEventAndServer } from '@/types/Event';
+import { Event, getRecentEventListByEventAndServer } from '@/types/Event';
 import { drawList, line } from '@/components/list';
 import { drawDatablock } from '@/components/dataBlock'
 import { Image, Canvas, createCanvas, loadImage } from 'canvas'
@@ -7,12 +7,14 @@ import { Server } from '@/types/Server';
 import { drawTitle } from '@/components/title'
 import { outputFinalBuffer } from '@/image/output'
 import { Cutoff } from "@/types/Cutoff";
-import { drawCutoffChart } from '@/components/chart/cutoffChat'
+import { drawCutoffChart } from '@/components/chart/cutoffChart'
 import { serverNameFullList } from '@/config';
 import { drawEventDatablock } from '@/components/dataBlock/event';
 import { drawTips } from '@/components/tips'
 import { assetsRootPath } from '@/config';
 import * as path from 'path'
+import {drawAttributeInList} from '@/components/list/attribute'
+import {drawCharacterInList} from '@/components/list/character'
 
 var statusName = {
     'not_start': '未开始',
@@ -43,19 +45,45 @@ export async function drawCutoffComprare(eventId: number, tier: number, server: 
 
     //初始化档线列表
     var cutoffList: Array<Cutoff> = []
-    const eventList = getSameTypeEventListByEventAndServer(event, server)
+    const eventList = getRecentEventListByEventAndServer(event, server, 5, true)
     for (let i = eventList.length - 1; i >= 0; i--) {
         const cutoff = new Cutoff(eventList[i].eventId, server, tier)
         await cutoff.initFull()
         cutoffList.push(cutoff)
     }
     //每个档线详细数据
-    for (var i in cutoffList) {
+    for (let i in cutoffList) {
         const cutoff = cutoffList[i]
         const tempEvent = new Event(cutoff.eventId)
-        let cutoffContent: string[] = []
+        list.push(drawList({
+            key: `ID:${cutoff.eventId} ${tempEvent.eventName[server]}`,
+        }))
+        //添加活动粗略信息，包括Attribute，Charactor
+        //attribute
+        const attributeList = tempEvent.getAttributeList()
+        for (const i in attributeList) {
+            if (Object.prototype.hasOwnProperty.call(attributeList, i)) {
+                const element = attributeList[i];
+                list.push(await drawAttributeInList({
+                    content: element,
+                    text: ` +${i}%`
+                }))
+            }
+        }
+        //charactor
+        const characterList = tempEvent.getCharacterList()
+        for (const i in characterList) {
+            if (Object.prototype.hasOwnProperty.call(characterList, i)) {
+                const element = characterList[i];
+                list.push(await drawCharacterInList({
+                    content: element,
+                    text: ` +${i}%`
+                }))
+            }
+        }
+        let cutoffContent: Array<Canvas | Image | string> = []
+
         //状态
-        var time = new Date().getTime()
         if (cutoff.status == 'in_progress') {
             cutoff.predict()
             let predictText: string
@@ -70,11 +98,10 @@ export async function drawCutoffComprare(eventId: number, tier: number, server: 
             cutoffContent.push(`更新时间:${changeTimefomant(cutoff.latestCutoff.time)}`)
         }
         else if (cutoff.status == 'ended') {
-            cutoffContent.push(`最终分数线:${cutoff.latestCutoff.ep.toString()}\n`)
+            cutoffContent.push(`最终分数线: ${cutoff.latestCutoff.ep.toString()}\n`)
         }
 
         list.push(drawList({
-            key: `ID:${cutoff.eventId} ${tempEvent.eventName[server]}`,
             content: cutoffContent
         }))
         list.push(line)

@@ -338,12 +338,24 @@ export function sortEventList(tempEventList: Event[], defaultServerList: Server[
 }
 
 //通过活动与服务器，获得活动类型相同的 前5期活动
-export function getSameTypeEventListByEventAndServer(event: Event, server: Server) {
+export function getRecentEventListByEventAndServer(event: Event, server: Server, count: number, sameType: boolean = false) {
     const eventIdList: Array<number> = Object.keys(mainAPI['events']).map(Number)
+    //对活动列表进行排序,从新到旧
+    eventIdList.sort((a, b) => {
+        const eventA = new Event(a)
+        const eventB = new Event(b)
+        if (eventA.startAt[server] == null || eventB.startAt[server] == null) {
+            return 0
+        }
+        return eventB.startAt[server] - eventA.startAt[server]
+    })
     var tempEventList: Array<Event> = []
     for (var i = 0; i < eventIdList.length; i++) {
         var tempEvent = new Event(eventIdList[i])
-        if (tempEvent.eventType == event.eventType && tempEvent.startAt[server] != null) {
+        if (tempEvent.startAt[server] != null) {
+            if (sameType && tempEvent.eventType != event.eventType) {
+                continue
+            }
             if (tempEvent.startAt[server] > event.startAt[server]) {
                 continue
             }
@@ -351,5 +363,5 @@ export function getSameTypeEventListByEventAndServer(event: Event, server: Serve
         }
     }
     sortEventList(tempEventList, [server])
-    return tempEventList.slice(tempEventList.length - 5, tempEventList.length)
+    return tempEventList.slice(tempEventList.length - count, tempEventList.length)
 }

@@ -8,7 +8,7 @@ import { drawEventDatablock } from '@/components/dataBlock/event';
 import { drawDatablock } from '@/components/dataBlock';
 import { outputFinalBuffer } from '@/image/output';
 import { drawPlayerRankingInList } from '@/components/list/playerRanking';
-import { drawEventTopChart } from '@/components/chart/cutoffChat';
+import { drawEventTopChart } from '@/components/chart/cutoffChart';
 
 var statusName = {
     'not_start': '未开始',

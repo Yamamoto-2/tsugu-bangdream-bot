@@ -20,7 +20,7 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
         let lableName: string
         if (setStartToZero) {
             const tempEvent = new Event(cutoff.eventId)
-            lableName = `${tempEvent.eventName[server]} T${cutoff.tier}`
+            lableName = `[${tempEvent.eventId}] ${tempEvent.eventName[server]} T${cutoff.tier}`
         }
         else{
             lableName = `T${cutoff.tier}`
