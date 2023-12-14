@@ -25,7 +25,7 @@ router.post('/submitRoomNumber',
         body('bandoriStationToken').isString().optional(),
     ],
     async (req: Request, res: Response) => {
-        console.log(req.url, req.body);
+        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
         const { number, rawMessage, platform, user_id, userName, time, bandoriStationToken } = req.body;
         const user = await userDB.getUser(platform, user_id);
         try {
@@ -52,7 +52,7 @@ router.post('/submitRoomNumber',
 
 router.get('/queryAllRoom',
     async (req: Request, res: Response) => {
-        console.log(req.url);
+        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
         try {
             let roomList = await queryAllRoom()
             res.status(200).json({
