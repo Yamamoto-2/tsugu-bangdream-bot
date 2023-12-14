@@ -126,7 +126,7 @@ export function drawRoundedRectWithText({
 
   ctx.fillStyle = textColor;
   ctx.textBaseline = "alphabetic";
-  ctx.font = `${textSize}px old`;
+  ctx.font = `${textSize}px old,Microsoft Yahei`;
 
   let x = 0, y = 0;
   if (textAlign === "left" || textAlign === "start") {
