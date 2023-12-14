@@ -60,7 +60,7 @@ export async function drawPlayerDetailBlockWithIllust(player: Player): Promise<C
         textSize: 35
     })
     list.push(drawImageListCenter([idText]))
-    var dataBlock = drawDatablock({ list })
+    var dataBlock = drawDatablock({ list, opacity: 1 })
     //获取玩家首页卡面插画
     const userIllustData = player.profile.userIllust
     const illustCard = new Card(userIllustData.cardId)
