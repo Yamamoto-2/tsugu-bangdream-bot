@@ -72,3 +72,9 @@ export interface tsuguUserServerInList {
 export interface Channel {
     tsugu_gacha: boolean
 }
+
+export const statusName = {
+    'not_start': '未开始',
+    'in_progress': '进行中',
+    'ended': '已结束'
+}

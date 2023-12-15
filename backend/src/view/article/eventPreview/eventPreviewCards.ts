@@ -30,7 +30,7 @@ export async function drawEventPreviewCards(eventId: number, illustration: boole
     result.push(title.toBuffer('image/png'))
 
     //卡池卡牌
-    const eventGachaAndCardList = await getEventGachaAndCardList(event, Server.tw)
+    const eventGachaAndCardList = await getEventGachaAndCardList(event, Server.jp)
     let cardList = eventGachaAndCardList.gachaCardList
     //活动卡牌
     for (let i = 0; i < event.rewardCards.length; i++) {

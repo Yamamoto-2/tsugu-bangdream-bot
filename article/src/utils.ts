@@ -1,6 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 
+export async function processRequest(postPromise, filePath) {
+    try {
+        const response = await postPromise;
+        base64ToFile(response.data, filePath);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 export function base64ToFile(base64List: Array<{ type: 'string' | 'base64', string: string }>, outputPath: string) {
     if (!fs.existsSync(path.dirname(outputPath))) {
         fs.mkdirSync(path.dirname(outputPath), { recursive: true });
@@ -27,4 +36,12 @@ export function base64ToFile(base64List: Array<{ type: 'string' | 'base64', stri
             }
         }
     }
+}
+
+export const tierListOfServer = {
+    'jp': [20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 5000, 10000, 20000, 30000, 50000],
+    'tw': [100, 500],
+    'en': [50, 100, 300, 500, 1000, 2000, 2500],
+    'kr': [100],
+    'cn': [50, 100, 300, 500, 1000, 2000]
 }

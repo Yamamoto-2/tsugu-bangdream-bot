@@ -1,19 +1,11 @@
 import * as axios from 'axios';
 import * as path from 'path';
 import * as readline from 'readline';
-import { base64ToFile } from './utils';
+import { processRequest } from './utils';
 
 const url = 'http://localhost:3000';
 const projectRoot: string = path.resolve(path.dirname(__dirname));
 
-async function processRequest(postPromise, filePath) {
-    try {
-        const response = await postPromise;
-        base64ToFile(response.data, filePath);
-    } catch (error) {
-        console.error(error);
-    }
-}
 
 async function main(eventIdString: string) {
     const eventId = parseInt(eventIdString);

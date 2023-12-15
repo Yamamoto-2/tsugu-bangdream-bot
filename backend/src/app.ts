@@ -16,6 +16,7 @@ import { songChartRouter } from '@/routers/songChart';
 import { userRouter } from '@/routers/user'
 import { stationRouter } from '@/routers/station'
 import { eventPreviewRouter } from '@/routers/article/eventPreview'
+import { eventReportRouter } from '@/routers/article/eventReport'
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -57,8 +58,9 @@ else {
         });
     });
 }
-if(process.env.ARTICLE == 'true'){
+if (process.env.ARTICLE == 'true') {
     app.use('/eventPreview', eventPreviewRouter);
+    app.use('/eventReport', eventReportRouter);
 }
 
 //404

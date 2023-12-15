@@ -35,7 +35,7 @@ export async function drawEventDatablock(event: Event, topLeftText?: string) {
             const element = attributeList[i];
             textImageList.push(await drawAttributeInList({
                 content: element,
-                text: ` + ${i}%`
+                text: ` +${i}%`
             }))
         }
     }
@@ -46,7 +46,7 @@ export async function drawEventDatablock(event: Event, topLeftText?: string) {
             const element = characterList[i];
             textImageList.push(await drawCharacterInList({
                 content: element,
-                text: ` + ${i}%`
+                text: ` +${i}%`
             }))
         }
     }
