@@ -4,7 +4,7 @@ import { drawTimeLineChart } from "@/components/chart_Timeline";
 import { Event } from '@/types/Event';
 import { Server } from '@/types/Server';
 import { EventTop } from '@/types/EventTop';
-import { getColor } from '@/components/utils'
+import { getPresetColor } from '@/types/Color';
 
 export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = false, server: Server = Server['jp']) {
     //setStartToZero:是否将开始时间设置为0
@@ -26,14 +26,15 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
         else {
             lableName = `T${cutoff.tier}`
         }
+        const tempColor = getPresetColor(i)
         datasets.push({
             label: lableName,
             data: cutoff.getChartData(setStartToZero),
             borderWidth: 5,
-            borderColor: [getColor(i, 1).rgbaData],
-            backgroundColor: [getColor(i, 0.2).rgbaData],
-            pointBackgroundColor: getColor(i, 1).rgbaData,
-            pointBorderColor: getColor(i, 1).rgbaData,
+            borderColor: [tempColor.getRGBA(1)],
+            backgroundColor: [tempColor.getRGBA(0.2)],
+            pointBackgroundColor: tempColor.getRGBA(1),
+            pointBorderColor: tempColor.getRGBA(1),
             fill: onlyOne
         })
 
@@ -46,10 +47,11 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
                 else {
                     data = [{ x: new Date(cutoff.startAt), y: cutoff.predictEP }, { x: new Date(cutoff.endAt), y: cutoff.predictEP }]
                 }
+                const tempColor = getPresetColor(i)
                 datasets.push({
                     label: `T${cutoff.tier} 预测线`,
-                    borderColor: [getColor(i, 1).rgbaData],
-                    backgroundColor: [getColor(i, 1).rgbaData],
+                    borderColor: [tempColor.getRGBA(1)],
+                    backgroundColor: [tempColor.getRGBA(1)],
                     data: data,
                     borderWidth: 5,
                     borderDash: [20, 10],
@@ -65,10 +67,11 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
     }
     if (!setStartToZero) {
         if (time < cutoffList[0].endAt) {
+            const tempColor = getPresetColor(0)
             datasets.push({
                 label: "当前时间",
-                borderColor: [getColor(0, 1).rgbaData],
-                backgroundColor: [getColor(0, 1).rgbaData],
+                borderColor: [tempColor.getRGBA(1)],
+                backgroundColor: [tempColor.getRGBA(1)],
                 data: [{ x: new Date(time), y: 0 }],
                 fill: false,
                 pointRadius: 10,
@@ -106,19 +109,21 @@ export async function drawEventTopChart(eventTop: EventTop, setStartToZero = fal
         var newText = text.replace(/\[[^\]]*\]/g, "");
         return newText;
     }
+    let colorNumber = 0
     for (const key in allData) {
-        const tempColor = getColor(0, 1).rgbaData;
+        const tempColor = getPresetColor(colorNumber)
         datasets.push({
             label: removeBraces(eventTop.getUserNameById(Number(key))),
             data: allData[key],
             borderWidth: 4,
-            borderColor: [getColor(0, 1).rgbaData],
-            backgroundColor: [getColor(0, 0.2).rgbaData],
-            pointBackgroundColor: getColor(0, 0).rgbaData,
-            pointBorderColor: getColor(0, 0).rgbaData,
+            borderColor: [tempColor.getRGBA(1)],
+            backgroundColor: [tempColor.getRGBA(0.2)],
+            pointBackgroundColor: tempColor.getRGBA(0),
+            pointBorderColor: tempColor.getRGBA(0),
             pointStyle: false,
             fill: false
         })
+        colorNumber++
     }
     var data = { datasets: datasets }
     return await drawTimeLineChart({ data, start: new Date(eventTop.startAt), end: new Date(eventTop.endAt), setStartToZero })

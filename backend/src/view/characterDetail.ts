@@ -13,6 +13,7 @@ import { changeTimefomantMonthDay } from '@/components/list/time';
 import { stackImage, stackImageHorizontal } from '@/components/utils';
 import { drawBandInList } from '@/components/list/band';
 import { config } from '@/routers/fuzzySearch'
+import { getColorFromHex } from '@/types/Color'
 
 
 const rightListWidth = 500
@@ -89,14 +90,11 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
     ))
     listRight.push(rightListLine)
     //应援色
-    const colorCanvas = createCanvas(50, 50)
-    const colorCtx = colorCanvas.getContext('2d')
-    colorCtx.fillStyle = character.colorCode.toLowerCase()
-    colorCtx.fillRect(0, 0, 50, 50)
+    const tempColor = getColorFromHex(character.colorCode)
     listRight.push(drawList(
         {
             key: '应援色',
-            content: [character.colorCode, colorCanvas],
+            content: [character.colorCode, tempColor.generateColorBlock(1)],
             maxWidth: rightListWidth
         }
     ))
