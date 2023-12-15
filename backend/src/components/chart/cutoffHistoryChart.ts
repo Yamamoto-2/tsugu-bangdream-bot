@@ -28,7 +28,7 @@ export async function drawCutoffHistoryChart(cutoffList: Cutoff[]): Promise<Canv
         const tempColor = getPresetColor(i)
         backgroundColor.push(tempColor.getRGBA(0.8))
         list.push(drawList({
-            content: [tempColor.generateColorBlock(1), `[${cutoff.eventId}] [${finalEP}] ${eventName}`],
+            content: [tempColor.generateColorBlock(0.8), `[${cutoff.eventId}] [${finalEP}] ${eventName}`],
             textSize: 20,
         }))
     }
