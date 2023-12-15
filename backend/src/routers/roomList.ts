@@ -64,7 +64,7 @@ function getRoomList(roomList: any) {
             let server = room.player.server
             if (isServer(server)) {
                 const tempPlayer = new Player(room.player.id, getServerByServerId(server))
-                tempPlayer.initFull()
+                tempPlayer.initFull(false)
                 tempRoom.setPlayer(tempPlayer)
             }
         }
