@@ -10,12 +10,6 @@ import { outputFinalBuffer } from '@/image/output';
 import { drawPlayerRankingInList } from '@/components/list/playerRanking';
 import { drawEventTopChart } from '@/components/chart/cutoffChart';
 
-var statusName = {
-    'not_start': '未开始',
-    'in_progress': '进行中',
-    'ended': '已结束'
-};
-
 export async function drawCutoffEventTop(eventId: number, server: Server): Promise<Array<Buffer | string>> {
     var eventTop = new EventTop(eventId, server);
     await eventTop.initFull();

@@ -11,14 +11,10 @@ import { drawCutoffChart } from '@/components/chart/cutoffChart'
 import { serverNameFullList, tierListOfServer } from '@/config';
 import { drawEventDatablock } from '@/components/dataBlock/event';
 import { drawTips } from '@/components/tips'
-import { assetsRootPath } from '@/config';
+import { assetsRootPath, statusName } from '@/config';
 import * as path from 'path'
 
-var statusName = {
-    'not_start': '未开始',
-    'in_progress': '进行中',
-    'ended': '已结束'
-}
+
 
 export async function drawCutoffListOfEvent(eventId: number, server: Server): Promise<Array<Buffer | string>> {
     var event = new Event(eventId)
@@ -33,23 +29,6 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server): Pr
     all.push(await drawEventDatablock(event))
 
     const list: Array<Image | Canvas> = []
-    //状态
-    var time = new Date().getTime()
-    var status = ''
-    if (time < event.startAt[server]) {
-        status = 'not_start'
-    }
-    else if (time > event.endAt[server]) {
-        status = 'ended'
-    }
-    else {
-        status = 'in_progress'
-    }
-    list.push(drawList({
-        key: '状态',
-        text: statusName[status]
-    }))
-    list.push(line)
 
     //初始化档线列表
     var tierList = tierListOfServer[Server[server]]
@@ -62,6 +41,14 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server): Pr
         }
         cutoffList.push(tempCutoff)
     }
+
+    //状态
+    list.push(drawList({
+        key: '状态',
+        text: statusName[cutoffList[0].status]
+    }))
+
+    list.push(line)
     //每个档线详细数据
     for (var i in cutoffList) {
         const cutoff = cutoffList[i]

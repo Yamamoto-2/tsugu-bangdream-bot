@@ -16,12 +16,6 @@ import * as path from 'path'
 import {drawAttributeInList} from '@/components/list/attribute'
 import {drawCharacterInList} from '@/components/list/character'
 
-var statusName = {
-    'not_start': '未开始',
-    'in_progress': '进行中',
-    'ended': '已结束'
-}
-
 export async function drawCutoffComprare(eventId: number, tier: number, server: Server): Promise<Array<Buffer | string>> {
     //检查
     var event = new Event(eventId)

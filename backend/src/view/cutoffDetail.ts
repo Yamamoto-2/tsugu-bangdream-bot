@@ -11,16 +11,10 @@ import { drawCutoffChart } from '@/components/chart/cutoffChart'
 import { serverNameFullList } from '@/config';
 import { drawEventDatablock } from '@/components/dataBlock/event';
 import { drawTips } from '@/components/tips'
-import { assetsRootPath } from '@/config';
+import { assetsRootPath, statusName } from '@/config';
 import * as path from 'path'
 
-var statusName = {
-    'not_start': '未开始',
-    'in_progress': '进行中',
-    'ended': '已结束'
-}
-
-export async function drawCutoffDetail(eventId: number, tier: number, server: Server): Promise<Array<Buffer | string>>{
+export async function drawCutoffDetail(eventId: number, tier: number, server: Server): Promise<Array<Buffer | string>> {
     var cutoff = new Cutoff(eventId, server, tier)
     if (cutoff.isExist == false) {
         return [`错误: ${serverNameFullList[server]} 活动或档线不存在`]
