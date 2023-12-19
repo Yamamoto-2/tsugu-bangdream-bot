@@ -196,7 +196,7 @@ export class Gacha {
 }
 
 //获取当前进行中的卡池
-export function getPresentGachaList(server: Server, start: number = Date.now(), end: number = Date.now()): Gacha[] {
+export async function getPresentGachaList(server: Server, start: number = Date.now(), end: number = Date.now()): Promise<Array<Gacha>> {
     var gachaList: Array<Gacha> = []
     var gachaListMain = mainAPI['gacha']
 
@@ -209,14 +209,12 @@ export function getPresentGachaList(server: Server, start: number = Date.now(), 
                 continue
             }
             if (gacha.publishedAt[server] <= end && gacha.closedAt[server] >= start) {
-                if (gacha.type == 'special' || gacha.type == 'free') {
+                if (gacha.type == 'free') {
                     continue
                 }
                 if (gacha.gachaName[Server.jp] != null) {
-                    if (gacha.gachaName[Server.jp].includes('初心者限定')) {//跳过新手限定卡池
-                        continue
-                    }
-                    if (gacha.gachaName[Server.jp].includes('カムバック')) {//跳过回归卡池
+                    await gacha.initFull(false)
+                    if(gacha.gachaPeriod[Server.jp] == '期限なし'){
                         continue
                     }
                 }

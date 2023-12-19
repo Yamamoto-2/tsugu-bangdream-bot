@@ -53,7 +53,7 @@ async function commandGachaSimulate(
 
   if (status) {
     if (!gachaId) {
-      const gachaList = getPresentGachaList(server_mode)
+      const gachaList = await getPresentGachaList(server_mode)
       if (gachaList.length === 0) {
         return ['错误: 该服务器没有正在进行的卡池']
       }

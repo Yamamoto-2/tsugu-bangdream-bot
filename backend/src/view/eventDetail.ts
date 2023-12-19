@@ -238,7 +238,7 @@ export async function getEventGachaAndCardList(event: Event, server: Server, use
     if (event.startAt[server] == null) {
         return { gachaCardList: [], gachaList: [] }
     }
-    let tempGachaList = getPresentGachaList(server, event.startAt[server], event.endAt[server])
+    let tempGachaList = await getPresentGachaList(server, event.startAt[server], event.endAt[server])
     for (var j = 0; j < tempGachaList.length; j++) {
         if (gachaIdList.indexOf(tempGachaList[j].gachaId) == -1) {
             gachaList.push(tempGachaList[j])
