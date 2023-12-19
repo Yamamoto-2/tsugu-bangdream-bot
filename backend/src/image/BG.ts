@@ -17,50 +17,57 @@ async function Spread(image: Image, width: number, height: number, brightness: n
   const canvas: Canvas = createCanvas(width, height);
   const ctx = canvas.getContext('2d');
 
-  // 计算图片等比例缩放后的尺寸
-  const imageAspectRatio = image.width / image.height;
-  const canvasAspectRatio = width / height;
-  let renderableHeight: number, renderableWidth: number;
-  if (imageAspectRatio < canvasAspectRatio) {
-    renderableHeight = height;
-    renderableWidth = image.width / (image.height / height);
-  } else if (imageAspectRatio > canvasAspectRatio) {
-    renderableWidth = width;
-    renderableHeight = image.height / (image.width / width);
-  } else {
-    renderableHeight = height;
-    renderableWidth = width;
-  }
+  // 调整亮度
+  const brightenedImage = await adjustBrightness(image, brightness);
 
-  // 将图片等比例缩放并重复铺满整个画布
-  let x = 0,
-    y = 0;
-  while (y < height) {
-    x = 0;
-    while (x < width) {
-      ctx.drawImage(image, x, y, renderableWidth, renderableHeight);
-      x += renderableWidth;
+  // 计算缩放后的尺寸
+  const { scaledWidth, scaledHeight } = getScaledDimensions(brightenedImage, width, height);
+
+  // 绘制图像
+  for (let y = 0; y < height; y += scaledHeight) {
+    for (let x = 0; x < width; x += scaledWidth) {
+      ctx.drawImage(brightenedImage, x, y, scaledWidth, scaledHeight);
     }
-    y += renderableHeight;
   }
 
-  // 获取画布的像素数据
+  return canvas.toBuffer();
+}
+
+async function adjustBrightness(image: Image, brightness: number): Promise<Image> {
+  const canvas = createCanvas(image.width, image.height);
+  const ctx = canvas.getContext('2d');
+
+  ctx.drawImage(image, 0, 0, image.width, image.height);
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const data = imageData.data;
 
-  // 增加亮度值
   const factor = brightness / 255;
   for (let i = 0; i < data.length; i += 4) {
-    data[i] += 255 * factor;
-    data[i + 1] += 255 * factor;
-    data[i + 2] += 255 * factor;
+    data[i] = Math.min(255, data[i] + 255 * factor);     // Red
+    data[i + 1] = Math.min(255, data[i + 1] + 255 * factor); // Green
+    data[i + 2] = Math.min(255, data[i + 2] + 255 * factor); // Blue
+    // Alpha (data[i + 3]) remains unchanged
   }
 
-  // 将修改后的像素数据放回画布
   ctx.putImageData(imageData, 0, 0);
 
-  // 将画布输出为 buffer
-  return canvas.toBuffer();
+  return await loadImage(canvas.toBuffer());
+}
+
+function getScaledDimensions(image: Image, targetWidth: number, targetHeight: number): { scaledWidth: number, scaledHeight: number } {
+  const imageAspectRatio = image.width / image.height;
+  const canvasAspectRatio = targetWidth / targetHeight;
+  let scaledWidth: number, scaledHeight: number;
+
+  if (imageAspectRatio > canvasAspectRatio) {
+    scaledWidth = targetWidth;
+    scaledHeight = image.height * (targetWidth / image.width);
+  } else {
+    scaledHeight = targetHeight;
+    scaledWidth = image.width * (targetHeight / image.height);
+  }
+
+  return { scaledWidth, scaledHeight };
 }
 
 var star: Image[] = [];
@@ -82,7 +89,7 @@ export async function CreateBGEazy({
   ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, width, height);
   if (width < 2000) {
-    var ratio = defaultBGTexture.width / width 
+    var ratio = defaultBGTexture.width / width
   }
   else {
     ratio = 1
