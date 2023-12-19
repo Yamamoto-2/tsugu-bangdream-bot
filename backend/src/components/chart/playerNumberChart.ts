@@ -27,7 +27,7 @@ export async function drawPlayerNumberChart(playerNumberList: Array<{ evrntId: n
         const tempColor = getPresetColor(i)
         backgroundColor.push(tempColor.getRGBA(0.8))
         list.push(drawList({
-            content: [tempColor.generateColorBlock(1), `[${element.evrntId}] [${element.playerNumber}] ${eventName}`],
+            content: [tempColor.generateColorBlock(0.8), `[${element.evrntId}] [${element.playerNumber}] ${eventName}`],
             textSize: 20,
         }))
     }
