@@ -15,6 +15,12 @@ export async function drawEventPreviewRules(eventId: number): Promise<Array<Buff
     }
     await event.initFull()
 
+    const result = []
+
+
+    const title = await drawArticleTitle1('活动规则', 'Rules', event, true)
+    result.push(title.toBuffer('image/png'))
+
     let list: Array<Image | Canvas> = []
 
     //规则
@@ -34,7 +40,6 @@ export async function drawEventPreviewRules(eventId: number): Promise<Array<Buff
     //创建最终输出数组
     let all: Array<Image | Canvas> = []
 
-    all.push(await drawArticleTitle1('活动规则', 'Rules', event))
     all.push(listImage)
 
     var BGimage = await event.getEventBGImage()
@@ -46,5 +51,7 @@ export async function drawEventPreviewRules(eventId: number): Promise<Array<Buff
         text: 'Rules'
     })
 
-    return [buffer];
+    result.push(buffer)
+
+    return result;
 }
