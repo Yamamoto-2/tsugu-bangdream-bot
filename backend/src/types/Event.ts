@@ -216,7 +216,8 @@ export class Event {
         return await loadImage(BGImageBuffer)
     }
     //活动规则轮播图
-    async getEventSlideImage(server: Server): Promise<Image[]> {
+    async getEventSlideImage(tempServer: Server): Promise<Image[]> {
+        const server = getServerByPriority(this.startAt, [tempServer])
         const result: Image[] = []
         const baseUrl = `${Bestdoriurl}/assets/${Server[server]}/event/${this.assetBundleName}/slide_rip/`
         let ruleNumber = 1
@@ -239,8 +240,8 @@ export class Event {
         const TopscreenTrimImageBuffer = await downloadFileCache(url)
         return await loadImage(TopscreenTrimImageBuffer)
     }
-    async getEventLogoImage(server: Server): Promise<Image> {
-        var server = getServerByPriority(this.startAt, [server])
+    async getEventLogoImage(tempServer: Server): Promise<Image> {
+        const server = getServerByPriority(this.startAt, [tempServer])
         var LogoImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/event/${this.assetBundleName}/images_rip/logo.png`)
         return await loadImage(LogoImageBuffer)
     }
