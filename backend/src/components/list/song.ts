@@ -2,7 +2,7 @@ import { Canvas, createCanvas } from 'canvas'
 import { Band } from "@/types/Band"
 import { Server, getServerByPriority } from "@/types/Server"
 import { Song } from "@/types/Song"
-import { drawText, setFontStyle } from "@/components/text"
+import { drawText, setFontStyle } from "@/image/text"
 import { resizeImage } from "@/components/utils"
 import { drawDifficulityList, drawDifficulity } from "@/components/list/difficulty"
 import { globalDefaultServer } from "@/config"

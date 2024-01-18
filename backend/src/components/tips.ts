@@ -1,5 +1,5 @@
 import { Canvas, Image, createCanvas } from 'canvas'
-import { drawText } from "@/components/text"
+import { drawText } from "@/image/text"
 import { resizeImage } from "@/components/utils"
 
 const line2 = createCanvas(1000, 3)

@@ -4,7 +4,7 @@ import { getQQUserIcon, getBandoriStationUserIcon } from "@/api/userIcon"
 import { Canvas, Image, createCanvas, loadImage } from 'canvas';
 import { drawDatablock } from "@/components/dataBlock";
 import { drawList, line, drawListWithLine } from "@/components/list";
-import { drawText } from "@/components/text";
+import { drawText } from "@/image/text";
 import { stackImage, stackImageHorizontal } from "@/components/utils";
 import { changeTimefomant } from '@/components/list/time'
 import { drawPlayerCardInList } from '@/components/list/playerCardIconList'

@@ -5,7 +5,7 @@ import { drawImageListCenter } from '@/components/list'
 import { Canvas, createCanvas } from 'canvas'
 import { drawRoundedRect } from '@/image/drawRect';
 import { resizeImage, stackImage } from '@/components/utils';
-import { drawText } from '@/components/text';
+import { drawText } from '@/image/text';
 
 const width = 250
 const height = 800

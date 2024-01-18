@@ -1,5 +1,5 @@
 import { assetsRootPath } from '@/config'
-import { setFontStyle } from '@/components/text'
+import { setFontStyle } from '@/image/text'
 import { Band } from '@/types/Band'
 import { Attribute } from '@/types/Attribute'
 import { Card } from '@/types/Card'

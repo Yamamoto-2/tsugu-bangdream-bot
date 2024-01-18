@@ -1,7 +1,7 @@
 import { Player } from '@/types/Player';
 import { drawImageListCenter } from "@/components/list";
 import { drawDatablock } from '@/components/dataBlock'
-import { drawText, drawTextWithImages } from "@/components/text";
+import { drawText, drawTextWithImages } from "@/image/text";
 import { createCanvas, Image, Canvas } from 'canvas';
 import { drawDegree } from '@/components/degree';
 import { Degree } from '@/types/Degree';

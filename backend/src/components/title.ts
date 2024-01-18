@@ -1,5 +1,5 @@
 import { Canvas, loadImage, createCanvas, Image } from 'canvas'
-import { drawText } from '@/components/text'
+import { drawText } from '@/image/text'
 import { assetsRootPath } from '@/config'
 import * as path from 'path'
 

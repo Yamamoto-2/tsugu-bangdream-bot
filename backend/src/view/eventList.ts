@@ -11,7 +11,7 @@ import { Server, getIcon, getServerByName } from '@/types/Server'
 import { Event, sortEventList } from '@/types/Event';
 import { drawCardListInList } from '@/components/list/cardIconList';
 import { GetProbablyTimeDifference, changeTimefomant } from '@/components/list/time';
-import { drawTextWithImages } from '@/components/text';
+import { drawTextWithImages } from '@/image/text';
 import { getEventGachaAndCardList } from './eventDetail'
 import { drawDottedLine } from '@/image/dottedLine'
 import { statConfig } from '@/components/list/stat'

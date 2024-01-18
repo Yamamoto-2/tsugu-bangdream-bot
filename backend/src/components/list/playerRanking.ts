@@ -5,7 +5,7 @@ import { drawCardIcon } from '@/components/card';
 import { drawDegree } from '@/components/degree';
 import { Server } from '@/types/Server';
 import { Degree } from '@/types/Degree';
-import { drawText } from '@/components/text';
+import { drawText } from '@/image/text';
 import { downloadFileCache } from '@/api/downloadFileCache';
 import { Bestdoriurl } from "@/config"
 

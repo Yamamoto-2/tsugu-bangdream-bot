@@ -1,7 +1,7 @@
 import { Skill } from '@/types/Skill'
 import { Image, Canvas, loadImage, createCanvas } from 'canvas'
 import { assetsRootPath } from '@/config'
-import { drawTextWithImages } from '@/components/text'
+import { drawTextWithImages } from '@/image/text'
 import * as path from 'path'
 
 var skillIcon: { [skillType: string]: Image } = {}

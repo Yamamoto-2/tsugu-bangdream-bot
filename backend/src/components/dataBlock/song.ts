@@ -6,7 +6,7 @@ import { drawDottedLine } from '@/image/dottedLine'
 import { resizeImage, stackImage, stackImageHorizontal } from "@/components/utils"
 import { Server, getServerByPriority } from "@/types/Server"
 import { Band } from "@/types/Band"
-import { drawText } from "@/components/text"
+import { drawText } from "@/image/text"
 import { drawDifficulityList } from "@/components/list/difficulty"
 import { globalDefaultServer } from "@/config"
 

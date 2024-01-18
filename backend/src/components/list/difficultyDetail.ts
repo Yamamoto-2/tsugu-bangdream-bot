@@ -1,7 +1,7 @@
 import { difficultyColorList, difficultyNameList } from "@/components/list/difficulty"
 import { drawRoundedRectWithText } from "@/image/drawRect"
 import { Canvas, createCanvas, Image } from 'canvas';
-import { drawTextWithImages } from "@/components/text";
+import { drawTextWithImages } from "@/image/text";
 import { drawList, drawImageListCenter } from '@/components/list'
 import { resizeImage, stackImage } from "@/components/utils";
 import { Player } from "@/types/Player";

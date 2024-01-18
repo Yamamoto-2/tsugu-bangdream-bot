@@ -2,7 +2,7 @@ import { Canvas, createCanvas } from "canvas";
 import { Event } from "@/types/Event";
 import { createRoundedRectangleCanvas } from "@/image/createRoundedRectangleCanvas";
 import { Server } from "@/types/Server";
-import { resizeImage } from "../utils";
+import { resizeImage } from "@/components/utils";
 import { drawImageWithShadow } from "@/image/drawImageWithShadow"
 
 

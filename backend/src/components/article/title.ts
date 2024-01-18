@@ -1,5 +1,5 @@
 import { createCanvas, Canvas } from "canvas";
-import { drawText } from "@/components/text";
+import { drawText } from "@/image/text";
 import { drawImageWithShadow } from "@/image/drawImageWithShadow"
 import { Event } from "@/types/Event";
 import { Server } from "@/types/Server";

@@ -2,7 +2,7 @@ import { Player } from "@/types/Player";
 import { Canvas, createCanvas, Image, loadImage } from 'canvas';
 import { drawList } from '@/components/list'
 import { resizeImage } from "@/components/utils";
-import { drawTextWithImages } from "@/components/text";
+import { drawTextWithImages } from "@/image/text";
 import { Character } from "@/types/Character";
 import mainAPI from '@/types/_Main'
 

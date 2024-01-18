@@ -1,6 +1,6 @@
 import { Canvas, Image, createCanvas } from 'canvas';
 import { drawRoundedRectWithText } from '@/image/drawRect';
-import { drawText, drawTextWithImages } from '@/components/text';
+import { drawText, drawTextWithImages } from '@/image/text';
 import { drawDottedLine } from '@/image/dottedLine'
 import { Server, getServerByPriority, getIcon } from '@/types/Server'
 import { stackImageHorizontal } from '@/components/utils';

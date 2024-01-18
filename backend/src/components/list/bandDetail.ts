@@ -3,7 +3,7 @@ import { Canvas, createCanvas, Image, loadImage } from 'canvas';
 import { drawList } from '@/components/list'
 import { resizeImage } from "@/components/utils";
 import { Band } from "@/types/Band";
-import { drawTextWithImages } from "@/components/text";
+import { drawTextWithImages } from "@/image/text";
 import { starList } from '@/components/list/rarity'
 import mainAPI from "@/types/_Main";
 import { Bestdoriurl } from "@/config";

@@ -4,7 +4,7 @@ import { assetsRootPath, globalDefaultServer } from '@/config'
 import { Band } from '@/types/Band'
 import { Character } from '@/types/Character'
 import { Server, getServerByPriority } from '@/types/Server'
-import { setFontStyle } from '@/components/text'
+import { setFontStyle } from '@/image/text'
 import { drawRoundedRect } from '@/image/drawRect'
 import * as path from 'path'
 

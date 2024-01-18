@@ -1,6 +1,6 @@
 import { createCanvas, Canvas } from 'canvas'
 import { Song } from "@/types/Song"
-import { drawText } from "@/components/text"
+import { drawText } from "@/image/text"
 
 export const difficultyColorList = ["#8eb4fd", "#a6f692", "#fbdf8c", "#ff898b", "#f383cb"] //画难度时使用的配色
 export const difficultyNameList = ['easy', 'normal', 'hard', 'expert', 'special'] //难度名称

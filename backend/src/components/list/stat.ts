@@ -1,5 +1,5 @@
 import { Canvas, createCanvas, Image } from 'canvas';
-import { drawText } from "@/components/text";
+import { drawText } from "@/image/text";
 import { drawList } from "@/components/list";
 import { stackImage } from '@/components/utils'
 import { drawRoundedRect } from "@/image/drawRect";

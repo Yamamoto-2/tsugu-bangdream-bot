@@ -3,7 +3,7 @@ import { Card } from "@/types/Card";
 import { drawCardIcon } from "@/components/card";
 import { drawTitle } from "@/components/title";
 import { createCanvas, Canvas, Image, loadImage } from 'canvas';
-import { drawTextWithImages, drawText } from "@/components/text";
+import { drawTextWithImages, drawText } from "@/image/text";
 import { outputFinalBuffer } from '@/image/output'
 import { getServerByPriority, Server } from "@/types/Server";
 import { drawDatablock } from "@/components/dataBlock";
