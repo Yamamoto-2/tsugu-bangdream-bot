@@ -102,7 +102,7 @@ async function drawEventSongDetail(song: Song, defaultServerList: Server[] = glo
     else {
         bpm = `${bpmMin} ~ ${bpmMax}`
     }
-    list.push(await drawList({
+    list.push(drawList({
         key: 'bpm',
         text: bpm
     }))

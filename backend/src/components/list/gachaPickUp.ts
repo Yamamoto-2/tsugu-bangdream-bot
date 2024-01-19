@@ -37,7 +37,7 @@ export async function drawGachaPickupInList(gacha: Gacha, server: Server, key?: 
         for (let rarity in pickUpCardList) {
             for (let weight in pickUpCardList[rarity]) {
                 const rate = parseInt(weight) / gacha.rates[server][rarity].weightTotal * gacha.rates[server][rarity].rate
-                list.push(await drawList({
+                list.push(drawList({
                     text: `${rate.toFixed(2)}%: `,
                 }))
                 list.push(await drawCardListInList({
