@@ -15,4 +15,6 @@ tsconfig.tsbuildinfo
 *.ntvs*
 *.njsproj
 *.sln
+*.env
+*.exe
 cache/*
