@@ -72,7 +72,7 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
     else {
         bpm = `${bpmMin} ~ ${bpmMax}`
     }
-    list.push(await drawList({
+    list.push(drawList({
         key: 'bpm',
         text: bpm
     }))
@@ -91,6 +91,13 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
             key: 'special难度发布时间',
             content: song.difficulty['4'].publishedAt
         }, defaultServerList))
+    }
+    if (song.nickname != null) {
+        list.push(line)
+        list.push(drawList({
+            key: '模糊搜索关键词',
+            text: song.nickname
+        }))
     }
 
     //创建最终输出数组
