@@ -86,12 +86,12 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server): Pr
     var listImage = drawDatablock({ list })
 
     all.push(listImage)
-
+    /*
     all.push(drawTips({
         text: '想给我们提供数据?\n可以在群聊238052000中提供数据\n也可以通过扫描右侧二维码进行上传\n手机可以长按图片扫描二维码\n我们会尽快将数据上传至服务器',
         image: await loadImage(path.join(assetsRootPath, 'shimowendang.png'))
     }))
-
+    */
     var buffer = await outputFinalBuffer({
         imageList: all,
         useEasyBG: true
