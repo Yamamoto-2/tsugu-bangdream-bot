@@ -5,6 +5,8 @@ import { Event } from '@/types/Event';
 import { Server } from '@/types/Server';
 import { EventTop } from '@/types/EventTop';
 import { getPresetColor } from '@/types/Color';
+import { drawList } from '@/components/list'
+import { stackImage } from '@/components/utils'
 
 export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = false, server: Server = Server['jp']) {
     //setStartToZero:是否将开始时间设置为0
@@ -13,20 +15,31 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
     if (cutoffList.length == 0) {
         return (createCanvas(1, 1))
     }
+
+    const list = []
+
     var onlyOne = cutoffList.length == 1
     for (let i = 0; i < cutoffList.length; i++) {
+        const tempColor = getPresetColor(i)
 
         const cutoff = cutoffList[i];
+        const tempEvent = new Event(cutoff.eventId)
 
         let lableName: string
         if (setStartToZero) {
-            const tempEvent = new Event(cutoff.eventId)
             lableName = `[${tempEvent.eventId}] ${tempEvent.eventName[server]} T${cutoff.tier}`
+            list.push(drawList({
+                content: [tempColor.generateColorBlock(0.8), `[${tempEvent.eventId}] ${tempEvent.eventName[server]} T${cutoff.tier}`],
+                textSize: 20,
+            }))
         }
         else {
             lableName = `T${cutoff.tier}`
+            list.push(drawList({
+                content: [tempColor.generateColorBlock(0.8), `T${cutoff.tier}`],
+                textSize: 20,
+            }))
         }
-        const tempColor = getPresetColor(i)
         datasets.push({
             label: lableName,
             data: cutoff.getChartData(setStartToZero),
@@ -80,6 +93,8 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
             })
         }
     }
+    let all = []
+    all.push(stackImage(list))
 
     var data = {
         datasets: datasets
@@ -92,10 +107,12 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
                 longestTime = cutoff.endAt - cutoff.startAt
             }
         }
-        return await drawTimeLineChart({ data, start: new Date(0), end: new Date(longestTime), setStartToZero })
+        all.push(await drawTimeLineChart({ data, start: new Date(0), end: new Date(longestTime), setStartToZero }))
+        return (stackImage(all))
     }
     else {
-        return await drawTimeLineChart({ data, start: new Date(cutoffList[0].startAt), end: new Date(cutoffList[0].endAt), setStartToZero })
+        all.push(await drawTimeLineChart({ data, start: new Date(cutoffList[0].startAt), end: new Date(cutoffList[0].endAt), setStartToZero }))
+        return (stackImage(all))
     }
 
 }

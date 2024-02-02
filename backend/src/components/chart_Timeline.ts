@@ -4,7 +4,7 @@ import { registerFont, loadImage } from 'canvas';
 import 'chartjs-adapter-moment';
 registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
 var width = 800
-var height = 800
+var height = 1200
 const chartJSNodeCanvas = new ChartJSNodeCanvas({
     width, height, chartCallback: (ChartJS) => {
         ChartJS.defaults.font.family = 'old,Microsoft Yahei';
@@ -28,11 +28,7 @@ export async function drawTimeLineChart({
     var options = {
         plugins: {
             legend: {
-                labels: {
-                    font: {
-                        size: 20,
-                    },
-                },
+                display: false,
             }
         },
         scales: {
