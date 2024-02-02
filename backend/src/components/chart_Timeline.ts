@@ -23,12 +23,18 @@ export async function drawTimeLineChart({
     end,
     setStartToZero = false,
     data
-}: drawTimeLineChartOptions) {
+}: drawTimeLineChartOptions,
+    displayLable = false) {
     const yMax = Math.max(...data['datasets'].map((dataset: any) => Math.max(...dataset['data'].map((data: any) => data['y']))))
     var options = {
         plugins: {
             legend: {
-                display: false,
+                labels: {
+                    font: {
+                        size: 20,
+                    },
+                },
+                display: displayLable,
             }
         },
         scales: {

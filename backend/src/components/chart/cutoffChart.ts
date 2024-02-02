@@ -143,5 +143,5 @@ export async function drawEventTopChart(eventTop: EventTop, setStartToZero = fal
         colorNumber++
     }
     var data = { datasets: datasets }
-    return await drawTimeLineChart({ data, start: new Date(eventTop.startAt), end: new Date(eventTop.endAt), setStartToZero })
+    return await drawTimeLineChart({ data, start: new Date(eventTop.startAt), end: new Date(eventTop.endAt), setStartToZero }, true)
 }
