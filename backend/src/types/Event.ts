@@ -145,6 +145,9 @@ export class Event {
         if (isSameBand) {
             this.bandId.push(new Character(this.characters[0].characterId).bandId.toString())
         }
+        else{
+            this.bandId.push('0')
+        }
     }
     async initFull(update: boolean = true) {
         if (this.isInitFull) {
