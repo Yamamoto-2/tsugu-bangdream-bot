@@ -93,7 +93,7 @@ export async function commandBindPlayer(config: Config, session: Session<'tsugu'
             user.platform = session.platform
             user.user_id = session.userId
             curServer.bindingStatus = BindingStatus.Success
-            const result = paresMessageList(await commandSearchPlayer(backendUrl, user, playerId, serverName, config.useEasyBG))
+            const result = paresMessageList(await commandSearchPlayer(backendUrl, user, playerId, serverName, config.useEasyBG, config.compress))
             return result
         }
     }
@@ -186,7 +186,7 @@ export async function commandUnbindPlayer(config: Config, session: Session<'tsug
     }
 }
 
-export async function commandPlayerInfo(config: Config, session: Session<'tsugu', never>, serverName: string, useEasyBG: boolean) {
+export async function commandPlayerInfo(config: Config, session: Session<'tsugu', never>, serverName: string, useEasyBG: boolean, compress: boolean) {
     let user: tsuguUser
     try {
         user = await getUser(session, config)
@@ -209,7 +209,7 @@ export async function commandPlayerInfo(config: Config, session: Session<'tsugu'
         return `错误: 未检测到${serverNameFullList[server]}的玩家数据`
     }
     else {
-        const result = await commandSearchPlayer(config.backendUrl, user, curServer.playerId, serverName, useEasyBG)
+        const result = await commandSearchPlayer(config.backendUrl, user, curServer.playerId, serverName, useEasyBG, compress)
         return h.image(result[0] as Buffer, 'image/png')
     }
 }

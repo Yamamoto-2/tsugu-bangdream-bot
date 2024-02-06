@@ -2,7 +2,7 @@ import { Server, getServerByName } from '../types/Server'
 import {getDataFromBackend} from './utils'
 
 
-export async function commandSongMeta(backendUrl:string,default_servers:Server[], text: string): Promise<Array<Buffer | string>>{
+export async function commandSongMeta(backendUrl:string,default_servers:Server[], text: string, compress: boolean): Promise<Array<Buffer | string>>{
     let server: Server
     if (!text) {
         server = default_servers[0]
@@ -15,6 +15,7 @@ export async function commandSongMeta(backendUrl:string,default_servers:Server[]
     }
     return await getDataFromBackend(`${backendUrl}/songMeta`, {
         default_servers,
-        server
+        server,
+        compress
     })
 }   

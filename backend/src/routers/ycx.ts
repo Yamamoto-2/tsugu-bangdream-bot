@@ -14,6 +14,7 @@ router.post(
         body('server').custom(value => isServer(value)),
         body('tier').isInt(),
         body('eventId').optional().isInt(),
+        body('compress').isBoolean(),
     ],
     async (req, res) => {
         console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
@@ -24,10 +25,10 @@ router.post(
         }
 
 
-        const { server, tier, eventId } = req.body;
+        const { server, tier, eventId, compress } = req.body;
 
         try {
-            const result = await commandYcx(getServerByServerId(server), tier, eventId);
+            const result = await commandYcx(getServerByServerId(server), tier, compress, eventId);
             res.send(listToBase64(result));
         } catch (e) {
             console.log(e);
@@ -36,7 +37,7 @@ router.post(
     }
 );
 
-export async function commandYcx(server: Server, tier: number, eventId?: number): Promise<Array<Buffer | string>> {
+export async function commandYcx(server: Server, tier: number, compress: boolean, eventId?: number): Promise<Array<Buffer | string>> {
     if (!tier) {
         return ['请输入排名']
     }
@@ -44,9 +45,9 @@ export async function commandYcx(server: Server, tier: number, eventId?: number)
         eventId = getPresentEvent(server).eventId
     }
     if(tier == 10){
-        return await drawCutoffEventTop(eventId,server);
+        return await drawCutoffEventTop(eventId,server,compress);
     }
-    return await drawCutoffDetail(eventId, tier, server)
+    return await drawCutoffDetail(eventId, tier, server, compress)
 
 }
 

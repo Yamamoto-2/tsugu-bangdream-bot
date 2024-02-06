@@ -16,7 +16,7 @@ import * as path from 'path'
 import {drawAttributeInList} from '@/components/list/attribute'
 import {drawCharacterInList} from '@/components/list/character'
 
-export async function drawCutoffComprare(eventId: number, tier: number, server: Server): Promise<Array<Buffer | string>> {
+export async function drawCutoffComprare(eventId: number, tier: number, server: Server, compress: boolean): Promise<Array<Buffer | string>> {
     //检查
     var event = new Event(eventId)
     if (!event.isExist) {
@@ -118,7 +118,8 @@ export async function drawCutoffComprare(eventId: number, tier: number, server: 
     */
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEasyBG: true
+        useEasyBG: true,
+        compress:compress,
     })
     return [buffer]
 }

@@ -14,7 +14,7 @@ import { drawGachaRateInList } from '@/components/list/gachaRate';
 import { globalDefaultServer, serverNameFullList } from '@/config';
 import { drawGachaPickupInList } from '@/components/list/gachaPickUp'
 
-export async function drawGachaDetail(gachaId: number, defaultServerList: Server[] = globalDefaultServer, useEasyBG: boolean): Promise<Array<Buffer | string>> {
+export async function drawGachaDetail(gachaId: number, defaultServerList: Server[] = globalDefaultServer, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
     const gacha = new Gacha(gachaId)
     if (!gacha.isExist) {
         return ['错误: 卡池不存在']
@@ -109,7 +109,8 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
         imageList: all,
         useEasyBG: useEasyBG,
         BGimage: gachaBGImage,
-        text: 'Gacha'
+        text: 'Gacha',
+        compress:compress,
     })
     return [buffer]
 }

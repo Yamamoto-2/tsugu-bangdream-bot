@@ -19,6 +19,7 @@ router.post(
     }),
     body('status').isBoolean(),
     body('times').optional().isInt(),
+    body('compress').isBoolean(),
     body('gachaId').optional().isInt(),
   ],
   async (req, res) => {
@@ -31,10 +32,10 @@ router.post(
       return res.send([{ type: 'string', string: '参数错误' }]);
     }
 
-    const { server_mode, status, times, gachaId } = req.body;
+    const { server_mode, status, times, compress, gachaId } = req.body;
 
     try {
-      const result = await commandGachaSimulate(server_mode, status, times, gachaId);
+      const result = await commandGachaSimulate(server_mode, status, times, compress, gachaId);
       res.send(listToBase64(result));
     } catch (e) {
       console.log(e);
@@ -47,6 +48,7 @@ async function commandGachaSimulate(
   server_mode: Server,
   status: boolean,
   times?: number,
+  compress?:boolean,
   gachaId?: number
 ): Promise<Array<Buffer | string>> {
   let gacha: Gacha;
@@ -74,7 +76,7 @@ async function commandGachaSimulate(
         return ['错误: 该卡池不存在'];
       }
     }
-    return await drawRandomGacha(gacha, times || 10, server_mode);
+    return await drawRandomGacha(gacha, times || 10, server_mode, compress);
   }
 
   return [];

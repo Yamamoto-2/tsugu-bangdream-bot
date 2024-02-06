@@ -11,6 +11,7 @@ router.post('/', [
     body('playerId').isInt(), // Validation for 'playerId' field
     body('server').custom((value) => isServer(value)), // Custom validation for 'server' field
     body('useEasyBG').isBoolean(), // Validation for 'useEasyBG' field
+    body('compress').isBoolean(),
 ], async (req, res) => {
     console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
 
@@ -18,10 +19,10 @@ router.post('/', [
     if (!errors.isEmpty()) {
         return res.send([{ type: 'string', string: '参数错误' }]);
     }
-    const { playerId, server, useEasyBG } = req.body;
+    const { playerId, server, useEasyBG, compress } = req.body;
 
     try {
-        const result = await commandSearchPlayer(playerId, getServerByServerId(server), useEasyBG);
+        const result = await commandSearchPlayer(playerId, getServerByServerId(server), useEasyBG, compress);
         res.send(listToBase64(result));
     } catch (e) {
         console.log(e);
@@ -29,9 +30,9 @@ router.post('/', [
     }
 });
 
-export async function commandSearchPlayer(playerId: number, server: Server, useEasyBG: boolean): Promise<Array<Buffer | string>> {
+export async function commandSearchPlayer(playerId: number, server: Server, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
 
-    return await drawPlayerDetail(playerId, server, useEasyBG)
+    return await drawPlayerDetail(playerId, server, useEasyBG, compress)
 
 }
 

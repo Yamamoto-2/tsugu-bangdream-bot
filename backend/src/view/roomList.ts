@@ -2,7 +2,7 @@ import { drawRoomListTitle, drawRoonInList } from "@/components/list/room";
 import { outputFinalBuffer } from "@/image/output";
 import { Room } from "@/types/Room";
 
-export async function drawRoomList(roomList: Room[]): Promise<Array<Buffer | string>> {
+export async function drawRoomList(roomList: Room[], compress: boolean): Promise<Array<Buffer | string>> {
     let all = []
     all.push(await drawRoomListTitle())
     //let roomList = await queryAllRoom()
@@ -16,7 +16,8 @@ export async function drawRoomList(roomList: Room[]): Promise<Array<Buffer | str
     var buffer = await outputFinalBuffer({
         imageList: all,
         useEasyBG: true,
-        startWithSpace: false
+        startWithSpace: false,
+        compress:compress,
     })
     return [buffer]
 }

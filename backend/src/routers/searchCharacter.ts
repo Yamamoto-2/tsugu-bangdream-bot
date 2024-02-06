@@ -12,6 +12,7 @@ const router = express.Router();
 router.post('/', [
     body('default_servers').custom(isServerList),
     body('text').isString(),
+    body('compress').isBoolean(),
 ], async (req, res) => {
     console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
 
@@ -21,10 +22,10 @@ router.post('/', [
         return res.send([{ type: 'string', string: '参数错误' }]);
     }
 
-    const { default_servers, text } = req.body;
+    const { default_servers, text, compress } = req.body;
 
     try {
-        const result = await commandCharacter(default_servers, text);
+        const result = await commandCharacter(default_servers, text, compress);
         res.send(listToBase64(result));
     } catch (e) {
         console.log(e);
@@ -32,16 +33,16 @@ router.post('/', [
     }
 });
 
-export async function commandCharacter(default_servers: Server[], text: string): Promise<Array<Buffer | string>> {
+export async function commandCharacter(default_servers: Server[], text: string, compress:boolean): Promise<Array<Buffer | string>> {
     if (isInteger(text)) {
-        return await drawCharacterDetail(parseInt(text), default_servers)
+        return await drawCharacterDetail(parseInt(text), default_servers, compress)
     }
     var fuzzySearchResult = fuzzySearch(text.split(' '))
     console.log(fuzzySearchResult)
     if (Object.keys(fuzzySearchResult).length == 0) {
         return ['错误: 没有有效的关键词']
     }
-    return await drawCharacterList(fuzzySearchResult, default_servers)
+    return await drawCharacterList(fuzzySearchResult, default_servers, compress)
 
 }
 

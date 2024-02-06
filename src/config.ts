@@ -59,6 +59,7 @@ export interface Channel {
 
 export interface Config {
     useEasyBG: boolean,
+    compress:boolean,
     backendUrl: string,
     RemoteDBSwitch: boolean,
     RemoteDBHost: string,

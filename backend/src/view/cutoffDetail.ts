@@ -14,7 +14,7 @@ import { drawTips } from '@/components/tips'
 import { assetsRootPath, statusName } from '@/config';
 import * as path from 'path'
 
-export async function drawCutoffDetail(eventId: number, tier: number, server: Server): Promise<Array<Buffer | string>> {
+export async function drawCutoffDetail(eventId: number, tier: number, server: Server, compress: boolean): Promise<Array<Buffer | string>> {
     var cutoff = new Cutoff(eventId, server, tier)
     if (cutoff.isExist == false) {
         return [`错误: ${serverNameFullList[server]} 活动或档线不存在`]
@@ -102,7 +102,8 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
     */
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEasyBG: true
+        useEasyBG: true,
+        compress:compress,
     })
 
     return [buffer];

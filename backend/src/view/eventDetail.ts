@@ -19,7 +19,7 @@ import { Song, getPresentSongList } from '@/types/Song'
 import { drawSongListDataBlock } from '@/components/dataBlock/songList';
 import { globalDefaultServer, serverNameFullList } from '@/config';
 
-export async function drawEventDetail(eventId: number, defaultServerList: Server[] = globalDefaultServer, useEasyBG: boolean): Promise<Array<Buffer | string>> {
+export async function drawEventDetail(eventId: number, defaultServerList: Server[] = globalDefaultServer, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
     const event = new Event(eventId)
     if (!event.isExist) {
         return ['错误: 活动不存在']
@@ -226,7 +226,8 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
         imageList: all,
         useEasyBG: useEasyBG,
         BGimage,
-        text: 'Event'
+        text: 'Event',
+        compress:compress,
     })
 
     return [buffer];

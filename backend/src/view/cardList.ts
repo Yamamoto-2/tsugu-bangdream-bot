@@ -13,7 +13,7 @@ import { globalDefaultServer } from '@/config';
 
 const maxWidth = 7000
 
-export async function drawCardList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
+export async function drawCardList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
     //计算模糊搜索结果
     var tempCardList: Array<Card> = [];//最终输出的卡牌列表
     var cardIdList: Array<number> = Object.keys(mainAPI['cards']).map(Number);//所有卡牌ID列表
@@ -133,7 +133,8 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         all.push(cardListImage)
         var buffer = await outputFinalBuffer({
             imageList: all,
-            useEasyBG: true
+            useEasyBG: true,
+            compress:compress,
         })
         return [buffer]
     }

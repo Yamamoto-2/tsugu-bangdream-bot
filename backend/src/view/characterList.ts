@@ -13,7 +13,7 @@ import { drawCharacterDetail } from './characterDetail'
 
 const maxWidth = 1370
 
-export async function drawCharacterList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
+export async function drawCharacterList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
     //计算模糊搜索结果
     var tempCharacterList: Array<Character> = [];//最终输出的角色列表
     var characterIdList: Array<number> = Object.keys(mainAPI['characters']).map(Number);//所有卡牌ID列表
@@ -40,7 +40,7 @@ export async function drawCharacterList(matches: { [key: string]: string[] }, de
         return ['没有搜索到符合条件的角色']
     }
     if (tempCharacterList.length == 1) {
-        return (await drawCharacterDetail(tempCharacterList[0].characterId, defaultServerList))
+        return (await drawCharacterDetail(tempCharacterList[0].characterId, defaultServerList, compress))
     }
     const characterImageList: Canvas[] = []
     for (let i = 0; i < tempCharacterList.length; i++) {
@@ -61,7 +61,8 @@ export async function drawCharacterList(matches: { [key: string]: string[] }, de
     }))
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEasyBG: true
+        useEasyBG: true,
+        compress:compress,
     })
     return [buffer];
 }

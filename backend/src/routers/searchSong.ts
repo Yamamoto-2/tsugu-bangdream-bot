@@ -15,6 +15,7 @@ router.post(
         // Express-validator checks for type validation
         body('default_servers').custom(isServerList),
         body('text').isString(),
+        body('compress').isBoolean(),
     ],
     async (req, res) => {
         console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
@@ -26,10 +27,10 @@ router.post(
         }
 
 
-        const { default_servers, text } = req.body;
+        const { default_servers, text, compress } = req.body;
 
         try {
-            const result = await commandSong(default_servers, text);
+            const result = await commandSong(default_servers, text, compress);
             res.send(listToBase64(result));
         } catch (e) {
             console.log(e);
@@ -39,17 +40,17 @@ router.post(
 );
 
 
-export async function commandSong(default_servers: Server[], text: string): Promise<Array<Buffer | string>> {
+export async function commandSong(default_servers: Server[], text: string, compress: boolean): Promise<Array<Buffer | string>> {
 
     if (isInteger(text)) {
-        return await drawSongDetail(new Song(parseInt(text)), default_servers)
+        return await drawSongDetail(new Song(parseInt(text)), default_servers, compress)
     }
     var fuzzySearchResult = fuzzySearch(text.split(' '))
     console.log(fuzzySearchResult)
     if (Object.keys(fuzzySearchResult).length == 0) {
         return ['错误: 没有有效的关键词']
     }
-    return await drawSongList(fuzzySearchResult, default_servers)
+    return await drawSongList(fuzzySearchResult, default_servers, compress)
 }
 
 export { router as searchSongRouter }

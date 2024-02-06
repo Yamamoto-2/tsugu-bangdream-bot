@@ -44,7 +44,7 @@ const constellationList = {
     'sagittarius': '射手座',
 }
 
-export async function drawCharacterDetail(characterId: number, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
+export async function drawCharacterDetail(characterId: number, defaultServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
     const character = new Character(characterId)
     if (!character.isExist) {
         return ['错误: 角色不存在']
@@ -217,7 +217,8 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
 
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEasyBG: true
+        useEasyBG: true,
+        compress:compress,
     })
 
     return [buffer]

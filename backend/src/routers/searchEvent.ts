@@ -14,10 +14,11 @@ router.post('/', [
     body('default_servers').custom(isServerList),
     body('text').isString(),
     body('useEasyBG').isBoolean(),
+    body('compress').isBoolean(),
 ], async (req, res) => {
     console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
 
-    const { default_servers, text, useEasyBG } = req.body;
+    const { default_servers, text, useEasyBG, compress } = req.body;
 
     // Check for validation errors
     const errors = validationResult(req);
@@ -25,7 +26,7 @@ router.post('/', [
         return res.send([{ type: 'string', string: '参数错误' }]);
     }
     try {
-        const result = await commandEvent(default_servers, text, useEasyBG);
+        const result = await commandEvent(default_servers, text, useEasyBG, compress);
         res.send(listToBase64(result));
     } catch (e) {
         console.log(e);
@@ -33,10 +34,10 @@ router.post('/', [
     }
 });
 
-export async function commandEvent(default_servers: Server[], text: string, useEasyBG: boolean): Promise<Array<Buffer | string>> {
+export async function commandEvent(default_servers: Server[], text: string, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
 
     if (isInteger(text)) {
-        return await drawEventDetail(parseInt(text), default_servers, useEasyBG)
+        return await drawEventDetail(parseInt(text), default_servers, useEasyBG, compress)
     }
 
     var fuzzySearchResult = fuzzySearch(text.split(' '))
@@ -44,7 +45,7 @@ export async function commandEvent(default_servers: Server[], text: string, useE
     if (Object.keys(fuzzySearchResult).length == 0) {
         return ['错误: 没有有效的关键词']
     }
-    return await drawEventList(fuzzySearchResult, default_servers)
+    return await drawEventList(fuzzySearchResult, default_servers, compress)
 
 }
 

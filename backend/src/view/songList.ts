@@ -41,7 +41,7 @@ const line2: Canvas = drawDottedLine({
 })
 
 
-export async function drawSongList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
+export async function drawSongList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
     // 计算歌曲模糊搜索结果
     var tempSongList: Array<Song> = [];
     var songIdList: Array<number> = Object.keys(mainAPI['songs']).map(Number)
@@ -76,7 +76,7 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
         return ['没有搜索到符合条件的歌曲']
     }
     if (tempSongList.length == 1) {
-        return await drawSongDetail(tempSongList[0], defaultServerList)
+        return await drawSongDetail(tempSongList[0], defaultServerList,compress)
     }
 
 
@@ -122,7 +122,8 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
     all.push(songListImage)
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEasyBG: true
+        useEasyBG: true,
+        compress:compress
     })
     return [buffer]
 }

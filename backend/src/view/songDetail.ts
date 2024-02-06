@@ -14,7 +14,7 @@ import { drawSongMetaListDataBlock } from '@/components/dataBlock/songMetaList'
 import { globalDefaultServer, serverNameFullList } from '@/config';
 import { formatSeconds } from '@/components/list/time'
 
-export async function drawSongDetail(song: Song, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
+export async function drawSongDetail(song: Song, defaultServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
     if (song.isExist == false) {
         return ['错误: 歌曲不存在']
     }
@@ -136,7 +136,8 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
 
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEasyBG: true
+        useEasyBG: true,
+        compress:compress
     })
     return [buffer]
 }

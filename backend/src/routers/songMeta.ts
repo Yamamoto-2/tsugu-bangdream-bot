@@ -10,6 +10,7 @@ router.post('/', [
     // Define validation rules for request body
     body('default_servers').custom(isServerList),
     body('server').custom(isServer),
+    body('compress').isBoolean(),
 ], async (req, res) => {
     console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
 
@@ -19,10 +20,10 @@ router.post('/', [
         return res.send([{ type: 'string', string: '参数错误' }]);
     }
 
-    const { default_servers, server } = req.body;
+    const { default_servers, server, compress } = req.body;
 
     try {
-        const result = await commandSongMeta(default_servers, getServerByServerId(server));
+        const result = await commandSongMeta(default_servers, getServerByServerId(server), compress);
         res.send(listToBase64(result));
     } catch (e) {
         console.log(e);
@@ -30,11 +31,11 @@ router.post('/', [
     }
 });
 
-export async function commandSongMeta(default_servers: Server[], server: Server): Promise<Array<Buffer | string>> {
+export async function commandSongMeta(default_servers: Server[], server: Server, compress:boolean): Promise<Array<Buffer | string>> {
     if (server == undefined) {
         server = default_servers[0]
     }
-    return await drawSongMetaList(server)
+    return await drawSongMetaList(server, compress)
 }
 
 export { router as songMetaRouter }

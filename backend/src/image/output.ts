@@ -14,6 +14,7 @@ interface outputFinalOptions {
     useEasyBG?: boolean;
     text?: string;
     BGimage?: Image | Canvas;
+    compress?:boolean;
 }
 
 //将图片列表从上到下叠在一起输出为一张图片
@@ -76,15 +77,22 @@ export var outputFinalBuffer = async function ({
     imageList,
     useEasyBG = true,
     text,
-    BGimage
+    BGimage,
+    compress,
 }: outputFinalOptions): Promise<Buffer> {
     var tempcanv = await outputFinalCanv({
         startWithSpace,
         imageList,
         useEasyBG,
         text,
-        BGimage
+        BGimage,
     })
-    var tempBuffer = tempcanv.toBuffer()
+    var tempBuffer:Buffer
+    if(compress){
+        tempBuffer = tempcanv.toBuffer('image/jpeg',{quality:0.7})
+    }
+    else{
+        tempBuffer = tempcanv.toBuffer()
+    }
     return (tempBuffer)
 }

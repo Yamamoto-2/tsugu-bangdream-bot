@@ -11,6 +11,7 @@ router.post('/', [
     body('default_servers').custom((value) => isServerList(value)),
     body('gachaId').isInt(),
     body('useEasyBG').isBoolean(),
+    body('compress').isBoolean(),
 ], async (req, res) => {
     console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
 
@@ -19,10 +20,10 @@ router.post('/', [
         return res.send([{ type: 'string', string: '参数错误' }]);
     }
 
-    const { default_servers, gachaId, useEasyBG } = req.body;
+    const { default_servers, gachaId, useEasyBG, compress } = req.body;
 
     try {
-        const result = await commandGacha(default_servers, gachaId, useEasyBG);
+        const result = await commandGacha(default_servers, gachaId, useEasyBG, compress);
         res.send(listToBase64(result));
     } catch (e) {
         console.log(e);
@@ -30,9 +31,9 @@ router.post('/', [
     }
 });
 
-export async function commandGacha(default_server: Server[], gachaId: number, useEasyBG: boolean): Promise<Array<Buffer | string>> {
+export async function commandGacha(default_server: Server[], gachaId: number, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
 
-    return await drawGachaDetail(gachaId, default_server, useEasyBG)
+    return await drawGachaDetail(gachaId, default_server, useEasyBG, compress)
 
 }
 

@@ -2,7 +2,7 @@
 import { Server, getServerByName } from "../types/Server"
 import { getDataFromBackend } from './utils'
 
-export async function commandLsycx(backendUrl: string, server_mode: Server, tier: number, serverName: string, eventId: number): Promise<Array<Buffer | string>> {
+export async function commandLsycx(backendUrl: string, server_mode: Server, tier: number, serverName: string, eventId: number, compress: boolean): Promise<Array<Buffer | string>> {
     let server: Server
     if (!serverName) {
         server = server_mode
@@ -16,6 +16,7 @@ export async function commandLsycx(backendUrl: string, server_mode: Server, tier
     return await getDataFromBackend(`${backendUrl}/lsycx`, {
         server,
         tier,
-        eventId
+        eventId,
+        compress
     })
 }

@@ -16,6 +16,7 @@ router.post(
         body('default_servers').custom(isServerList),
         body('songId').isInt(),
         body('difficultyText').isString(),
+        body('compress').isBoolean(),
     ],
     async (req, res) => {
         console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
@@ -27,10 +28,10 @@ router.post(
         }
 
 
-        const { default_servers, songId, difficultyText } = req.body;
+        const { default_servers, songId, difficultyText, compress } = req.body;
 
         try {
-            const result = await commandSongChart(default_servers, songId, difficultyText);
+            const result = await commandSongChart(default_servers, songId, compress, difficultyText);
             res.send(listToBase64(result));
         } catch (e) {
             console.log(e);
@@ -40,14 +41,14 @@ router.post(
 );
 
 
-export async function commandSongChart(default_servers: Server[], songId: number, difficultyText?: string): Promise<Array<Buffer | string>> {
+export async function commandSongChart(default_servers: Server[], songId: number, compress: boolean, difficultyText?: string): Promise<Array<Buffer | string>> {
     difficultyText = difficultyText.toLowerCase()
     var fuzzySearchResult = fuzzySearch(difficultyText.split(' '))
     console.log(fuzzySearchResult)
     if (fuzzySearchResult.difficulty === undefined) {
         return ['错误: 不正确的难度关键词,可以使用以下关键词:easy,normal,hard,expert,special']
     }
-    return await drawSongChart(songId, parseInt(fuzzySearchResult.difficulty[0]), default_servers)
+    return await drawSongChart(songId, parseInt(fuzzySearchResult.difficulty[0]), default_servers, compress)
 }
 
 export { router as songChartRouter }

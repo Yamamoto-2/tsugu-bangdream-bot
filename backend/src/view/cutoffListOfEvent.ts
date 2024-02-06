@@ -16,7 +16,7 @@ import * as path from 'path'
 
 
 
-export async function drawCutoffListOfEvent(eventId: number, server: Server): Promise<Array<Buffer | string>> {
+export async function drawCutoffListOfEvent(eventId: number, server: Server, compress: boolean): Promise<Array<Buffer | string>> {
     var event = new Event(eventId)
     if (!event.isExist) {
         return ['活动不存在']
@@ -94,7 +94,8 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server): Pr
     */
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEasyBG: true
+        useEasyBG: true,
+        compress:compress,
     })
     return [buffer]
 }

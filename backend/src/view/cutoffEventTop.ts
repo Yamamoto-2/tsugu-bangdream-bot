@@ -10,7 +10,7 @@ import { outputFinalBuffer } from '@/image/output';
 import { drawPlayerRankingInList } from '@/components/list/playerRanking';
 import { drawEventTopChart } from '@/components/chart/cutoffChart';
 
-export async function drawCutoffEventTop(eventId: number, server: Server): Promise<Array<Buffer | string>> {
+export async function drawCutoffEventTop(eventId: number, server: Server, compress: boolean): Promise<Array<Buffer | string>> {
     var eventTop = new EventTop(eventId, server);
     await eventTop.initFull();
     if (!eventTop.isExist) {
@@ -41,7 +41,7 @@ export async function drawCutoffEventTop(eventId: number, server: Server): Promi
     var listImage = drawDatablock({ list });
     all.push(listImage);
 
-    var buffer = await outputFinalBuffer({ imageList: all, useEasyBG: true })
+    var buffer = await outputFinalBuffer({ imageList: all, useEasyBG: true, compress:compress, })
 
     return [buffer];
 }

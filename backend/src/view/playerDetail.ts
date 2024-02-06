@@ -19,7 +19,7 @@ async function loadImageOnce() {
 }
 loadImageOnce()
 
-export async function drawPlayerDetail(playerId: number, server: Server, useEasyBG: boolean): Promise<Array<Buffer | string>> {
+export async function drawPlayerDetail(playerId: number, server: Server, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
     var player = new Player(playerId, server)
     await player.initFull()
     if (!player.isExist) {
@@ -96,7 +96,8 @@ export async function drawPlayerDetail(playerId: number, server: Server, useEasy
         imageList: all,
         useEasyBG: useEasyBG,
         text: ' ',
-        BGimage: BGDefaultImage
+        BGimage: BGDefaultImage,
+        compress:compress,
     })
     return [buffer]
 }

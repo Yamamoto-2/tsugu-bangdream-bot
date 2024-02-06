@@ -1,7 +1,7 @@
 import { Server, getServerByName } from '../types/Server';
 import { getDataFromBackend } from './utils'
 
-export async function commandYcxAll(backendUrl: string, server_mode: Server, serverName: string, eventId: number): Promise<Array<Buffer | string>> {
+export async function commandYcxAll(backendUrl: string, server_mode: Server, serverName: string, eventId: number, compress: boolean): Promise<Array<Buffer | string>> {
     let server: Server
     if (!serverName) {
         server = server_mode
@@ -15,7 +15,8 @@ export async function commandYcxAll(backendUrl: string, server_mode: Server, ser
 
     return await getDataFromBackend(`${backendUrl}/ycxAll`, {
         server,
-        eventId
+        eventId,
+        compress
     })
 
 }

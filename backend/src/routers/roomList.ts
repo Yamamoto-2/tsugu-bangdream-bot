@@ -11,6 +11,7 @@ const router = express.Router();
 router.post('/', [
   // Define validation rules for the request body
   body('roomList').isArray().notEmpty(),
+  body('compress').isBoolean(),
 ], async (req, res) => {
   console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
 
@@ -20,7 +21,7 @@ router.post('/', [
     return res.send([{ type: 'string', string: '车牌格式错误' }]);
   }
 
-  const { roomList } = req.body;
+  const { roomList, compress } = req.body;
   let tempRoomlist: Room[];
   // 检查类型是否正确
   try {
@@ -31,7 +32,7 @@ router.post('/', [
     return;
   }
   try {
-    const result = await commandRoomList(tempRoomlist);
+    const result = await commandRoomList(tempRoomlist, compress);
     res.send(listToBase64(result));
   } catch (e) {
     console.log(e);
@@ -39,11 +40,11 @@ router.post('/', [
   }
 });
 
-export async function commandRoomList(roomList: Room[]): Promise<Array<string | Buffer>> {
+export async function commandRoomList(roomList: Room[], compress:boolean): Promise<Array<string | Buffer>> {
     if (roomList.length == 0) {
         return ['myc']
     }
-    return await drawRoomList(roomList)
+    return await drawRoomList(roomList, compress)
 }
 
 function getRoomList(roomList: any) {

@@ -13,6 +13,7 @@ router.post(
         body('server').custom(isServer),
         body('tier').isInt(),
         body('eventId').optional().isInt(),
+        body('compress').isBoolean(),
     ],
     async (req, res) => {
         console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
@@ -22,9 +23,9 @@ router.post(
             return res.send([{ type: 'string', string: '参数错误' }]);
         }
 
-        const { server, tier, eventId } = req.body;
+        const { server, tier, eventId, compress } = req.body;
         try {
-            const result = await commandLsYcx(getServerByServerId(server), tier, eventId);
+            const result = await commandLsYcx(getServerByServerId(server), tier, compress, eventId);
             res.send(listToBase64(result));
         } catch (e) {
             console.log(e);
@@ -33,12 +34,12 @@ router.post(
     }
 );
 
-export async function commandLsYcx(server: Server, tier: number, eventId?: number): Promise<Array<Buffer | string>> {
+export async function commandLsYcx(server: Server, tier: number, compress: boolean, eventId?: number): Promise<Array<Buffer | string>> {
 
     if (!eventId) {
         eventId = getPresentEvent(server).eventId
     }
-    return drawCutoffComprare(eventId, tier, server)
+    return drawCutoffComprare(eventId, tier, server,compress)
 
 }
 

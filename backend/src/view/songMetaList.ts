@@ -22,7 +22,7 @@ const line = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawSongMetaList(server: Server): Promise<Array<Buffer | string>> {
+export async function drawSongMetaList(server: Server, compress: boolean): Promise<Array<Buffer | string>> {
     const feverMode = [true, false]
     const imageList = []
     for (let i = 0; i < feverMode.length; i++) {
@@ -34,7 +34,8 @@ export async function drawSongMetaList(server: Server): Promise<Array<Buffer | s
     all.push(stackImageHorizontal(imageList))
     var buffer = await outputFinalBuffer({
         imageList: all,
-        useEasyBG: true
+        useEasyBG: true,
+        compress:compress
     })
     return [buffer]
 }

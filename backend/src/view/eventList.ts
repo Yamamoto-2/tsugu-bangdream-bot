@@ -34,7 +34,7 @@ export const line2: Canvas = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawEventList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer): Promise<Array<Buffer | string>> {
+export async function drawEventList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
     //计算模糊搜索结果
     var tempEventList: Array<Event> = [];//最终输出的活动列表
     var eventIdList: Array<number> = Object.keys(mainAPI['events']).map(Number);//所有活动ID列表
@@ -139,7 +139,8 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
         all.push(eventListImage)
         const buffer = await outputFinalBuffer({
             imageList: all,
-            useEasyBG: true
+            useEasyBG: true,
+            compress:compress,
         })
         return [buffer]
     }

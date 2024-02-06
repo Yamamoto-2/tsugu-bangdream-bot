@@ -4,7 +4,7 @@ import { getDataFromBackend } from './utils'
 import * as axios from 'axios'
 
 
-export async function commandRoomList(config: Config, keyWord?: string): Promise<Array<string | Buffer>> {
+export async function commandRoomList(config: Config, compress: boolean, keyWord?: string): Promise<Array<string | Buffer>> {
     let tempRoomList: Room[] = []  
     //如果从远程服务器获取
     if (config.RemoteDBSwitch) {
@@ -37,6 +37,7 @@ export async function commandRoomList(config: Config, keyWord?: string): Promise
         return [`没有找到包含 ${keyWord} 的房间`]
     }
     return await getDataFromBackend(`${config.backendUrl}/roomList`, {
-        roomList
+        roomList,
+        compress
     })
 }
