@@ -19,7 +19,7 @@ router.post(
     }),
     body('status').isBoolean(),
     body('times').optional().isInt(),
-    body('compress').isBoolean(),
+    body('compress').optional().isBoolean(),
     body('gachaId').optional().isInt(),
   ],
   async (req, res) => {

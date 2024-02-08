@@ -11,7 +11,7 @@ const router = express.Router();
 router.post('/', [
   // Define validation rules for the request body
   body('roomList').isArray().notEmpty(),
-  body('compress').isBoolean(),
+  body('compress').optional().isBoolean(),
 ], async (req, res) => {
   console.log(req.ip,`${req.baseUrl}${req.path}`, JSON.stringify(req.body));
 

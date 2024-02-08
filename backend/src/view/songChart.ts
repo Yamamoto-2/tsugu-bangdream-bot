@@ -30,7 +30,7 @@ export async function drawSongChart(songId: number, difficultyId: number, defaul
     }, songChart as any)
     
     let buffer:Buffer
-    if(compress){
+    if( compress!=undefined && compress){
         buffer = tempcanv.toBuffer('image/jpeg',{quality:0.7})
     }
     else{

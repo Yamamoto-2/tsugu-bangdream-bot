@@ -11,7 +11,7 @@ router.post('/', [
     body('default_servers').custom((value) => isServerList(value)),
     body('gachaId').isInt(),
     body('useEasyBG').isBoolean(),
-    body('compress').isBoolean(),
+    body('compress').optional().isBoolean(),
 ], async (req, res) => {
     console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
 

@@ -12,7 +12,7 @@ router.post(
     [
         body('server').custom((value) => isServerList(value)), // Custom validation using isServerList
         body('eventId').optional().isInt(), // eventId is optional and must be an integer if provided
-        body('compress').isBoolean(),
+        body('compress').optional().isBoolean(),
     ],
     async (req, res) => {
         console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);

@@ -13,7 +13,7 @@ router.post(
         body('server').custom(isServer),
         body('tier').isInt(),
         body('eventId').optional().isInt(),
-        body('compress').isBoolean(),
+        body('compress').optional().isBoolean(),
     ],
     async (req, res) => {
         console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);

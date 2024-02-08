@@ -10,7 +10,7 @@ router.post('/', [
     // Define validation rules for request body
     body('default_servers').custom(isServerList),
     body('server').custom(isServer),
-    body('compress').isBoolean(),
+    body('compress').optional().isBoolean(),
 ], async (req, res) => {
     console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
 

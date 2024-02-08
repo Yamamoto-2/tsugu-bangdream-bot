@@ -12,7 +12,7 @@ const router = express.Router();
 router.post('/', [
     body('default_servers').custom(isServerList),
     body('text').isString(),
-    body('compress').isBoolean(),
+    body('compress').optional().isBoolean(),
 ], async (req, res) => {
     console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
 

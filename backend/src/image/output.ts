@@ -88,7 +88,7 @@ export var outputFinalBuffer = async function ({
         BGimage,
     })
     var tempBuffer:Buffer
-    if(compress){
+    if(compress!=undefined && compress){
         tempBuffer = tempcanv.toBuffer('image/jpeg',{quality:0.7})
     }
     else{
