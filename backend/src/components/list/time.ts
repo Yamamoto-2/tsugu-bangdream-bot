@@ -3,6 +3,7 @@ import { getPresentEvent } from '@/types/Event';
 import { Server, getServerByName } from '@/types/Server';
 import { drawListByServerList } from '@/components/list'
 import { Canvas } from 'canvas'
+import {Event} from '@/types/Event'
 import * as moment from 'moment'
 
 interface timeInListOptions {
@@ -20,7 +21,11 @@ export async function drawTimeInList({
         const element = content[i];
         if (element == null) {
             if (i == 3 && key == "开始时间" && eventId != undefined) {
-                formatedTimeList.push(changeTimefomant(GetProbablyTimeDifference(eventId)) + " (预计开放时间)")
+                const currentEvent = getPresentEvent(getServerByName("cn"));
+                const currentEventId = currentEvent.eventId;
+                if(eventId < currentEventId){
+                    formatedTimeList.push(changeTimefomant(GetProbablyTimeDifference(eventId,currentEvent)) + " (预计开放时间)")
+                }
             }
             formatedTimeList.push(null)
             continue
@@ -31,8 +36,7 @@ export async function drawTimeInList({
     return canvas
 }
 //获取当前活动与查询活动的大致时间差(国服)
-export function GetProbablyTimeDifference(eventId: number): number {
-    var currentEvent = getPresentEvent(getServerByName("cn"));
+export function GetProbablyTimeDifference(eventId: number,currentEvent:Event): number {
     var diff = eventId - currentEvent.eventId;
     var timeStamp = currentEvent.startAt[3] + 1000 * 60 * 60 * 24 * 9 * diff;
     return timeStamp;
