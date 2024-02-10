@@ -8,7 +8,7 @@ import { stackImage, stackImageHorizontal, resizeImage } from '@/components/util
 import { drawTitle } from '@/components/title';
 import { outputFinalBuffer } from '@/image/output'
 import { Server, getIcon, getServerByName } from '@/types/Server'
-import { Event, sortEventList } from '@/types/Event';
+import { Event, getPresentEvent, sortEventList } from '@/types/Event';
 import { drawCardListInList } from '@/components/list/cardIconList';
 import { GetProbablyTimeDifference, changeTimefomant } from '@/components/list/time';
 import { drawTextWithImages } from '@/image/text';
@@ -155,10 +155,11 @@ async function drawEventInList(event: Event, defaultServerList: Server[] = globa
     content.push(`ID: ${event.eventId.toString()}  ${await event.getTypeName()}\n`)
     //活动时间
     var numberOfServer = Math.min(defaultServerList.length, 2)
+    const currentEvent = getPresentEvent(getServerByName("cn"));
     for (var i = 0; i < numberOfServer; i++) {
         let server = defaultServerList[i]
         if (server == getServerByName('cn') && event.startAt[server] == null) {
-            content.push(await getIcon(server), `${changeTimefomant(GetProbablyTimeDifference(event.eventId))} (预计开放时间)\n`)
+            content.push(await getIcon(server), `${changeTimefomant(GetProbablyTimeDifference(event.eventId,currentEvent))} (预计开放时间)\n`)
         }
         else {
             content.push(await getIcon(server), `${changeTimefomant(event.startAt[server])} - ${changeTimefomant(event.endAt[server])}\n`)
