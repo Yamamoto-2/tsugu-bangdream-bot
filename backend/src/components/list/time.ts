@@ -23,7 +23,7 @@ export async function drawTimeInList({
             if (i == 3 && key == "开始时间" && eventId != undefined) {
                 const currentEvent = getPresentEvent(getServerByName("cn"));
                 const currentEventId = currentEvent.eventId;
-                if(eventId < currentEventId){
+                if(eventId > currentEventId){
                     formatedTimeList.push(changeTimefomant(GetProbablyTimeDifference(eventId,currentEvent)) + " (预计开放时间)")
                 }
             }
