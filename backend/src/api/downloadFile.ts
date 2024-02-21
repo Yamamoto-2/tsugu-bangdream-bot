@@ -7,16 +7,16 @@ import * as fs from 'fs';
 
 const errUrl: string[] = [];
 
-async function downloadFile(url: string, IgnoreErr: boolean = true, overwrite= false): Promise<Buffer> {
+async function downloadFile(url: string, IgnoreErr: boolean = true, overwrite = false): Promise<Buffer> {
   try {
     if (errUrl.includes(url)) {
       throw new Error("downloadFile: errUrl.includes(url)");
     }
-    const cacheTime = overwrite ? 0 : 1/0;
+    const cacheTime = overwrite ? 0 : 1 / 0;
     const cacheDir = getCacheDirectory(url);
     const fileName = getFileNameFromUrl(url);
     const data = await download(url, cacheDir, fileName, cacheTime);
-    if(data.toString().startsWith("<!DOCTYPE html>")){
+    if (data.toString().startsWith("<!DOCTYPE html>")) {
       fs.unlinkSync(path.join(cacheDir, fileName));
       throw new Error("downloadFile: data.toString().startsWith(\"<!DOCTYPE html>\")");
     }
@@ -25,7 +25,7 @@ async function downloadFile(url: string, IgnoreErr: boolean = true, overwrite= f
     console.log(url)
     console.log(e)
     errUrl.push(url);
-    if (url.includes('.png') && IgnoreErr) {
+    if ((url.includes('.png') || url.includes('.svg')) && IgnoreErr) {
       return fs.readFileSync(path.join(assetsRootPath, 'err.png'));
     }
     throw e; // Rethrow the error if it is not related to handling the error case
