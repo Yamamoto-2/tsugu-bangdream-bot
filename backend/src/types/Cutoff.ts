@@ -138,15 +138,19 @@ export class Cutoff {
             chartData.push({ x: new Date(this.startAt), y: 0 })
 
         }
+        let tempTime = this.cutoffs[0].time
+        // const spacing = 3 * 60 * 60 * 1000
         for (let i = 0; i < this.cutoffs.length; i++) {
             const element = this.cutoffs[i];
-            if (setStartToZero) {
-                chartData.push({ x: new Date(element.time - this.startAt), y: element.ep - this.cutoffs[0].ep })
-            }
-            else {
-                chartData.push({ x: new Date(element.time), y: element.ep })
-
-            }
+            // if(element.time - tempTime > spacing || i == this.cutoffs.length - 1){
+                if (setStartToZero) {
+                    chartData.push({ x: new Date(element.time - this.startAt), y: element.ep })
+                }
+                else {
+                    chartData.push({ x: new Date(element.time), y: element.ep })
+                }
+                tempTime = element.time
+            // }
         }
         return chartData
     }
