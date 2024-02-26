@@ -126,32 +126,31 @@ export class Cutoff {
         return this.predictEP
     }
     getChartData(setStartToZero = false): { x: Date, y: number }[] {
-        //setStartToZero:是否将开始时间设置为0
         if (this.isExist == false) {
-            return
+            return [];
         }
-        let chartData: { x: Date, y: number }[] = []
+        let chartData: { x: Date, y: number }[] = [];
         if (setStartToZero) {
-            chartData.push({ x: new Date(0), y: 0 })
+            chartData.push({ x: new Date(0), y: 0 });
+        } else {
+            chartData.push({ x: new Date(this.startAt), y: 0 });
         }
-        else {
-            chartData.push({ x: new Date(this.startAt), y: 0 })
-
-        }
-        let tempTime = this.cutoffs[0].time
-        // const spacing = 3 * 60 * 60 * 1000
+    
+        // 在访问 this.cutoffs[0].time 之前检查 this.cutoffs 是否存在且长度大于0
+        let tempTime = this.cutoffs && this.cutoffs.length > 0 ? this.cutoffs[0].time : null;
+        // 如果 tempTime 为 null，则后续逻辑应当考虑这种情况以避免错误
+    
         for (let i = 0; i < this.cutoffs.length; i++) {
             const element = this.cutoffs[i];
-            // if(element.time - tempTime > spacing || i == this.cutoffs.length - 1){
-                if (setStartToZero) {
-                    chartData.push({ x: new Date(element.time - this.startAt), y: element.ep })
-                }
-                else {
-                    chartData.push({ x: new Date(element.time), y: element.ep })
-                }
-                tempTime = element.time
-            // }
+            if (setStartToZero) {
+                // 确保 tempTime 不为 null 才执行减法操作
+                chartData.push({ x: tempTime ? new Date(element.time - this.startAt) : new Date(0), y: element.ep });
+            } else {
+                chartData.push({ x: new Date(element.time), y: element.ep });
+            }
+            tempTime = element.time;
         }
-        return chartData
+        return chartData;
     }
+    
 }
