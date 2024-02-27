@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import { tsuguUser, BindingStatus } from '@/config';
 import { UserDB } from '@/database/userDB';
 import { Player } from '@/types/Player';
-import { Server } from '@/types/Server';
+import { Server, getServerByName } from '@/types/Server';
 import * as dotenv from 'dotenv';
 import { generateVerifyCode } from '@/routers/utils'
 dotenv.config();
@@ -26,7 +26,7 @@ router.post('/getUserData',
         body('user_id').isString(),
     ],
     async (req: Request, res: Response) => {
-        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
+        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         const { platform, user_id } = req.body;
         try {
             let user = await userDB.getUser(platform, user_id);
@@ -114,9 +114,88 @@ router.post('/changeUserData',
     ],
     async (req: Request, res: Response) => {
         req.ip
-        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
+        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         const { platform, user_id, update } = req.body;
         try {
+            const updateData = update as Partial<tsuguUser>;
+            await userDB.updateUser(platform, user_id, updateData);
+            res.json({ status: 'success' });
+        } catch (error) {
+            res.status(400).json({ status: 'failed', data: `错误: ${error.message}` });
+        }
+    }
+);
+// 修改用户数据
+router.post('/changeUserData/setServerMode',
+    [
+        body('platform').isString(),
+        body('user_id').isString(),
+        body('text').isString(),
+    ],
+    async (req: Request, res: Response) => {
+        req.ip
+        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
+        const { platform, user_id, text } = req.body;
+        try {
+            const update = { server_mode: getServerByName(text) }
+            if (update.server_mode == undefined) {
+                res.status(400).json({ status: 'failed', data: `错误: 服务器不存在` });
+                return
+            }
+            const updateData = update as Partial<tsuguUser>;
+            await userDB.updateUser(platform, user_id, updateData);
+            res.json({ status: 'success' });
+        } catch (error) {
+            res.status(400).json({ status: 'failed', data: `错误: ${error.message}` });
+        }
+    }
+);
+router.post('/changeUserData/setCarForwarding',
+    [
+        body('platform').isString(),
+        body('user_id').isString(),
+        body('status').isBoolean(),
+    ],
+    async (req: Request, res: Response) => {
+        req.ip
+        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
+        const { platform, user_id, status } = req.body;
+        try {
+            const update = { car: status }
+            const updateData = update as Partial<tsuguUser>;
+            await userDB.updateUser(platform, user_id, updateData);
+            res.json({ status: 'success' });
+        } catch (error) {
+            res.status(400).json({ status: 'failed', data: `错误: ${error.message}` });
+        }
+    }
+);
+router.post('/changeUserData/setDefaultServer',
+    [
+        body('platform').isString(),
+        body('user_id').isString(),
+        body('text').isString(),
+    ],
+    async (req: Request, res: Response) => {
+        req.ip
+        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
+        const { platform, user_id, text } = req.body;
+        try {
+            const serversArray = text.split(" "); // 将字符串转换为数组
+            const servers = serversArray.map(s => getServerByName(s))
+            console.log(servers)
+            // 去除 undefined
+            for (let i = 0; i < servers.length; i++) {
+                if (servers[i] == undefined) {
+                    servers.splice(i, 1);
+                    i--;
+                }
+            }
+            if (servers.length == 0) {
+                res.status(400).json({ status: 'failed', data: `错误: 服务器不存在` });
+                return
+            }
+            const update = { default_server: servers }
             const updateData = update as Partial<tsuguUser>;
             await userDB.updateUser(platform, user_id, updateData);
             res.json({ status: 'success' });
@@ -178,7 +257,7 @@ router.post('/bindPlayerVerification',
         body('bindType').isBoolean(), //true为绑定，false为解绑
     ],
     async (req: Request, res: Response) => {
-        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
+        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         const { platform, user_id, server, playerId } = req.body;
         try {
             let user = await userDB.getUser(platform, user_id);

@@ -32,8 +32,7 @@ import { ycmV2 } from '@/routers/v2/ycm';
 import { cardIllustrationRouterV2 } from '@/routers/v2/cardIllustration';
 import { gachaSimulateRouterV2 } from '@/routers/v2/gachaSimulate';
 import { songMetaRouterV2 } from '@/routers/v2/songMeta';
-// import { userRouterV2 } from '@/routers/v2/user';
-// import { stationRouterV2 } from '@/routers/v2/station';
+import { utilsRouterV2 } from '@/routers/v2/utils';
 
 
 dotenv.config();
@@ -98,6 +97,7 @@ app.use('/v2/chart', chartRouterV2); // ✅
 app.use('/v2/ycx', ycxRouterV2); // ✅
 app.use('/v2/ycxAll', ycxAllRouterV2); // ✅
 app.use('/v2/lsycx', lsycxRouterV2) // ✅
+app.use('/v2/utils', utilsRouterV2) // ✅
 // v2 routers end
 
 //404
