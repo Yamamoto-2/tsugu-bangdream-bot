@@ -271,12 +271,12 @@ router.post('/bindPlayerVerification',
             const player = new Player(parseInt(playerId), server)
             await player.initFull()
             //判断玩家是否存在
-            if (!player.isExist) {
+            if (!player.isExist && req.body.bindType) {
                 curServer.bindingStatus = BindingStatus.None
                 curServer.playerId = 0
                 //删除验证码
                 delete curServer.verifyCode
-                userDB.updateServerList(platform, user_id, server, curServer)
+                // userDB.updateServerList(platform, user_id, server, curServer)
                 res.status(400).json({ status: 'failed', data: `错误: 不存在玩家或服务器错误: ${playerId}` });
                 return
             }
