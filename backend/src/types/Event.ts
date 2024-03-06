@@ -44,7 +44,7 @@ export class Event {
     musics?: Array<
         Array<
             {
-                musicID: number,
+                musicId: number,
                 musicRankingRewards?: Array<{
                     fromRank: number,
                     toRank: number,
