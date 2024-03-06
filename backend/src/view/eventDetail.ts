@@ -18,6 +18,8 @@ import { drawDegreeListOfEvent } from '@/components/list/degreeList';
 import { Song, getPresentSongList } from '@/types/Song'
 import { drawSongListDataBlock } from '@/components/dataBlock/songList';
 import { globalDefaultServer, serverNameFullList } from '@/config';
+import { drawSongInList, drawSongListInList } from '@/components/list/song';
+import { resizeImage } from '@/components/utils';
 
 export async function drawEventDetail(eventId: number, defaultServerList: Server[] = globalDefaultServer, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
     const event = new Event(eventId)
@@ -123,6 +125,21 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     //牌子
     list.push(await drawDegreeListOfEvent(event, defaultServerList))
     list.push(line)
+
+    //有歌榜活动的歌榜歌曲
+    const eventTypes:string[] = ['versus', 'challenge', 'medley']
+    if(eventTypes.includes(event.eventType) && event.musics!=undefined && event.musics.length>0){
+        let songs:Song[] = []
+        let defaultServer = defaultServerList[0]
+        if(!event.musics[defaultServerList[0]]){
+            defaultServer = Server.jp
+        }
+        for(let i=0;i<event.musics[defaultServer].length;i++){
+            songs.push(new Song(event.musics[defaultServer][i].musicId))
+        }
+        list.push(await drawSongListInList(songs))
+        list.push(line)
+    }
 
     //奖励卡牌
     var rewardCardList: Card[] = []
