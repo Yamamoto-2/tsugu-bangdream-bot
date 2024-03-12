@@ -86,7 +86,7 @@ if (process.env.ARTICLE == 'true') {
 app.use('/v2/ycm', ycmV2); // ✅
 app.use('/v2/card', cardRouterV2); // ✅
 app.use('/v2/cardIllustration', cardIllustrationRouterV2); // ✅
-app.use('/v2/cacha', gachaRouterV2); // ✅
+app.use('/v2/gacha', gachaRouterV2); // ✅
 app.use('/v2/gachaSimulate', gachaSimulateRouterV2); // ✅
 app.use('/v2/event', eventRouterV2); // ✅
 app.use('/v2/song', songRouterV2); // ✅
