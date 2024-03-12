@@ -171,7 +171,8 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         all.push(cardListImage)
         var buffer = await outputFinalBuffer({
             imageList: all,
-            useEasyBG: true
+            useEasyBG: true,
+            compress:compress
         })
         return [buffer]
     }
