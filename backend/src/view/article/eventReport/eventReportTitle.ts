@@ -11,7 +11,10 @@ export async function drawEventReportTitle(eventId: number): Promise<Array<Buffe
         return ['错误: 活动不存在']
     }
     await event.initFull()
-    const eventReportTitleFrame = await loadImage(assetsRootPath + '/eventReportTitleFrame.png')
+    const eventReportTitleFrame = resizeImage({
+        image: await loadImage(assetsRootPath + '/eventReportTitleFrame.png'),
+        widthMax: 1000,
+    })
     const eventGachaAndCardList = await getEventGachaAndCardList(event, Server.jp)
     const gachaCardList = eventGachaAndCardList.gachaCardList
     gachaCardList.sort((a, b) => {
@@ -21,11 +24,11 @@ export async function drawEventReportTitle(eventId: number): Promise<Array<Buffe
     const cardIllustrationImage = await card.getCardIllustrationImage(false)
     const resizedCardIllustrationImage = resizeImage({
         image: cardIllustrationImage,
-        widthMax: 660
+        widthMax: 1000,
     })
     const canvas = createCanvas(eventReportTitleFrame.width, eventReportTitleFrame.height)
     const ctx = canvas.getContext('2d')
-    ctx.drawImage(resizedCardIllustrationImage, 0, eventReportTitleFrame.height / 2 - resizedCardIllustrationImage.height / 2)
+    ctx.drawImage(resizedCardIllustrationImage, 0, 0)
     ctx.drawImage(eventReportTitleFrame, 0, 0)
     return [canvas.toBuffer('image/png')]
 }
