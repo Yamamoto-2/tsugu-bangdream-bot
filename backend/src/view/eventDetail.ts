@@ -127,14 +127,14 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     list.push(line)
 
     //有歌榜活动的歌榜歌曲
-    const eventTypes:string[] = ['versus', 'challenge', 'medley']
-    if(eventTypes.includes(event.eventType) && event.musics!=undefined && event.musics.length>0){
-        let songs:Song[] = []
+    const eventTypes: string[] = ['versus', 'challenge', 'medley']
+    if (eventTypes.includes(event.eventType) && event.musics != undefined && event.musics.length > 0) {
+        let songs: Song[] = []
         let defaultServer = defaultServerList[0]
-        if(!event.musics[defaultServerList[0]]){
+        if (!event.musics[defaultServerList[0]]) {
             defaultServer = Server.jp
         }
-        for(let i=0;i<event.musics[defaultServer].length;i++){
+        for (let i = 0; i < event.musics[defaultServer].length; i++) {
             songs.push(new Song(event.musics[defaultServer][i].musicId))
         }
         list.push(await drawSongListInList(songs))
@@ -218,7 +218,7 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
         if (event.startAt[server] == null) {
             continue
         }
-        const songList: Song[] = getPresentSongList(server, event.startAt[server], event.endAt[server]);
+        const songList: Song[] = getPresentSongList(server, event.startAt[server], event.endAt[server] + 1000 * 60 * 60);
 
         if (songList.length !== 0) {
             const isDuplicate = all.some((block) => {
@@ -244,7 +244,7 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
         useEasyBG: useEasyBG,
         BGimage,
         text: 'Event',
-        compress:compress,
+        compress: compress,
     })
 
     return [buffer];

@@ -28,7 +28,7 @@ export async function drawEventPreviewSongs(eventId: number): Promise<Array<Buff
     const eventBGImage = await event.getEventBGImage()
 
     //歌曲列表
-    const songList: Song[] = getPresentSongList(server, event.startAt[server], event.endAt[server])
+    const songList: Song[] = getPresentSongList(server, event.startAt[server], event.endAt[server] + 1000 * 60 * 60)
     const promises = []
     for (let i = 0; i < songList.length; i++) {
         const song = songList[i]
