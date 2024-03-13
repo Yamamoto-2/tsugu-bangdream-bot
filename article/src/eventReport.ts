@@ -13,7 +13,7 @@ async function main(eventIdString: string) {
     await processRequest(await axios.default.post(url + '/eventReport/eventReportTitle', { eventId }), `${outputDir}/0_eventReportTitle_`);
     await processRequest(await axios.default.post(url + '/eventReport/eventReportCutoffListOfEvent', { eventId, server: 3 }), `${outputDir}/2_ycxAll_`);
     await processRequest(await axios.default.post(url + '/eventReport/eventReportPlayerNumber', { eventId, server: 3 }), `${outputDir}/3_eventReportPlayerNumber_`);
-    await processRequest(await axios.default.post(url + '/ycx', { eventId, tier: 10, server: 3 }), `${outputDir}/5_eventReportCutoffDetailTop_`);
+    await processRequest(await axios.default.post(url + '/ycx', { eventId, tier: 10, server: 3, compress: false }), `${outputDir}/5_eventReportCutoffDetailTop_`);
     for (let i = 0, len = tierListOfServer.cn.length; i < len; i++) {
         const tier = tierListOfServer.cn[i];
         await processRequest(await axios.default.post(url + '/eventReport/eventReportCutoffDetail', { eventId, tier, server: 3 }), `${outputDir}/6_eventReportCutoffDetail${tier}_`);
