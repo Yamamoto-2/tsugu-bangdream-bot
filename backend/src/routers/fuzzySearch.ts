@@ -40,6 +40,9 @@ export function fuzzySearch(keywordList: string[]): { [key: string]: string[] } 
     //替换大于号小于号
     keyword = keyword.replace(/&gt;/g, '>');
     keyword = keyword.replace(/&lt;/g, '<');
+    //中文状态下的全角大于小于符号
+    keyword = keyword.replace(/&gt;/g, '＞');
+    keyword = keyword.replace(/&lt;/g, '＜');
     console.log(keyword)
     //是否为等级
     const lvNumber = extractLvNumber(keyword);
