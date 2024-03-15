@@ -106,15 +106,16 @@ export class Song {
         this.bandId = songData['bandId']
         this.jacketImage = songData['jacketImage']
         this.musicTitle = songData['musicTitle']
-        this.publishedAt = stringToNumberArray(songData['publishedAt'])
-        this.closedAt = stringToNumberArray(songData['closedAt'])
+        this.publishedAt = songData['publishedAt'] ? stringToNumberArray(songData['publishedAt']) : [];
+        this.closedAt = songData['closedAt'] ? stringToNumberArray(songData['closedAt']) : [];
         this.difficulty = songData['difficulty']
         this.length = songData['length']
         this.notes = songData['notes']
         this.bpm = songData['bpm']
         this.nickname = songData['nickname']
         for (let i in this.difficulty) {
-            this.songLevels.push(this.difficulty[i].playLevel.toString())
+            const playLevel = this.difficulty[i].playLevel;
+            this.songLevels.push((playLevel !== undefined ? playLevel : 0).toString());
         }
 
         //meta数据
@@ -141,8 +142,8 @@ export class Song {
         this.bandId = songData['bandId']
         this.jacketImage = songData['jacketImage']
         this.musicTitle = songData['musicTitle']
-        this.publishedAt = stringToNumberArray(songData['publishedAt'])
-        this.closedAt = stringToNumberArray(songData['closedAt'])
+        this.publishedAt = songData['publishedAt'] ? stringToNumberArray(songData['publishedAt']) : [];
+        this.closedAt = songData['closedAt'] ? stringToNumberArray(songData['closedAt']) : [];
         this.difficulty = songData['difficulty']
         this.length = songData['length']
         this.notes = songData['notes']
