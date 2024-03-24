@@ -172,7 +172,7 @@ function decode(text: string): string {
 
 //提交房间号
 export async function submitRoomNumber({ number, rawMessage, source, userId, time, userName, bandoriStationToken }: RoomOption, user?: tsuguUser) {
-    if (source == 'onebot' || source == 'red') {
+    if (source == 'onebot' || source == 'red' || source == 'chronocat') {
         source = 'qq'
     }
     const room = new Room({
