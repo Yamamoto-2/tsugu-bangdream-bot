@@ -7,7 +7,7 @@ import { stackImage } from '@/components/utils'
 import { Canvas } from 'canvas'
 
 export async function drawGachaPickupInList(gacha: Gacha, server: Server, key?: string): Promise<Canvas> {
-    var list = []
+    const list = []
     list.push(drawList({
         key: key ?? '卡池PickUp',
     }))
@@ -49,6 +49,13 @@ export async function drawGachaPickupInList(gacha: Gacha, server: Server, key?: 
                 }))
             }
         }
+        return stackImage(list)
     }
-    return stackImage(list)
+    else {
+        const result = drawList({
+            key: key ?? '卡池PickUp',
+            text: '无'
+        })
+        return result
+    }
 } 
