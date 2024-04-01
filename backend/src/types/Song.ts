@@ -170,13 +170,12 @@ export class Song {
     getSongRip(): number {
         return Math.ceil(this.songId / 10) * 10
     }
-    async getSongJacketImage(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
+    async getSongJacketImage(defaultServerList: Server[] = [Server.jp,Server.cn]): Promise<Image> {
         const jacketImageUrl = this.getSongJacketImageURL(defaultServerList)
         var jacketImageBuffer = await downloadFile(jacketImageUrl)
         return await loadImage(jacketImageBuffer)
     }
-    getSongJacketImageURL(defaultServerList: Server[] = globalDefaultServer): string {
-        if (!defaultServerList) defaultServerList = globalDefaultServer
+    getSongJacketImageURL(defaultServerList?: Server[]): string {
         var server = getServerByPriority(this.publishedAt, defaultServerList)
         var jacketImageName = this.jacketImage[this.jacketImage.length - 1]
         if (this.songId == 13) {
