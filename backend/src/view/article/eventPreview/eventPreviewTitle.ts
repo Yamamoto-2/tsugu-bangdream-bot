@@ -34,7 +34,9 @@ export async function drawEventPreviewTitle(eventId: number): Promise<Array<Buff
     const canvas = createCanvas(width, height)
     const ctx = canvas.getContext('2d')
     ctx.drawImage(resizedCardIllustrationImage, 0, 0)
-    ctx.drawImage(titleImage, 0, height / 2 - titleImage.height / 2)
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
+    ctx.fillRect(0, height - 50 - titleImage.height, width, titleImage.height + 50)
+    ctx.drawImage(titleImage, 0, height - 25 - titleImage.height)
 
     result.push(canvas.toBuffer('image/png'))
 
