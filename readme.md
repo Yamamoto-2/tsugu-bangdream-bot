@@ -15,7 +15,7 @@
 | --- | --- |
 | **koishi 部署** | [![npm](https://img.shields.io/npm/v/koishi-plugin-tsugu-bangdream-bot?style=flat-square)](https://koishi.chat/zh-CN/manual/introduction.html)|
 | **lpt 登陆端部署** | [![release](https://img.shields.io/github/v/release/kumoSleeping/lgr-tsugu-py?style=flat-square)](https://github.com/kumoSleeping/lgr-tsugu-py) |
-| **py 自行构建**| [![pypi](https://img.shields.io/pypi/v/tsugu?style=flat-square)](https://pypi.org/project/tsugu-bangdream-bot/)|
+| **py 自行构建**| [![pypi](https://img.shields.io/pypi/v/tsugu?style=flat-square)](https://github.com/kumoSleeping/tsugu-python-frontend/)|
 
 ## 🏠 后端部署
 
