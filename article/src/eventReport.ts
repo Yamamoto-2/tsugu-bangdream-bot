@@ -16,7 +16,12 @@ async function main(eventIdString: string) {
     await processRequest(await axios.default.post(url + '/ycx', { eventId, tier: 10, server: 3, compress: false }), `${outputDir}/5_eventReportCutoffDetailTop_`);
     for (let i = 0, len = tierListOfServer.cn.length; i < len; i++) {
         const tier = tierListOfServer.cn[i];
-        await processRequest(await axios.default.post(url + '/eventReport/eventReportCutoffDetail', { eventId, tier, server: 3 }), `${outputDir}/6_eventReportCutoffDetail${tier}_`);
+        try {
+            await processRequest(await axios.default.post(url + '/eventReport/eventReportCutoffDetail', { eventId, tier, server: 3 }), `${outputDir}/6_eventReportCutoffDetail${tier}_`);
+        }
+        catch (e) {
+            console.log(e);
+        }
     }
 
     fs.copyFileSync(`${projectRoot}/assets/title1.png`, `${outputDir}/1_title1.png`);
