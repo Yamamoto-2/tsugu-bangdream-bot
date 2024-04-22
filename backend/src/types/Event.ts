@@ -145,7 +145,7 @@ export class Event {
         if (isSameBand) {
             this.bandId.push(new Character(this.characters[0].characterId).bandId.toString())
         }
-        else{
+        else {
             this.bandId.push('0')
         }
     }
@@ -209,7 +209,7 @@ export class Event {
             return await loadImage(BannerImageBuffer)
         } catch (e) {
             var server = Server.jp
-            var BannerImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/event/${this.assetBundleName}/images_rip/banner.png`)
+            var BannerImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/homebanner_rip/${this.bannerAssetBundleName}.png`)
             return await loadImage(BannerImageBuffer)
         }
     }
