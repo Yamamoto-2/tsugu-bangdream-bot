@@ -205,11 +205,11 @@ export class Event {
         if (!defaultServerList) defaultServerList = globalDefaultServer
         var server = getServerByPriority(this.startAt, defaultServerList)
         try {
-            var BannerImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/homebanner_rip/${this.bannerAssetBundleName}.png`, false)
+            var BannerImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/event/${this.assetBundleName}/images_rip/banner.png`, false)
             return await loadImage(BannerImageBuffer)
         } catch (e) {
             var server = Server.jp
-            var BannerImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/homebanner_rip/${this.bannerAssetBundleName}.png`)
+            var BannerImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/event/${this.assetBundleName}/images_rip/banner.png`)
             return await loadImage(BannerImageBuffer)
         }
     }
