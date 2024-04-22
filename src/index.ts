@@ -408,10 +408,10 @@ export function apply(ctx: Context, config: Config) {
     .example('抽卡模拟:模拟抽卡10次').example('抽卡模拟 300 922 :模拟抽卡300次，卡池为922号卡池')
     .channelFields(['tsugu_gacha'])
     .action(async ({ session }, times, gachaId) => {
-      const tsuguUserData = await observeUserTsugu(session)
-      const server_mode = tsuguUserData.server_mode
       const status = session.channel?.tsugu_gacha ?? true
       if (status) {
+        const tsuguUserData = await observeUserTsugu(session)
+        const server_mode = tsuguUserData.server_mode
         const list = await commandGachaSimulate(config.backendUrl, server_mode, times, config.compress, gachaId)
         return (paresMessageList(list))
       }
