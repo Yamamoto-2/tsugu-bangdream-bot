@@ -115,8 +115,8 @@ export function apply(ctx: Context, config: Config) {
   async function observeUserTsugu(session: Session): Promise<tsuguUser> {
     async function getLocalUserData(session: Session): Promise<tsuguUser> {
       const localResult = await session.observeUser(['tsugu'])
-      for(let i = 0;i<localResult.tsugu.server_list.length;i++){
-        if(localResult.tsugu.server_list[i]['gameID'] != undefined){
+      for (let i = 0; i < localResult.tsugu.server_list.length; i++) {
+        if (localResult.tsugu.server_list[i]['gameID'] != undefined) {
           localResult.tsugu.server_list[i]['playerId'] = localResult.tsugu.server_list[i]['gameID']
           delete localResult.tsugu.server_list[i]['gameID']
         }
@@ -411,8 +411,13 @@ export function apply(ctx: Context, config: Config) {
       const tsuguUserData = await observeUserTsugu(session)
       const server_mode = tsuguUserData.server_mode
       const status = session.channel?.tsugu_gacha ?? true
-      const list = await commandGachaSimulate(config.backendUrl, server_mode, status, times, config.compress, gachaId)
-      return (paresMessageList(list))
+      if (status) {
+        const list = await commandGachaSimulate(config.backendUrl, server_mode, times, config.compress, gachaId)
+        return (paresMessageList(list))
+      }
+      else {
+        return '抽卡功能已关闭'
+      }
     })
   ctx.on('command/before-execute', (argv) => {
     const { command, session } = argv;
