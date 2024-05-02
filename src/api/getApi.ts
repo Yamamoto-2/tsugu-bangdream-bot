@@ -1,14 +1,11 @@
-import * as path from 'path';
-import { getJsonAndSave } from './downloader';
-import { getCacheDirectory, getFileNameFromUrl } from './utils';
+import * as axios from 'axios';
 
 async function callAPIAndCacheResponse(url: string, cacheTime: number = 0): Promise<object> {
-  const cacheDir = getCacheDirectory(url);
-  const fileName = getFileNameFromUrl(url);
-  const data = await getJsonAndSave(url, cacheDir, fileName, cacheTime);
-  return data;
+  const response = await axios.default.get(url);
+  return response.data;
 }
 
+//getJson
 
 
 export { callAPIAndCacheResponse };

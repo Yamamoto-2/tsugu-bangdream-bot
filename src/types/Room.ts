@@ -2,7 +2,6 @@ import { BandoriStationurl, tsuguUser } from "../config";
 import { Player } from "./Player";
 import { unescape } from "querystring";
 import { Server, getServerByName } from "./Server";
-import { getJsonAndSave } from "../api/downloader";
 import { BindingStatus } from "../config"
 import * as axios from 'axios'
 
@@ -155,7 +154,6 @@ export async function queryRoomNumberFromBandoriStation(): Promise<Room[]> {
                 roomData['user_info']['bandori_player_brief_info']['user_id'],
                 getServerByName(roomData['user_info']['bandori_player_brief_info']['server'])
             )
-            await player.initFull()
             room.setPlayer(player)
         }
         roomList.push(room)
@@ -191,7 +189,6 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
             const curServer = user.server_list[server]
             if (curServer.bindingStatus == BindingStatus.Success) {
                 const player = new Player(curServer.playerId, server)
-                await player.initFull()
                 room.setPlayer(player)
             }
         }

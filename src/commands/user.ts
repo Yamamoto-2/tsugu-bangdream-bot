@@ -32,7 +32,6 @@ export async function commandBindPlayer(config: Config, session: Session<'tsugu'
     } catch (error) {
         return error.message
     }
-    console.log(user)
     let server: Server
     // 获得待绑定的服务器
     if (!serverName) {
