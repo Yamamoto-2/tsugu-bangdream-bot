@@ -43,7 +43,7 @@ export async function drawEventStage(eventId: number, server: Server, meta: bool
     async function drawStageSong(stage: Stage) {
         return stackImage([
             await drawEventStageTypeTop(stage),
-            await drawEventStageSongHorizontal(stage)
+            await drawEventStageSongHorizontal(stage, meta)
         ])
 
     }
