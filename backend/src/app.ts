@@ -12,11 +12,12 @@ import { songMetaRouter } from '@/routers/songMeta';
 import { ycxRouter } from '@/routers/ycx';
 import { ycxAllRouter } from '@/routers/ycxAll';
 import { lsycxRouter } from '@/routers/lsycx';
-import { songChartRouter } from '@/routers/songChart';1
+import { songChartRouter } from '@/routers/songChart'; 1
 import { userRouter } from '@/routers/user'
 import { stationRouter } from '@/routers/station'
 import { eventPreviewRouter } from '@/routers/article/eventPreview'
 import { eventReportRouter } from '@/routers/article/eventReport'
+import { eventStageRouter } from '@/routers/eventStage'
 import * as dotenv from 'dotenv';
 import { cardRouterV2 } from '@/routers/v2/card';
 import { gachaRouterV2 } from '@/routers/v2/gacha';
@@ -56,6 +57,7 @@ app.use('/songChart', songChartRouter);
 app.use('/ycx', ycxRouter);
 app.use('/ycxAll', ycxAllRouter);
 app.use('/lsycx', lsycxRouter)
+app.use('/eventStage', eventStageRouter)
 
 if (process.env.LOCAL_DB == 'true') {
     app.use('/user', userRouter);

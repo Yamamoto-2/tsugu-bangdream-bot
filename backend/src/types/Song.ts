@@ -6,7 +6,7 @@ import mainAPI from '@/types/_Main'
 import { Bestdoriurl } from '@/config'
 import { stringToNumberArray } from '@/types/utils'
 
-export const difficultyName = {
+export const difficultyName = {//难度名称
     0: "easy",
     1: "normal",
     2: "hard",
@@ -20,8 +20,20 @@ export const tagNameList = {
     'extra': 'EXTRA歌曲',
 }
 
-export const difficultyColorList = ["#8eb4fd", "#a6f692", "#fbdf8c", "#ff898b", "#f383cb"] //画难度时使用的配色
-export const difficultyNameList = ['easy', 'normal', 'hard', 'expert', 'special'] //难度名称
+export const difficultyColorList = [ //画难度时使用的配色
+    "#8eb4fd",
+    "#a6f692",
+    "#fbdf8c",
+    "#ff898b",
+    "#f383cb"
+]
+export const difficultyNameList = [ //难度名称List
+    'easy',
+    'normal',
+    'hard',
+    'expert',
+    'special'
+]
 
 export class Song {
     songId: number;

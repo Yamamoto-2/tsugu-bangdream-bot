@@ -15,6 +15,7 @@ import { roomNumber } from './commands/roomNumber'
 import { commandRoomList } from './commands/roomList'
 import { commandBindPlayer, commandPlayerInfo, commandSwitchDefaultServer, commandSwitchServerMode, commandUnbindPlayer, commandSwitchCarMode } from './commands/user'
 import { commandSongChart } from './commands/songChart'
+import { commandEventStage } from './commands/eventStage'
 import { Server } from './types/Server'
 import { globalDefaultServer, BindingStatus, tsuguUser } from './config'
 import { tierListOfServerToString, checkLeftDigits, paresMessageList } from './utils'
@@ -362,7 +363,7 @@ export function apply(ctx: Context, config: Config) {
       return paresMessageList(list)
     })
   ctx.command('查询分数表 <word:text>', '查询分数表').usage('查询指定服务器的歌曲分数表，如果没有服务器名的话，服务器为用户的默认服务器')
-    .alias('查分数表', '查询分数榜', '查分数榜')
+    .alias('查分数表', '查询分数榜', '查分数榜').example('查询分数表 cn :返回国服的歌曲分数表')
     .action(async ({ session }, text) => {
       const tsuguUserData = await observeUserTsugu(session)
       const default_servers = tsuguUserData.default_server
@@ -370,6 +371,20 @@ export function apply(ctx: Context, config: Config) {
       return paresMessageList(list)
 
     })
+
+  ctx.command("查试炼 <eventId:number>", "查试炼").usage('查询当前服务器当前活动试炼信息\n可以自定义活动ID\n参数:-m 显示歌曲meta(相对效率)')
+    .alias('查stage', '查舞台', '查festival', '查5v5')
+    .example('查试炼 157 -m :返回157号活动的试炼信息，包含歌曲meta')
+    .example('查试炼 -m :返回当前活动的试炼信息，包含歌曲meta')
+    .example('查试炼 :返回当前活动的试炼信息')
+    .option('meta', '-m')
+    .action(async ({ session, options }, eventId) => {
+      const tsuguUserData = await observeUserTsugu(session)
+      const server_mode = tsuguUserData.server_mode
+      const list = await commandEventStage(config.backendUrl, server_mode, config.compress, options.meta, eventId)
+      return paresMessageList(list)
+    })
+
   ctx.command("查卡池 <gachaId:number>", "查卡池").usage('根据卡池ID查询卡池信息')
     .action(async ({ session }, gachaId) => {
       const tsuguUserData = await observeUserTsugu(session)

@@ -18,7 +18,7 @@ async function loadImageOnce() {
     cardTypeIconList.limited = await loadImage(path.join(assetsRootPath, '/Card/L.png'));
     cardTypeIconList.dreamfes = await loadImage(path.join(assetsRootPath, '/Card/D.png'));
     cardTypeIconList.kirafes = await loadImage(path.join(assetsRootPath, '/Card/K.png'));
-    cardTypeIconList.birthday = await loadImage(path.join(assetsRootPath, '/Card/b.png'));
+    cardTypeIconList.birthday = await loadImage(path.join(assetsRootPath, '/Card/B.png'));
     starList.normal = await loadImage(path.join(assetsRootPath, '/Card/star.png'));
     starList.trained = await loadImage(path.join(assetsRootPath, '/Card/star_trained.png'));
     limitBreakIcon = await loadImage(path.join(assetsRootPath, '/Card/limitBreakRank.png'));
