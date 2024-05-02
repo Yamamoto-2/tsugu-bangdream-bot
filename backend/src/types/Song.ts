@@ -3,7 +3,7 @@ import { Image, loadImage } from 'canvas'
 import { downloadFile } from '@/api/downloadFile'
 import { getServerByPriority, Server } from '@/types/Server'
 import mainAPI from '@/types/_Main'
-import { globalDefaultServer, Bestdoriurl } from '@/config'
+import { Bestdoriurl } from '@/config'
 import { stringToNumberArray } from '@/types/utils'
 
 export const difficultyName = {
@@ -14,11 +14,14 @@ export const difficultyName = {
     4: "special"
 }
 
-const tagNameList = {
+export const tagNameList = {
     'normal': '原创曲',
     'anime': '翻唱曲',
     'extra': 'EXTRA歌曲',
 }
+
+export const difficultyColorList = ["#8eb4fd", "#a6f692", "#fbdf8c", "#ff898b", "#f383cb"] //画难度时使用的配色
+export const difficultyNameList = ['easy', 'normal', 'hard', 'expert', 'special'] //难度名称
 
 export class Song {
     songId: number;
@@ -170,7 +173,7 @@ export class Song {
     getSongRip(): number {
         return Math.ceil(this.songId / 10) * 10
     }
-    async getSongJacketImage(defaultServerList: Server[] = [Server.jp,Server.cn]): Promise<Image> {
+    async getSongJacketImage(defaultServerList: Server[] = [Server.jp, Server.cn]): Promise<Image> {
         const jacketImageUrl = this.getSongJacketImageURL(defaultServerList)
         var jacketImageBuffer = await downloadFile(jacketImageUrl)
         return await loadImage(jacketImageBuffer)

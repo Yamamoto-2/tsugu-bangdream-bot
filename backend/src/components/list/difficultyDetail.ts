@@ -1,4 +1,4 @@
-import { difficultyColorList, difficultyNameList } from "@/components/list/difficulty"
+import { difficultyColorList, difficultyNameList } from "@/types/Song"
 import { drawRoundedRectWithText } from "@/image/drawRect"
 import { Canvas, createCanvas, Image } from 'canvas';
 import { drawTextWithImages } from "@/image/text";

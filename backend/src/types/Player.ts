@@ -4,6 +4,7 @@ import { Server } from '@/types/Server'
 import { Card, addStat, Stat } from '@/types/Card'
 import { AreaItem } from '@/types/AreaItem';
 import { Event } from '@/types/Event';
+import { difficultyNameList } from "@/types/Song"
 
 /*
 - mode=0 只从缓存取，无需等待队列立即返回缓存数据
@@ -234,9 +235,9 @@ export class Player {
         this.server = server;
     }
     async initFull(cache: boolean = false) {
-        if (this.isInitfull){
-             return
-            }
+        if (this.isInitfull) {
+            return
+        }
         var cacheTime = cache ? 1 / 0 : 0;
         try {
             var playerData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/player/${Server[this.server]}/${this.playerId}?mode=2`, cacheTime);
@@ -266,7 +267,6 @@ export class Player {
 
         //修复新旧API难度信息不兼容问题
         if (this.profile.userMusicClearInfoMap == undefined) {
-            const difficultyNameList = ['easy', 'normal', 'hard', 'expert', 'special'] //难度名称
             this.profile.userMusicClearInfoMap = { entries: {} }
             for (let i = 0; i < difficultyNameList.length; i++) {
                 const difficultyName = difficultyNameList[i];
