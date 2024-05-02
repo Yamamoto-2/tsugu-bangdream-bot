@@ -4,7 +4,7 @@ import { callAPIAndCacheResponse } from "@/api/getApi";
 import { Bestdoriurl } from "@/config";
 
 
-export class EventTop{
+export class CutoffEventTop{
     eventId:number;
     server:Server;
     startAt:number;

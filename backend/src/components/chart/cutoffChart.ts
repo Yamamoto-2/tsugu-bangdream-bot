@@ -3,7 +3,7 @@ import { Cutoff } from "@/types/Cutoff";
 import { drawTimeLineChart } from "@/components/chart_Timeline";
 import { Event } from '@/types/Event';
 import { Server } from '@/types/Server';
-import { EventTop } from '@/types/EventTop';
+import { CutoffEventTop } from '@/types/CutoffEventTop';
 import { getPresetColor } from '@/types/Color';
 import { drawList } from '@/components/list'
 import { stackImage } from '@/components/utils'
@@ -116,12 +116,12 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
     }
 
 }
-export async function drawEventTopChart(eventTop: EventTop, setStartToZero = false, server: Server = Server['jp']) {
+export async function drawCutoffEventTopChart(CutoffEventTop: CutoffEventTop, setStartToZero = false, server: Server = Server['jp']) {
     var datasets = []
-    if (eventTop == undefined) {
+    if (CutoffEventTop == undefined) {
         return (createCanvas(1, 1))
     }
-    var allData = eventTop.getChartData();
+    var allData = CutoffEventTop.getChartData();
     function removeBraces(text: string): string {
         var newText = text.replace(/\[[^\]]*\]/g, "");
         return newText;
@@ -130,7 +130,7 @@ export async function drawEventTopChart(eventTop: EventTop, setStartToZero = fal
     for (const key in allData) {
         const tempColor = getPresetColor(colorNumber)
         datasets.push({
-            label: removeBraces(eventTop.getUserNameById(Number(key))),
+            label: removeBraces(CutoffEventTop.getUserNameById(Number(key))),
             data: allData[key],
             borderWidth: 4,
             borderColor: [tempColor.getRGBA(1)],
@@ -143,5 +143,5 @@ export async function drawEventTopChart(eventTop: EventTop, setStartToZero = fal
         colorNumber++
     }
     var data = { datasets: datasets }
-    return await drawTimeLineChart({ data, start: new Date(eventTop.startAt), end: new Date(eventTop.endAt), setStartToZero }, true)
+    return await drawTimeLineChart({ data, start: new Date(CutoffEventTop.startAt), end: new Date(CutoffEventTop.endAt), setStartToZero }, true)
 }
