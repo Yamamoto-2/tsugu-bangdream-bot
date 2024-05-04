@@ -41,12 +41,17 @@ async function loadMainAPI(useCache: boolean = false) {
             mainAPI['areaItems'][key] = areaItemFix[key]
         }
     }
-    const songNickname = await readExcelFile(path.join(configPath, 'nickname_song.xlsx'))
-    for (let i = 0; i < songNickname.length; i++) {
-        const element = songNickname[i];
-        if (mainAPI['songs'][element['Id'].toString()]) {
-            mainAPI['songs'][element['Id'].toString()]['nickname'] = element['Nickname']
+    try {
+        const songNickname = await readExcelFile(path.join(configPath, 'nickname_song.xlsx'))
+        for (let i = 0; i < songNickname.length; i++) {
+            const element = songNickname[i];
+            if (mainAPI['songs'][element['Id'].toString()]) {
+                mainAPI['songs'][element['Id'].toString()]['nickname'] = element['Nickname']
+            }
         }
+    }
+    catch (e) {
+        console.log('读取nickname_song.xlsx失败')
     }
 
 }
