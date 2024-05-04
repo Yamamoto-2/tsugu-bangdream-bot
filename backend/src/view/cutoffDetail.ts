@@ -10,9 +10,8 @@ import { Cutoff } from "@/types/Cutoff";
 import { drawCutoffChart } from '@/components/chart/cutoffChart'
 import { serverNameFullList } from '@/config';
 import { drawEventDatablock } from '@/components/dataBlock/event';
-import { drawTips } from '@/components/tips'
-import { assetsRootPath, statusName } from '@/config';
-import * as path from 'path'
+import { statusName } from '@/config';
+
 
 export async function drawCutoffDetail(eventId: number, tier: number, server: Server, compress: boolean): Promise<Array<Buffer | string>> {
     var cutoff = new Cutoff(eventId, server, tier)
@@ -67,6 +66,13 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
         tempImageList.push(finalTimeImage)
 
         list.push(drawListMerge(tempImageList)) //合并两个list
+        list.push(line)
+
+        //活动剩余时间
+        list.push(drawList({
+            key: '活动剩余时间',
+            text: `${changeTimePeriodFormat(cutoff.endAt - time)}`
+        }))
         list.push(line)
 
     }

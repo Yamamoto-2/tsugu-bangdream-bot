@@ -10,9 +10,6 @@ import { Cutoff } from "@/types/Cutoff";
 import { drawCutoffChart } from '@/components/chart/cutoffChart'
 import { serverNameFullList } from '@/config';
 import { drawEventDatablock } from '@/components/dataBlock/event';
-import { drawTips } from '@/components/tips'
-import { assetsRootPath } from '@/config';
-import * as path from 'path'
 import { drawAttributeInList } from '@/components/list/attribute'
 import { drawCharacterInList } from '@/components/list/character'
 

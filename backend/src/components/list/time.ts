@@ -97,11 +97,13 @@ export function changeTimefomantMonthDay(timeStamp: number | null) {//获取生�
     return temp
 }
 
-export function changeTimePeriodFormat(period: number): string {//时间戳的差值到月日时分秒
+export function changeTimePeriodFormat(period: number): string {//时间戳的差值到年月日时分秒
     if (period == null) {
         return '?'
     }
 
+    var centery = Math.floor(period / (1000 * 60 * 60 * 24 * 30 * 12 * 100));
+    var years = Math.floor(period / (1000 * 60 * 60 * 24 * 30 * 12));
     var months = Math.floor(period / (1000 * 60 * 60 * 24 * 30));
     var days = Math.floor((period % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
     var hours = Math.floor((period % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -110,6 +112,12 @@ export function changeTimePeriodFormat(period: number): string {//时间戳的�
 
     var temp = "";
 
+    if (centery != 0) {
+        temp += centery.toString() + "世纪";
+    }
+    if (years != 0) {
+        temp += years.toString() + "年";
+    }
     if (months != 0) {
         temp += months.toString() + "月";
     }
