@@ -20,7 +20,7 @@ export async function drawCutoffEventTop(eventId: number, server: Server, compre
     all.push(drawTitle('档线', `${serverNameFullList[server]} 10档线`));
     var list: Array<Image | Canvas> = [];
     var event = new Event(eventId);
-    all.push(await drawEventDatablock(event));
+    all.push(await drawEventDatablock(event, [server]));
 
     //前十名片
     var userInRankings = cutoffEventTop.getLatestRanking();
@@ -41,7 +41,7 @@ export async function drawCutoffEventTop(eventId: number, server: Server, compre
     var listImage = drawDatablock({ list });
     all.push(listImage);
 
-    var buffer = await outputFinalBuffer({ imageList: all, useEasyBG: true, compress:compress, })
+    var buffer = await outputFinalBuffer({ imageList: all, useEasyBG: true, compress: compress, })
 
     return [buffer];
 }

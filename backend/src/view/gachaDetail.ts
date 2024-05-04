@@ -73,10 +73,10 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
     list.push(line)
 
     //卡池pickUp
-    try{
+    try {
         list.push(await drawGachaPickupInList(gacha, server))
     }
-    catch(e){
+    catch (e) {
         console.log(e)
     }
 
@@ -97,7 +97,7 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
         var relatedEvent = getPresentEvent(server, gacha.publishedAt[server])
         if (relatedEvent != null && !tempEventIdList.includes(relatedEvent.eventId)) {
             tempEventIdList.push(relatedEvent.eventId)
-            eventImageList.push(await drawEventDatablock(relatedEvent, `${serverNameFullList[server]}相关活动`))
+            eventImageList.push(await drawEventDatablock(relatedEvent, defaultServerList, `${serverNameFullList[server]}相关活动`))
         }
     }
 
@@ -110,7 +110,7 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
         useEasyBG: useEasyBG,
         BGimage: gachaBGImage,
         text: 'Gacha',
-        compress:compress,
+        compress: compress,
     })
     return [buffer]
 }

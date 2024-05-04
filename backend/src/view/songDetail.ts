@@ -129,7 +129,7 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
         var event = getPresentEvent(server, song.publishedAt[server])
         if (event != undefined && eventIdList.indexOf(event.eventId) == -1) {
             eventIdList.push(event.eventId)
-            var eventDatablockImage = await drawEventDatablock(event, `${serverNameFullList[server]}相关活动`)
+            var eventDatablockImage = await drawEventDatablock(event, defaultServerList, `${serverNameFullList[server]}相关活动`)
             all.push(eventDatablockImage)
         }
     }
@@ -137,7 +137,7 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
     var buffer = await outputFinalBuffer({
         imageList: all,
         useEasyBG: true,
-        compress:compress
+        compress: compress
     })
     return [buffer]
 }

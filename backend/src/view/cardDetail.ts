@@ -150,13 +150,15 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
     var gachaImageList: Array<Canvas | Image> = []
     for (let k = 0; k < defaultServerList.length; k++) {
         let server = defaultServerList[k];
+        //如果卡牌有关联活动
         if (card.releaseEvent[server].length != 0) {
             var tempEvent = new Event(card.releaseEvent[server][0])
             if (!tempEventIdList.includes(tempEvent.eventId)) {
-                eventImageList.push(await drawEventDatablock(tempEvent, `${serverNameFullList[server]}相关活动`))
+                eventImageList.push(await drawEventDatablock(tempEvent, defaultServerList, `${serverNameFullList[server]}相关活动`))
                 tempEventIdList.push(tempEvent.eventId)
             }
         }
+        //如果卡牌有关联卡池
         if (card.releaseGacha[server].length != 0) {
             const gachaIdList = card.releaseGacha[server]
             gachaIdList.sort((a, b) => {
@@ -174,7 +176,7 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
             if (tempEventId != null) {
                 var tempEvent = new Event(tempEventId)
                 if (!tempEventIdList.includes(tempEvent.eventId)) {
-                    eventImageList.push(await drawEventDatablock(tempEvent, `${serverNameFullList[server]}相关活动`))
+                    eventImageList.push(await drawEventDatablock(tempEvent, defaultServerList, `${serverNameFullList[server]}相关活动`))
                     tempEventIdList.push(tempEvent.eventId)
                 }
             }
@@ -204,7 +206,7 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
         useEasyBG: useEasyBG,
         BGimage,
         text: 'Card',
-        compress:compress,
+        compress: compress,
     })
 
     return [buffer]

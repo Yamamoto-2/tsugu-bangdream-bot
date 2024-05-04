@@ -5,8 +5,11 @@ import { drawCharacterInList } from '@/components/list/character'
 import { drawAttributeInList } from "@/components/list/attribute";
 import { Canvas } from 'canvas';
 import { drawBannerImageCanvas } from '@/components/dataBlock/utils'
+import { drawTimeInList } from '@/components/list/time'
+import { Server } from '@/types/Server';
+import { globalDefaultServer } from '@/config'
 
-export async function drawEventDatablock(event: Event, topLeftText?: string) {
+export async function drawEventDatablock(event: Event, defaultServerList: Server[] = globalDefaultServer, topLeftText?: string) {
     await event.initFull()
     var list = []
     var eventBannerImage = await event.getBannerImage()
@@ -51,12 +54,12 @@ export async function drawEventDatablock(event: Event, topLeftText?: string) {
         }
     }
 
-    /*
     //活动时间
     textImageList.push(await drawTimeInList({
-        content: event.startAt
-    }))
-    */
+        content: event.startAt,
+        eventId: event.eventId,
+        estimateCNTime: true
+    }, defaultServerList))
 
     //画左侧有竖线的排版
     var textImageListImage = drawListWithLine(textImageList)

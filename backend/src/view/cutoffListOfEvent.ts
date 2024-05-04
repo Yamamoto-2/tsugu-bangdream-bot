@@ -26,7 +26,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server, com
     }
     var all = []
     all.push(drawTitle('档线列表', `${serverNameFullList[server]}`))
-    all.push(await drawEventDatablock(event))
+    all.push(await drawEventDatablock(event[server]))
 
     const list: Array<Image | Canvas> = []
 
@@ -95,7 +95,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server, com
     var buffer = await outputFinalBuffer({
         imageList: all,
         useEasyBG: true,
-        compress:compress,
+        compress: compress,
     })
     return [buffer]
 }

@@ -55,7 +55,7 @@ export async function drawEventPreviewCards(eventId: number, illustration: boole
         for (let i = 0; i < cardList.length; i++) {
             const card = cardList[i]
             const trainingStatusList = card.getTrainingStatusList()
-            for(let j=0;j<trainingStatusList.length;j++){
+            for (let j = 0; j < trainingStatusList.length; j++) {
                 const trainingStatus = trainingStatusList[j]
                 cardImages.push(await card.getCardIllustrationImageBuffer(trainingStatus))
             }

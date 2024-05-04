@@ -56,7 +56,8 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     list.push(await drawTimeInList({
         key: '开始时间',
         content: event.startAt,
-        eventId: event.eventId
+        eventId: event.eventId,
+        estimateCNTime: true
     }))
     list.push(line)
 

@@ -23,7 +23,7 @@ export async function drawEventReportCutoffListOfEvent(eventId: number, server: 
     }
     var all = []
     all.push(drawTitle('数据总览', '档线数据'))
-    all.push(await drawEventDatablock(event))
+    all.push(await drawEventDatablock(event,[server]))
 
     const list: Array<Image | Canvas> = []
 

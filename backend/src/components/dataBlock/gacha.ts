@@ -1,7 +1,7 @@
 import { Gacha } from "@/types/Gacha";
 import { drawListWithLine, drawList } from "@/components/list";
 import { drawDatablock } from '@/components/dataBlock'
- 
+
 import { Canvas } from 'canvas';
 import { drawBannerImageCanvas } from '@/components/dataBlock/utils'
 
@@ -27,7 +27,8 @@ export async function drawGachaDatablock(gacha: Gacha, topLeftText?: string) {
     /*
     //卡池时间
     textImageList.push(await drawTimeInList({
-        content: gacha.startAt
+        content: gacha.startAt,
+        estimateCNTime: true
     }))
     */
 

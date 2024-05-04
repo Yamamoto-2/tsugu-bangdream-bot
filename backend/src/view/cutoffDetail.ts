@@ -29,7 +29,7 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
     all.push(drawTitle('预测线', `${serverNameFullList[server]} ${cutoff.tier}档线`))
     var list: Array<Image | Canvas> = []
     var event = new Event(eventId)
-    all.push(await drawEventDatablock(event))
+    all.push(await drawEventDatablock(event, [server]))
 
     //状态
     var time = new Date().getTime()
@@ -103,7 +103,7 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
     var buffer = await outputFinalBuffer({
         imageList: all,
         useEasyBG: true,
-        compress:compress,
+        compress: compress,
     })
 
     return [buffer];

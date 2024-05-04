@@ -13,8 +13,8 @@ import { drawEventDatablock } from '@/components/dataBlock/event';
 import { drawTips } from '@/components/tips'
 import { assetsRootPath } from '@/config';
 import * as path from 'path'
-import {drawAttributeInList} from '@/components/list/attribute'
-import {drawCharacterInList} from '@/components/list/character'
+import { drawAttributeInList } from '@/components/list/attribute'
+import { drawCharacterInList } from '@/components/list/character'
 
 export async function drawCutoffComprare(eventId: number, tier: number, server: Server, compress: boolean): Promise<Array<Buffer | string>> {
     //检查
@@ -33,7 +33,7 @@ export async function drawCutoffComprare(eventId: number, tier: number, server: 
 
     var all = []
     all.push(drawTitle('历史的档线对比', `${serverNameFullList[server]} ${tier}档线`))
-    all.push(await drawEventDatablock(event))
+    all.push(await drawEventDatablock(event, [server]))
 
     const list: Array<Image | Canvas> = []
 
@@ -119,7 +119,7 @@ export async function drawCutoffComprare(eventId: number, tier: number, server: 
     var buffer = await outputFinalBuffer({
         imageList: all,
         useEasyBG: true,
-        compress:compress,
+        compress: compress,
     })
     return [buffer]
 }

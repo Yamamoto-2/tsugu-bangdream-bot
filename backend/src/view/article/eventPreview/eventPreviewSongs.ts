@@ -1,7 +1,6 @@
 import { drawList, line, drawListByServerList, drawListMerge } from '@/components/list';
 import { drawDatablock } from '@/components/dataBlock'
 import { Image, Canvas } from 'canvas'
-import { drawTimeInList } from '@/components/list/time';
 import { Server } from '@/types/Server';
 import { drawTitle } from '@/components/title'
 import { outputFinalBuffer } from '@/image/output'
@@ -9,7 +8,7 @@ import { Song, getPresentSongList } from '@/types/Song'
 import { drawSongDataBlock } from '@/components/dataBlock/song';
 import { drawSongMetaListDataBlock } from '@/components/dataBlock/songMetaList'
 import { Band } from '@/types/Band';
-import { globalDefaultServer, serverNameFullList } from '@/config';
+import { globalDefaultServer } from '@/config';
 import { formatSeconds } from '@/components/list/time'
 import { Event } from '@/types/Event';
 import { drawArticleTitle1 } from '@/components/article/title'

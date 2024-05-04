@@ -12,7 +12,6 @@ import { Server } from '@/types/Server';
 import { globalDefaultServer } from '@/config';
 import { drawSongDetail } from "./songDetail";
 
-const maxHeight = 6000
 
 // 紧凑化虚线分割
 const line = drawDottedLine({
@@ -76,9 +75,10 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
         return ['没有搜索到符合条件的歌曲']
     }
     if (tempSongList.length == 1) {
-        return await drawSongDetail(tempSongList[0], defaultServerList,compress)
+        return await drawSongDetail(tempSongList[0], defaultServerList, compress)
     }
 
+    const maxHeight = 6000
 
     var tempSongImageList: Canvas[] = [];
     var songImageListHorizontal: Canvas[] = [];
@@ -123,7 +123,7 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
     var buffer = await outputFinalBuffer({
         imageList: all,
         useEasyBG: true,
-        compress:compress
+        compress: compress
     })
     return [buffer]
 }
