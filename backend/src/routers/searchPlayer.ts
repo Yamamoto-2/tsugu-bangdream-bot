@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post('/', [
     body('playerId').isInt(), // Validation for 'playerId' field
-    body('server').custom((value) => isServer(value)), // Custom validation for 'server' field
+    body('server').custom(isServer), // Custom validation for 'server' field
     body('useEasyBG').isBoolean(), // Validation for 'useEasyBG' field
     body('compress').optional().isBoolean(),
 ], async (req, res) => {

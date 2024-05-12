@@ -4,7 +4,7 @@ import { drawCardDetail } from '@/view/cardDetail';
 import { drawCardList } from '@/view/cardList';
 import { isInteger, isServerList, listToBase64 } from '@/routers/utils';
 import { fuzzySearch } from '@/routers/fuzzySearch';
-import { Server } from '@/types/Server';
+import { getServerByServerId, Server } from '@/types/Server';
 
 const router = express.Router();
 
@@ -43,6 +43,9 @@ export async function commandCard(default_servers: Server[], text: string, useEa
     console.log(fuzzySearchResult)
     if (Object.keys(fuzzySearchResult).length == 0) {
         return ['错误: 没有有效的关键词']
+    }
+    for(let i = 0; i < default_servers.length; i++) {
+        default_servers[i] = getServerByServerId(default_servers[i])
     }
     return await drawCardList(fuzzySearchResult, default_servers, compress)
 

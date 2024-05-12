@@ -5,7 +5,7 @@ import { fuzzySearch } from '@/routers/fuzzySearch';
 import { isInteger, listToBase64, isServerList } from '@/routers/utils';
 import { drawSongChart } from '@/view/songChart';
 import { Song } from '@/types/Song';
-import { Server } from '@/types/Server';
+import { getServerByServerId, Server } from '@/types/Server';
 
 const router = express.Router();
 
@@ -47,6 +47,9 @@ export async function commandSongChart(default_servers: Server[], songId: number
     console.log(fuzzySearchResult)
     if (fuzzySearchResult.difficulty === undefined) {
         return ['错误: 不正确的难度关键词,可以使用以下关键词:easy,normal,hard,expert,special']
+    }
+    for(let i = 0; i < default_servers.length; i++) {
+        default_servers[i] = getServerByServerId(default_servers[i])
     }
     return await drawSongChart(songId, parseInt(fuzzySearchResult.difficulty[0]), default_servers, compress)
 }

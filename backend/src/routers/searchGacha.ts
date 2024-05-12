@@ -1,6 +1,6 @@
 import { body, validationResult } from 'express-validator';
 import { drawGachaDetail } from '@/view/gachaDetail';
-import { Server } from '@/types/Server';
+import { getServerByServerId, Server } from '@/types/Server';
 import { listToBase64, isServerList } from '@/routers/utils';
 import express from 'express';
 
@@ -31,9 +31,12 @@ router.post('/', [
     }
 });
 
-export async function commandGacha(default_server: Server[], gachaId: number, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
-
-    return await drawGachaDetail(gachaId, default_server, useEasyBG, compress)
+export async function commandGacha(default_servers: Server[], gachaId: number, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
+    
+    for(let i = 0; i < default_servers.length; i++) {
+        default_servers[i] = getServerByServerId(default_servers[i])
+    }
+    return await drawGachaDetail(gachaId, default_servers, useEasyBG, compress)
 
 }
 

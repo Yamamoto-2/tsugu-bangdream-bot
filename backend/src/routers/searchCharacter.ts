@@ -4,7 +4,7 @@ import { drawCharacterList } from '@/view/characterList';
 import { drawCharacterDetail } from '@/view/characterDetail';
 import { isInteger } from '@/routers/utils';
 import { fuzzySearch } from '@/routers/fuzzySearch';
-import { Server } from '@/types/Server';
+import { getServerByServerId, Server } from '@/types/Server';
 import { listToBase64, isServerList } from '@/routers/utils';
 
 const router = express.Router();
@@ -41,6 +41,9 @@ export async function commandCharacter(default_servers: Server[], text: string, 
     console.log(fuzzySearchResult)
     if (Object.keys(fuzzySearchResult).length == 0) {
         return ['错误: 没有有效的关键词']
+    }
+    for(let i = 0; i < default_servers.length; i++) {
+        default_servers[i] = getServerByServerId(default_servers[i])
     }
     return await drawCharacterList(fuzzySearchResult, default_servers, compress)
 

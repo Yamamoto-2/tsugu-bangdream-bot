@@ -11,11 +11,10 @@ export enum Server {
 }
 
 export function getServerByServerId (serverId: number): Server {
-    //如果是string,转换为number
+    //如果是string，则按服务器名查服务器
     if (typeof serverId == 'string') {
-        serverId = Number(serverId)
+        serverId = getServerByName(serverId)
     }
-    //
     // 根据服务器id获取对应服务器
     return serverList[serverId]
 }
