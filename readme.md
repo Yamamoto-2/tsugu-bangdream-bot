@@ -9,13 +9,19 @@
 [![npm](https://img.shields.io/npm/v/koishi-plugin-tsugu-bangdream-bot?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-tsugu-bangdream-bot) [![npm](https://img.shields.io/npm/l/koishi-plugin-tsugu-bangdream-bot?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-tsugu-bangdream-bot) [![npm](https://img.shields.io/npm/dt/koishi-plugin-tsugu-bangdream-bot?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-tsugu-bangdream-bot)
 
 
-## 🤖 BOT 部署
+## 🚪 相关项目
 
-| 部署方式 | 传送门 |
-| --- | --- |
-| **koishi 部署** | [![npm](https://img.shields.io/npm/v/koishi-plugin-tsugu-bangdream-bot?style=flat-square)](https://koishi.chat/zh-CN/manual/introduction.html)|
-| **lpt 登陆端部署** | [![release](https://img.shields.io/github/v/release/kumoSleeping/lgr-tsugu-py?style=flat-square)](https://github.com/kumoSleeping/lgr-tsugu-py) |
-| **py 自行构建**| [![pypi](https://img.shields.io/pypi/v/tsugu?style=flat-square)](https://github.com/kumoSleeping/tsugu-python-frontend/)|
+| 项目名称 | 传送门 | 可用状态 |
+| --- | --- | --- |
+| **koishi-plugin-tsugu-bangdream-bot** | [![npm](https://img.shields.io/npm/v/koishi-plugin-tsugu-bangdream-bot?style=flat-square)](https://koishi.chat/zh-CN/manual/introduction.html)| ✅ |
+| **nonebot-plugin-tsugu-frontend** | [![github](https://img.shields.io/github/v/release/zhaomaoniu/nonebot-plugin-tsugu-frontend?style=flat-square)](https://github.com/zhaomaoniu/nonebot-plugin-tsugu-frontend/) | ❌ |
+| **lgr-tsugu-py** | [![release](https://img.shields.io/github/v/release/kumoSleeping/lgr-tsugu-py?style=flat-square)](https://github.com/kumoSleeping/lgr-tsugu-py) | ❌ |
+| **tsugu-python-frontend**| [![pypi](https://img.shields.io/pypi/v/tsugu?style=flat-square)](https://github.com/kumoSleeping/tsugu-python-frontend/)| ❌ |
+| **tsugu-api-python**| [![pypi](https://img.shields.io/pypi/v/tsugu-api-python?style=flat-square)](https://pypi.org/project/tsugu-api-python/)| ❌ |
+| **tsugu-bot-go**| [![github](https://img.shields.io/github/v/release/WindowsSov8forUs/tsugu-bot-go?style=flat-square)](https://github.com/WindowsSov8forUs/tsugu-bot-go) | ❌ |
+
+> 由近期由 v2 api 引发的安全漏洞，现已彻底移除 v2 api，目前上方不可用项目正在进行迁移工作，敬请期待。
+
 
 ## 🏠 后端部署
 
