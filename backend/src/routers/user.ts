@@ -4,9 +4,8 @@ import bodyParser from 'body-parser';
 import { tsuguUser, BindingStatus } from '@/config';
 import { UserDB } from '@/database/userDB';
 import { Player } from '@/types/Player';
-import { Server, getServerByName } from '@/types/Server';
 import * as dotenv from 'dotenv';
-import { generateVerifyCode } from '@/routers/utils'
+import { generateVerifyCode,isServer, isServerList } from '@/routers/utils'
 dotenv.config();
 
 const router = express.Router();
@@ -16,7 +15,6 @@ if (process.env.LOCAL_DB == 'true') {
     console.log(`user: 已连接至数据库: ${process.env.MONGODB_URI}`);
 }
 router.use(bodyParser.json());
-
 
 
 // 查询或创建用户
@@ -49,16 +47,6 @@ router.post('/getUserData',
         }
     }
 );
-// 判断Server函数
-function isServer(obj: any): obj is Server {
-    if (typeof obj !== 'string') {
-        return false;
-    }
-    if (!(obj in Server)) {
-        return false;
-    }
-    return true;
-}
 
 // 判断tsuguUser函数 (in key of tsuguUser)
 function isPartialTsuguUser(obj: any): obj is Partial<tsuguUser> {
@@ -74,11 +62,11 @@ function isPartialTsuguUser(obj: any): obj is Partial<tsuguUser> {
         return false;
     }
 
-    if ('server_mode' in obj && !(obj.server_mode in Server)) {
+    if ('server_mode' in obj && !isServer(obj.server_mode)) {
         return false;
     }
 
-    if ('default_server' in obj && !Array.isArray(obj.default_server)) {
+    if ('default_server' in obj && !isServerList(obj.default_server)) {
         return false;
     }
 
@@ -129,103 +117,6 @@ router.post('/changeUserData',
         console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         const { platform, user_id, update } = req.body;
         try {
-            const updateData = update as Partial<tsuguUser>;
-            await userDB.updateUser(platform, user_id, updateData);
-            res.json({ status: 'success' });
-        } catch (error) {
-            res.status(400).json({ status: 'failed', data: `错误: ${error.message}` });
-        }
-    }
-);
-// 修改用户数据
-router.post('/changeUserData/setServerMode',
-    [
-        body('platform').isString(),
-        body('user_id').isString(),
-        body('text').isString(),
-    ],
-    async (req: Request, res: Response) => {
-
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
-        }
-
-        req.ip
-        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
-        const { platform, user_id, text } = req.body;
-        try {
-            const update = { server_mode: getServerByName(text) }
-            if (update.server_mode == undefined) {
-                res.status(400).json({ status: 'failed', data: `错误: 服务器不存在` });
-                return
-            }
-            const updateData = update as Partial<tsuguUser>;
-            await userDB.updateUser(platform, user_id, updateData);
-            res.json({ status: 'success' });
-        } catch (error) {
-            res.status(400).json({ status: 'failed', data: `错误: ${error.message}` });
-        }
-    }
-);
-router.post('/changeUserData/setCarForwarding',
-    [
-        body('platform').isString(),
-        body('user_id').isString(),
-        body('status').isBoolean(),
-    ],
-    async (req: Request, res: Response) => {
-
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
-        }
-
-        req.ip
-        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
-        const { platform, user_id, status } = req.body;
-        try {
-            const update = { car: status }
-            const updateData = update as Partial<tsuguUser>;
-            await userDB.updateUser(platform, user_id, updateData);
-            res.json({ status: 'success' });
-        } catch (error) {
-            res.status(400).json({ status: 'failed', data: `错误: ${error.message}` });
-        }
-    }
-);
-router.post('/changeUserData/setDefaultServer',
-    [
-        body('platform').isString(),
-        body('user_id').isString(),
-        body('text').isString(),
-    ],
-    async (req: Request, res: Response) => {
-
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
-        }
-
-        req.ip
-        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
-        const { platform, user_id, text } = req.body;
-        try {
-            const serversArray = text.split(" "); // 将字符串转换为数组
-            const servers = serversArray.map(s => getServerByName(s))
-            console.log(servers)
-            // 去除 undefined
-            for (let i = 0; i < servers.length; i++) {
-                if (servers[i] == undefined) {
-                    servers.splice(i, 1);
-                    i--;
-                }
-            }
-            if (servers.length == 0) {
-                res.status(400).json({ status: 'failed', data: `错误: 服务器不存在` });
-                return
-            }
-            const update = { default_server: servers }
             const updateData = update as Partial<tsuguUser>;
             await userDB.updateUser(platform, user_id, updateData);
             res.json({ status: 'success' });

@@ -18,6 +18,9 @@ export function isServer(server: any): boolean {
     if (typeof server == 'number') {
         server = Server[server]
     }
+    else{
+        return false
+    }
     return Object.keys(Server).includes(server)
 }
 
