@@ -8,26 +8,19 @@ const router = express.Router();
 
 router.post('/', [
   // Define validation rules using express-validator
-  body('text').isString(),
+  body('text').isInt(),
 ], async (req, res) => {
-  console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
+  console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
 
   // Check for validation errors
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.send([{ type: 'string', string: '参数错误' }]);
+    return res.status(400).send([{ type: 'string', string: '参数错误' }]);
   }
-
   const { text } = req.body;
-
   try {
-    // Ensure cardId is a valid number
-    const cardId = parseInt(text);
-    if (isNaN(cardId)) {
-      return res.send([{ type: 'string', string: '参数错误，卡牌ID必须是一个数字' }]);
-    }
     // Ensure cardId is a valid number (no need to check isNaN again)
-    const images = await commandGetCardIllustration(cardId);
+    const images = await commandGetCardIllustration(text);
     res.send(listToBase64(images));
   } catch (error) {
     res.status(500).send('内部服务器错误');

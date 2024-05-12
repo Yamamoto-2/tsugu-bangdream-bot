@@ -28,7 +28,7 @@ router.post(
     const errors = validationResult(req);
     console.log(errors)
     if (!errors.isEmpty()) {
-      return res.send([{ type: 'string', string: '参数错误' }]);
+      return res.status(400).send([{ type: 'string', string: '参数错误' }]);
     }
 
     const { server_mode, times, compress, gachaId } = req.body;

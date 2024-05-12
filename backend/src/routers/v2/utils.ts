@@ -17,7 +17,7 @@ router.post('/', [
     // 验证请求体
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).send([{ type: 'string', string: '参数验证错误' }]);
+      return res.status(400).send([{ type: 'string', string: '参数错误' }]);
     }
   
     const { text } = req.body; // 默认不压缩

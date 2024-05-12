@@ -18,7 +18,7 @@ router.post('/', [
   // Check for validation errors
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.send([{ type: 'string', string: '车牌格式错误' }]);
+    return res.status(400).send([{ type: 'string', string: '车牌格式错误' }]);
   }
 
   const { roomList, compress } = req.body;

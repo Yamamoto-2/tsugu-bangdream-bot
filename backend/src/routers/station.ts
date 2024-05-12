@@ -25,7 +25,13 @@ router.post('/submitRoomNumber',
         body('bandoriStationToken').isString().optional(),
     ],
     async (req: Request, res: Response) => {
-        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+        }
+
+        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         const { number, rawMessage, platform, user_id, userName, time, bandoriStationToken } = req.body;
         const user = await userDB.getUser(platform, user_id);
         try {
@@ -52,7 +58,7 @@ router.post('/submitRoomNumber',
 
 router.get('/queryAllRoom',
     async (req: Request, res: Response) => {
-        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
+        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         try {
             let roomList = await queryAllRoom()
             res.status(200).json({

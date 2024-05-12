@@ -23,7 +23,7 @@ router.post('/', [
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.send([{ type: 'string', string: '参数错误' }]);
+        return res.status(400).send([{ type: 'string', string: '参数错误' }]);
     }
     try {
         const result = await commandEvent(default_servers, text, useEasyBG, compress);

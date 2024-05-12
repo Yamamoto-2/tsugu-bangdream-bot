@@ -26,6 +26,12 @@ router.post('/getUserData',
         body('user_id').isString(),
     ],
     async (req: Request, res: Response) => {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+        }
+
         console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         const { platform, user_id } = req.body;
         try {
@@ -113,6 +119,12 @@ router.post('/changeUserData',
         body('update').custom(isPartialTsuguUser),
     ],
     async (req: Request, res: Response) => {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+        }
+
         req.ip
         console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         const { platform, user_id, update } = req.body;
@@ -133,6 +145,12 @@ router.post('/changeUserData/setServerMode',
         body('text').isString(),
     ],
     async (req: Request, res: Response) => {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+        }
+
         req.ip
         console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         const { platform, user_id, text } = req.body;
@@ -157,6 +175,12 @@ router.post('/changeUserData/setCarForwarding',
         body('status').isBoolean(),
     ],
     async (req: Request, res: Response) => {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+        }
+
         req.ip
         console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         const { platform, user_id, status } = req.body;
@@ -177,6 +201,12 @@ router.post('/changeUserData/setDefaultServer',
         body('text').isString(),
     ],
     async (req: Request, res: Response) => {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+        }
+
         req.ip
         console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         const { platform, user_id, text } = req.body;
@@ -213,6 +243,12 @@ router.post('/bindPlayerRequest',
         body('server').custom(isServer),
         body('bindType').isBoolean(), //true为绑定，false为解绑
     ], async (req: Request, res: Response) => {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+        }
+
         console.log(req.url, req.body);
         const { platform, user_id, server } = req.body;
         try {
@@ -257,6 +293,12 @@ router.post('/bindPlayerVerification',
         body('bindType').isBoolean(), //true为绑定，false为解绑
     ],
     async (req: Request, res: Response) => {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+        }
+
         console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         const { platform, user_id, server, playerId } = req.body;
         try {
