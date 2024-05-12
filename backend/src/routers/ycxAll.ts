@@ -1,7 +1,7 @@
 import { drawCutoffListOfEvent } from '@/view/cutoffListOfEvent';
 import { Server, getServerByServerId } from '@/types/Server';
 import { getPresentEvent } from '@/types/Event';
-import { listToBase64, isServerList } from '@/routers/utils';
+import { listToBase64, isServerList,isServer } from '@/routers/utils';
 import express from 'express';
 import { body, validationResult } from 'express-validator';
 
@@ -10,7 +10,7 @@ const router = express.Router();
 router.post(
     '/',
     [
-        body('server').custom((value) => isServerList(value)), // Custom validation using isServerList
+        body('server').custom((value) => isServer(value)), // Custom validation using isServerList
         body('eventId').optional().isInt(), // eventId is optional and must be an integer if provided
         body('compress').optional().isBoolean(),
     ],

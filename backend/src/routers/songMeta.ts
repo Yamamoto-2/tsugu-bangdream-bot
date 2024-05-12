@@ -32,6 +32,9 @@ router.post('/', [
 });
 
 export async function commandSongMeta(default_servers: Server[], server: Server, compress:boolean): Promise<Array<Buffer | string>> {
+    for(let i = 0; i < default_servers.length; i++) {
+        default_servers[i] = getServerByServerId(default_servers[i])
+    }
     if (server == undefined) {
         server = default_servers[0]
     }

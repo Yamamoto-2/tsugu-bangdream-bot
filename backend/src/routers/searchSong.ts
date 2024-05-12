@@ -5,7 +5,7 @@ import { fuzzySearch } from '@/routers/fuzzySearch';
 import { isInteger, listToBase64, isServerList } from '@/routers/utils';
 import { drawSongDetail } from '@/view/songDetail';
 import { Song } from '@/types/Song';
-import { Server } from '@/types/Server';
+import { getServerByServerId, Server } from '@/types/Server';
 
 const router = express.Router();
 
@@ -49,6 +49,10 @@ export async function commandSong(default_servers: Server[], text: string, compr
     console.log(fuzzySearchResult)
     if (Object.keys(fuzzySearchResult).length == 0) {
         return ['错误: 没有有效的关键词']
+    }
+    
+    for(let i = 0; i < default_servers.length; i++) {
+        default_servers[i] = getServerByServerId(default_servers[i])
     }
     return await drawSongList(fuzzySearchResult, default_servers, compress)
 }

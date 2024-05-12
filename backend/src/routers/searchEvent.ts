@@ -2,7 +2,7 @@ import { isInteger } from '@/routers/utils';
 import { fuzzySearch } from '@/routers/fuzzySearch';
 import { drawEventDetail } from '@/view/eventDetail';
 import { drawEventList } from '@/view/eventList';
-import { Server } from '@/types/Server';
+import { getServerByServerId, Server } from '@/types/Server';
 import { listToBase64, isServerList } from '@/routers/utils';
 import express from 'express';
 import { validationResult, body } from 'express-validator';
@@ -44,6 +44,9 @@ export async function commandEvent(default_servers: Server[], text: string, useE
     console.log(fuzzySearchResult)
     if (Object.keys(fuzzySearchResult).length == 0) {
         return ['错误: 没有有效的关键词']
+    }
+    for(let i = 0; i < default_servers.length; i++) {
+        default_servers[i] = getServerByServerId(default_servers[i])
     }
     return await drawEventList(fuzzySearchResult, default_servers, compress)
 

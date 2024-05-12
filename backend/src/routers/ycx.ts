@@ -11,7 +11,7 @@ const router = express.Router();
 router.post(
     '/',
     [
-        body('server').custom(value => isServer(value)),
+        body('server').custom(isServer),
         body('tier').isInt(),
         body('eventId').optional().isInt(),
         body('compress').optional().isBoolean(),

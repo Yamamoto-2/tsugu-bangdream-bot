@@ -2,7 +2,7 @@ import express from 'express';
 import { body, validationResult } from 'express-validator';
 import { drawRandomGacha } from '@/view/gachaSimulate';
 import { Gacha, getPresentGachaList } from '@/types/Gacha';
-import { Server } from '@/types/Server';
+import { getServerByServerId, Server } from '@/types/Server';
 import { listToBase64, isServer } from '@/routers/utils';
 
 const router = express.Router();
@@ -34,7 +34,7 @@ router.post(
     const { server_mode, times, compress, gachaId } = req.body;
 
     try {
-      const result = await commandGachaSimulate(server_mode, times, compress, gachaId);
+      const result = await commandGachaSimulate(getServerByServerId(server_mode), times, compress, gachaId);
       res.send(listToBase64(result));
     } catch (e) {
       console.log(e);

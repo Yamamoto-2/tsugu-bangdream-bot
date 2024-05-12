@@ -10,9 +10,7 @@ import { Cutoff } from "@/types/Cutoff";
 import { drawCutoffChart } from '@/components/chart/cutoffChart'
 import { serverNameFullList, tierListOfServer } from '@/config';
 import { drawEventDatablock } from '@/components/dataBlock/event';
-import { drawTips } from '@/components/tips'
-import { assetsRootPath, statusName } from '@/config';
-import * as path from 'path'
+import { statusName } from '@/config';
 
 
 
@@ -26,7 +24,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server, com
     }
     var all = []
     all.push(drawTitle('档线列表', `${serverNameFullList[server]}`))
-    all.push(await drawEventDatablock(event[server]))
+    all.push(await drawEventDatablock(event,[server]))
 
     const list: Array<Image | Canvas> = []
 

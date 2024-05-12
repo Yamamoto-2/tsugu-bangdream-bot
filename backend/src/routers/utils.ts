@@ -16,7 +16,7 @@ export function isInteger(char: string): boolean {
 
 export function isServer(server: any): boolean {
     if (typeof server == 'number') {
-        server = server.toString()
+        server = Server[server]
     }
     return Object.keys(Server).includes(server)
 }
