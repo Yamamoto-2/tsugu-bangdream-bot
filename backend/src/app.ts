@@ -19,7 +19,6 @@ import { eventPreviewRouter } from '@/routers/article/eventPreview'
 import { eventReportRouter } from '@/routers/article/eventReport'
 import { eventStageRouter } from '@/routers/eventStage'
 import * as dotenv from 'dotenv';
-import { V2Router } from '@/routers/v2';
 
 
 dotenv.config();
@@ -45,8 +44,6 @@ app.use('/ycxAll', ycxAllRouter);
 app.use('/lsycx', lsycxRouter)
 app.use('/eventStage', eventStageRouter)
 
-// v2 routers
-app.use('/v2', V2Router)
 
 if (process.env.LOCAL_DB == 'true') {
     app.use('/user', userRouter);
