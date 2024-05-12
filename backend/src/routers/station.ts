@@ -28,7 +28,7 @@ router.post('/submitRoomNumber',
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+            res.status(400).json({ status: 'failed', data: '参数错误' });
         }
 
         console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
