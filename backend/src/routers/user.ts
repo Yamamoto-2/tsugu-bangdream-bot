@@ -5,7 +5,7 @@ import { tsuguUser, BindingStatus } from '@/config';
 import { UserDB } from '@/database/userDB';
 import { Player } from '@/types/Player';
 import * as dotenv from 'dotenv';
-import { generateVerifyCode,isServer, isServerList } from '@/routers/utils'
+import { generateVerifyCode, isServer, isServerList } from '@/routers/utils'
 dotenv.config();
 
 const router = express.Router();
@@ -27,7 +27,7 @@ router.post('/getUserData',
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+            return res.status(400).send({ status: 'failed', data: '参数错误' });
         }
 
         console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
@@ -110,7 +110,7 @@ router.post('/changeUserData',
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+            return res.status(400).send({ status: 'failed', data: '参数错误' });
         }
 
         req.ip
@@ -137,7 +137,7 @@ router.post('/bindPlayerRequest',
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+            return res.status(400).send({ status: 'failed', data: '参数错误' });
         }
 
         console.log(req.url, req.body);
@@ -187,7 +187,7 @@ router.post('/bindPlayerVerification',
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+            return res.status(400).send({ status: 'failed', data: '参数错误' });
         }
 
         console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
