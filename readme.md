@@ -8,21 +8,6 @@
 
 [![npm](https://img.shields.io/npm/v/koishi-plugin-tsugu-bangdream-bot?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-tsugu-bangdream-bot) [![npm](https://img.shields.io/npm/l/koishi-plugin-tsugu-bangdream-bot?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-tsugu-bangdream-bot) [![npm](https://img.shields.io/npm/dt/koishi-plugin-tsugu-bangdream-bot?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-tsugu-bangdream-bot)
 
-
-## 🚪 相关项目
-
-| 项目名称 | 传送门 | 可用状态 |
-| --- | --- | --- |
-| **koishi-plugin-tsugu-bangdream-bot** | [![npm](https://img.shields.io/npm/v/koishi-plugin-tsugu-bangdream-bot?style=flat-square)](https://koishi.chat/zh-CN/manual/introduction.html)| ✅ |
-| **nonebot-plugin-tsugu-frontend** | [![github](https://img.shields.io/github/v/release/zhaomaoniu/nonebot-plugin-tsugu-frontend?style=flat-square)](https://github.com/zhaomaoniu/nonebot-plugin-tsugu-frontend/) | ❌ |
-| **lgr-tsugu-py** | [![release](https://img.shields.io/github/v/release/kumoSleeping/lgr-tsugu-py?style=flat-square)](https://github.com/kumoSleeping/lgr-tsugu-py) | ❌ |
-| **tsugu-python-frontend**| [![pypi](https://img.shields.io/pypi/v/tsugu?style=flat-square)](https://github.com/kumoSleeping/tsugu-python-frontend/)| ❌ |
-| **tsugu-api-python**| [![pypi](https://img.shields.io/pypi/v/tsugu-api-python?style=flat-square)](https://pypi.org/project/tsugu-api-python/)| ❌ |
-| **tsugu-bot-go**| [![github](https://img.shields.io/github/v/release/WindowsSov8forUs/tsugu-bot-go?style=flat-square)](https://github.com/WindowsSov8forUs/tsugu-bot-go) | ❌ |
-
-> 由近期由 v2 api 引发的安全漏洞，现已彻底移除 v2 api，目前上方不可用项目正在进行迁移工作，敬请期待。
-
-
 ## 🏠 后端部署
 
 > 需要 `nodejs` 18+ 环境以及 `npm` 等包管理工具
@@ -50,10 +35,27 @@ pm2 install pm2-logrotate
 pm2 set pm2-logrotate:compress 0
 ```
 
-
 ## 📖 文章
 
 > 相关文章: https://www.bilibili.com/read/cv24464090 
+
+
+## 🚪 相关项目
+
+| 项目名称 | 传送门 |
+| --- | --- | 
+| **koishi-plugin-tsugu-bangdream-bot** | [![npm](https://img.shields.io/npm/v/koishi-plugin-tsugu-bangdream-bot?style=flat-square)](https://koishi.chat/zh-CN/manual/introduction.html)|
+| **nonebot-plugin-tsugu-frontend** | [![github](https://img.shields.io/github/v/release/zhaomaoniu/nonebot-plugin-tsugu-frontend?style=flat-square)](https://github.com/zhaomaoniu/nonebot-plugin-tsugu-frontend/) | 
+| **lgr-tsugu-py** | [![release](https://img.shields.io/github/v/release/kumoSleeping/lgr-tsugu-py?style=flat-square)](https://github.com/kumoSleeping/lgr-tsugu-py) |
+| **chat-tsugu-py**| [![pypi](https://img.shields.io/pypi/v/tsugu?style=flat-square)](https://github.com/kumoSleeping/ChatTsuguPy)|
+| **tsugu-api-python**| [![pypi](https://img.shields.io/pypi/v/tsugu-api-python?style=flat-square)](https://https://github.com/WindowsSov8forUs/tsugu-api-python) |
+| **tsugu-bot-go**| [![github](https://img.shields.io/github/v/release/WindowsSov8forUs/tsugu-bot-go?style=flat-square)](https://github.com/WindowsSov8forUs/tsugu-bot-go) |
+| **nonebot-tsugu** | [![pypi](https://img.shields.io/pypi/v/nonebot-tsugu?style=flat-square)](https://github.com/otae-1204/NoneBot-Tsugu/tree/main ) |
+
+> 请自行甄别以上项目安全性与完成度
+
+## 🐧 QQ 官方机器人
+> 点击链接了解机器人详情 [Tsugu](https://qun.qq.com/qunpro/robot/qunshare?robot_uin=3889000770&robot_appid=102076262&biz_type=0)
 
 ## 📦 数据支持
 
@@ -62,6 +64,3 @@ pm2 set pm2-logrotate:compress 0
 | 数据支持 | [🔗bestdori](https://bestdori.com/) |
 | 车牌数据 | [🔗bandoristation](https://bandoristation.com) |
 
-
-## 🐧 QQ 官方机器人
-> 点击链接了解机器人详情 [Tsugu](https://qun.qq.com/qunpro/robot/qunshare?robot_uin=3889000770&robot_appid=102076262&biz_type=0)
