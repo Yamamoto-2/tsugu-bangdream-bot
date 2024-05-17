@@ -125,7 +125,7 @@ export async function CreateBG({
   //给图片增加三角形纹理
   const canvas = await createBlurredTrianglePattern({
     image: BGimage,
-    blurRadius: 10,
+    blurRadius: 100,
     triangleSize: 200,
     brightnessDifference: 0.04,
   });
