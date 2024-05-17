@@ -3,7 +3,7 @@ import { Card } from '@/types/Card'
 import { drawList, line, drawListByServerList, drawListMerge } from '@/components/list';
 import { drawDatablock } from '@/components/dataBlock'
 import { drawGachaDatablock } from '@/components/dataBlock/gacha'
-import { Image, Canvas, createCanvas } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { drawBannerImageCanvas } from '@/components/dataBlock/utils'
 import { drawTimeInList } from '@/components/list/time';
 import { drawAttributeInList } from '@/components/list/attribute'
@@ -33,7 +33,7 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     var eventBannerImage = await event.getBannerImage()
     var eventBannerImageCanvas = drawBannerImageCanvas(eventBannerImage)
     list.push(eventBannerImageCanvas)
-    list.push(createCanvas(800, 30))
+    list.push(new Canvas(800, 30))
 
     //标题
     list.push(await drawListByServerList(event.eventName, '活动名称', defaultServerList))

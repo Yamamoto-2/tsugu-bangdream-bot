@@ -1,7 +1,7 @@
 import { Event, getRecentEventListByEventAndServer } from '@/types/Event';
-import { drawList, line, drawListMerge } from '@/components/list';
+import { drawList, line } from '@/components/list';
 import { drawDatablock } from '@/components/dataBlock'
-import { Image, Canvas, createCanvas, loadImage } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { Server } from '@/types/Server';
 import { drawTitle } from '@/components/title'
 import { outputFinalBuffer } from '@/image/output'

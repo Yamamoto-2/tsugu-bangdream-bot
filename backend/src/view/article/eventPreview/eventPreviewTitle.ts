@@ -1,4 +1,4 @@
-import { Canvas, createCanvas, loadImage } from 'canvas'
+import { Canvas } from 'skia-canvas'
 
 import { Event } from '@/types/Event'
 import { drawArticleTitle1 } from '@/components/article/title'
@@ -31,14 +31,14 @@ export async function drawEventPreviewTitle(eventId: number): Promise<Array<Buff
         image: cardIllustrationImage,
         widthMax: 1000,
     })
-    const canvas = createCanvas(width, height)
+    const canvas = new Canvas(width, height)
     const ctx = canvas.getContext('2d')
     ctx.drawImage(resizedCardIllustrationImage, 0, 0)
     ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
     ctx.fillRect(0, height - 50 - titleImage.height, width, titleImage.height + 50)
     ctx.drawImage(titleImage, 0, height - 25 - titleImage.height)
 
-    result.push(canvas.toBuffer('image/png'))
+    result.push(await canvas.toBuffer('png'))
 
     return result
 }

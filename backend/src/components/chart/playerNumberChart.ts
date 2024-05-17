@@ -4,7 +4,7 @@ import { Cutoff } from '@/types/Cutoff'
 import { Event } from '@/types/Event'
 import { getServerByPriority } from '@/types/Server'
 import { drawList } from '@/components/list'
-import { Canvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import { getPresetColor } from '@/types/Color';
 
 

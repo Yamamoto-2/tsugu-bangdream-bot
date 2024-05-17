@@ -1,7 +1,7 @@
 import { Event } from "@/types/Event"
 import { drawList, line, drawListByServerList, drawListMerge } from '@/components/list';
 import { drawDatablock } from '@/components/dataBlock'
-import { Image, Canvas, createCanvas } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { drawBannerImageCanvas } from '@/components/dataBlock/utils'
 import { Gacha } from '@/types/Gacha'
 import { Server, getServerByPriority } from '@/types/Server';
@@ -22,7 +22,7 @@ export async function drawEventPreviewGacha(eventId: number): Promise<Array<Buff
     const result = []
 
     const title = await drawArticleTitle1('活动卡池', 'Gacha', event, true)
-    result.push(title.toBuffer('image/png'))
+    result.push(await title.toBuffer('png'))
 
     //卡池列表
     const eventGachaAndCardList = await getEventGachaAndCardList(event, Server.jp)
@@ -31,7 +31,7 @@ export async function drawEventPreviewGacha(eventId: number): Promise<Array<Buff
     const promises = []
     for (let i = 0; i < gachaList.length; i++) {
         const gacha = gachaList[i]
-        if(gacha.type == 'birthday'){
+        if (gacha.type == 'birthday') {
             continue
         }
         promises.push(await drawEventGachaDetail(gacha, [Server.jp, Server.tw]))
@@ -52,7 +52,7 @@ async function drawEventGachaDetail(gacha: Gacha, defaultServerList: Server[]): 
     var gachaBannerImage = await gacha.getBannerImage()
     var gachaBannerImageCanvas = drawBannerImageCanvas(gachaBannerImage)
     list.push(gachaBannerImageCanvas)
-    list.push(createCanvas(800, 30))
+    list.push(new Canvas(800, 30))
 
     //标题
     list.push(await drawListByServerList(gacha.gachaName, '卡池名称', defaultServerList))
@@ -86,10 +86,10 @@ async function drawEventGachaDetail(gacha: Gacha, defaultServerList: Server[]): 
     list.push(line)
 
     //卡池pickUp
-    try{
+    try {
         list.push(await drawGachaPickupInList(gacha, server))
     }
-    catch(e){
+    catch (e) {
         console.log(e)
     }
 

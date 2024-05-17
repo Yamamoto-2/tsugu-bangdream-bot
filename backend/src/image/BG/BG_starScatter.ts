@@ -1,9 +1,9 @@
-import { Canvas, Image } from 'canvas';
+import { Canvas, Image } from 'skia-canvas';
 
 
 interface ScatterProps {
   canvas: Canvas;
-  image:Image;
+  image: Image;
   canvasWidth: number;
   canvasHeight: number;
   density: number;
@@ -60,5 +60,5 @@ export async function scatterImages({
   }
 
   // Return base64-encoded PNG image
-  return canvas.toDataURL();
+  return canvas.toDataURL('png');
 }

@@ -1,7 +1,7 @@
 import { Song } from "@/types/Song";
 import mainAPI from "@/types/_Main"
 import { match, checkRelationList } from "@/routers/fuzzySearch"
-import { Canvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import { drawTitle } from '@/components/title';
 import { outputFinalBuffer } from '@/image/output'
 import { drawDatablockHorizontal } from "@/components/dataBlock";

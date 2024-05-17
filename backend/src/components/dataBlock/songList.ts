@@ -1,7 +1,7 @@
-import {drawSongInList} from "@/components/list/song"
+import { drawSongInList } from "@/components/list/song"
 import { Song } from "@/types/Song"
 import { drawDatablock } from '@/components/dataBlock'
-import { Image, Canvas, createCanvas } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { drawDottedLine } from '@/image/dottedLine'
 
 // 紧凑化虚线分割
@@ -17,12 +17,12 @@ const line = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawSongListDataBlock(songList: Song[], topLeftText?: string){
+export async function drawSongListDataBlock(songList: Song[], topLeftText?: string) {
     var list: Array<Image | Canvas> = []
     for (let i = 0; i < songList.length; i++) {
         list.push(await drawSongInList(songList[i]))
         list.push(line)
     }
     list.pop()
-    return(drawDatablock({list, topLeftText}))
+    return (drawDatablock({ list, topLeftText }))
 }

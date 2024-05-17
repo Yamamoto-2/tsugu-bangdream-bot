@@ -2,7 +2,7 @@ import { Gacha } from "@/types/Gacha";
 import { drawListWithLine, drawList } from "@/components/list";
 import { drawDatablock } from '@/components/dataBlock'
 
-import { Canvas } from 'canvas';
+import { Canvas } from 'skia-canvas';
 import { drawBannerImageCanvas } from '@/components/dataBlock/utils'
 
 export async function drawGachaDatablock(gacha: Gacha, topLeftText?: string) {

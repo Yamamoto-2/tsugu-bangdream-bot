@@ -20,6 +20,7 @@ router.post(
         console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
         // Check for validation errors
         const errors = validationResult(req);
+        console.log(errors)
         if (!errors.isEmpty()) {
             return res.status(400).send([{ type: 'string', string: '参数错误' }]);
         }

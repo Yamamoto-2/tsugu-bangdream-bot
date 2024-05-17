@@ -1,6 +1,6 @@
 import { difficultyColorList, difficultyNameList } from "@/types/Song"
 import { drawRoundedRectWithText } from "@/image/drawRect"
-import { Canvas, createCanvas, Image } from 'canvas';
+import { Canvas, Image } from 'skia-canvas';
 import { drawTextWithImages } from "@/image/text";
 import { drawList, drawImageListCenter } from '@/components/list'
 import { resizeImage, stackImage } from "@/components/utils";
@@ -29,7 +29,7 @@ function DifficultyDetailInList(DifficultyDetailInListOptions: drawDifficultyDet
             maxWidth: maxWidth,
             lineHeight: 40,
         })
-        const canvas = createCanvas(maxWidth, tempBandRankText.height + 50)
+        const canvas = new Canvas(maxWidth, tempBandRankText.height + 50)
         const ctx = canvas.getContext('2d')
         ctx.drawImage(tempBandIcon, (maxWidth - logoWidth) / 2, 0)
         ctx.drawImage(tempBandRankText, (maxWidth / 2) - tempBandRankText.width / 2, 50)

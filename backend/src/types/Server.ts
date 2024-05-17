@@ -1,7 +1,9 @@
 import { downloadFileCache } from '@/api/downloadFileCache'
-import { loadImage, Image } from 'canvas'
+import { loadImage, Image } from 'skia-canvas'
 import { globalDefaultServer, serverNameFullList } from '@/config'
 import { globalServerPriority, Bestdoriurl } from '@/config'
+import { loadImageFromPath, convertSvgToPngBuffer } from '@/image/utils';
+
 
 //服务器列表，因为有TW而不适用country
 export const serverList: Array<Server> = [0, 1, 2, 3, 4]
@@ -10,7 +12,7 @@ export enum Server {
     jp, en, tw, cn, kr
 }
 
-export function getServerByServerId (serverId: number): Server {
+export function getServerByServerId(serverId: number): Server {
     //如果是string，则按服务器名查服务器
     if (typeof serverId == 'string') {
         serverId = getServerByName(serverId)
@@ -34,15 +36,23 @@ export function getServerByName(name: string): Server {
     return server
 }
 
+let serverIconCache: { [server: number]: Image } = {}
+
 export async function getIcon(server: Server): Promise<Image> {
-    if(server == Server.tw){
-        return (await loadImage('./assets/tw.png'))
+    if (serverIconCache[server]) {
+        return serverIconCache[server]
     }
-    else{
-        const iconBuffer = await downloadFileCache(`${Bestdoriurl}/res/icon/${Server[server]}.svg`)
-        return (await loadImage(iconBuffer))
+    let image: Image
+    if (server == Server.tw) {
+        image = await loadImageFromPath('./assets/tw.png')
     }
-    
+    else {
+        const iconSvgBuffer = await downloadFileCache(`${Bestdoriurl}/res/icon/${Server[server]}.svg`)
+        const iconPngBuffer = await convertSvgToPngBuffer(iconSvgBuffer)
+        image = await loadImage(iconPngBuffer)
+    }
+    serverIconCache[server] = image
+    return image
 }
 
 export function getServerByPriority(content: Array<any>, defaultServerList: Server[] = globalDefaultServer) {
@@ -55,3 +65,5 @@ export function getServerByPriority(content: Array<any>, defaultServerList: Serv
     }
     return undefined;
 }
+
+

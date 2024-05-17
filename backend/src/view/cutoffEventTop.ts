@@ -1,4 +1,4 @@
-import { Image, Canvas, createCanvas } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { drawTitle } from "@/components/title";
 import { serverNameFullList } from "@/config";
 import { CutoffEventTop } from "@/types/CutoffEventTop";
@@ -33,7 +33,7 @@ export async function drawCutoffEventTop(eventId: number, server: Server, compre
         }
     }
 
-    list.push(createCanvas(800, 50))
+    list.push(new Canvas(800, 50))
 
     //折线图
     list.push(await drawCutoffEventTopChart(cutoffEventTop, false, server))

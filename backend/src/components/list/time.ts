@@ -2,7 +2,7 @@ import { globalDefaultServer } from '@/config';
 import { getPresentEvent } from '@/types/Event';
 import { Server, getServerByName } from '@/types/Server';
 import { drawListByServerList } from '@/components/list'
-import { Canvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import { Event } from '@/types/Event'
 
 interface timeInListOptions {

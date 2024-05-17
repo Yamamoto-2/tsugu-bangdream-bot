@@ -1,16 +1,13 @@
 import * as path from 'path';
 import { assetsRootPath } from "@/config";
-import { Image, loadImage } from 'canvas';
+import { Image, loadImage } from 'skia-canvas';
 import { download } from '@/api/downloader';
-
-
-async function loadIconUndefined(): Promise<Image> {
-    const iconPath = path.join(assetsRootPath, 'iconUndefined.png');
-    const icon = await loadImage(iconPath);
-    return icon;
-}
+import { loadImageFromPath } from '@/image/utils';
 
 let QQUserIconCache = {};
+
+const iconUndefinedPath = path.join(assetsRootPath, 'iconUndefined.png');
+const iconUndefined = loadImageFromPath(iconUndefinedPath);
 
 export async function getQQUserIcon(Id: number): Promise<Image> {
     if (QQUserIconCache[Id]) {
@@ -20,13 +17,13 @@ export async function getQQUserIcon(Id: number): Promise<Image> {
     try {
         const imageUrl = `https://q1.qlogo.cn/g?b=qq&nk=${Id}&s=640`;
         const filename = `${Id}.png`;
-        const iconPath = await download(imageUrl);
-        const icon = await loadImage(iconPath);
+        const iconBuffer = await download(imageUrl);
+        const icon = await loadImage(iconBuffer);
         QQUserIconCache[Id] = icon;
         return icon;
     } catch (e) {
         console.log(e)
-        const icon = await loadIconUndefined();
+        const icon = iconUndefined
         return icon;
     }
 }
@@ -40,13 +37,13 @@ export async function getBandoriStationUserIcon(avatar: string): Promise<Image> 
 
     try {
         const imageUrl = `https://asset.bandoristation.com/images/user-avatar/${avatar}`;
-        const iconPath = await download(imageUrl);
-        const icon = await loadImage(iconPath);
+        const iconBuffer = await download(imageUrl);
+        const icon = await loadImage(iconBuffer);
         BandoriStationUserIconCache[avatar] = icon;
         return icon;
     } catch (e) {
         console.log(e)
-        const icon = await loadIconUndefined();
+        const icon = iconUndefined
         return icon;
     }
 }

@@ -9,7 +9,7 @@ import { drawCardPrefixInList } from '@/components/list/cardPrefix'
 import { drawCardStatInList } from '@/components/list/stat'
 import { drawCardListInList } from '@/components/list/cardIconList'
 import { drawSdcharaInList } from '@/components/list/cardSdchara'
-import { Image, Canvas, createCanvas } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { Server } from '@/types/Server';
 import { outputFinalBuffer } from '@/image/output'
 import { Event } from '@/types/Event';
@@ -27,7 +27,7 @@ export async function drawEventPreviewCards(eventId: number, illustration: boole
 
 
     const title = await drawArticleTitle1('活动卡牌', 'Cards', event, true)
-    result.push(title.toBuffer('image/png'))
+    result.push(await title.toBuffer('png'))
 
     //卡池卡牌
     const eventGachaAndCardList = await getEventGachaAndCardList(event, Server.jp)
@@ -90,7 +90,7 @@ async function drawEventCardDetail(cardId: number, defaultServerList: Server[], 
     //标题
     list.push(await drawCardPrefixInList(card, defaultServerList))
     var trainingStatusList = card.getTrainingStatusList()
-    list.push(createCanvas(800, 30))
+    list.push(new Canvas(800, 30))
 
     //插画
     for (let i = 0; i < trainingStatusList.length; i++) {
@@ -100,7 +100,7 @@ async function drawEventCardDetail(cardId: number, defaultServerList: Server[], 
             trainingStatus: element,
             isList: true
         }))
-        list.push(createCanvas(800, 30))
+        list.push(new Canvas(800, 30))
     }
 
     //类型

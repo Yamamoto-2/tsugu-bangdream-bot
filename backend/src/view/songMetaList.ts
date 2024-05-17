@@ -1,5 +1,5 @@
 import { Song, getMetaRanking } from "@/types/Song";
-import { Canvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import { drawTitle } from '@/components/title';
 import { outputFinalBuffer } from '@/image/output'
 import { drawSongInList } from '@/components/list/song';

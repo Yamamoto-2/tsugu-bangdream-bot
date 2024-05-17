@@ -1,6 +1,6 @@
 import { Card } from "@/types/Card";
 import { Player } from "@/types/Player";
-import { Canvas } from 'canvas';
+import { Canvas } from 'skia-canvas';
 import { drawCardIcon } from "@/components/card";
 import {drawList} from '@/components/list'
 

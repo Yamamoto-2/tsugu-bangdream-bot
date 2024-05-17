@@ -1,14 +1,16 @@
 import { Skill } from '@/types/Skill'
-import { Image, Canvas, loadImage, createCanvas } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { assetsRootPath } from '@/config'
 import { drawTextWithImages } from '@/image/text'
 import * as path from 'path'
+import { loadImageFromPath } from '@/image/utils';
+
 
 var skillIcon: { [skillType: string]: Image } = {}
 async function loadImageOnce() {
-    skillIcon.life = await loadImage(path.join(assetsRootPath, '/Skill/life.png'));
-    skillIcon.judge = await loadImage(path.join(assetsRootPath, '/Skill/judge.png'));
-    skillIcon.damage = await loadImage(path.join(assetsRootPath, '/Skill/damage.png'));
+    skillIcon.life = await loadImageFromPath(path.join(assetsRootPath, '/Skill/life.png'));
+    skillIcon.judge = await loadImageFromPath(path.join(assetsRootPath, '/Skill/judge.png'));
+    skillIcon.damage = await loadImageFromPath(path.join(assetsRootPath, '/Skill/damage.png'));
 }
 loadImageOnce()
 
@@ -24,17 +26,17 @@ export async function drawCardIconSkill(skill: Skill): Promise<Canvas> {
             skillValue += 'G'
         }
         else if (EffectTypes.includes('score_over_life')) {
-            if(EffectTypes.includes('score_under_life')){
+            if (EffectTypes.includes('score_under_life')) {
                 skillValue += 'L'
             }
-            else{
+            else {
                 skillValue += '/'
             }
         }
-        else if(EffectTypes.includes('score_under_great_half') || EffectTypes.includes('score_perfect')){
+        else if (EffectTypes.includes('score_under_great_half') || EffectTypes.includes('score_perfect')) {
             skillValue += 'P'
         }
-        else if(EffectTypes.includes('score_rate_up_with_perfect')){
+        else if (EffectTypes.includes('score_rate_up_with_perfect')) {
             skillValue += '+0.5*P'
         }
         content.push(skillValue)
@@ -60,8 +62,8 @@ export async function drawCardIconSkill(skill: Skill): Promise<Canvas> {
         color: '#ffffff',
         font: 'old'
     })
-    const textbase = await loadImage(path.join(assetsRootPath, '/Card/text.png'));
-    const canvas = createCanvas(stringWithImage.width + 15, 45)
+    const textbase = await loadImageFromPath(path.join(assetsRootPath, '/Card/text.png'));
+    const canvas = new Canvas(stringWithImage.width + 15, 45)
     const ctx = canvas.getContext('2d')
     ctx.drawImage(textbase, stringWithImage.width + 15 - textbase.width, 0)
     ctx.drawImage(stringWithImage, 5, 0)

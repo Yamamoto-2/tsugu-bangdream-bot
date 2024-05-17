@@ -1,6 +1,6 @@
 import { Event } from '@/types/Event';
 import { drawDatablock } from '@/components/dataBlock'
-import { Image, Canvas, createCanvas } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { Server } from '@/types/Server';
 import { outputFinalBuffer } from '@/image/output'
 import { drawArticleTitle1 } from '@/components/article/title'
@@ -19,7 +19,7 @@ export async function drawEventPreviewRules(eventId: number): Promise<Array<Buff
 
 
     const title = await drawArticleTitle1('活动规则', 'Rules', event, true)
-    result.push(title.toBuffer('image/png'))
+    result.push(await title.toBuffer('png'))
 
     let list: Array<Image | Canvas> = []
 
@@ -29,7 +29,7 @@ export async function drawEventPreviewRules(eventId: number): Promise<Array<Buff
         const element = rules[i]
         const elementResized = resizeImage({ image: element, widthMax: 770 })
         const elementRounded = await createRoundedRectangleCanvas(elementResized, 25)
-        const tempCanvas = createCanvas(800, elementRounded.height + 50)
+        const tempCanvas = new Canvas(800, elementRounded.height + 50)
         const tempCtx = tempCanvas.getContext('2d')
         drawImageWithShadow(tempCtx, elementRounded, 15, 25)
         list.push(tempCanvas)

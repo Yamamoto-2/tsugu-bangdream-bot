@@ -2,7 +2,7 @@ import { Gacha } from "@/types/Gacha";
 import { Card } from "@/types/Card";
 import { drawCardIcon } from "@/components/card";
 import { drawTitle } from "@/components/title";
-import { createCanvas, Canvas, Image, loadImage } from 'canvas';
+import { Canvas } from 'skia-canvas';
 import { drawTextWithImages, drawText } from "@/image/text";
 import { outputFinalBuffer } from '@/image/output'
 import { getServerByPriority, Server } from "@/types/Server";
@@ -94,7 +94,7 @@ export async function drawRandomGacha(gacha: Gacha, times: number = 10, server: 
     var buffer = await outputFinalBuffer({
         imageList: all,
         useEasyBG: true,
-        compress:compress,
+        compress: compress,
     })
     return [buffer]
 }
@@ -109,7 +109,7 @@ async function drawGachaCard(card: Card, numberOfCard: number = 1) {
         cardIdVisible: true,
     });
     if (numberOfCard > 1) {
-        const canvas = createCanvas(230, 230);
+        const canvas = new Canvas(230, 230);
         const ctx = canvas.getContext('2d');
         const maxTimes = Math.min(6, numberOfCard - 1);
         const cardIconWithoutId = await drawCardIcon({
@@ -132,7 +132,7 @@ async function drawGachaCard(card: Card, numberOfCard: number = 1) {
         return canvas;
     }
     else {
-        const canvas = createCanvas(230, 230);
+        const canvas = new Canvas(230, 230);
         const ctx = canvas.getContext('2d');
         ctx.drawImage(cardIconWithId, 35, 20, 180, 200);
         return canvas;
@@ -224,7 +224,7 @@ async function drawGachaBanner(gacha: Gacha) {
         image: await drawGachaDatablock(gacha),
         widthMax: maxWidth / 2
     })
-    const canvas = createCanvas(maxWidth + 200, gachaBannerImage.height);
+    const canvas = new Canvas(maxWidth + 200, gachaBannerImage.height);
     const ctx = canvas.getContext('2d');
     //ctx.drawImage(okButton, 1010, 0)
     ctx.drawImage(gachaBannerImage, 50, 0)

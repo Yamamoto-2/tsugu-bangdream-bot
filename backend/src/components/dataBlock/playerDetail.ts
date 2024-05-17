@@ -2,7 +2,7 @@ import { Player } from '@/types/Player';
 import { drawImageListCenter } from "@/components/list";
 import { drawDatablock } from '@/components/dataBlock'
 import { drawText, drawTextWithImages } from "@/image/text";
-import { createCanvas, Image, Canvas } from 'canvas';
+import { Image, Canvas } from 'skia-canvas';
 import { drawDegree } from '@/components/degree';
 import { Degree } from '@/types/Degree';
 import { Card } from '@/types/Card';
@@ -25,7 +25,7 @@ export async function drawPlayerDetailBlockWithIllust(player: Player): Promise<C
         textSize: 35
     })
     list.push(drawImageListCenter([levelText]))
-    list.push(createCanvas(1, 25))
+    list.push(new Canvas(1, 25))
     //degree(牌子)列表
     var degreeImageList: Array<Canvas | Image> = []
     var userProfileDegreeMap = player.profile.userProfileDegreeMap.entries
@@ -33,11 +33,11 @@ export async function drawPlayerDetailBlockWithIllust(player: Player): Promise<C
         var tempDegree = userProfileDegreeMap[i]
         var tempDegreeImage = await drawDegree(new Degree(tempDegree.degreeId), player.server)
         degreeImageList.push(tempDegreeImage)
-        degreeImageList.push(createCanvas(20, 1))
+        degreeImageList.push(new Canvas(20, 1))
     }
     degreeImageList.pop()
     list.push(drawImageListCenter(degreeImageList))
-    list.push(createCanvas(1, 25))
+    list.push(new Canvas(1, 25))
     //玩家描述
     var introductionText = drawText({
         text: player.profile.introduction,
@@ -45,7 +45,7 @@ export async function drawPlayerDetailBlockWithIllust(player: Player): Promise<C
         textSize: 35
     })
     list.push(drawImageListCenter([introductionText]))
-    list.push(createCanvas(1, 25))
+    list.push(new Canvas(1, 25))
     //玩家ID与服务器
     let userId: string
     if (player.profile.publishUserIdFlg) {
@@ -67,7 +67,7 @@ export async function drawPlayerDetailBlockWithIllust(player: Player): Promise<C
     var illust = await illustCard.getCardTrimImage(userIllustData.trainingStatus)
     //最终绘图
     var titleImage = drawTitle('查询', '玩家信息')
-    var canvas = createCanvas(1000, 900 + dataBlock.height)
+    var canvas = new Canvas(1000, 900 + dataBlock.height)
     var ctx = canvas.getContext('2d')
     ctx.drawImage(illust, 0, 0, 1000, 1000)
     ctx.drawImage(titleImage, 0, 0)

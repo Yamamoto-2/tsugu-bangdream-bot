@@ -1,10 +1,13 @@
-import { Canvas, Image, createCanvas, loadImage } from 'canvas';
+import { Canvas, Image } from 'skia-canvas';
 import { CreateBG, CreateBGEazy } from '@/image/BG';
 import { assetsRootPath } from '@/config';
 import * as path from 'path';
+import { loadImageFromPath } from '@/image/utils';
+
+
 var BGDefaultImage: Image
 async function loadImageOnce() {
-    BGDefaultImage = await loadImage(path.join(assetsRootPath, "/BG/live.png"));
+    BGDefaultImage = await loadImageFromPath(path.join(assetsRootPath, "/BG/live.png"));
 }
 loadImageOnce()
 
@@ -14,7 +17,7 @@ interface outputFinalOptions {
     useEasyBG?: boolean;
     text?: string;
     BGimage?: Image | Canvas;
-    compress?:boolean;
+    compress?: boolean;
 }
 
 //将图片列表从上到下叠在一起输出为一张图片
@@ -26,7 +29,7 @@ export var outputFinalCanv = async function ({ imageList,
 }: outputFinalOptions
 ): Promise<Canvas> {
     let allH = 30
-    if(startWithSpace){
+    if (startWithSpace) {
         allH += 50
     }
     var maxW = 0
@@ -37,10 +40,10 @@ export var outputFinalCanv = async function ({ imageList,
             maxW = imageList[i].width
         }
     }
-    var tempcanv = createCanvas(maxW, allH)
+    var tempcanv = new Canvas(maxW, allH)
     var ctx = tempcanv.getContext("2d")
 
-    if ( useEasyBG) {
+    if (useEasyBG) {
         ctx.drawImage(await CreateBGEazy({
             width: maxW,
             height: allH
@@ -57,7 +60,7 @@ export var outputFinalCanv = async function ({ imageList,
 
 
     let allH2 = 0
-    if(startWithSpace){
+    if (startWithSpace) {
         allH2 += 50
     }
     for (var i = 0; i < imageList.length; i++) {
@@ -87,12 +90,12 @@ export var outputFinalBuffer = async function ({
         text,
         BGimage,
     })
-    var tempBuffer:Buffer
-    if(compress!=undefined && compress){
-        tempBuffer = tempcanv.toBuffer('image/jpeg',{quality:0.7})
+    var tempBuffer: Buffer
+    if (compress != undefined && compress) {
+        tempBuffer = await tempcanv.toBuffer('jpeg', { quality: 0.7 })
     }
-    else{
-        tempBuffer = tempcanv.toBuffer()
+    else {
+        tempBuffer = await tempcanv.toBuffer('png')
     }
     return (tempBuffer)
 }

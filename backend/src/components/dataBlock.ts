@@ -1,4 +1,4 @@
-import { Canvas, Image, createCanvas } from 'canvas';
+import { Canvas, Image } from 'skia-canvas';
 import { drawRoundedRect } from '@/image/drawRect';
 import { drawText } from '@/image/text';
 
@@ -31,10 +31,10 @@ export function drawDatablock({
 
     //创建Canvas
     if (topLeftText != undefined && BG) {
-        var tempcanv = createCanvas(maxW + 200, allH + topLeftTextHeight)
+        var tempcanv = new Canvas(maxW + 200, allH + topLeftTextHeight)
     }
     else {
-        var tempcanv = createCanvas(maxW + 200, allH)
+        var tempcanv = new Canvas(maxW + 200, allH)
     }
     var ctx = tempcanv.getContext("2d")
 
@@ -119,9 +119,9 @@ export function drawDatablockHorizontal({
 
     // 创建 Canvas
     if (topLeftText !== undefined && BG) {
-        var tempcanv = createCanvas(allW + topLeftTextHeight, maxH + 100);
+        var tempcanv = new Canvas(allW + topLeftTextHeight, maxH + 100);
     } else {
-        var tempcanv = createCanvas(allW, maxH + 100);
+        var tempcanv = new Canvas(allW, maxH + 100);
     }
     var ctx = tempcanv.getContext("2d");
 

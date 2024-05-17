@@ -1,4 +1,4 @@
-import { Canvas, Image, createCanvas } from 'canvas';
+import { Canvas, Image } from 'skia-canvas';
 import { drawRoundedRectWithText } from '@/image/drawRect';
 import { drawText, drawTextWithImages } from '@/image/text';
 import { drawDottedLine } from '@/image/dottedLine'
@@ -63,13 +63,13 @@ export function drawList({
         });
     }
     else {
-        textImage = createCanvas(0, 0)
+        textImage = new Canvas(0, 0)
     }
     if (key == undefined) {
-        return stackImageHorizontal([createCanvas(20, 1), textImage])
+        return stackImageHorizontal([new Canvas(20, 1), textImage])
     }
     var ymax = textImage.height + keyImage.height + 10;
-    const canvas = createCanvas(maxWidth, ymax);
+    const canvas = new Canvas(maxWidth, ymax);
     const ctx = canvas.getContext('2d');
     ctx.drawImage(keyImage, 0, 0);
     ctx.drawImage(textImage, 20, keyImage.height + 10);
@@ -105,9 +105,9 @@ export function drawTipsInList({
         });
     }
     else {
-        textImage = createCanvas(1, 1)
+        textImage = new Canvas(1, 1)
     }
-    const canvas = createCanvas(800, textImage.height + 10);
+    const canvas = new Canvas(800, textImage.height + 10);
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#f1f1f1'
     ctx.fillRect(0, 10, 800, textImage.height);
@@ -164,7 +164,7 @@ export function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
             maxHeight = element.height
         }
     }
-    var canvas = createCanvas(800, maxHeight)
+    var canvas = new Canvas(800, maxHeight)
     var ctx = canvas.getContext('2d')
     var x = 0
     for (let i = 0; i < imageList.length; i++) {
@@ -198,7 +198,7 @@ export function drawImageListCenter(imageList: Array<Canvas | Image>, maxWidth =
         tempImageList = []
     }
     if (imageList.length == 0) {
-        return createCanvas(1, 10)
+        return new Canvas(1, 10)
     }
     //遍历imageList，计算每一行的宽度，高度，imageList
     for (let i = 0; i < imageList.length; i++) {
@@ -226,7 +226,7 @@ export function drawImageListCenter(imageList: Array<Canvas | Image>, maxWidth =
         const element = lineList[i];
         Height += element.height
     }
-    var canvas = createCanvas(maxWidth, Height)
+    var canvas = new Canvas(maxWidth, Height)
     var ctx = canvas.getContext('2d')
     //画每一行
     const middleWidth = maxWidth / 2
@@ -253,7 +253,7 @@ export function drawListWithLine(textImageList: Array<Canvas | Image>): Canvas {
         const element = textImageList[i];
         height += element.height
     }
-    var canvas = createCanvas(800, height + 10)
+    var canvas = new Canvas(800, height + 10)
     var ctx = canvas.getContext('2d')
     ctx.fillStyle = '#a8a8a8'
     ctx.fillRect(10, 10, 5, height + 20)

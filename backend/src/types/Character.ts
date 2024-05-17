@@ -1,6 +1,6 @@
 import mainAPI from '@/types/_Main'
 import { callAPIAndCacheResponse } from '@/api/getApi'
-import { Image, loadImage } from 'canvas'
+import { Image, loadImage } from 'skia-canvas'
 import { downloadFileCache } from '@/api/downloadFileCache'
 import { formatNumber } from '@/types/utils';
 import { Bestdoriurl } from "@/config"

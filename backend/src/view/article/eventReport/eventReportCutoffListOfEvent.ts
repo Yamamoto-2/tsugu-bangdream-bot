@@ -1,14 +1,14 @@
 import { Event } from '@/types/Event';
 import { drawList, line } from '@/components/list';
 import { drawDatablock } from '@/components/dataBlock'
-import { Image, Canvas, createCanvas, loadImage } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { changeTimefomant } from '@/components/list/time';
 import { Server } from '@/types/Server';
 import { drawTitle } from '@/components/title'
 import { outputFinalBuffer } from '@/image/output'
 import { Cutoff } from "@/types/Cutoff";
 import { drawCutoffChart } from '@/components/chart/cutoffChart'
-import { serverNameFullList, tierListOfServer } from '@/config';
+import { tierListOfServer } from '@/config';
 import { drawEventDatablock } from '@/components/dataBlock/event';
 import { drawTips } from '@/components/tips'
 import { statusName } from '@/config';
@@ -23,7 +23,7 @@ export async function drawEventReportCutoffListOfEvent(eventId: number, server: 
     }
     var all = []
     all.push(drawTitle('数据总览', '档线数据'))
-    all.push(await drawEventDatablock(event,[server]))
+    all.push(await drawEventDatablock(event, [server]))
 
     const list: Array<Image | Canvas> = []
 
@@ -66,7 +66,7 @@ export async function drawEventReportCutoffListOfEvent(eventId: number, server: 
         list.push(line)
     }
     list.pop()
-    list.push(createCanvas(800, 50))
+    list.push(new Canvas(800, 50))
 
     //折线图
     list.push(await drawCutoffChart(cutoffList))

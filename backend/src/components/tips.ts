@@ -1,8 +1,8 @@
-import { Canvas, Image, createCanvas } from 'canvas'
+import { Canvas, Image } from 'skia-canvas'
 import { drawText } from "@/image/text"
 import { resizeImage } from "@/components/utils"
 
-const line2 = createCanvas(1000, 3)
+const line2 = new Canvas(1000, 3)
 const ctx2 = line2.getContext('2d')
 ctx2.fillStyle = '#ababab'
 ctx2.fillRect(50, 0, 420, 3)
@@ -39,7 +39,7 @@ export function drawTips({
         })
         height = Math.max(textImage.height, imageCanvas.height)
     }
-    const canvas = createCanvas(maxWidth + 100, height + 20)
+    const canvas = new Canvas(maxWidth + 100, height + 20)
     const ctx = canvas.getContext('2d')
     ctx.drawImage(line2, 0, 0)
     ctx.drawImage(textImage, 50, 20)

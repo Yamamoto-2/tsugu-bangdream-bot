@@ -2,7 +2,7 @@ import { globalDefaultServer } from '@/config';
 import { Character } from '@/types/Character'
 import { Server, getServerByPriority } from '@/types/Server'
 import { drawImageListCenter } from '@/components/list'
-import { Canvas, createCanvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import { drawRoundedRect } from '@/image/drawRect';
 import { resizeImage, stackImage } from '@/components/utils';
 import { drawText } from '@/image/text';
@@ -11,7 +11,7 @@ const width = 250
 const height = 800
 
 export async function drawCharacterHalfBlock(character: Character, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
-    const canvas = createCanvas(250, 800)
+    const canvas = new Canvas(250, 800)
     const ctx = canvas.getContext('2d')
     await character.initFull(false)
     //底部圆角矩形
@@ -41,7 +41,7 @@ export async function drawCharacterHalfBlock(character: Character, defaultServer
         width,
         height,
         radius: 20,
-        opacity:1,
+        opacity: 1,
         color: color + '00',
         strokeColor: color,
         strokeWidth: 4
@@ -51,12 +51,12 @@ export async function drawCharacterHalfBlock(character: Character, defaultServer
         width,
         height: 100,
         radius: 20,
-        opacity:1,
+        opacity: 1,
         color: color,
     }), 0, height - 100)
     //画底部文字
     //名字
-    const list:Canvas[] = []
+    const list: Canvas[] = []
     const server = getServerByPriority(character.characterName, defaultServerList)
     const nameText = character.characterName[server]
     const nameTextImage = drawText({

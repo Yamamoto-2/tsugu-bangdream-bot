@@ -1,12 +1,13 @@
 import { stageTypeList, stageTypeTextStrokeColor, stageTypeName, Stage } from "@/types/EventStage";
 import { Song, difficultyColorList } from "@/types/Song";
-import { Canvas, createCanvas, Image, loadImage, registerFont } from 'canvas';
+import { Canvas, Image, FontLibrary } from 'skia-canvas';
 import { assetsRootPath } from '@/config'
 import { changeTimefomant } from '@/components/list/time'
 import { setFontStyle } from '@/image/text'
 import { stackImageHorizontal } from "../utils";
+import { loadImageFromPath } from '@/image/utils';
 
-registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
+FontLibrary.use("old", [`${assetsRootPath}/Fonts/old.ttf`])
 
 export let stageTypeTopImageList: { [type: string]: Image } = {}
 
@@ -15,7 +16,7 @@ async function loadStageTypeTopImage(type: string): Promise<Image> {//加载活�
         return stageTypeTopImageList[type];
     }
     else {
-        stageTypeTopImageList[type] = await loadImage(assetsRootPath + `/eventStage/${type}.png`);
+        stageTypeTopImageList[type] = await loadImageFromPath(assetsRootPath + `/eventStage/${type}.png`);
         return stageTypeTopImageList[type];
     }
 }
@@ -33,7 +34,7 @@ export async function drawEventStageTypeTop(stage: Stage): Promise<Canvas> {//�
     const typeName = stageTypeName[type];
     const timeText = `${changeTimefomant(startAt)} - ${changeTimefomant(endAt)}`;
 
-    const canvas = createCanvas(eventStageTypeTopImage.width, eventStageTypeTopImage.height);
+    const canvas = new Canvas(eventStageTypeTopImage.width, eventStageTypeTopImage.height);
     const ctx = canvas.getContext('2d');
     ctx.drawImage(eventStageTypeTopImage, 0, 0);
     ctx.textBaseline = 'middle';
@@ -59,7 +60,7 @@ export async function drawEventStageTypeTop(stage: Stage): Promise<Canvas> {//�
 }
 
 async function drawSongInEventStageSongHorizontal(song: Song, meta: boolean): Promise<Canvas> {//绘制活动中的每个歌曲(包括难度)
-    const canvas = createCanvas(800 / 8, 800 / 8 / 180 * 210);
+    const canvas = new Canvas(800 / 8, 800 / 8 / 180 * 210);
     const ctx = canvas.getContext('2d');
 
     const jacketImageHeight = 800 / 8 - 6
@@ -74,7 +75,7 @@ async function drawSongInEventStageSongHorizontal(song: Song, meta: boolean): Pr
     //难度，高度为meta*10像素
     function drawDifficultyLineGraph(difficultyId: number): Canvas {
         const meta = song.calcMeta(true, difficultyId)
-        const canvas = createCanvas(jacketImageHeight / 10, jacketImageHeight);
+        const canvas = new Canvas(jacketImageHeight / 10, jacketImageHeight);
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = difficultyColorList[difficultyId];
         ctx.fillRect(0, jacketImageHeight - meta * 10, jacketImageHeight, meta * 10);
@@ -99,7 +100,7 @@ async function drawSongInEventStageSongHorizontal(song: Song, meta: boolean): Pr
 export async function drawEventStageSongHorizontal(stage: Stage, meta: boolean = false): Promise<Canvas> {//绘制活动中的歌曲列表(横向)
     const songIdList = stage.songIdList;
 
-    const canvas = createCanvas(800, 800 / 8 / 180 * 210 + 10);
+    const canvas = new Canvas(800, 800 / 8 / 180 * 210 + 10);
     const ctx = canvas.getContext('2d');
     for (let i = 0; i < songIdList.length; i++) {
         const song = new Song(songIdList[i]);

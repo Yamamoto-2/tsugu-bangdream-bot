@@ -2,7 +2,7 @@ import { Skill } from '@/types/Skill'
 import { Server, getServerByPriority } from '@/types/Server'
 import { drawTipsInList, drawListByServerList } from '@/components/list'
 import { stackImage } from '@/components/utils'
-import { Canvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import { Card } from '@/types/Card'
 import { globalDefaultServer } from '@/config'
 

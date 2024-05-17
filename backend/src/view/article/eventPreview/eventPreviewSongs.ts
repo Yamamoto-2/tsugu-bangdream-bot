@@ -1,6 +1,6 @@
 import { drawList, line, drawListByServerList, drawListMerge } from '@/components/list';
 import { drawDatablock } from '@/components/dataBlock'
-import { Image, Canvas } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { Server } from '@/types/Server';
 import { drawTitle } from '@/components/title'
 import { outputFinalBuffer } from '@/image/output'
@@ -23,7 +23,7 @@ export async function drawEventPreviewSongs(eventId: number): Promise<Array<Buff
     const result = []
 
     const title = await drawArticleTitle1('活动歌曲', 'Songs', event, true)
-    result.push(title.toBuffer('image/png'))
+    result.push(await title.toBuffer('png'))
     const eventBGImage = await event.getEventBGImage()
 
     //歌曲列表

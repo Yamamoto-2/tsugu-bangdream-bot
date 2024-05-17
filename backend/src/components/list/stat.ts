@@ -1,4 +1,4 @@
-import { Canvas, createCanvas, Image } from 'canvas';
+import { Canvas, Image } from 'skia-canvas';
 import { drawText } from "@/image/text";
 import { drawList } from "@/components/list";
 import { stackImage } from '@/components/utils'
@@ -21,7 +21,7 @@ export async function drawCardStatInList(card: Card) {
     list.push(drawList({
         key: '综合力', content: [`综合力: ${statTotal} + (${limitBreakstatTotal * 4})`]
     }))
-    list.push(createCanvas(1, 5))
+    list.push(new Canvas(1, 5))
     list.push(statImage)
     return stackImage(list)
 }
@@ -33,7 +33,7 @@ export async function drawStatInList(stat: Stat) {
     list.push(drawList({
         key: '综合力', content: [`综合力: ${statTotal}`]
     }))
-    list.push(createCanvas(1, 5));
+    list.push(new Canvas(1, 5));
     list.push(statImage);
     return stackImage(list);
 }
@@ -42,7 +42,7 @@ async function drawCardStatDivided(stat: Stat, statTotal: number, limitBreakstat
     const widthMax = 800
 
     function drawStatLine(key: string, value: number, total: number): Canvas {
-        const canvas = createCanvas(800, 70);
+        const canvas = new Canvas(800, 70);
         const ctx = canvas.getContext('2d');
         let text = `${statConfig[key].name}: ${Math.floor(value)}`;
         if (limitBreakstat) {

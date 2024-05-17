@@ -18,6 +18,9 @@ export function isServer(server: any): boolean {
     if (typeof server == 'number') {
         server = Server[server]
     }
+    else if (typeof server == 'string') {   
+        server = Server[parseInt(server)]
+    }
     else{
         return false
     }

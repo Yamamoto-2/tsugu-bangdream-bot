@@ -3,7 +3,7 @@ import { drawListWithLine, drawList } from "@/components/list";
 import { drawDatablock } from '@/components/dataBlock'
 import { drawCharacterInList } from '@/components/list/character'
 import { drawAttributeInList } from "@/components/list/attribute";
-import { Canvas } from 'canvas';
+import { Canvas } from 'skia-canvas';
 import { drawBannerImageCanvas } from '@/components/dataBlock/utils'
 import { drawTimeInList } from '@/components/list/time'
 import { Server } from '@/types/Server';

@@ -1,9 +1,10 @@
-import { Canvas, createCanvas, loadImage } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import { Event } from '@/types/Event'
 import { getEventGachaAndCardList } from '@/view/eventDetail'
 import { Server } from '@/types/Server'
 import { assetsRootPath } from '@/config'
 import { resizeImage } from '@/components/utils'
+import { loadImageFromPath } from '@/image/utils';
 
 export async function drawEventReportTitle(eventId: number): Promise<Array<Buffer | string>> {
     const event = new Event(eventId)
@@ -12,7 +13,7 @@ export async function drawEventReportTitle(eventId: number): Promise<Array<Buffe
     }
     await event.initFull()
     const eventReportTitleFrame = resizeImage({
-        image: await loadImage(assetsRootPath + '/eventReportTitleFrame.png'),
+        image: await loadImageFromPath(assetsRootPath + '/eventReportTitleFrame.png'),
         widthMax: 1000,
     })
     const eventGachaAndCardList = await getEventGachaAndCardList(event, Server.jp)
@@ -26,9 +27,9 @@ export async function drawEventReportTitle(eventId: number): Promise<Array<Buffe
         image: cardIllustrationImage,
         widthMax: 1000,
     })
-    const canvas = createCanvas(eventReportTitleFrame.width, eventReportTitleFrame.height)
+    const canvas = new Canvas(eventReportTitleFrame.width, eventReportTitleFrame.height)
     const ctx = canvas.getContext('2d')
     ctx.drawImage(resizedCardIllustrationImage, 0, 0)
     ctx.drawImage(eventReportTitleFrame, 0, 0)
-    return [canvas.toBuffer('image/png')]
+    return [await canvas.toBuffer('png')]
 }

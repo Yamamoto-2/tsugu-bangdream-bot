@@ -3,6 +3,7 @@ import { assetsRootPath } from '@/config';
 import { getCacheDirectory, getFileNameFromUrl } from '@/api/utils';
 import { download } from '@/api/downloader';
 import { Buffer } from 'buffer';
+import { assetErrorImageBuffer } from '@/image/utils';
 import * as fs from 'fs';
 
 const errUrl: string[] = [];
@@ -26,7 +27,7 @@ async function downloadFile(url: string, IgnoreErr: boolean = true, overwrite = 
     console.log(e)
     errUrl.push(url);
     if ((url.includes('.png') || url.includes('.svg')) && IgnoreErr) {
-      return fs.readFileSync(path.join(assetsRootPath, 'err.png'));
+      return assetErrorImageBuffer;
     }
     throw e; // Rethrow the error if it is not related to handling the error case
   }

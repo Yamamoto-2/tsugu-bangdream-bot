@@ -1,4 +1,4 @@
-import { Canvas, Image, loadImage } from 'canvas'
+import { Canvas, Image } from 'skia-canvas'
 import { outputFinalBuffer } from '@/image/output'
 import { Server } from '@/types/Server'
 import { Player } from '@/types/Player';
@@ -12,10 +12,11 @@ import { drawDatablock } from '@/components/dataBlock';
 import { drawPlayerBandRankInList, drawPlayerStageChallengeRankInList, drawPlayerDeckTotalRatingInList } from '@/components/list/bandDetail'
 import { drawPlayerDifficultyDetailInList } from '@/components/list/difficultyDetail'
 import { drawCharacterRankInList } from '@/components/list/characterDetail'
+import { loadImageFromPath } from '@/image/utils';
 
 let BGDefaultImage: Image
 async function loadImageOnce() {
-    BGDefaultImage = await loadImage(path.join(assetsRootPath, "/BG/common.png"));
+    BGDefaultImage = await loadImageFromPath(path.join(assetsRootPath, "/BG/common.png"));
 }
 loadImageOnce()
 
@@ -97,7 +98,7 @@ export async function drawPlayerDetail(playerId: number, server: Server, useEasy
         useEasyBG: useEasyBG,
         text: ' ',
         BGimage: BGDefaultImage,
-        compress:compress,
+        compress: compress,
     })
     return [buffer]
 }

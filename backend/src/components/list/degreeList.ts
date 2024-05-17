@@ -1,5 +1,5 @@
 import { drawList } from '@/components/list'
-import { Canvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import { drawDegree } from '@/components/degree'
 import { Degree } from '@/types/Degree'
 import { Server, getServerByPriority } from '@/types/Server'
@@ -92,7 +92,7 @@ export async function drawDegreeListOfEvent(event: Event, defaultServerList: Ser
 /*
 var drawRankingrewards = async function (eventID) {
     var drawrewardsets = async function (all) {
-        var tempcanv = canvas.createCanvas(1000,70*Math.ceil(all.length/3)+20)
+        var tempcanv = canvas.new Canvas(1000,70*Math.ceil(all.length/3)+20)
         var ctx = tempcanv.getContext("2d")
         for(var i = 0;i<all.length;i++){
             ctx.drawImage(all[i],120+265*(i%3),Math.floor(i/3)*70)

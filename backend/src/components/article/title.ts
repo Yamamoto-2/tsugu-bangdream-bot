@@ -1,4 +1,4 @@
-import { createCanvas, Canvas } from "canvas";
+import { Canvas } from 'skia-canvas';
 import { drawText } from "@/image/text";
 import { drawImageWithShadow } from "@/image/drawImageWithShadow"
 import { Event } from "@/types/Event";
@@ -11,7 +11,7 @@ export async function drawArticleTitle1(text: string, subText?: string, event?: 
     if (event) {
         baseX = 450
     }
-    const canvas = createCanvas(1000, 130)
+    const canvas = new Canvas(1000, 130)
     const ctx = canvas.getContext("2d")
     // 画EventLogo
     if (event) {
@@ -21,7 +21,7 @@ export async function drawArticleTitle1(text: string, subText?: string, event?: 
     }
 
     // 画一个矩形
-    const rectCanvas = createCanvas(5, 120)
+    const rectCanvas = new Canvas(5, 120)
     const rectCtx = rectCanvas.getContext("2d")
     rectCtx.fillStyle = "#ffffff"
     rectCtx.fillRect(0, 0, 5, 120)

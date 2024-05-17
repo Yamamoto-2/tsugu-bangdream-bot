@@ -1,5 +1,5 @@
 import { drawList } from '@/components/list'
-import { Canvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import { drawCardIcon } from '@/components/card'
 import { Card } from '@/types/Card'
 

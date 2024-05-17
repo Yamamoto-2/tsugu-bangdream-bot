@@ -1,8 +1,9 @@
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import { assetsRootPath } from '@/config';
-import { registerFont, loadImage } from 'canvas';
+import { FontLibrary, loadImage } from 'skia-canvas';
+import { assetErrorImageBuffer } from '@/image/utils';
 import 'chartjs-adapter-moment';
-registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
+FontLibrary.use("old", [`${assetsRootPath}/Fonts/old.ttf`])
 var width = 800
 var height = 1200
 const chartJSNodeCanvas = new ChartJSNodeCanvas({
@@ -59,11 +60,11 @@ export async function drawTimeLineChart({
         options: options
     }
     try {
-        const image = await chartJSNodeCanvas.renderToBuffer(configuration as any);
-        return await loadImage(image);
+        const imageBuffer = await chartJSNodeCanvas.renderToBuffer(configuration as any);
+        return await loadImage(imageBuffer);
     }
     catch (e) {
         console.log(e)
-        return loadImage(assetsRootPath + '/err.png')
+        return loadImage(assetErrorImageBuffer)
     }
 }

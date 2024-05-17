@@ -1,4 +1,4 @@
-import { Canvas, Image, } from 'canvas';
+import { Canvas, Image, } from 'skia-canvas';
 
 export async function createRoundedRectangleCanvas(input: Canvas | Image, radius: number = 25): Promise<Canvas> {
     let imgCanvas: Canvas;

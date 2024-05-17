@@ -1,4 +1,4 @@
-import { CanvasRenderingContext2D, Canvas, Image } from 'canvas';
+import { CanvasRenderingContext2D, Canvas, Image } from 'skia-canvas';
 
 /**
  * Draws an image with shadow on the canvas.

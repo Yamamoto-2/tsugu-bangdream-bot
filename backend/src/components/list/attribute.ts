@@ -1,6 +1,6 @@
 import { Attribute } from '@/types/Attribute'
 import { drawList } from '@/components/list'
-import { Canvas, Image } from 'canvas'
+import { Canvas, Image } from 'skia-canvas'
 
 interface AttributeInListOptions {
     key?: string;

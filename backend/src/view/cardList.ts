@@ -2,7 +2,7 @@ import { Card } from "@/types/Card";
 import { Character } from "@/types/Character";
 import mainAPI from "@/types/_Main"
 import { match, checkRelationList } from "@/routers/fuzzySearch"
-import { Canvas, createCanvas, Image, loadImage } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import { drawCardIcon } from "@/components/card"
 import { drawDatablockHorizontal } from '@/components/dataBlock';
 import { stackImage } from '@/components/utils'
@@ -67,7 +67,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
     var characterIconImageList: Canvas[] = [];//角色头像列表，画在最左边
     //画角色头像Icon函数
     async function drawCharacterIcon(characterId: number | null): Promise<Canvas> {
-        const tempCanvas = createCanvas(100, 140);
+        const tempCanvas = new Canvas(100, 140);
         const ctx = tempCanvas.getContext('2d');
         if (characterId == null) {
             return tempCanvas;
@@ -134,7 +134,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         var buffer = await outputFinalBuffer({
             imageList: all,
             useEasyBG: true,
-            compress:compress,
+            compress: compress,
         })
         return [buffer]
     }
@@ -172,7 +172,7 @@ export async function drawCardList(matches: { [key: string]: string[] }, default
         var buffer = await outputFinalBuffer({
             imageList: all,
             useEasyBG: true,
-            compress:compress
+            compress: compress
         })
         return [buffer]
     }
@@ -195,11 +195,11 @@ function getCardListByAttributeAndCharacterId(cardFullList: Card[], attribute: '
 //每个颜色和角色的一行
 async function drawCardListLine(cardList: Card[]) {
     if (cardList.length == 0) {
-        return createCanvas(1, 140);
+        return new Canvas(1, 140);
     }
     const maxX = cardList.length * 140
     const maxY = 140
-    const canvas = createCanvas(maxX, maxY)
+    const canvas = new Canvas(maxX, maxY)
     const ctx = canvas.getContext('2d')
     //排序，稀有度高的在前面，其中技能加成高的在前面
     cardList.sort((a, b) => {

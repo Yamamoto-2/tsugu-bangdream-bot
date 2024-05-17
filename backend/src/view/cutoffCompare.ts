@@ -1,7 +1,7 @@
 import { Event, getRecentEventListByEventAndServer } from '@/types/Event';
 import { drawList, line } from '@/components/list';
 import { drawDatablock } from '@/components/dataBlock'
-import { Image, Canvas, createCanvas, loadImage } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { changeTimefomant } from '@/components/list/time';
 import { Server } from '@/types/Server';
 import { drawTitle } from '@/components/title'
@@ -12,6 +12,7 @@ import { serverNameFullList } from '@/config';
 import { drawEventDatablock } from '@/components/dataBlock/event';
 import { drawAttributeInList } from '@/components/list/attribute'
 import { drawCharacterInList } from '@/components/list/character'
+import { loadImageFromPath } from '@/image/utils';
 
 export async function drawCutoffComprare(eventId: number, tier: number, server: Server, compress: boolean): Promise<Array<Buffer | string>> {
     //检查
@@ -98,7 +99,7 @@ export async function drawCutoffComprare(eventId: number, tier: number, server: 
         list.push(line)
     }
     list.pop()
-    list.push(createCanvas(800, 50))
+    list.push(new Canvas(800, 50))
 
     //折线图
     list.push(await drawCutoffChart(cutoffList, true, server))
@@ -110,7 +111,7 @@ export async function drawCutoffComprare(eventId: number, tier: number, server: 
     /*
     all.push(drawTips({
         text: '想给我们提供数据?\n可以在B站 @Tsugu_Official 的置顶动态留言\n或者在群238052000中提供数据\n也可以扫描右侧二维码进行上传\n手机可以长按图片扫描二维码\n我们会尽快将数据上传至服务器',
-        image: await loadImage(path.join(assetsRootPath, 'shimowendang.png'))
+        image: await loadImageFromPath(path.join(assetsRootPath, 'shimowendang.png'))
     }))
     */
     var buffer = await outputFinalBuffer({

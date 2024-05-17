@@ -1,4 +1,4 @@
-import { createCanvas, Canvas } from 'canvas';
+import { Canvas } from 'skia-canvas';
 
 interface DrawDottedLineOptions {
   width: number;
@@ -15,7 +15,7 @@ interface DrawDottedLineOptions {
 export function drawDottedLine(options: DrawDottedLineOptions): Canvas {
   const { width, height, startX, startY, endX, endY, radius, gap, color } = options;
 
-  const canvas = createCanvas(width, height);
+  const canvas = new Canvas(width, height);
   const ctx = canvas.getContext('2d');
 
   // Calculate the total length of the line

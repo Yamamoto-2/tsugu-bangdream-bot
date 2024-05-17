@@ -1,4 +1,4 @@
-import { Canvas, createCanvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import { Band } from "@/types/Band"
 import { Server, getServerByPriority } from "@/types/Server"
 import { Song } from "@/types/Song"
@@ -17,7 +17,7 @@ export async function drawSongInList(song: Song, difficulty?: number, text?: str
         heightMax: 80
     })
 
-    var canvas = createCanvas(800, 75)
+    var canvas = new Canvas(800, 75)
     var ctx = canvas.getContext("2d")
     ctx.drawImage(songImage, 50, 5, 65, 65)
     //id
@@ -57,13 +57,13 @@ export async function drawSongInList(song: Song, difficulty?: number, text?: str
     return canvas
 }
 
-export async function drawSongListInList(songs: Song[], difficulty?: number, text?: string, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas>{
-    let height:number = 75 * songs.length + 10 * (songs.length - 1)
-    let canvas = createCanvas(760, height)
+export async function drawSongListInList(songs: Song[], difficulty?: number, text?: string, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
+    let height: number = 75 * songs.length + 10 * (songs.length - 1)
+    let canvas = new Canvas(760, height)
     let ctx = canvas.getContext("2d")
     let x = 0
     let y = 0
-    let views:Canvas[] = []
+    let views: Canvas[] = []
     const line = drawDottedLine({
         width: 800,
         height: 10,
@@ -76,11 +76,11 @@ export async function drawSongListInList(songs: Song[], difficulty?: number, tex
         color: "#a8a8a8"
     })
     for (let i = 0; i < songs.length; i++) {
-        views.push(resizeImage({image: await drawSongInList(songs[i],difficulty,text,defaultServerList), widthMax: 760}))
+        views.push(resizeImage({ image: await drawSongInList(songs[i], difficulty, text, defaultServerList), widthMax: 760 }))
         views.push(line)
     }
     views.pop()
-    for(let i = 0; i < views.length; i++){
+    for (let i = 0; i < views.length; i++) {
         ctx.drawImage(views[i], x, y)
         y += views[i].height
     }

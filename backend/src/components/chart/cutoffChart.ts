@@ -1,4 +1,4 @@
-import { createCanvas } from 'canvas';
+import { Canvas } from 'skia-canvas';
 import { Cutoff } from "@/types/Cutoff";
 import { drawTimeLineChart } from "@/components/chart_Timeline";
 import { Event } from '@/types/Event';
@@ -13,7 +13,7 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
     var datasets = []
     var time = new Date().getTime()
     if (cutoffList.length == 0) {
-        return (createCanvas(1, 1))
+        return (new Canvas(1, 1))
     }
 
     const list = []
@@ -119,7 +119,7 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
 export async function drawCutoffEventTopChart(CutoffEventTop: CutoffEventTop, setStartToZero = false, server: Server = Server['jp']) {
     var datasets = []
     if (CutoffEventTop == undefined) {
-        return (createCanvas(1, 1))
+        return (new Canvas(1, 1))
     }
     var allData = CutoffEventTop.getChartData();
     function removeBraces(text: string): string {

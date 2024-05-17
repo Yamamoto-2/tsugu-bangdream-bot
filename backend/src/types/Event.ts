@@ -1,5 +1,5 @@
 import { callAPIAndCacheResponse } from '@/api/getApi';
-import { Image, loadImage } from 'canvas'
+import { Image, loadImage } from 'skia-canvas'
 import { downloadFileCache } from '@/api/downloadFileCache'
 import { Server, getServerByPriority } from '@/types/Server'
 import mainAPI from '@/types/_Main';

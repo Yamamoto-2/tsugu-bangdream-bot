@@ -4,7 +4,7 @@ import { Character } from '@/types/Character'
 import { Server, getServerByPriority, serverList } from '@/types/Server'
 import { Gacha } from '@/types/Gacha'
 import { Event } from '@/types/Event'
-import { Image, loadImage } from 'canvas'
+import { Image, loadImage } from 'skia-canvas'
 import { downloadFile } from '@/api/downloadFile'
 import { downloadFileCache } from '@/api/downloadFileCache'
 import mainAPI from '@/types/_Main'
@@ -264,15 +264,15 @@ export class Card {
         trainingStatus = this.ableToTraining(trainingStatus)
         const trainingString = trainingStatus ? '_after_training' : '_normal'
         var tempServer = this.getFirstReleasedServer()
-        var cardIconImage = await downloadFileCache(`${Bestdoriurl}/assets/${Server[tempServer]}/thumb/chara/card00${this.getRip()}/${this.resourceSetName}${trainingString}.png`)
-        return await loadImage(cardIconImage)
+        var cardIconImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[tempServer]}/thumb/chara/card00${this.getRip()}/${this.resourceSetName}${trainingString}.png`)
+        return await loadImage(cardIconImageBuffer)
     }
     async getCardIllustrationImage(trainingStatus: boolean): Promise<Image> {
         trainingStatus = this.ableToTraining(trainingStatus)
         const trainingString = trainingStatus ? '_after_training' : '_normal'
         var tempServer = this.getFirstReleasedServer()
-        var CardIllustrationImage = await downloadFile(`${Bestdoriurl}/assets/${Server[tempServer]}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`)
-        return await loadImage(CardIllustrationImage)
+        var CardIllustrationImageBuffer = await downloadFile(`${Bestdoriurl}/assets/${Server[tempServer]}/characters/resourceset/${this.resourceSetName}_rip/card${trainingString}.png`)
+        return await loadImage(CardIllustrationImageBuffer)
     }
     async getCardIllustrationImageBuffer(trainingStatus: boolean): Promise<Buffer> {
         trainingStatus = this.ableToTraining(trainingStatus);
@@ -285,8 +285,8 @@ export class Card {
         trainingStatus = this.ableToTraining(trainingStatus)
         const trainingString = trainingStatus ? '_after_training' : '_normal'
         var tempServer = this.getFirstReleasedServer()
-        var CardIllustrationImage = await downloadFile(`${Bestdoriurl}/assets/${Server[tempServer]}/characters/resourceset/${this.resourceSetName}_rip/trim${trainingString}.png`)
-        return await loadImage(CardIllustrationImage)
+        var CardIllustrationImageBuffer = await downloadFile(`${Bestdoriurl}/assets/${Server[tempServer]}/characters/resourceset/${this.resourceSetName}_rip/trim${trainingString}.png`)
+        return await loadImage(CardIllustrationImageBuffer)
     }
     getTypeName() {
         if (typeName[this.type] == undefined) {

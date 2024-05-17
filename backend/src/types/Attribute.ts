@@ -1,6 +1,7 @@
-import { loadImage, Image } from 'canvas'
+import { loadImage, Image } from 'skia-canvas'
 import { downloadFileCache } from '@/api/downloadFileCache'
 import { Bestdoriurl } from "@/config"
+import { convertSvgToPngBuffer } from '@/image/utils'
 
 const attributeColor = {
     'happy': '#ff6600',
@@ -22,7 +23,19 @@ export class Attribute {
     }
 
     async getIcon(): Promise<Image> {
-        const iconBuffer = await downloadFileCache(`${Bestdoriurl}/res/icon/${this.name}.svg`)
-        return (await loadImage(iconBuffer))
+        return getAttributeIcon(this.name)
     }
 }
+
+let attributeIconCache: { [name: string]: Image } = {}
+
+async function getAttributeIcon(attributeName: string): Promise<Image> {
+    if (attributeIconCache[attributeName]) {
+        return attributeIconCache[attributeName]
+    }
+    const iconSvgBuffer = await downloadFileCache(`${Bestdoriurl}/res/icon/${attributeName}.svg`)
+    const iconPngBuffer = await convertSvgToPngBuffer(iconSvgBuffer)
+    const image = await loadImage(iconPngBuffer)
+    attributeIconCache[attributeName] = image
+    return image
+} 

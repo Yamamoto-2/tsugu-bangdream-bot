@@ -1,7 +1,7 @@
 import { Room } from "@/types/Room";
 import { Player } from "@/types/Player";
 import { getQQUserIcon, getBandoriStationUserIcon } from "@/api/userIcon"
-import { Canvas, Image, createCanvas, loadImage } from 'canvas';
+import { Canvas, Image } from 'skia-canvas';
 import { drawDatablock } from "@/components/dataBlock";
 import { drawList, line, drawListWithLine } from "@/components/list";
 import { drawText } from "@/image/text";
@@ -16,7 +16,7 @@ import { getServerByServerId } from '@/types/Server'
 
 
 export async function drawRoomListTitle() {
-    const canvas = createCanvas(1000, 150)
+    const canvas = new Canvas(1000, 150)
     const ctx = canvas.getContext('2d')
     ctx.fillStyle = '#ff3b72'
     ctx.fillRect(0, 0, 1000, 150)
@@ -64,11 +64,11 @@ export async function drawRoonInList(room: Room) {
     }))
     //画text
     const textImage = stackImage(textList)
-    const canvas = createCanvas(600, textImage.height)
+    const canvas = new Canvas(600, textImage.height)
     const ctx = canvas.getContext('2d')
     ctx.drawImage(textImage, 20, 0)
     //画icon
-    const canvasLeft = createCanvas(200, 200)
+    const canvasLeft = new Canvas(200, 200)
     const ctxLeft = canvasLeft.getContext('2d')
     ctxLeft.drawImage(Icon, 0, 0, 180, 180)
     //合并
@@ -92,7 +92,7 @@ export async function drawRoonInList(room: Room) {
 }
 
 async function drawPlayerDetailInRoomList(player: Player) {
-    const canvas = createCanvas(800, 110)
+    const canvas = new Canvas(800, 110)
     const ctx = canvas.getContext('2d')
     //画卡
     const cardIconList = await drawPlayerCardInList(player, undefined, true, 100)
@@ -124,7 +124,7 @@ async function drawPlayerDetailInRoomList(player: Player) {
             image: tempDegreeImage,
             heightMax: 35
         }))
-        degreeImageList.push(createCanvas(10, 35))
+        degreeImageList.push(new Canvas(10, 35))
     }
     degreeImageList.pop()
     const degreeListImage = stackImageHorizontal(degreeImageList)

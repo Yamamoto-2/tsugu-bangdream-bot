@@ -1,5 +1,9 @@
-const Canvas = require("canvas")
+const Canvas = require('skia-canvas')
 const config = require("@/config")
+const utils = require('@/image/utils')
+const loadImageFromPath = utils.loadImageFromPath
+
+
 /**
  * @typedef {object} BestdoriNote
  * @property {"BPM" | "Long" | "Slide" | "Single" | "Directional"} type
@@ -160,31 +164,31 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
 
     const secondsPerCol = chartLength / colCount;
 
-    const canvas = Canvas.createCanvas(width, height);
+    const canvas = new Canvas(width, height);
     const ctx = canvas.getContext('2d');
 
     // 读取音符图片
     const img_notes = {
-        Single: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/Single.png'),
-        SingleOff: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/SingleOff.png'),
-        Flick: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/Flick.png'),
-        FlickTop: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/FlickTop.png'),
-        Skill: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/Skill.png'),
-        Long: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/Long.png'),
-        Tick: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/Tick.png'),
-        Sim: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/Sim.png'),
-        LeftArrow: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/LeftArrow.png'),
-        LeftArrowEnd: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/LeftArrowEnd.png'),
-        RightArrow: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/RightArrow.png'),
-        RightArrowEnd: await Canvas.loadImage(config.assetsRootPath + '/SongChart/note/RightArrowEnd.png'),
+        Single: await loadImageFromPath(config.assetsRootPath + '/SongChart/note/Single.png'),
+        SingleOff: await loadImageFromPath(config.assetsRootPath + '/SongChart/note/SingleOff.png'),
+        Flick: await loadImageFromPath(config.assetsRootPath + '/SongChart/note/Flick.png'),
+        FlickTop: await loadImageFromPath(config.assetsRootPath + '/SongChart/note/FlickTop.png'),
+        Skill: await loadImageFromPath(config.assetsRootPath + '/SongChart/note/Skill.png'),
+        Long: await loadImageFromPath(config.assetsRootPath + '/SongChart/note/Long.png'),
+        Tick: await loadImageFromPath(config.assetsRootPath + '/SongChart/note/Tick.png'),
+        Sim: await loadImageFromPath(config.assetsRootPath + '/SongChart/note/Sim.png'),
+        LeftArrow: await loadImageFromPath(config.assetsRootPath + '/SongChart/note/LeftArrow.png'),
+        LeftArrowEnd: await loadImageFromPath(config.assetsRootPath + '/SongChart/note/LeftArrowEnd.png'),
+        RightArrow: await loadImageFromPath(config.assetsRootPath + '/SongChart/note/RightArrow.png'),
+        RightArrowEnd: await loadImageFromPath(config.assetsRootPath + '/SongChart/note/RightArrowEnd.png'),
     }
     // 读取封面
     const coverImg = await (async () => {
         try {
-            if (typeof cover === "string" || Buffer.isBuffer(cover)) return await Canvas.loadImage(cover)
+            if (typeof cover === "string" || Buffer.isBuffer(cover)) return await loadImageFromPath(cover)
             else throw new Error()
         } catch (e) {
-            return await Canvas.loadImage(config.assetsRootPath + '/SongChart/jacket.png')
+            return await loadImageFromPath(config.assetsRootPath + '/SongChart/jacket.png')
         }
     })()
 

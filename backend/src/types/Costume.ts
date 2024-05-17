@@ -3,7 +3,7 @@ import { downloadFile } from '@/api/downloadFile';
 import { Bestdoriurl, globalDefaultServer } from '@/config';
 import mainAPI from '@/types/_Main';
 import { Server, getServerByPriority } from '@/types/Server';
-import { Image, loadImage } from 'canvas';
+import { Image, loadImage } from 'skia-canvas';
 import {stringToNumberArray} from '@/types/utils'
 
 export class Costume {
@@ -48,7 +48,7 @@ export class Costume {
     async getSdchara(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
         if (!defaultServerList) defaultServerList = globalDefaultServer
         var server = getServerByPriority(this.publishedAt, defaultServerList)
-        var Buffer = await downloadFile(`${Bestdoriurl}/assets/${Server[server]}/characters/livesd/${this.sdResourceName}_rip/sdchara.png`)
-        return await loadImage(Buffer)
+        var sdCharaBuffer = await downloadFile(`${Bestdoriurl}/assets/${Server[server]}/characters/livesd/${this.sdResourceName}_rip/sdchara.png`)
+        return await loadImage(sdCharaBuffer)
     }
 }

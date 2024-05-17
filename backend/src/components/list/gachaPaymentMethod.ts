@@ -1,4 +1,3 @@
-import { Image, Canvas, createCanvas } from 'canvas'
 import { drawList } from '@/components/list'
 import { Gacha } from '@/types/Gacha'
 import { Server } from '@/types/Server'

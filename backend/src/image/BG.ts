@@ -1,9 +1,11 @@
 import { createBlurredTrianglePattern } from "@/image/BG/BG_triangle";
 import { scatterImages } from "@/image/BG/BG_starScatter";
 import { drawTextOnCanvas } from "@/image/BG/BG_text";
-import { createCanvas, loadImage, Image, Canvas } from 'canvas';
+import { loadImage, Image, Canvas } from 'skia-canvas';
 import { assetsRootPath } from '@/config'
 import * as path from 'path';
+import { loadImageFromPath } from '@/image/utils';
+
 
 interface BGOptions {
   image?: Image | Canvas | any;
@@ -14,7 +16,7 @@ interface BGOptions {
 
 // 将图片等比例缩放并重复铺满整个画布,并且增加亮度
 async function Spread(image: Image, width: number, height: number, brightness: number): Promise<Buffer> {
-  const canvas: Canvas = createCanvas(width, height);
+  const canvas: Canvas = new Canvas(width, height);
   const ctx = canvas.getContext('2d');
 
   // 调整亮度
@@ -30,11 +32,11 @@ async function Spread(image: Image, width: number, height: number, brightness: n
     }
   }
 
-  return canvas.toBuffer();
+  return await canvas.toBuffer('png');
 }
 
 async function adjustBrightness(image: Image, brightness: number): Promise<Image> {
-  const canvas = createCanvas(image.width, image.height);
+  const canvas = new Canvas(image.width, image.height);
   const ctx = canvas.getContext('2d');
 
   ctx.drawImage(image, 0, 0, image.width, image.height);
@@ -51,7 +53,7 @@ async function adjustBrightness(image: Image, brightness: number): Promise<Image
 
   ctx.putImageData(imageData, 0, 0);
 
-  return await loadImage(canvas.toBuffer());
+  return await loadImage(await canvas.toBuffer('png'));
 }
 
 function getScaledDimensions(image: Image, targetWidth: number, targetHeight: number): { scaledWidth: number, scaledHeight: number } {
@@ -74,9 +76,9 @@ var star: Image[] = [];
 
 var defaultBGTexture: Image;
 async function loadImageOnce() {
-  star.push(await loadImage(path.join(assetsRootPath, "/BG/star1.png")));
-  star.push(await loadImage(path.join(assetsRootPath, "/BG/star2.png")));
-  defaultBGTexture = await loadImage(path.join(assetsRootPath, "/BG/bg_object_big.png"));
+  star.push(await loadImageFromPath(path.join(assetsRootPath, "/BG/star1.png")));
+  star.push(await loadImageFromPath(path.join(assetsRootPath, "/BG/star2.png")));
+  defaultBGTexture = await loadImageFromPath(path.join(assetsRootPath, "/BG/bg_object_big.png"));
 }
 loadImageOnce()
 
@@ -84,7 +86,7 @@ export async function CreateBGEazy({
   width, height
 }) {
   const bgColor = '#fef3ef'
-  const canvas: Canvas = createCanvas(width, height);
+  const canvas: Canvas = new Canvas(width, height);
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, width, height);

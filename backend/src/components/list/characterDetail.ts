@@ -1,5 +1,5 @@
 import { Player } from "@/types/Player";
-import { Canvas, createCanvas, Image, loadImage } from 'canvas';
+import { Canvas, Image } from 'skia-canvas';
 import { drawList } from '@/components/list'
 import { resizeImage } from "@/components/utils";
 import { drawTextWithImages } from "@/image/text";
@@ -21,7 +21,7 @@ async function drawCharacterInList(CharacterDetailsInListOptions: drawBandDetail
                image: await tempCharacter.getIcon(),
                widthMax: logoWidth
           })
-          const canvas = createCanvas(maxWidth, 100)
+          const canvas = new Canvas(maxWidth, 100)
           const ctx = canvas.getContext('2d')
           ctx.drawImage(tempCharacterIcon, (maxWidth - logoWidth) / 2, 0)
           const tempCharacterRankText = drawTextWithImages({

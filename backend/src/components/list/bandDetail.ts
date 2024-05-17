@@ -1,5 +1,5 @@
 import { Player } from "@/types/Player";
-import { Canvas, createCanvas, Image, loadImage } from 'canvas';
+import { Canvas, Image } from 'skia-canvas';
 import { drawList } from '@/components/list'
 import { resizeImage } from "@/components/utils";
 import { Band } from "@/types/Band";
@@ -9,6 +9,8 @@ import mainAPI from "@/types/_Main";
 import { Bestdoriurl } from "@/config";
 import { assetsRootPath } from "@/config";
 import * as path from 'path'
+import { loadImageFromPath } from '@/image/utils';
+
 
 interface drawBandDetailsInListOptions {
     [bandId: number]: Array<Canvas | Image | string>
@@ -26,7 +28,7 @@ async function drawBandDetailsInList(BandDetailsInListOptions: drawBandDetailsIn
             image: await tempBand.getLogo(),
             widthMax: logoWidth
         })
-        const canvas = createCanvas(maxWidth, 100)
+        const canvas = new Canvas(maxWidth, 100)
         const ctx = canvas.getContext('2d')
         ctx.drawImage(tempBandIcon, (maxWidth - logoWidth) / 2, 0)
         const tempBandRankText = drawTextWithImages({
@@ -98,11 +100,11 @@ let rankImage: { [rankImageName: string]: Image } = {}
 async function loadRankImage(rankImageName: string): Promise<Image> {
     if (rankImage[rankImageName] == undefined) {
         try {
-            rankImage[rankImageName] = await loadImage(path.join(assetsRootPath, `/Rank/${rankImageName}.png`))
+            rankImage[rankImageName] = await loadImageFromPath(path.join(assetsRootPath, `/Rank/${rankImageName}.png`))
         }
         catch (e) {
             console.log(e)
-            rankImage[rankImageName] = await loadImage(`${Bestdoriurl}/res/icon/${rankImageName}.png`)
+            rankImage[rankImageName] = await loadImageFromPath(`${Bestdoriurl}/res/icon/${rankImageName}.png`)
         }
     }
     return rankImage[rankImageName]
@@ -117,7 +119,7 @@ export async function drawPlayerDeckTotalRatingInList(player: Player, key?: stri
             const rankName = userDeckTotalRatingMap[i].rank
             let rankId = DeckTotalRatingIdList[rankName]
             const rankImage = await loadRankImage(`rank_${rankId}`)
-            const canvas = createCanvas(100, 100)
+            const canvas = new Canvas(100, 100)
             const ctx = canvas.getContext('2d')
             ctx.drawImage(rankImage, 0, 0, 100, 100)
             if (userDeckTotalRatingMap[i].level != 0) {

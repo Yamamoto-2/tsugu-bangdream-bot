@@ -3,25 +3,26 @@ import { setFontStyle } from '@/image/text'
 import { Band } from '@/types/Band'
 import { Attribute } from '@/types/Attribute'
 import { Card } from '@/types/Card'
-import { Image, Canvas, loadImage, createCanvas } from 'canvas'
+import { Image, Canvas, loadImage } from 'skia-canvas'
 import { downloadFileCache } from '@/api/downloadFileCache'
 import { drawCardIconSkill } from '@/components/skill'
 import * as path from 'path'
 import { Skill } from '@/types/Skill'
 import { Bestdoriurl } from "@/config"
+import { loadImageFromPath } from '@/image/utils';
 
 var cardTypeIconList: { [type: string]: Image } = {}
 var starList: { [type: string]: Image } = {}
 var limitBreakIcon: Image
 
 async function loadImageOnce() {
-    cardTypeIconList.limited = await loadImage(path.join(assetsRootPath, '/Card/L.png'));
-    cardTypeIconList.dreamfes = await loadImage(path.join(assetsRootPath, '/Card/D.png'));
-    cardTypeIconList.kirafes = await loadImage(path.join(assetsRootPath, '/Card/K.png'));
-    cardTypeIconList.birthday = await loadImage(path.join(assetsRootPath, '/Card/B.png'));
-    starList.normal = await loadImage(path.join(assetsRootPath, '/Card/star.png'));
-    starList.trained = await loadImage(path.join(assetsRootPath, '/Card/star_trained.png'));
-    limitBreakIcon = await loadImage(path.join(assetsRootPath, '/Card/limitBreakRank.png'));
+    cardTypeIconList.limited = await loadImageFromPath(path.join(assetsRootPath, '/Card/L.png'));
+    cardTypeIconList.dreamfes = await loadImageFromPath(path.join(assetsRootPath, '/Card/D.png'));
+    cardTypeIconList.kirafes = await loadImageFromPath(path.join(assetsRootPath, '/Card/K.png'));
+    cardTypeIconList.birthday = await loadImageFromPath(path.join(assetsRootPath, '/Card/B.png'));
+    starList.normal = await loadImageFromPath(path.join(assetsRootPath, '/Card/star.png'));
+    starList.trained = await loadImageFromPath(path.join(assetsRootPath, '/Card/star_trained.png'));
+    limitBreakIcon = await loadImageFromPath(path.join(assetsRootPath, '/Card/limitBreakRank.png'));
 }
 
 loadImageOnce()
@@ -83,7 +84,7 @@ export async function drawCardIcon({
 }: drawCardIconOptions): Promise<Canvas> {
     trainingStatus = card.ableToTraining(trainingStatus)
     illustTrainingStatus ??= trainingStatus
-    const canvas: Canvas = cardIdVisible ? createCanvas(180, 210) : createCanvas(180, 180);
+    const canvas: Canvas = cardIdVisible ? new Canvas(180, 210) : new Canvas(180, 180);
     const ctx = canvas.getContext('2d');
     ctx.drawImage(await card.getCardIconImage(illustTrainingStatus), 0, 0, 180, 180);
     //如果显示卡牌ID，画面高度为210，在下方显示
@@ -149,11 +150,11 @@ export async function drawCardIllustration({
 }: drawCardIllustrationOptions): Promise<Canvas> {
     trainingStatus = card.ableToTraining(trainingStatus)
     var CardIllustrationImage = await card.getCardIllustrationImage(trainingStatus)
-    const canvas = createCanvas(1360, 905)
+    const canvas = new Canvas(1360, 905)
     var ctx = canvas.getContext("2d")
     //将cardIllustration等比例缩放至宽度为1334
     var scale = 1334 / CardIllustrationImage.width
-    const illustrationCanvas = createCanvas(1334, 879)
+    const illustrationCanvas = new Canvas(1334, 879)
     var illustrationCtx = illustrationCanvas.getContext("2d")
     var illustrationHeight = CardIllustrationImage.height * scale
     illustrationCtx.drawImage(CardIllustrationImage, 0, (879 / 2) - (illustrationHeight / 2), 1334, illustrationHeight)
@@ -173,7 +174,7 @@ export async function drawCardIllustration({
     if (isList) {
         //等比例缩放到宽度为widthMax
         var scale = 800 / 1360
-        var tempcanvas = createCanvas(800, 905 * scale)
+        var tempcanvas = new Canvas(800, 905 * scale)
         var ctx = tempcanvas.getContext("2d")
         ctx.drawImage(canvas, 0, 0, 800, 905 * scale)
         return tempcanvas

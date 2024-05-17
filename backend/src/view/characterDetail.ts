@@ -1,6 +1,6 @@
 import { drawList, line, drawListByServerList, drawListMerge, drawImageListCenter, drawTipsInList } from '@/components/list';
 import { drawDatablock } from '@/components/dataBlock'
-import { Image, Canvas, createCanvas } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { Server, getServerByPriority } from '@/types/Server';
 import { drawTitle } from '@/components/title';
 import { outputFinalBuffer } from '@/image/output'
@@ -103,7 +103,7 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
     //画上部图片
     const imageLeft = stackImage(listRight)
     const characterHalfBlock = await drawCharacterHalfBlock(character)
-    const imageUp = stackImageHorizontal([imageLeft, createCanvas(50, 50), characterHalfBlock])
+    const imageUp = stackImageHorizontal([imageLeft, new Canvas(50, 50), characterHalfBlock])
 
     //画下部文字
     let list: Array<Canvas | Image> = []
@@ -210,7 +210,7 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
     all.push(drawDatablock({
         list: [
             drawImageListCenter([await character.getNameBanner()]),
-            createCanvas(50, 50),
+            new Canvas(50, 50),
             imageUp,
             stackImage(list)]
     }))
@@ -218,7 +218,7 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
     var buffer = await outputFinalBuffer({
         imageList: all,
         useEasyBG: true,
-        compress:compress,
+        compress: compress,
     })
 
     return [buffer]

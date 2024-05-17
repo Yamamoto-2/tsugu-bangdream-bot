@@ -1,7 +1,7 @@
 import { Server } from '@/types/Server';
 import { downloadFileCache } from '@/api/downloadFileCache'
 import { downloadFile } from '@/api/downloadFile';
-import { Canvas, Image, createCanvas, loadImage } from 'canvas';
+import { Canvas, Image, loadImage } from 'skia-canvas';
 import mainAPI from '@/types/_Main';
 import { Bestdoriurl } from '@/config';
 
@@ -30,24 +30,24 @@ export class Degree {
         this.degreeName = degreeData['degreeName'];
     }
     async getDegreeImage(server: Server): Promise<Image> {
-        var degreeImage = await downloadFile(`${Bestdoriurl}/assets/${Server[server]}/thumb/degree_rip/${this.baseImageName[server]}.png`)
-        return loadImage(degreeImage)
+        var degreeImageBuffer = await downloadFile(`${Bestdoriurl}/assets/${Server[server]}/thumb/degree_rip/${this.baseImageName[server]}.png`)
+        return loadImage(degreeImageBuffer)
     }
     async getDegreeFrame(server: Server): Promise<Image | Canvas> {
         var frameName = this.degreeType[server] + "_" + this.rank[server]
         if (frameName == "none_none") {//这个为空底图
-            return (createCanvas(1, 1))
+            return (new Canvas(1, 1))
         }
 
-        var degreeFrame = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/thumb/degree_rip/${frameName}.png`)
-        return loadImage(degreeFrame)
+        var degreeFrameBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/thumb/degree_rip/${frameName}.png`)
+        return loadImage(degreeFrameBuffer)
     }
     async getDegreeIcon(server: Server): Promise<Image | Canvas> {
         var iconName = this.iconImageName[server] + "_" + this.rank[server]
         if (iconName == "none_none") {//这个为空底图
-            return (createCanvas(1, 1))
+            return (new Canvas(1, 1))
         }
-        var degreeIcon = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/thumb/degree_rip/${iconName}.png`)
-        return loadImage(degreeIcon)
+        var degreeIconBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/thumb/degree_rip/${iconName}.png`)
+        return loadImage(degreeIconBuffer)
     }
 }

@@ -11,7 +11,7 @@ import { drawCardListInList } from '@/components/list/cardIconList'
 import { drawSdcharaInList } from '@/components/list/cardSdchara'
 import { drawEventDatablock } from '@/components/dataBlock/event';
 import { drawGachaDatablock } from '@/components/dataBlock/gacha'
-import { Image, Canvas, createCanvas } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { Server } from '@/types/Server';
 import { drawTitle } from '@/components/title';
 import { outputFinalBuffer } from '@/image/output'
@@ -33,7 +33,7 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
     //标题
     list.push(await drawCardPrefixInList(card, defaultServerList))
     var trainingStatusList = card.getTrainingStatusList()
-    list.push(createCanvas(800, 30))
+    list.push(new Canvas(800, 30))
 
     //插画
     for (let i = 0; i < trainingStatusList.length; i++) {
@@ -43,7 +43,7 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
             trainingStatus: element,
             isList: true
         }))
-        list.push(createCanvas(800, 30))
+        list.push(new Canvas(800, 30))
     }
 
     //类型

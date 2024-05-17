@@ -1,7 +1,7 @@
 import { Event } from '@/types/Event';
 import { drawList, line } from '@/components/list';
 import { drawDatablock } from '@/components/dataBlock'
-import { Image, Canvas, createCanvas, loadImage } from 'canvas'
+import { Image, Canvas} from 'skia-canvas'
 import { changeTimefomant } from '@/components/list/time';
 import { Server } from '@/types/Server';
 import { drawTitle } from '@/components/title'
@@ -11,8 +11,7 @@ import { drawCutoffChart } from '@/components/chart/cutoffChart'
 import { serverNameFullList, tierListOfServer } from '@/config';
 import { drawEventDatablock } from '@/components/dataBlock/event';
 import { statusName } from '@/config';
-
-
+import { loadImageFromPath } from '@/image/utils';
 
 export async function drawCutoffListOfEvent(eventId: number, server: Server, compress: boolean): Promise<Array<Buffer | string>> {
     var event = new Event(eventId)
@@ -75,7 +74,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server, com
         list.push(line)
     }
     list.pop()
-    list.push(createCanvas(800, 50))
+    list.push(new Canvas(800, 50))
 
     //折线图
     list.push(await drawCutoffChart(cutoffList))
@@ -87,7 +86,7 @@ export async function drawCutoffListOfEvent(eventId: number, server: Server, com
     /*
     all.push(drawTips({
         text: '想给我们提供数据?\n可以在群聊238052000中提供数据\n也可以通过扫描右侧二维码进行上传\n手机可以长按图片扫描二维码\n我们会尽快将数据上传至服务器',
-        image: await loadImage(path.join(assetsRootPath, 'shimowendang.png'))
+        image: await loadImageFromPath(path.join(assetsRootPath, 'shimowendang.png'))
     }))
     */
     var buffer = await outputFinalBuffer({

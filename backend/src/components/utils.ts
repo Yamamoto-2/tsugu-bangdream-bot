@@ -1,4 +1,4 @@
-import { Canvas, Image, createCanvas } from 'canvas';
+import { Canvas, Image } from 'skia-canvas';
 
 export function stackImage(list: Array<Image | Canvas>) {
     var maxW = 0
@@ -9,7 +9,7 @@ export function stackImage(list: Array<Image | Canvas>) {
         }
         allH += list[i].height
     }
-    var tempcanv = createCanvas(maxW, allH)
+    var tempcanv = new Canvas(maxW, allH)
     var ctx = tempcanv.getContext("2d")
     var allH2 = 0
     for (var i = 0; i < list.length; i++) {
@@ -28,7 +28,7 @@ export function stackImageHorizontal(list: Array<Image | Canvas>) {
         }
         allW += list[i].width
     }
-    var tempcanv = createCanvas(allW, maxH)
+    var tempcanv = new Canvas(allW, maxH)
     var ctx = tempcanv.getContext("2d")
     var allW2 = 0
     for (var i = 0; i < list.length; i++) {
@@ -59,7 +59,7 @@ export function resizeImage({
         height = height * widthMax / width
         width = widthMax
     }
-    var canvas = createCanvas(width, height)
+    var canvas = new Canvas(width, height)
     var ctx = canvas.getContext('2d')
     ctx.drawImage(image, 0, 0, width, height)
     return canvas

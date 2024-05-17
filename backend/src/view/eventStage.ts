@@ -3,7 +3,7 @@ import { Server } from '@/types/Server';
 import { EventStage, Stage } from '@/types/EventStage';
 import { serverNameFullList } from '@/config';
 import { drawTitle } from '@/components/title'
-import { Canvas, Image, createCanvas } from 'canvas'
+import { Canvas, Image } from 'skia-canvas'
 import { drawEventStageTypeTop, drawEventStageSongHorizontal } from '@/components/list/eventStage'
 import { stageTypeList } from '@/types/EventStage'
 import { outputFinalBuffer } from '@/image/output'

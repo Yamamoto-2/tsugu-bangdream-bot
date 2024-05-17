@@ -1,12 +1,11 @@
 import { Card } from '@/types/Card'
-import { Image, loadImage, Canvas, createCanvas } from 'canvas'
-import { assetsRootPath, globalDefaultServer } from '@/config'
+import { Canvas } from 'skia-canvas'
+import { globalDefaultServer } from '@/config'
 import { Band } from '@/types/Band'
 import { Character } from '@/types/Character'
 import { Server, getServerByPriority } from '@/types/Server'
 import { setFontStyle } from '@/image/text'
 import { drawRoundedRect } from '@/image/drawRect'
-import * as path from 'path'
 
 var prefixBG: Canvas
 async function loadImageOnce() {
@@ -20,7 +19,7 @@ async function loadImageOnce() {
 loadImageOnce()
 
 export async function drawCardPrefixInList(card: Card, defaultServerList: Server[] = globalDefaultServer) {
-    const canvas = createCanvas(800, 155)
+    const canvas = new Canvas(800, 155)
     const ctx = canvas.getContext('2d')
     ctx.drawImage(prefixBG, 0, 0)
 

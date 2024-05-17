@@ -3,7 +3,7 @@ import { Card } from '@/types/Card'
 import { drawArticleTrimBanner } from '@/components/article/trimBanner'
 import { drawList, line, drawListByServerList, drawListMerge } from '@/components/list';
 import { drawDatablock } from '@/components/dataBlock'
-import { Image, Canvas } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { drawTimeInList } from '@/components/list/time';
 import { drawAttributeInList } from '@/components/list/attribute'
 import { drawCharacterInList } from '@/components/list/character'

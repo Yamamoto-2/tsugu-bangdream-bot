@@ -1,7 +1,8 @@
-import { Canvas, Image, loadImage } from 'canvas'
+import { Canvas, Image } from 'skia-canvas'
 import { drawList } from '@/components/list'
 import { assetsRootPath } from '@/config'
 import * as path from 'path'
+import { loadImageFromPath } from '@/image/utils';
 
 interface RarityInListOptions {
     key?: string;
@@ -12,8 +13,8 @@ interface RarityInListOptions {
 
 export let starList: { [type: string]: Image } = {}
 async function loadImageOnce() {
-    starList.normal = await loadImage(path.join(assetsRootPath, '/Card/star.png'));
-    starList.trained = await loadImage(path.join(assetsRootPath, '/Card/star_trained.png'));
+    starList.normal = await loadImageFromPath(path.join(assetsRootPath, '/Card/star.png'));
+    starList.trained = await loadImageFromPath(path.join(assetsRootPath, '/Card/star_trained.png'));
 }
 loadImageOnce()
 
@@ -21,7 +22,7 @@ export async function drawRarityInList({
     key,
     rarity,
     trainingStatus = true,
-    text 
+    text
 }: RarityInListOptions): Promise<Canvas> {
     var content: Array<string | Image | Canvas> = []
     var star: Image
@@ -34,14 +35,14 @@ export async function drawRarityInList({
     for (let i = 0; i < rarity; i++) {
         content.push(star)
     }
-    if(text){
+    if (text) {
         content.push(text)
     }
     var canvas = drawList({
         key,
         content: content,
-        textSize:50,
-        spacing:0
+        textSize: 50,
+        spacing: 0
     })
     return canvas
 }

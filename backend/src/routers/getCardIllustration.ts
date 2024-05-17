@@ -1,7 +1,6 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
 import { Card } from '@/types/Card';
-import { createCanvas } from 'canvas';
 import { listToBase64 } from '@/routers/utils';
 
 const router = express.Router();
@@ -10,7 +9,7 @@ router.post('/', [
   // Define validation rules using express-validator
   body('cardId').isNumeric().withMessage('cardId must be a number'),
 ], async (req, res) => {
-  console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
+  console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
 
   // Check for validation errors
   const errors = validationResult(req);

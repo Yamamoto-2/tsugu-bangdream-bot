@@ -1,11 +1,11 @@
-import { createCanvas, Canvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import { Song } from "@/types/Song"
 import { drawText } from "@/image/text"
 import { difficultyColorList } from "@/types/Song"
 
 export function drawDifficulityList(song: Song, imageHeight: number = 60, spacing: number = 10): Canvas {
     var difficultyCount = Object.keys(song.difficulty).length
-    var canvas = createCanvas(imageHeight * difficultyCount + (difficultyCount - 1) * spacing, imageHeight)
+    var canvas = new Canvas(imageHeight * difficultyCount + (difficultyCount - 1) * spacing, imageHeight)
     var ctx = canvas.getContext("2d")
     for (var d in song.difficulty) {
         let i = parseInt(d)
@@ -15,7 +15,7 @@ export function drawDifficulityList(song: Song, imageHeight: number = 60, spacin
 }
 
 export function drawDifficulity(difficultyType: number, playLevel: number, imageHeight: number) {
-    var tempcanv = createCanvas(imageHeight, imageHeight)
+    var tempcanv = new Canvas(imageHeight, imageHeight)
     var ctx = tempcanv.getContext("2d")
     if (difficultyColorList[difficultyType] != undefined) {
         ctx.fillStyle = difficultyColorList[difficultyType]

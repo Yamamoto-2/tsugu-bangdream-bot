@@ -1,4 +1,4 @@
-import { Canvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import mainAPI from '@/types/_Main'
 
 

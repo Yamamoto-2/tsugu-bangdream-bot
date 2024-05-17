@@ -1,7 +1,7 @@
 import { drawSongInList } from "@/components/list/song"
 import { Song } from "@/types/Song"
 import { drawDatablock } from '@/components/dataBlock'
-import { Image, Canvas, createCanvas } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { drawDottedLine } from '@/image/dottedLine'
 import { resizeImage, stackImage, stackImageHorizontal } from "@/components/utils"
 import { Server, getServerByPriority } from "@/types/Server"
@@ -52,9 +52,9 @@ export async function drawSongDataBlock(song: Song, text?: string, defaultServer
         maxWidth: 365
     })
     var difficultyImage = drawDifficulityList(song, 60, 10)
-    var list = [songNameImage, line, songDetailImage, createCanvas(1, 60)]
+    var list = [songNameImage, line, songDetailImage, new Canvas(1, 60)]
     var rightCanvas = stackImage(list)
-    var canvas = stackImageHorizontal([songJacketCanvas, createCanvas(35, 1), rightCanvas])
+    var canvas = stackImageHorizontal([songJacketCanvas, new Canvas(35, 1), rightCanvas])
     var ctx = canvas.getContext("2d")
     ctx.drawImage(difficultyImage, 435, canvas.height - difficultyImage.height)
     return (drawDatablock({ list: [canvas] }))

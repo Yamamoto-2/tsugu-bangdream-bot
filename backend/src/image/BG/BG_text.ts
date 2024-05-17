@@ -1,9 +1,7 @@
-import { Canvas, registerFont} from 'canvas';
+import { Canvas, FontLibrary} from 'skia-canvas';
 import { assetsRootPath } from '@/config';
-import path from 'path';
 
-registerFont(path.join(assetsRootPath, "/Fonts/Orbitron Black.ttf"), { family: 'Orbitron' });
-//registerFont(path.join(assetsRootPath, "/Fonts/Highnoon-Mincho-One.ttf"), { family: 'Mincho' });
+FontLibrary.use("Orbitron", [`${assetsRootPath}/Fonts/Orbitron Black.ttf`])
 
 interface DrawTextOptions {
   text: string;

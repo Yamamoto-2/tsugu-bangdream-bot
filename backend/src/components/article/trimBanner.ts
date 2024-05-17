@@ -1,4 +1,4 @@
-import { Canvas, createCanvas } from "canvas";
+import { Canvas } from 'skia-canvas';
 import { Event } from "@/types/Event";
 import { createRoundedRectangleCanvas } from "@/image/createRoundedRectangleCanvas";
 import { Server } from "@/types/Server";
@@ -12,7 +12,7 @@ export async function drawArticleTrimBanner(event: Event): Promise<Canvas> {
 
     //BG
     const BG = await event.getEventBGImage()
-    const cutBGCanvas = createCanvas(900, 450)
+    const cutBGCanvas = new Canvas(900, 450)
     const cutBGCtx = cutBGCanvas.getContext('2d')
     cutBGCtx.drawImage(BG, 0, 0, 900, BG.height * 900 / BG.width)
     const RoundedBG = await createRoundedRectangleCanvas(cutBGCanvas, 25)
@@ -21,7 +21,7 @@ export async function drawArticleTrimBanner(event: Event): Promise<Canvas> {
     const logo = await event.getEventLogoImage(Server.tw)
     const resizedLogo = resizeImage({ image: logo, widthMax: 450 })
 
-    const canvas = createCanvas(1000, 550)
+    const canvas = new Canvas(1000, 550)
     const ctx = canvas.getContext('2d')
 
     //画Image

@@ -1,14 +1,14 @@
 import { globalDefaultServer } from "@/config"
 import { Degree } from "@/types/Degree"
 import { Server, getServerByPriority } from "@/types/Server"
-import { Canvas, createCanvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 
 export async function drawDegree(degree: Degree, server: Server, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     // 如果服务器没有这个牌子，换一个有这个牌子的服务器
     if (degree.degreeName[server] == null) {
         server = getServerByPriority(degree.degreeName, defaultServerList)
     }
-    var canvas = createCanvas(230, 50)
+    var canvas = new Canvas(230, 50)
     var ctx = canvas.getContext("2d")
 
     var degreeImage = await degree.getDegreeImage(server) //底图

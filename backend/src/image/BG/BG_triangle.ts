@@ -1,4 +1,4 @@
-import { createCanvas, loadImage, Canvas, Image } from 'canvas';
+import { Canvas, Image } from 'skia-canvas';
 import { getBlurredImage } from '@/image/blurImage';
 
 interface createBlurredTrianglePatternOptions {
@@ -20,7 +20,7 @@ export async function createBlurredTrianglePattern({
     // Load image
 
     // Initialize canvas
-    const canvas = createCanvas(image.width, image.height);
+    const canvas = new Canvas(image.width, image.height);
     const ctx = canvas.getContext('2d');
 
     // Create blurred image

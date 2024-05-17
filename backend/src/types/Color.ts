@@ -1,4 +1,4 @@
-import { createCanvas, Canvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 
 export class Color {
     r: number
@@ -20,7 +20,7 @@ export class Color {
     }
 
     generateColorBlock(alpha = 1): Canvas {
-        const colorCanvas = createCanvas(50, 50)
+        const colorCanvas = new Canvas(50, 50)
         const colorCtx = colorCanvas.getContext('2d')
         colorCtx.fillStyle = this.getRGBA(alpha)
         colorCtx.fillRect(0, 0, 50, 50)

@@ -1,7 +1,7 @@
-import { createCanvas, Canvas, registerFont } from 'canvas';
+import { Canvas, FontLibrary } from 'skia-canvas';
 import { assetsRootPath } from '@/config';
-import {getTextWidth} from '@/image/utils';
-registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
+import { getTextWidth } from '@/image/utils';
+FontLibrary.use("old",[`${assetsRootPath}/Fonts/old.ttf`])
 
 interface RoundedRect {
   width: number;
@@ -23,7 +23,7 @@ export function drawRoundedRect({
   strokeColor = "#bbbbbb",
   strokeWidth = 0,
 }: RoundedRect): Canvas {
-  const canvas = createCanvas(width, height);
+  const canvas = new Canvas(width, height);
   const ctx = canvas.getContext("2d");
 
   if (typeof radius === "number") {
@@ -113,8 +113,8 @@ export function drawRoundedRectWithText({
   textColor = "#ffffff",
   textSize,
   textAlign = "center",
-  height = textSize*4/3,
-  width = getTextWidth(text, textSize,font) + height,
+  height = textSize * 4 / 3,
+  width = getTextWidth(text, textSize, font) + height,
   radius = height / 2,
   color = "#5b5b5b",
   opacity = 1,

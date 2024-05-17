@@ -1,7 +1,7 @@
 import { Card } from "@/types/Card";
 import mainAPI from "@/types/_Main"
 import { match, checkRelationList } from "@/routers/fuzzySearch"
-import { Canvas, createCanvas } from 'canvas'
+import { Canvas } from 'skia-canvas'
 import { drawDatablock, drawDatablockHorizontal } from '@/components/dataBlock';
 import { line } from '@/components/list';
 import { stackImage, stackImageHorizontal, resizeImage } from '@/components/utils'
@@ -140,7 +140,7 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
         const buffer = await outputFinalBuffer({
             imageList: all,
             useEasyBG: true,
-            compress:compress,
+            compress: compress,
         })
         return [buffer]
     }
@@ -159,7 +159,7 @@ async function drawEventInList(event: Event, defaultServerList: Server[] = globa
     for (var i = 0; i < numberOfServer; i++) {
         let server = defaultServerList[i]
         if (server == getServerByName('cn') && event.startAt[server] == null && event.eventId > currentEvent.eventId) {
-            content.push(await getIcon(server), `${changeTimefomant(GetProbablyTimeDifference(event.eventId,currentEvent))} (预计开放时间)\n`)
+            content.push(await getIcon(server), `${changeTimefomant(GetProbablyTimeDifference(event.eventId, currentEvent))} (预计开放时间)\n`)
         }
         else {
             content.push(await getIcon(server), `${changeTimefomant(event.startAt[server])} - ${changeTimefomant(event.endAt[server])}\n`)
@@ -211,7 +211,7 @@ async function drawEventInList(event: Event, defaultServerList: Server[] = globa
         image: await event.getBannerImage(),
         heightMax: 100
     })
-    var imageUp = stackImageHorizontal([eventBannerImage, createCanvas(20, 1), textImage])
+    var imageUp = stackImageHorizontal([eventBannerImage, new Canvas(20, 1), textImage])
 
     //活动期间卡池卡牌
     var cardList: Card[] = []

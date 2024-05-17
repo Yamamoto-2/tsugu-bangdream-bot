@@ -1,7 +1,7 @@
 import { getPresentEvent } from '@/types/Event';
 import { drawList, line, drawListByServerList, drawListMerge } from '@/components/list';
 import { drawDatablock } from '@/components/dataBlock'
-import { Image, Canvas } from 'canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { drawTimeInList } from '@/components/list/time';
 import { Server } from '@/types/Server';
 import { drawTitle } from '@/components/title'

@@ -1,7 +1,8 @@
-import { createCanvas, registerFont, Image, Canvas, CanvasRenderingContext2D } from 'canvas';
+import { FontLibrary, Image, Canvas, CanvasRenderingContext2D } from 'skia-canvas';
 import { assetsRootPath } from '@/config';
-registerFont(assetsRootPath + "/Fonts/old.ttf", { family: "old" })
-registerFont(assetsRootPath + "/Fonts/FangZhengHeiTi_GBK.ttf", { family: "FangZhengHeiTi" })
+FontLibrary.use("old", [`${assetsRootPath}/Fonts/old.ttf`])
+FontLibrary.use("FangZhengHeiTi", [`${assetsRootPath}/Fonts/FangZhengHeiTi_GBK.ttf`])
+
 
 interface warpTextOptions {
     text: string,
@@ -23,14 +24,14 @@ export function drawText({
 }: warpTextOptions): Canvas {
     var wrappedTextData = wrapText({ text, maxWidth, lineHeight, textSize });
     if (wrappedTextData.numberOfLines == 1) {
-        var canvas = createCanvas(1, 1);
+        var canvas = new Canvas(1, 1);
         var ctx = canvas.getContext('2d');
         setFontStyle(ctx, textSize, font);
         var width = maxWidth = ctx.measureText(wrappedTextData.wrappedText[0]).width
-        canvas = createCanvas(width, lineHeight);
+        canvas = new Canvas(width, lineHeight);
     }
     else {
-        var canvas = createCanvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
+        var canvas = new Canvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
     }
     var ctx = canvas.getContext('2d');
     let y = lineHeight / 2 + textSize / 3
@@ -52,7 +53,7 @@ export function wrapText({
     lineHeight,
     font = "old"
 }: warpTextOptions) {
-    const canvas = createCanvas(1, 1);
+    const canvas = new Canvas(1, 1);
     const ctx = canvas.getContext('2d');
     const temp = text.split('\n');
     ctx.textBaseline = 'alphabetic';
@@ -112,7 +113,7 @@ export function drawTextWithImages({
     var canvas: Canvas
     //单行文字，宽度为第一行的宽度
     if (wrappedTextData.numberOfLines == 1) {
-        canvas = createCanvas(1, 1);
+        canvas = new Canvas(1, 1);
         const ctx = canvas.getContext('2d');
         setFontStyle(ctx, textSize, font);
         var Width = 0
@@ -127,11 +128,11 @@ export function drawTextWithImages({
             }
             Width += spacing
         }
-        canvas = createCanvas(Width - spacing, lineHeight);
+        canvas = new Canvas(Width - spacing, lineHeight);
     }
     //多行文字
     else {
-        canvas = createCanvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
+        canvas = new Canvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
 
     }
     const ctx = canvas.getContext('2d');
@@ -170,7 +171,7 @@ function warpTextWithImages({
     spacing = textSize / 3,
     font = 'old'
 }: TextWithImagesOptions) {
-    const canvas = createCanvas(1, 1);
+    const canvas = new Canvas(1, 1);
     const ctx = canvas.getContext('2d');
     ctx.textBaseline = 'alphabetic';
     setFontStyle(ctx, textSize, font);
@@ -185,7 +186,7 @@ function warpTextWithImages({
     }
 
     for (let i = 0; i < content.length; i++) {
-        if(content[i] == undefined || content[i] == null){
+        if (content[i] == undefined || content[i] == null) {
             content[i] = "?"
         }
         if (typeof content[i] === "string") {
