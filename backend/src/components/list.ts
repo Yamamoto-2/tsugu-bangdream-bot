@@ -72,7 +72,9 @@ export function drawList({
     const canvas = new Canvas(maxWidth, ymax);
     const ctx = canvas.getContext('2d');
     ctx.drawImage(keyImage, 0, 0);
-    ctx.drawImage(textImage, 20, keyImage.height + 10);
+    if(textImage.height != 0){
+        ctx.drawImage(textImage, 20, keyImage.height + 10);
+    }
     return canvas;
 }
 
