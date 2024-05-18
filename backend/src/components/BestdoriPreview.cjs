@@ -164,7 +164,7 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
 
     const secondsPerCol = chartLength / colCount;
 
-    const canvas = new Canvas(width, height);
+    const canvas = new Canvas.Canvas(width, height);
     const ctx = canvas.getContext('2d');
 
     // 读取音符图片
@@ -185,7 +185,7 @@ async function DrawPreview ({id, title, artist, author, diff, level, cover}, cha
     // 读取封面
     const coverImg = await (async () => {
         try {
-            if (typeof cover === "string" || Buffer.isBuffer(cover)) return await loadImageFromPath(cover)
+            if (typeof cover === "string" || Buffer.isBuffer(cover)) return await Canvas.loadImage(cover)
             else throw new Error()
         } catch (e) {
             return await loadImageFromPath(config.assetsRootPath + '/SongChart/jacket.png')
