@@ -386,7 +386,7 @@
 |:------:|:-------:|:-----:|:-----|
 | `platform` | string | - | 用户的平台名称。 |
 | `user_id` | string | - | 用户的 ID 。 |
-| `update` | [PartialTsuguUser](#partialtsuguuser-修改用户数据) | - | 用户的 ID 。 |
+| `update` | [PartialTsuguUser](#partialtsuguuser-修改用户数据) | - | 一个数据结构，用以传入想要修改的用户数据字段以及对应的值。 |
 
 ##### PartialTsuguUser 修改用户数据
 
