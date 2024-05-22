@@ -46,7 +46,7 @@ pm2 set pm2-logrotate:compress 0
 | --- | --- | --- |
 | **koishi-plugin-tsugu-bangdream-bot** | [Koishi🔗](https://koishi.chat/zh-CN/market/) | ☕️ ☕️ ☕️ |
 | **nonebot-plugin-tsugu-bangdream-bot** | [Nonebot🔗](https://registry.nonebot.dev/plugin/nonebot-plugin-tsugu-bangdream-bot:nonebot_plugin_tsugu_bangdream_bot) | ☕️ ☕️ ☕️ |
-| **tsugu-api-python**| [Repo🔗](https://https://github.com/WindowsSov8forUs/tsugu-api-python) | ☕️ ☕️ ☕️ |
+| **tsugu-api-python**| [Repo🔗](https://github.com/WindowsSov8forUs/tsugu-api-python) | ☕️ ☕️ ☕️ |
 | **chat-tsugu-py**| [Repo🔗](https://github.com/kumoSleeping/ChatTsuguPy)| ☕️ ☕️ ☕️ |
 | **tsugu-bot-go**| [Repo🔗](https://github.com/WindowsSov8forUs/tsugu-bot-go) | ☕️ ☕️ |
 | **nonebot-plugin-tsugu-frontend** | [Nonebot🔗](https://registry.nonebot.dev/plugin/nonebot-plugin-tsugu-frontend:nonebot_plugin_tsugu_frontend) | ☕️ ☕️ |
