@@ -44,18 +44,18 @@ pm2 set pm2-logrotate:compress 0
 
 | 项目名称 | 传送门 | 完成度 |
 | --- | --- | --- |
-| **koishi-plugin-tsugu-bangdream-bot** | [Koishi🔗](https://koishi.chat/zh-CN/market/) | ☕️ ☕️ ☕️ |
-| **nonebot-plugin-tsugu-bangdream-bot** | [Nonebot🔗](https://registry.nonebot.dev/plugin/nonebot-plugin-tsugu-bangdream-bot:nonebot_plugin_tsugu_bangdream_bot) | ☕️ ☕️ ☕️ |
-| **tsugu-api-python**| [Repo🔗](https://github.com/WindowsSov8forUs/tsugu-api-python) | ☕️ ☕️ ☕️ |
-| **chat-tsugu-py**| [Repo🔗](https://github.com/kumoSleeping/ChatTsuguPy)| ☕️ ☕️ ☕️ |
-| **tsugu-bot-go**| [Repo🔗](https://github.com/WindowsSov8forUs/tsugu-bot-go) | ☕️ ☕️ |
-| **nonebot-plugin-tsugu-frontend** | [Nonebot🔗](https://registry.nonebot.dev/plugin/nonebot-plugin-tsugu-frontend:nonebot_plugin_tsugu_frontend) | ☕️ ☕️ |
-| **lgr-tsugu-py** | [Repo🔗](https://github.com/kumoSleeping/lgr-tsugu-py) | ☕️ ☕️ |
-| **nonebot-tsugu** | [Repo🔗](https://github.com/otae-1204/NoneBot-Tsugu/tree/main ) | ☕️ |
+| **koishi-plugin-tsugu-bangdream-bot** | [🔗Koishi](https://koishi.chat/zh-CN/market/) | ☕️ ☕️ ☕️ |
+| **nonebot-plugin-tsugu-bangdream-bot** | [🔗Nonebot](https://registry.nonebot.dev/plugin/nonebot-plugin-tsugu-bangdream-bot:nonebot_plugin_tsugu_bangdream_bot) | ☕️ ☕️ ☕️ |
+| **tsugu-api-python**| [🔗Repo](https://github.com/WindowsSov8forUs/tsugu-api-python) | ☕️ ☕️ ☕️ |
+| **chat-tsugu-py**| [🔗Repo](https://github.com/kumoSleeping/ChatTsuguPy)| ☕️ ☕️ ☕️ |
+| **tsugu-bot-go**| [🔗Repo](https://github.com/WindowsSov8forUs/tsugu-bot-go) | ☕️ ☕️ |
+| **nonebot-plugin-tsugu-frontend** | [🔗Nonebot](https://registry.nonebot.dev/plugin/nonebot-plugin-tsugu-frontend:nonebot_plugin_tsugu_frontend) | ☕️ ☕️ |
+| **lgr-tsugu-py** | [🔗Repo](https://github.com/kumoSleeping/lgr-tsugu-py) | ☕️ ☕️ |
+| **nonebot-tsugu** | [🔗Repo](https://github.com/otae-1204/NoneBot-Tsugu/tree/main ) | ☕️ |
 
 
 ## 🐧 QQ 官方机器人
-> 点击链接了解机器人详情 [Tsugu](https://qun.qq.com/qunpro/robot/qunshare?robot_uin=3889000770&robot_appid=102076262&biz_type=0)
+> 点击链接了解机器人详情 [🔗Tsugu](https://qun.qq.com/qunpro/robot/qunshare?robot_uin=3889000770&robot_appid=102076262&biz_type=0)
 
 
 ## 📚 后端 API 文档
