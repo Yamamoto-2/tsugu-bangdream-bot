@@ -42,20 +42,25 @@ pm2 set pm2-logrotate:compress 0
 
 ## 🚪 相关项目
 
-| 项目名称 | 传送门 |
-| --- | --- | 
-| **koishi-plugin-tsugu-bangdream-bot** | [![npm](https://img.shields.io/npm/v/koishi-plugin-tsugu-bangdream-bot?style=flat-square)](https://koishi.chat/zh-CN/manual/introduction.html)|
-| **nonebot-plugin-tsugu-frontend** | [![github](https://img.shields.io/github/v/release/zhaomaoniu/nonebot-plugin-tsugu-frontend?style=flat-square)](https://github.com/zhaomaoniu/nonebot-plugin-tsugu-frontend/) | 
-| **lgr-tsugu-py** | [![release](https://img.shields.io/github/v/release/kumoSleeping/lgr-tsugu-py?style=flat-square)](https://github.com/kumoSleeping/lgr-tsugu-py) |
-| **chat-tsugu-py**| [![pypi](https://img.shields.io/pypi/v/tsugu?style=flat-square)](https://github.com/kumoSleeping/ChatTsuguPy)|
-| **tsugu-api-python**| [![pypi](https://img.shields.io/pypi/v/tsugu-api-python?style=flat-square)](https://https://github.com/WindowsSov8forUs/tsugu-api-python) |
-| **tsugu-bot-go**| [![github](https://img.shields.io/github/v/release/WindowsSov8forUs/tsugu-bot-go?style=flat-square)](https://github.com/WindowsSov8forUs/tsugu-bot-go) |
-| **nonebot-tsugu** | [![pypi](https://img.shields.io/pypi/v/nonebot-tsugu?style=flat-square)](https://github.com/otae-1204/NoneBot-Tsugu/tree/main ) |
+| 项目名称 | 传送门 | 完成度 |
+| --- | --- | --- |
+| **koishi-plugin-tsugu-bangdream-bot** | [Koishi🔗](https://koishi.chat/zh-CN/market/) | ☕️ ☕️ ☕️ |
+| **nonebot-plugin-tsugu-bangdream-bot** | [Nonebot🔗](https://registry.nonebot.dev/plugin/nonebot-plugin-tsugu-bangdream-bot:nonebot_plugin_tsugu_bangdream_bot) | ☕️ ☕️ ☕️ |
+| **tsugu-api-python**| [Repo🔗](https://https://github.com/WindowsSov8forUs/tsugu-api-python) | ☕️ ☕️ ☕️ |
+| **chat-tsugu-py**| [Repo🔗](https://github.com/kumoSleeping/ChatTsuguPy)| ☕️ ☕️ ☕️ |
+| **tsugu-bot-go**| [Repo🔗](https://github.com/WindowsSov8forUs/tsugu-bot-go) | ☕️ ☕️ |
+| **nonebot-plugin-tsugu-frontend** | [Nonebot🔗](https://registry.nonebot.dev/plugin/nonebot-plugin-tsugu-frontend:nonebot_plugin_tsugu_frontend) | ☕️ ☕️ |
+| **lgr-tsugu-py** | [Repo🔗](https://github.com/kumoSleeping/lgr-tsugu-py) | ☕️ ☕️ |
+| **nonebot-tsugu** | [Repo🔗](https://github.com/otae-1204/NoneBot-Tsugu/tree/main ) | ☕️ |
 
-> 请自行甄别以上项目安全性与完成度
 
 ## 🐧 QQ 官方机器人
 > 点击链接了解机器人详情 [Tsugu](https://qun.qq.com/qunpro/robot/qunshare?robot_uin=3889000770&robot_appid=102076262&biz_type=0)
+
+
+## 📚 后端 API 文档
+
+> 详细文档请查看 [🔗文档](https://github.com/Yamamoto-2/tsugu-bangdream-bot/blob/master/docs/api.md)
 
 ## 📦 数据支持
 
