@@ -1,12 +1,12 @@
 import { Server } from '../types/Server'
-import {getDataFromBackend} from './utils'
+import { getReplyFromBackend } from "../api/getReplyFromBackend"
+import { Config } from '../config';
 
-
-export async function commandGacha(backendUrl:string,default_servers:Server[], gachaId: number,useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
-    return await getDataFromBackend(`${backendUrl}/searchGacha`, {
-        default_servers,
+export async function commandGacha(config: Config, displayedServerList: Server[], gachaId: number): Promise<Array<Buffer | string>> {
+    return await getReplyFromBackend(`${config.backendUrl}/searchGacha`, {
+        displayedServerList,
         gachaId,
-        useEasyBG,
-        compress
+        useEasyBG: config.useEasyBG,
+        compress: config.compress
     })
 }

@@ -201,9 +201,9 @@ export class Event {
         var eventData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/events/${this.eventId}.json`, time);
         return eventData
     }
-    async getBannerImage(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
-        if (!defaultServerList) defaultServerList = globalDefaultServer
-        var server = getServerByPriority(this.startAt, defaultServerList)
+    async getBannerImage(displayedServerList: Server[] = globalDefaultServer): Promise<Image> {
+        if (!displayedServerList) displayedServerList = globalDefaultServer
+        var server = getServerByPriority(this.startAt, displayedServerList)
         try {
             var BannerImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/event/${this.assetBundleName}/images_rip/banner.png`, false)
             return await loadImage(BannerImageBuffer)
@@ -327,10 +327,10 @@ export function getPresentEvent(server: Server, time?: number) {
 }
 
 //根据服务器，将活动列表排序
-export function sortEventList(tempEventList: Event[], defaultServerList: Server[] = globalDefaultServer) {
+export function sortEventList(tempEventList: Event[], displayedServerList: Server[] = globalDefaultServer) {
     tempEventList.sort((a, b) => {
-        for (var i = 0; i < defaultServerList.length; i++) {
-            var server = defaultServerList[i]
+        for (var i = 0; i < displayedServerList.length; i++) {
+            var server = displayedServerList[i]
             if (a.startAt[server] == null || b.startAt[server] == null) {
                 continue
             }

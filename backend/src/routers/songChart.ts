@@ -1,11 +1,12 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator';
-import { drawSongList } from '@/view/songList';
-import { fuzzySearch } from '@/routers/fuzzySearch';
-import { isInteger, listToBase64, isServerList } from '@/routers/utils';
+import { body } from 'express-validator';
+import { fuzzySearch } from '@/fuzzySearch';
+import { listToBase64 } from '@/routers/utils';
+import { isServerList } from '@/types/Server';
 import { drawSongChart } from '@/view/songChart';
-import { Song } from '@/types/Song';
 import { getServerByServerId, Server } from '@/types/Server';
+import { middleware } from '@/routers/middleware';
+import { Request, Response } from 'express';
 
 const router = express.Router();
 
@@ -13,25 +14,19 @@ router.post(
     '/',
     [
         // Express-validator checks for type validation
-        body('default_servers').custom(isServerList),
+        body('displayedServerList').custom(isServerList),
         body('songId').isInt(),
-        body('difficultyText').isString(),
+        body('difficultyId').isInt(),
         body('compress').optional().isBoolean(),
     ],
-    async (req, res) => {
-        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
-
-        // Check for validation errors
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
-        }
+    middleware,
+    async (req: Request, res: Response) => {
 
 
-        const { default_servers, songId, difficultyText, compress } = req.body;
+        const { displayedServerList, songId, difficultyId, compress } = req.body;
 
         try {
-            const result = await commandSongChart(default_servers, songId, compress, difficultyText);
+            const result = await commandSongChart(displayedServerList, songId, compress, difficultyId);
             res.send(listToBase64(result));
         } catch (e) {
             console.log(e);
@@ -41,17 +36,19 @@ router.post(
 );
 
 
-export async function commandSongChart(default_servers: Server[], songId: number, compress: boolean, difficultyText?: string): Promise<Array<Buffer | string>> {
-    difficultyText = difficultyText.toLowerCase()
-    var fuzzySearchResult = fuzzySearch(difficultyText.split(' '))
+export async function commandSongChart(displayedServerList: Server[], songId: number, compress: boolean, difficultyId = 3): Promise<Array<Buffer | string>> {
+    /*
+    text = text.toLowerCase()
+    var fuzzySearchResult = fuzzySearch(text.split(' '))
     console.log(fuzzySearchResult)
     if (fuzzySearchResult.difficulty === undefined) {
-        return ['错误: 不正确的难度关键词,可以使用以下关键词:easy,normal,hard,expert,special']
+        return ['错误: 不正确的难度关键词,可以使用以下关键词:easy,normal,hard,expert,special,EZ,NM,HD,EX,SP']
     }
-    for(let i = 0; i < default_servers.length; i++) {
-        default_servers[i] = getServerByServerId(default_servers[i])
+    */
+    for (let i = 0; i < displayedServerList.length; i++) {
+        displayedServerList[i] = getServerByServerId(displayedServerList[i])
     }
-    return await drawSongChart(songId, parseInt(fuzzySearchResult.difficulty[0]), default_servers, compress)
+    return await drawSongChart(songId, difficultyId, displayedServerList, compress)
 }
 
 export { router as songChartRouter }

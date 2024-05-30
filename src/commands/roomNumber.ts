@@ -1,6 +1,6 @@
 import { Room, submitRoomNumber } from "../types/Room";
 import * as fs from 'fs'
-import { carKeywordPath, tsuguUser, Config } from "../config";
+import { carKeywordPath, tsuguUser, Config, getUserPlayerByUser, userPlayerInList } from "../config";
 import { Session } from 'koishi'
 import * as axios from 'axios'
 
@@ -15,11 +15,10 @@ function loadConfig(): CarKeyword {
 
 const carKeywordConfig = loadConfig();
 
-export async function roomNumber(config:Config,session: Session<'tsugu', never>,user:tsuguUser, number: number, raw_message: string, bandoriStationToken?: string) {
-    if (!user.car) {
+export async function roomNumber(config: Config, session: Session<'tsugu', never>, user: tsuguUser, number: number, raw_message: string) {
+    if (!user.shareRoomNumber) {
         return
     }
-    console.log(user)
     let isCar = false
     for (let i = 0; i < carKeywordConfig['car'].length; i++) {
         const element = carKeywordConfig['car'][i];
@@ -34,29 +33,35 @@ export async function roomNumber(config:Config,session: Session<'tsugu', never>,
         }
     }
     if (isCar) {
-        if(config.RemoteDBSwitch){
-            const res = await axios.default.post(`${config.RemoteDBHost}/station/submitRoomNumber`,{
+        if (config.RemoteDBSwitch) {
+            const res = await axios.default.post(`${config.RemoteDBUrl}/station/submitRoomNumber`, {
                 number: number,
                 rawMessage: raw_message,
                 platform: user.platform,
-                user_id: user.user_id,
+                userId: user.userId,
                 userName: session.username,
                 time: Date.now(),
-                bandoriStationToken
+                avatarUrl: session.event.user.avatar,
+                bandoriStationToken: config.bandoriStationToken
             })
-            console.log(res.data?.data)
         }
-        else{
+        else {
+            let userPlayerInList: userPlayerInList
+            try {
+                userPlayerInList = getUserPlayerByUser(user)
+            }
+            catch (e) {
+            }
             let platform = user.platform
             await submitRoomNumber({
                 number: number,
                 rawMessage: raw_message,
                 source: platform,
-                userId: user.user_id,
+                userId: user.userId,
                 time: Date.now(),
-                userName:session.username,
-                bandoriStationToken
-            }, user)
+                userName: session.username,
+                bandoriStationToken: config.bandoriStationToken
+            }, userPlayerInList)
         }
     }
 }

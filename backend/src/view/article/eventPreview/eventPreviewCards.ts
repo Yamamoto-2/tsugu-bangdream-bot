@@ -77,7 +77,7 @@ export async function drawEventPreviewCards(eventId: number, illustration: boole
     }
 }
 
-async function drawEventCardDetail(cardId: number, defaultServerList: Server[], eventBGImage?: Image): Promise<string | Buffer> {
+async function drawEventCardDetail(cardId: number, displayedServerList: Server[], eventBGImage?: Image): Promise<string | Buffer> {
     const card = new Card(cardId)
     if (!card.isExist) {
         return '错误: 卡牌不存在'
@@ -88,7 +88,7 @@ async function drawEventCardDetail(cardId: number, defaultServerList: Server[], 
     var list: Array<Image | Canvas> = []
 
     //标题
-    list.push(await drawCardPrefixInList(card, defaultServerList))
+    list.push(await drawCardPrefixInList(card, displayedServerList))
     var trainingStatusList = card.getTrainingStatusList()
     list.push(new Canvas(800, 30))
 
@@ -142,17 +142,17 @@ async function drawEventCardDetail(cardId: number, defaultServerList: Server[], 
     */
     //技能
     var skill = new Skill(card.skillId)
-    list.push(await drawSkillInList({ key: '技能', card: card, content: skill }, defaultServerList))
+    list.push(await drawSkillInList({ key: '技能', card: card, content: skill }, displayedServerList))
     list.push(line)
 
     //标题
-    list.push(await drawListByServerList(card.prefix, '标题', defaultServerList))
+    list.push(await drawListByServerList(card.prefix, '标题', displayedServerList))
     list.push(line)
 
     //判断是否来自卡池
-    for (let j = 0; j < defaultServerList.length; j++) {
+    for (let j = 0; j < displayedServerList.length; j++) {
         var releaseFromGacha = false
-        var server = defaultServerList[j];
+        var server = displayedServerList[j];
         if (card.releasedAt[server] == null) {
             continue
         }
@@ -161,7 +161,7 @@ async function drawEventCardDetail(cardId: number, defaultServerList: Server[], 
             if (Object.prototype.hasOwnProperty.call(sourceOfServer, i)) {
                 if (i == 'gacha' && card.rarity > 2) {
                     //招募语
-                    list.push(await drawListByServerList(card.gachaText, '招募语', defaultServerList))
+                    list.push(await drawListByServerList(card.gachaText, '招募语', displayedServerList))
                     list.push(line)
                     releaseFromGacha = true
                     break
@@ -178,7 +178,7 @@ async function drawEventCardDetail(cardId: number, defaultServerList: Server[], 
     list.push(await drawTimeInList({
         key: '发布日期',
         content: card.releasedAt
-    }, defaultServerList))
+    }, displayedServerList))
     list.push(line)
     */
 

@@ -51,3 +51,12 @@ export function checkLeftDigits(str: string): number {
 
     return 0;
 }
+
+//将string Array 转化为 number Array，修复displayedServerList koishi数据库类型错误
+export function stringArrayToNumberArray(strArray: any[]): number[] {
+    let numArray: number[] = []
+    for (let i = 0; i < strArray.length; i++) {
+        numArray.push(parseInt(strArray[i]))
+    }
+    return numArray
+}

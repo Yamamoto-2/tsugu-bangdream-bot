@@ -57,3 +57,38 @@ export function formatNumber(num: number, length: number): string {
 
     return str;
 }
+
+//栈函数
+export class Stack<T> {
+    stack: T[];
+    private maxLength: number;
+
+    constructor(maxLength: number) {
+        this.stack = [];
+        this.maxLength = maxLength;
+    }
+
+    push(item: T): void {
+        this.stack.unshift(item); // 将新元素插入到堆栈的最前面
+
+        if (this.stack.length > this.maxLength) {
+            this.stack.pop(); // 如果堆栈长度超过指定的最大长度，自动弹出最后一个元素
+        }
+    }
+
+    pop(): T | undefined {
+        return this.stack.shift(); // 弹出并返回最前面的元素
+    }
+
+    isEmpty(): boolean {
+        return this.stack.length === 0;
+    }
+
+    size(): number {
+        return this.stack.length;
+    }
+
+    clear(): void {
+        this.stack = [];
+    }
+}

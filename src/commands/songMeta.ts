@@ -1,21 +1,11 @@
 import { Server, getServerByName } from '../types/Server'
-import {getDataFromBackend} from './utils'
+import { getReplyFromBackend } from "../api/getReplyFromBackend"
+import { Config } from '../config';
 
-
-export async function commandSongMeta(backendUrl:string,default_servers:Server[], text: string, compress: boolean): Promise<Array<Buffer | string>>{
-    let server: Server
-    if (!text) {
-        server = default_servers[0]
-    }
-    else {
-        server = getServerByName(text)
-    }
-    if (server == undefined) {
-        return ['错误: 服务器不存在']
-    }
-    return await getDataFromBackend(`${backendUrl}/songMeta`, {
+export async function commandSongMeta(config: Config, default_servers: Server[], mainServer: Server): Promise<Array<Buffer | string>> {
+    return await getReplyFromBackend(`${config.backendUrl}/songMeta`, {
         default_servers,
-        server,
-        compress
+        mainServer,
+        compress: config.compress
     })
 }   

@@ -1,11 +1,12 @@
 import { Server } from '../types/Server'
-import {getDataFromBackend} from './utils'
+import { getReplyFromBackend } from "../api/getReplyFromBackend"
+import { Config } from '../config';
 
-export async function commandCard(backendUrl:string,default_servers: Server[], text: string, useEasyBG: boolean, compress: boolean): Promise<Array<string | Buffer>> {
-    return await getDataFromBackend(`${backendUrl}/searchCard`, {
-        default_servers,
+export async function commandCard(config: Config, displayedServerList: Server[], text: string): Promise<Array<string | Buffer>> {
+    return await getReplyFromBackend(`${config.backendUrl}/searchCard`, {
+        displayedServerList,
         text,
-        useEasyBG,
-        compress
+        useEasyBG: config.useEasyBG,
+        compress: config.compress
     })
 }

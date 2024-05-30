@@ -14,7 +14,7 @@ import { drawGachaRateInList } from '@/components/list/gachaRate';
 import { globalDefaultServer, serverNameFullList } from '@/config';
 import { drawGachaPickupInList } from '@/components/list/gachaPickUp'
 
-export async function drawGachaDetail(gachaId: number, defaultServerList: Server[] = globalDefaultServer, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawGachaDetail(gachaId: number, displayedServerList: Server[] = globalDefaultServer, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
     const gacha = new Gacha(gachaId)
     if (!gacha.isExist) {
         return ['错误: 卡池不存在']
@@ -28,7 +28,7 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
     list.push(new Canvas(800, 30))
 
     //标题
-    list.push(await drawListByServerList(gacha.gachaName, '卡池名称', defaultServerList))
+    list.push(await drawListByServerList(gacha.gachaName, '卡池名称', displayedServerList))
     list.push(line)
 
     //类型
@@ -59,10 +59,10 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
     list.push(line)
 
     //描述
-    list.push(await drawListByServerList(gacha.description, '描述', defaultServerList))
+    list.push(await drawListByServerList(gacha.description, '描述', displayedServerList))
     list.push(line)
 
-    var server = getServerByPriority(gacha.publishedAt, defaultServerList)
+    var server = getServerByPriority(gacha.publishedAt, displayedServerList)
 
     //支付方法
     list.push(await drawGashaPaymentMethodInList(gacha))
@@ -89,15 +89,15 @@ export async function drawGachaDetail(gachaId: number, defaultServerList: Server
     var tempEventIdList = []//用于防止重复
     var eventImageList: Array<Canvas | Image> = []
 
-    for (let k = 0; k < defaultServerList.length; k++) {
-        let server = defaultServerList[k]
+    for (let k = 0; k < displayedServerList.length; k++) {
+        let server = displayedServerList[k]
         if (gacha.publishedAt[server] == null) {
             continue
         }
         var relatedEvent = getPresentEvent(server, gacha.publishedAt[server])
         if (relatedEvent != null && !tempEventIdList.includes(relatedEvent.eventId)) {
             tempEventIdList.push(relatedEvent.eventId)
-            eventImageList.push(await drawEventDatablock(relatedEvent, defaultServerList, `${serverNameFullList[server]}相关活动`))
+            eventImageList.push(await drawEventDatablock(relatedEvent, displayedServerList, `${serverNameFullList[server]}相关活动`))
         }
     }
 

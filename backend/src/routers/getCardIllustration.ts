@@ -1,32 +1,32 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
 import { Card } from '@/types/Card';
 import { listToBase64 } from '@/routers/utils';
+import { middleware } from '@/routers/middleware';
+import { Request, Response } from 'express';
 
 const router = express.Router();
 
-router.post('/', [
-  // Define validation rules using express-validator
-  body('cardId').isNumeric().withMessage('cardId must be a number'),
-], async (req, res) => {
-  console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
+router.post('/',
+  [
+    // Define validation rules using express-validator
+    body('cardId').isNumeric(),
+  ],
+  middleware,
+  async (req: Request, res: Response) => {
 
-  // Check for validation errors
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+    const { cardId } = req.body;
+
+    try {
+      // Ensure cardId is a valid number (no need to check isNaN again)
+      const images = await commandGetCardIllustration(cardId);
+      res.send(listToBase64(images));
+    } catch (error) {
+      console.log(error);
+      res.status(500).send('内部服务器错误');
+    }
   }
-
-  const { cardId } = req.body;
-
-  try {
-    // Ensure cardId is a valid number (no need to check isNaN again)
-    const images = await commandGetCardIllustration(cardId);
-    res.send(listToBase64(images));
-  } catch (error) {
-    res.status(500).send('内部服务器错误');
-  }
-});
+);
 
 async function commandGetCardIllustration(cardId: number): Promise<Array<Buffer | string>> {
   let card = new Card(cardId);

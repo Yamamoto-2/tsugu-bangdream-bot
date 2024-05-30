@@ -1,11 +1,12 @@
 import { Server } from '../types/Server'
-import { getDataFromBackend } from './utils'
+import { getReplyFromBackend } from "../api/getReplyFromBackend"
+import { Config } from '../config';
 
 
-export async function commandEventStage(backendUrl: string, server: Server, compress: boolean, meta: boolean = false, eventId?: number): Promise<Array<Buffer | string>> {
-    return await getDataFromBackend(`${backendUrl}/eventStage`, {
-        server,
-        compress,
+export async function commandEventStage(config: Config, mainServer: Server, eventId?: number, meta: boolean = false,): Promise<Array<Buffer | string>> {
+    return await getReplyFromBackend(`${config.backendUrl}/eventStage`, {
+        mainServer,
+        compress: config.compress,
         meta,
         eventId
     })

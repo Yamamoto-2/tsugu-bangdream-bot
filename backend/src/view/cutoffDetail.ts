@@ -13,10 +13,10 @@ import { drawEventDatablock } from '@/components/dataBlock/event';
 import { statusName } from '@/config';
 import { loadImageFromPath } from '@/image/utils';
 
-export async function drawCutoffDetail(eventId: number, tier: number, server: Server, compress: boolean): Promise<Array<Buffer | string>> {
-    var cutoff = new Cutoff(eventId, server, tier)
+export async function drawCutoffDetail(eventId: number, tier: number, mainServer: Server, compress: boolean): Promise<Array<Buffer | string>> {
+    var cutoff = new Cutoff(eventId, mainServer, tier)
     if (cutoff.isExist == false) {
-        return [`错误: ${serverNameFullList[server]} 活动或档线不存在`]
+        return [`错误: ${serverNameFullList[mainServer]} 活动或档线不存在`]
     }
     await cutoff.initFull()
     /*
@@ -25,10 +25,10 @@ export async function drawCutoffDetail(eventId: number, tier: number, server: Se
     }
     */
     var all = []
-    all.push(drawTitle('预测线', `${serverNameFullList[server]} ${cutoff.tier}档线`))
+    all.push(drawTitle('预测线', `${serverNameFullList[mainServer]} ${cutoff.tier}档线`))
     var list: Array<Image | Canvas> = []
     var event = new Event(eventId)
-    all.push(await drawEventDatablock(event, [server]))
+    all.push(await drawEventDatablock(event, [mainServer]))
 
     //状态
     var time = new Date().getTime()

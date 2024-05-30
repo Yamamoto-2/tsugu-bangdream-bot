@@ -5,7 +5,7 @@ import { getServerByPriority } from '@/types/Server'
 import { Server } from '@/types/Server'
 import { globalDefaultServer, serverNameFullList } from '@/config';
 
-export async function drawSongChart(songId: number, difficultyId: number, defaultServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawSongChart(songId: number, difficultyId: number, displayedServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
     const song = new Song(songId)
     if (!song.isExist) {
         return ['歌曲不存在']
@@ -14,7 +14,7 @@ export async function drawSongChart(songId: number, difficultyId: number, defaul
     if (!song.difficulty[difficultyId]) {
         return ['难度不存在']
     }
-    const server = getServerByPriority(song.publishedAt, defaultServerList)
+    const server = getServerByPriority(song.publishedAt, displayedServerList)
     const band = new Band(song.bandId)
     const bandName = band.bandName[server]
     const songChart = await song.getSongChart(difficultyId)
@@ -26,7 +26,7 @@ export async function drawSongChart(songId: number, difficultyId: number, defaul
         author: song.detail.lyricist[server],
         level: song.difficulty[difficultyId].playLevel,
         diff: difficultyName[difficultyId],
-        cover: song.getSongJacketImageURL(defaultServerList)
+        cover: song.getSongJacketImageURL(displayedServerList)
     }, songChart as any)
     
     let buffer:Buffer

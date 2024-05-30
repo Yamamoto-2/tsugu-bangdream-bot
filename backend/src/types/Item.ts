@@ -53,12 +53,12 @@ export class Item {
             }
         }
     }
-    async getItemImage(server?: Server, defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
-        if (!defaultServerList) defaultServerList = globalDefaultServer
+    async getItemImage(server?: Server, displayedServerList: Server[] = globalDefaultServer): Promise<Image> {
+        if (!displayedServerList) displayedServerList = globalDefaultServer
         if (server == undefined) {
-            server = getServerByPriority(this.name, defaultServerList)
+            server = getServerByPriority(this.name, displayedServerList)
         }
-        server = getServerByPriority(this.name, defaultServerList)
+        server = getServerByPriority(this.name, displayedServerList)
         let itemImageBuffer: Buffer
         if (this.typeName == 'material') {
             itemImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/thumb/material_rip/${this.typeName}${formatNumber(this.resourceId, 3)}.png`)

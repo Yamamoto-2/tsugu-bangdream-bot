@@ -42,7 +42,7 @@ export async function drawEventPreviewGacha(eventId: number): Promise<Array<Buff
     return result
 }
 
-async function drawEventGachaDetail(gacha: Gacha, defaultServerList: Server[]): Promise<string | Buffer> {
+async function drawEventGachaDetail(gacha: Gacha, displayedServerList: Server[]): Promise<string | Buffer> {
     if (!gacha.isExist) {
         return '错误: 卡池不存在'
     }
@@ -55,7 +55,7 @@ async function drawEventGachaDetail(gacha: Gacha, defaultServerList: Server[]): 
     list.push(new Canvas(800, 30))
 
     //标题
-    list.push(await drawListByServerList(gacha.gachaName, '卡池名称', defaultServerList))
+    list.push(await drawListByServerList(gacha.gachaName, '卡池名称', displayedServerList))
     list.push(line)
 
     //类型
@@ -72,10 +72,10 @@ async function drawEventGachaDetail(gacha: Gacha, defaultServerList: Server[]): 
     list.push(line)
 
     //描述
-    list.push(await drawListByServerList(gacha.description, '描述', defaultServerList))
+    list.push(await drawListByServerList(gacha.description, '描述', displayedServerList))
     list.push(line)
 
-    var server = getServerByPriority(gacha.publishedAt, defaultServerList)
+    var server = getServerByPriority(gacha.publishedAt, displayedServerList)
 
     //支付方法
     list.push(await drawGashaPaymentMethodInList(gacha))

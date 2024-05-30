@@ -1,5 +1,5 @@
 import { Server } from "@/types/Server";
-import { tsuguUser } from "@/config";
+import { tsuguUser } from "@/database/userDB";
 
 export function generateVerifyCode(): number {
     let verifyCode: number;
@@ -12,31 +12,6 @@ export function generateVerifyCode(): number {
 export function isInteger(char: string): boolean {
     const regex = /^-?[1-9]\d*$/;
     return regex.test(char);
-}
-
-export function isServer(server: any): boolean {
-    if (typeof server == 'number') {
-        server = Server[server]
-    }
-    else if (typeof server == 'string') {   
-        server = Server[parseInt(server)]
-    }
-    else{
-        return false
-    }
-    return Object.keys(Server).includes(server)
-}
-
-export function isServerList(default_servers: Array<any>): boolean {
-    let result = true
-    for (let i = 0; i < default_servers.length; i++) {
-        const element = default_servers[i];
-        if (!isServer(element)) {
-            result = false
-            break
-        }
-    }
-    return result
 }
 
 function imageBufferToBase64(buffer: Buffer): string {

@@ -13,8 +13,8 @@ export async function drawCharacterInList({
     key,
     content,
     text
-}: CharacterInListOptions, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
-    var server = getServerByPriority(content[0].characterName, defaultServerList)
+}: CharacterInListOptions, displayedServerList: Server[] = globalDefaultServer): Promise<Canvas> {
+    var server = getServerByPriority(content[0].characterName, displayedServerList)
     var list: Array<string | Image | Canvas> = []
     if (content.length == 1 && text == undefined) {
         list.push(await content[0].getIcon())

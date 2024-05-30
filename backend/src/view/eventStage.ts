@@ -3,17 +3,13 @@ import { Server } from '@/types/Server';
 import { EventStage, Stage } from '@/types/EventStage';
 import { serverNameFullList } from '@/config';
 import { drawTitle } from '@/components/title'
-import { Canvas, Image } from 'skia-canvas'
+import { Canvas } from 'skia-canvas'
 import { drawEventStageTypeTop, drawEventStageSongHorizontal } from '@/components/list/eventStage'
-import { stageTypeList } from '@/types/EventStage'
 import { outputFinalBuffer } from '@/image/output'
 import { drawDatablock } from '@/components/dataBlock'
-import { line } from '@/components/list'
 import { stackImage, stackImageHorizontal } from '@/components/utils'
-import { drawDatablockHorizontal } from '@/components/dataBlock'
 
-
-export async function drawEventStage(eventId: number, server: Server, meta: boolean = false, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawEventStage(eventId: number, mainServer: Server, meta: boolean = false, compress: boolean): Promise<Array<Buffer | string>> {
     const event = new Event(eventId);
     if (!event.isExist) {
         return [`错误: 活动不存在`];
@@ -21,10 +17,10 @@ export async function drawEventStage(eventId: number, server: Server, meta: bool
     if (event.eventType != 'festival') {
         return [`错误: 活动不是festival类型`];
     }
-    if (event.startAt[server] == null) {
-        return [`错误: ${serverNameFullList[server]} ID:${eventId} 活动没有时间数据`];
+    if (event.startAt[mainServer] == null) {
+        return [`错误: ${serverNameFullList[mainServer]} ID:${eventId} 活动没有时间数据`];
     }
-    console.log(eventId)
+
     const eventStage = new EventStage(eventId);
     await eventStage.initFull();
     if (!eventStage.isExist) {

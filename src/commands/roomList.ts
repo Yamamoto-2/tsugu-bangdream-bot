@@ -1,14 +1,15 @@
 import { Config } from '../config'
 import { queryAllRoom, Room } from '../types/Room'
-import { getDataFromBackend } from './utils'
+import { getReplyFromBackend } from "../api/getReplyFromBackend"
+
 import * as axios from 'axios'
 
 
-export async function commandRoomList(config: Config, compress: boolean, keyWord?: string): Promise<Array<string | Buffer>> {
-    let tempRoomList: Room[] = []  
+export async function commandRoomList(config: Config, keyWord?: string): Promise<Array<string | Buffer>> {
+    let tempRoomList: Room[] = []
     //如果从远程服务器获取
     if (config.RemoteDBSwitch) {
-        const res = await axios.default.get(`${config.RemoteDBHost}/station/queryAllRoom`)
+        const res = await axios.default.get(`${config.RemoteDBUrl}/station/queryAllRoom`)
         if (res.data.status == 'success') {
             tempRoomList = res.data.data
         }
@@ -36,8 +37,8 @@ export async function commandRoomList(config: Config, compress: boolean, keyWord
     if (roomList.length == 0 && keyWord != undefined) {
         return [`没有找到包含 ${keyWord} 的房间`]
     }
-    return await getDataFromBackend(`${config.backendUrl}/roomList`, {
+    return await getReplyFromBackend(`${config.backendUrl}/roomList`, {
         roomList,
-        compress
+        compress: config.compress
     })
 }

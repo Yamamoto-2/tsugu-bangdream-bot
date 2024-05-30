@@ -18,7 +18,7 @@ async function loadImageOnce() {
 }
 loadImageOnce()
 
-export async function drawCardPrefixInList(card: Card, defaultServerList: Server[] = globalDefaultServer) {
+export async function drawCardPrefixInList(card: Card, displayedServerList: Server[] = globalDefaultServer) {
     const canvas = new Canvas(800, 155)
     const ctx = canvas.getContext('2d')
     ctx.drawImage(prefixBG, 0, 0)
@@ -29,7 +29,7 @@ export async function drawCardPrefixInList(card: Card, defaultServerList: Server
     ctx.drawImage(bandLogo, 30, 25, 240, bandLogo.height * 240 / bandLogo.width)
 
     //prefix
-    const server = getServerByPriority(card.releasedAt, defaultServerList)
+    const server = getServerByPriority(card.releasedAt, displayedServerList)
     ctx.fillStyle = '#5b5b5b'
     ctx.textBaseline = 'hanging'
     ctx.textAlign = 'left'
@@ -38,7 +38,7 @@ export async function drawCardPrefixInList(card: Card, defaultServerList: Server
 
     //characterName
     const character = new Character(card.characterId)
-    const tempserver = getServerByPriority(character.characterName, defaultServerList)
+    const tempserver = getServerByPriority(character.characterName, displayedServerList)
     const characterName = character.characterName[tempserver]
     setFontStyle(ctx, 40, 'old')
     ctx.fillText(characterName, 300, 75, 470)

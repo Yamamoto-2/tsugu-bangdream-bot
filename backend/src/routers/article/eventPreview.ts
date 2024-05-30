@@ -1,6 +1,6 @@
 import { listToBase64 } from '@/routers/utils';
 import express from 'express';
-import { validationResult, body } from 'express-validator';
+import { body } from 'express-validator';
 import { drawEventPreviewTitle } from '@/view/article/eventPreview/eventPreviewTitle';
 import { drawEventPreviewDetail } from '@/view/article/eventPreview/eventPreviewDetail';
 import { drawEventPreviewRules } from '@/view/article/eventPreview/eventPreviewRules';
@@ -36,7 +36,7 @@ const handleEventPreview = (drawFunction) => async (req, res) => {
 router.post('/eventPreviewTitle', [logRequest, body('eventId').isInt()], handleEventPreview(drawEventPreviewTitle));
 router.post('/eventPreviewDetail', [logRequest, body('eventId').isInt()], handleEventPreview(drawEventPreviewDetail));
 router.post('/eventPreviewRules', [logRequest, body('eventId').isInt()], handleEventPreview(drawEventPreviewRules));
-router.post('/eventPreviewCards', [logRequest, body('eventId').isInt(),body('illustration').optional().isBoolean()], handleEventPreview(drawEventPreviewCards));
+router.post('/eventPreviewCards', [logRequest, body('eventId').isInt(), body('illustration').optional().isBoolean()], handleEventPreview(drawEventPreviewCards));
 router.post('/eventPreviewSongs', [logRequest, body('eventId').isInt()], handleEventPreview(drawEventPreviewSongs));
 router.post('/eventPreviewGacha', [logRequest, body('eventId').isInt()], handleEventPreview(drawEventPreviewGacha));
 

@@ -9,15 +9,18 @@ import { searchGachaRouter } from '@/routers/searchGacha';
 import { searchPlayerRouter } from '@/routers/searchPlayer';
 import { searchSongRouter } from '@/routers/searchSong';
 import { songMetaRouter } from '@/routers/songMeta';
-import { ycxRouter } from '@/routers/ycx';
-import { ycxAllRouter } from '@/routers/ycxAll';
-import { lsycxRouter } from '@/routers/lsycx';
+import { cutoffDetailRouter } from '@/routers/cutoffDetail';
+import { cutoffListOfRecentEventRouter } from '@/routers/cutoffListOfEvent';
+import { cutoffCompareRouter } from '@/routers/cutoffCompare';
 import { songChartRouter } from '@/routers/songChart'; 1
 import { userRouter } from '@/routers/user'
 import { stationRouter } from '@/routers/station'
 import { eventPreviewRouter } from '@/routers/article/eventPreview'
 import { eventReportRouter } from '@/routers/article/eventReport'
 import { eventStageRouter } from '@/routers/eventStage'
+import { fuzzySearchRouter } from '@/routers/fuzzySearch'
+
+import { logger } from '@/logger'
 import * as dotenv from 'dotenv';
 
 
@@ -39,10 +42,11 @@ app.use('/searchPlayer', searchPlayerRouter);
 app.use('/searchSong', searchSongRouter);
 app.use('/songMeta', songMetaRouter);
 app.use('/songChart', songChartRouter);
-app.use('/ycx', ycxRouter);
-app.use('/ycxAll', ycxAllRouter);
-app.use('/lsycx', lsycxRouter)
+app.use('/cutoffDetail', cutoffDetailRouter);
+app.use('/cutoffListOfRecentEvent', cutoffListOfRecentEventRouter);
+app.use('/cutoffCompare', cutoffCompareRouter)
 app.use('/eventStage', eventStageRouter)
+app.use('/fuzzySearch', fuzzySearchRouter);
 
 
 if (process.env.LOCAL_DB == 'true') {
@@ -51,14 +55,12 @@ if (process.env.LOCAL_DB == 'true') {
 }
 else {
     app.use('/user', (req, res) => {
-        console.log(req.url, req.body);
         res.status(404).send({
             status: 'fail',
             data: '错误: 服务器未启用数据库'
         });
     });
     app.use('/station', (req, res) => {
-        console.log(req.url, req.body);
         res.status(404).send({
             status: 'fail',
             data: '错误: 服务器未启用数据库'
@@ -71,7 +73,6 @@ if (process.env.ARTICLE == 'true') {
 }
 
 
-
 //404
 app.use((req, res) => {
     res.status(404).send('404 Not Found');
@@ -79,6 +80,5 @@ app.use((req, res) => {
 
 
 app.listen(3000, () => {
-    console.log('listening on port 3000');
-}
-);
+    logger('expressMainThread', 'listening on port 3000');
+});

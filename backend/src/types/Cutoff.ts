@@ -135,11 +135,11 @@ export class Cutoff {
         } else {
             chartData.push({ x: new Date(this.startAt), y: 0 });
         }
-    
+
         // 在访问 this.cutoffs[0].time 之前检查 this.cutoffs 是否存在且长度大于0
         let tempTime = this.cutoffs && this.cutoffs.length > 0 ? this.cutoffs[0].time : null;
         // 如果 tempTime 为 null，则后续逻辑应当考虑这种情况以避免错误
-    
+
         for (let i = 0; i < this.cutoffs.length; i++) {
             const element = this.cutoffs[i];
             if (setStartToZero) {
@@ -152,5 +152,5 @@ export class Cutoff {
         }
         return chartData;
     }
-    
+
 }

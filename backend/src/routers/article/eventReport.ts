@@ -1,10 +1,11 @@
 import express from 'express';
-import { validationResult, body } from 'express-validator';
+import { body } from 'express-validator';
 import { drawEventReportCutoffDetail } from '@/view/article/eventReport/eventReportCutoffDetail'
 import { drawEventReportPlayerNumber } from '@/view/article/eventReport/eventReportPlayerNumber'
 import { drawEventReportCutoffListOfEvent } from '@/view/article/eventReport/eventReportCutoffListOfEvent'
 import { drawEventReportTitle } from '@/view/article/eventReport/eventReportTitle'
-import { listToBase64, isServer } from '@/routers/utils';
+import { listToBase64 } from '@/routers/utils';
+import { isServer } from '@/types/Server';
 
 const router = express.Router();
 

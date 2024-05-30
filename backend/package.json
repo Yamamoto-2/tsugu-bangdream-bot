@@ -43,6 +43,7 @@
     "moment": "^2.30.1",
     "mongodb": "^6.6.2",
     "skia-canvas": "^1.0.1",
+    "sqlite3": "^5.1.7",
     "svg2img": "^1.0.0-beta.2",
     "validator": "^13.9.0",
     "xlsx": "^0.18.5"

@@ -1,6 +1,6 @@
 import { Card } from "@/types/Card";
 import mainAPI from "@/types/_Main"
-import { match, checkRelationList } from "@/routers/fuzzySearch"
+import { match, checkRelationList, FuzzySearchResult } from "@/fuzzySearch"
 import { Canvas } from 'skia-canvas'
 import { drawDatablock, drawDatablockHorizontal } from '@/components/dataBlock';
 import { line } from '@/components/list';
@@ -34,7 +34,7 @@ export const line2: Canvas = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawEventList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawEventList(matches: FuzzySearchResult, displayedServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
     //计算模糊搜索结果
     var tempEventList: Array<Event> = [];//最终输出的活动列表
     var eventIdList: Array<number> = Object.keys(mainAPI['events']).map(Number);//所有活动ID列表
@@ -43,13 +43,13 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
         var isMatch = match(matches, tempEvent, []);
         // 如果在所有所选服务器列表中都不存在，则不输出
         var numberOfNotReleasedServer = 0;
-        for (var j = 0; j < defaultServerList.length; j++) {
-            var server = defaultServerList[j];
+        for (var j = 0; j < displayedServerList.length; j++) {
+            var server = displayedServerList[j];
             if (tempEvent.startAt[server] == null) {
                 numberOfNotReleasedServer++;
             }
         }
-        if (numberOfNotReleasedServer == defaultServerList.length) {
+        if (numberOfNotReleasedServer == displayedServerList.length) {
             isMatch = false;
         }
 
@@ -57,7 +57,7 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
         if (matches._relationStr != undefined) {
             //如果之后范围的话则直接判断
             if (isMatch || Object.keys(matches).length == 1) {
-                isMatch = checkRelationList(tempEvent.eventId, matches._relationStr)
+                isMatch = checkRelationList(tempEvent.eventId, matches._relationStr as string[])
             }
         }
 
@@ -76,7 +76,7 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
     var tempH = 0;
 
     for (var i = 0; i < tempEventList.length; i++) {
-        eventPromises.push(drawEventInList(tempEventList[i], defaultServerList).then(image => ({ index: i, image: image })));
+        eventPromises.push(drawEventInList(tempEventList[i], displayedServerList).then(image => ({ index: i, image: image })));
     }
 
     var eventResults = await Promise.all(eventPromises);
@@ -147,17 +147,17 @@ export async function drawEventList(matches: { [key: string]: string[] }, defaul
 
 }
 
-async function drawEventInList(event: Event, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
+async function drawEventInList(event: Event, displayedServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     await event.initFull(false)
     var textSize = 25 * 3 / 4;
     var content = []
     //活动类型
     content.push(`ID: ${event.eventId.toString()}  ${await event.getTypeName()}\n`)
     //活动时间
-    var numberOfServer = Math.min(defaultServerList.length, 2)
+    var numberOfServer = Math.min(displayedServerList.length, 2)
     const currentEvent = getPresentEvent(getServerByName("cn"));
     for (var i = 0; i < numberOfServer; i++) {
-        let server = defaultServerList[i]
+        let server = displayedServerList[i]
         if (server == getServerByName('cn') && event.startAt[server] == null && event.eventId > currentEvent.eventId) {
             content.push(await getIcon(server), `${changeTimefomant(GetProbablyTimeDifference(event.eventId, currentEvent))} (预计开放时间)\n`)
         }
@@ -216,8 +216,8 @@ async function drawEventInList(event: Event, defaultServerList: Server[] = globa
     //活动期间卡池卡牌
     var cardList: Card[] = []
     var cardIdList: number[] = []//用于去重
-    for (var i = 0; i < defaultServerList.length; i++) {
-        var server = defaultServerList[i]
+    for (var i = 0; i < displayedServerList.length; i++) {
+        var server = displayedServerList[i]
         var EventGachaAndCardList = await getEventGachaAndCardList(event, server, true)
         var tempGachaCardList = EventGachaAndCardList.gachaCardList
         for (let i = 0; i < tempGachaCardList.length; i++) {

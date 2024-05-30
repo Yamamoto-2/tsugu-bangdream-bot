@@ -2,12 +2,14 @@ import { BestdoriapiPath, Bestdoriurl, configPath } from '@/config'
 import { callAPIAndCacheResponse } from '@/api/getApi'
 import { readJSON } from '@/types/utils'
 import { readExcelFile } from '@/types/utils'
+import { logger } from '@/logger'
 import * as path from 'path'
 
 const mainAPI: object = {}//main对象,用于存放所有api数据,数据来源于Bestdori网站
 
 //加载mainAPI
 async function loadMainAPI(useCache: boolean = false) {
+    logger('mainAPI', 'loading mainAPI...')
     const promiseAll = Object.keys(BestdoriapiPath).map(async (key) => {
         const maxRetry = 3
         if (useCache) {
@@ -51,14 +53,15 @@ async function loadMainAPI(useCache: boolean = false) {
         }
     }
     catch (e) {
-        console.log('读取nickname_song.xlsx失败')
+        logger('mainAPI', '读取nickname_song.xlsx失败')
     }
+    logger('mainAPI', 'mainAPI loaded')
 
 }
 
-console.log("正在初始化")
+logger('mainAPI', "initializing...")
 loadMainAPI(true).then(() => {
-    console.log("初始化完成")
+    logger('mainAPI', "initializing done")
     loadMainAPI()
 })
 

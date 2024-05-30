@@ -11,13 +11,13 @@ interface DegreeListInListOptions {
     key?: string;
     degreeList: Array<Degree>;
     server?: Server;
-    defaultServerList?: Server[];
+    displayedServerList?: Server[];
 }
 
 export async function drawDegreeListInList({
     degreeList,
     server,
-    defaultServerList = globalDefaultServer,
+    displayedServerList = globalDefaultServer,
     key
 }: DegreeListInListOptions): Promise<Canvas> {
     var list: Array<Canvas> = []
@@ -33,11 +33,11 @@ export async function drawDegreeListInList({
     })
 }
 
-export async function drawDegreeListOfEvent(event: Event, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
+export async function drawDegreeListOfEvent(event: Event, displayedServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     event.initFull()
     var list = []
     let tempDegreeList = []
-    var server = getServerByPriority(event.rankingRewards, defaultServerList)
+    var server = getServerByPriority(event.rankingRewards, displayedServerList)
     let rankingRewards = event.rankingRewards[server]
     for (let i = 0; i < rankingRewards.length; i++) {
         if (rankingRewards[i].rewardType == "degree") {
@@ -46,7 +46,7 @@ export async function drawDegreeListOfEvent(event: Event, defaultServerList: Ser
         }
     }
     list.push(await drawDegreeListInList({
-        key: "活动奖励", degreeList: tempDegreeList, server: server
+        key: "活动奖励", degreeList: tempDegreeList, server: server, displayedServerList: displayedServerList
     }))
     if (event.eventType == "versus" || event.eventType == "challenge" || event.eventType == "medley") {
         const rewards = event.musics[server]
@@ -59,7 +59,7 @@ export async function drawDegreeListOfEvent(event: Event, defaultServerList: Ser
                 }
             }
             list.push(await drawDegreeListInList({
-                degreeList: tempDegreeList, server: server
+                degreeList: tempDegreeList, server: server, displayedServerList: displayedServerList
             }))
             if (event.eventType == "medley") {
                 break

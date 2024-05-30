@@ -25,7 +25,10 @@ async function downloadFile(url: string, IgnoreErr: boolean = true, overwrite = 
   } catch (e) {
     console.log(url)
     console.log(e)
-    errUrl.push(url);
+    //if 404
+    if (e.message.includes('404')) {
+      errUrl.push(url);
+    }
     if ((url.includes('.png') || url.includes('.svg')) && IgnoreErr) {
       return assetErrorImageBuffer;
     }

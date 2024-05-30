@@ -1,13 +1,13 @@
 import { Server } from '../types/Server'
-import {getDataFromBackend} from './utils'
+import { getReplyFromBackend } from "../api/getReplyFromBackend"
+import { Config } from '../config';
 
-
-export async function commandEvent(backendUrl:string,default_servers: Server[], text: string, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
-    return await getDataFromBackend(`${backendUrl}/searchEvent`, {
-        default_servers,
+export async function commandEvent(config: Config, displayedServerList: Server[], text: string): Promise<Array<Buffer | string>> {
+    return await getReplyFromBackend(`${config.backendUrl}/searchEvent`, {
+        displayedServerList,
         text,
-        useEasyBG,
-        compress
+        useEasyBG: config.useEasyBG,
+        compress: config.compress
     })
 
 }

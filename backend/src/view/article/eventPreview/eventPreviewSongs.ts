@@ -18,7 +18,7 @@ export async function drawEventPreviewSongs(eventId: number): Promise<Array<Buff
     if (!event.isExist) {
         return ['错误: 活动不存在']
     }
-    const server = Server.jp
+    const mainServer = Server.jp
     await event.initFull()
     const result = []
 
@@ -27,7 +27,7 @@ export async function drawEventPreviewSongs(eventId: number): Promise<Array<Buff
     const eventBGImage = await event.getEventBGImage()
 
     //歌曲列表
-    const songList: Song[] = getPresentSongList(server, event.startAt[server], event.endAt[server] + 1000 * 60 * 60)
+    const songList: Song[] = getPresentSongList(mainServer, event.startAt[mainServer], event.endAt[mainServer] + 1000 * 60 * 60)
     const promises = []
     for (let i = 0; i < songList.length; i++) {
         const song = songList[i]
@@ -43,7 +43,7 @@ export async function drawEventPreviewSongs(eventId: number): Promise<Array<Buff
     return result
 }
 
-async function drawEventSongDetail(song: Song, defaultServerList: Server[] = globalDefaultServer, eventBGImage?: Image): Promise<Buffer | string> {
+async function drawEventSongDetail(song: Song, displayedServerList: Server[] = globalDefaultServer, eventBGImage?: Image): Promise<Buffer | string> {
     if (song.isExist == false) {
         return '错误: 歌曲不存在'
     }
@@ -66,17 +66,17 @@ async function drawEventSongDetail(song: Song, defaultServerList: Server[] = glo
 
     //乐队
     var band = new Band(song.bandId)
-    list.push(await drawListByServerList(band.bandName, '乐队', defaultServerList))
+    list.push(await drawListByServerList(band.bandName, '乐队', displayedServerList))
     list.push(line)
 
     //作词
-    list.push(await drawListByServerList(song.detail.lyricist, '作词', defaultServerList))
+    list.push(await drawListByServerList(song.detail.lyricist, '作词', displayedServerList))
     list.push(line)
     //作曲
-    list.push(await drawListByServerList(song.detail.composer, '作曲', defaultServerList))
+    list.push(await drawListByServerList(song.detail.composer, '作曲', displayedServerList))
     list.push(line)
     //编曲
-    list.push(await drawListByServerList(song.detail.arranger, '编曲', defaultServerList))
+    list.push(await drawListByServerList(song.detail.arranger, '编曲', displayedServerList))
     list.push(line)
     //时长
     list.push(drawList({

@@ -8,7 +8,7 @@ import { drawDatablock } from '@/components/dataBlock';
 import { drawTips } from '@/components/tips';
 import { outputFinalBuffer } from '@/image/output';
 
-export async function drawEventReportPlayerNumber(eventId: number, server: Server): Promise<Array<Buffer | string>> {
+export async function drawEventReportPlayerNumber(eventId: number, mainServer: Server): Promise<Array<Buffer | string>> {
     const event = new Event(eventId)
     if (!event.isExist) {
         return ['错误: 活动不存在']
@@ -24,7 +24,7 @@ export async function drawEventReportPlayerNumber(eventId: number, server: Serve
     }[] = await readExcelFile(`${configPath}/playerNumber.xlsx`)
 
     const recentEventCount = 10
-    const recentEventList = getRecentEventListByEventAndServer(event, server, recentEventCount, false)
+    const recentEventList = getRecentEventListByEventAndServer(event, mainServer, recentEventCount, false)
     const recentEvenrPlayerNumberList = []
     for (let i = 0; i < recentEventList.length; i++) {
         const element = recentEventList[i];

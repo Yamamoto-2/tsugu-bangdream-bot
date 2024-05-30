@@ -91,7 +91,7 @@ export class Gacha {
         this.newCards = gachaData['newCards']
     }
     async initFull(update: boolean = true) {
-        if(this.isInitFull){
+        if (this.isInitFull) {
             return
         }
         if (this.isExist == false) {
@@ -130,7 +130,7 @@ export class Gacha {
     }
     async getData(update: boolean = true) {
         var time = update ? 0 : 1 / 0
-        const gachaData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/gacha/${this.gachaId}.json`,time)
+        const gachaData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/gacha/${this.gachaId}.json`, time)
         return gachaData
     }
     async getBannerImage(): Promise<Image> {
@@ -142,20 +142,20 @@ export class Gacha {
             return (this.getGachaLogo())
         }
     }
-    async getGachaBGImage(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
-        if (!defaultServerList) defaultServerList = globalDefaultServer
+    async getGachaBGImage(displayedServerList: Server[] = globalDefaultServer): Promise<Image> {
+        if (!displayedServerList) displayedServerList = globalDefaultServer
         var server = getServerByPriority(this.publishedAt)
-        let BGImageBuffer:Buffer
-        try{
-            BGImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/bg.png`,false)
+        let BGImageBuffer: Buffer
+        try {
+            BGImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/bg.png`, false)
         }
-        catch(e){
+        catch (e) {
             BGImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/bg1.png`)
         }
         return await loadImage(BGImageBuffer)
     }
-    async getGachaLogo(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
-        if (!defaultServerList) defaultServerList = globalDefaultServer
+    async getGachaLogo(displayedServerList: Server[] = globalDefaultServer): Promise<Image> {
+        if (!displayedServerList) displayedServerList = globalDefaultServer
         var server = getServerByPriority(this.publishedAt)
         var LogoImageBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/gacha/screen/${this.resourceName}_rip/logo.png`)
         return await loadImage(LogoImageBuffer)
@@ -187,7 +187,7 @@ export class Gacha {
         for (const i in details) {
             if (Object.prototype.hasOwnProperty.call(details, i)) {
                 const element = details[i];
-                if(element['pickup']){
+                if (element['pickup']) {
                     this.pickUpCardId.push(Number(i))
                 }
             }
@@ -205,7 +205,7 @@ export async function getPresentGachaList(server: Server, start: number = Date.n
             const gacha = new Gacha(parseInt(gachaId))
 
             // 检查卡池持续时间是否与start和end有交集
-            if(gacha.publishedAt[server] == null){
+            if (gacha.publishedAt[server] == null) {
                 continue
             }
             if (gacha.publishedAt[server] <= end && gacha.closedAt[server] >= start) {
@@ -214,7 +214,7 @@ export async function getPresentGachaList(server: Server, start: number = Date.n
                 }
                 if (gacha.gachaName[Server.jp] != null) {
                     await gacha.initFull(false)
-                    if(gacha.gachaPeriod[Server.jp] == '期限なし'){
+                    if (gacha.gachaPeriod[Server.jp] == '期限なし') {
                         continue
                     }
                 }

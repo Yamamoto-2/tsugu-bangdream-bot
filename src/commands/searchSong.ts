@@ -1,11 +1,11 @@
 import { Server } from "../types/Server"
-import {getDataFromBackend} from './utils'
+import { getReplyFromBackend } from "../api/getReplyFromBackend"
+import { Config } from '../config';
 
-
-export async function commandSong(backendUrl:string,default_servers:Server[], text: string, compress: boolean): Promise<Array<Buffer | string>> {
-    return await getDataFromBackend(`${backendUrl}/searchSong`, {
-        default_servers,
+export async function commandSong(config: Config, displayedServerList: Server[], text: string): Promise<Array<Buffer | string>> {
+    return await getReplyFromBackend(`${config.backendUrl}/searchSong`, {
+        displayedServerList,
         text,
-        compress
+        compress: config.compress
     })
 }
