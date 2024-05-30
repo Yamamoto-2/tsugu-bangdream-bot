@@ -1,8 +1,7 @@
 import { BandoriStationurl, tsuguUser, userPlayerInList } from "../config";
 import { Player } from "./Player";
 import { unescape } from "querystring";
-import { Server, getServerByName } from "./Server";
-import { BindingStatus } from "../config"
+import { getServerByName } from "./Server";
 import * as axios from 'axios'
 
 

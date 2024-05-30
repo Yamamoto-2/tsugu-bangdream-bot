@@ -44,22 +44,3 @@ export function listToBase64(list: Array<Buffer | string>): Array<{ type: 'strin
 
     return result
 }
-
-export function isTsuguUser(obj: any): obj is tsuguUser {
-    // 检查 obj 是否符合 TsuguUser 接口的定义
-    return (
-        obj &&
-        typeof obj.user_id === 'string' &&
-        typeof obj.platform === 'string' &&
-        typeof obj.server_mode === 'object' &&
-        Array.isArray(obj.default_server) &&
-        typeof obj.car === 'boolean' &&
-        Array.isArray(obj.server_list) &&
-        obj.server_list.every(
-            (item: any) =>
-                typeof item.playerId === 'number' &&
-                typeof item.bindingStatus === 'object' &&
-                (typeof item.verifyCode === 'number' || item.verifyCode === undefined)
-        )
-    );
-}

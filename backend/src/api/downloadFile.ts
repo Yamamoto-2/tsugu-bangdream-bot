@@ -4,6 +4,7 @@ import { getCacheDirectory, getFileNameFromUrl } from '@/api/utils';
 import { download } from '@/api/downloader';
 import { Buffer } from 'buffer';
 import { assetErrorImageBuffer } from '@/image/utils';
+import { logger } from '@/logger';
 import * as fs from 'fs';
 
 const errUrl: string[] = [];
@@ -23,8 +24,7 @@ async function downloadFile(url: string, IgnoreErr: boolean = true, overwrite = 
     }
     return data
   } catch (e) {
-    console.log(url)
-    console.log(e)
+    logger(`downloader`, `Failed to download file from "${url}". Error: ${e.message}`)
     //if 404
     if (e.message.includes('404')) {
       errUrl.push(url);

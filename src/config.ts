@@ -34,10 +34,6 @@ export const tierListOfServer = {
     'cn': [20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000, 30000, 50000]
 }
 
-export enum BindingStatus {
-    None, Verifying, Success
-}
-
 export interface tsuguUser {
     userId: string,
     platform: string,

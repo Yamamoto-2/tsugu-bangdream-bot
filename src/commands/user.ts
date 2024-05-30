@@ -1,7 +1,7 @@
 import { Session, h } from "koishi";
 import { Server, getServerByName } from "../types/Server";
 import { Player } from "../types/Player";
-import { tsuguUser, bindingPlayerPromptWaitingTime, serverNameFullList, BindingStatus, Config, userPlayerInList } from "../config";
+import { tsuguUser, bindingPlayerPromptWaitingTime, serverNameFullList,  Config, userPlayerInList } from "../config";
 import { commandSearchPlayer } from "./searchPlayer";
 import { generateVerifyCode } from './utils';
 import { paresMessageList } from '../utils';

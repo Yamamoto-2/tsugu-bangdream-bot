@@ -27,7 +27,7 @@ export async function getUserIcon(avatarUrl?:string): Promise<Image> {
         userIconCache[avatarUrl] = icon;
         return icon;
     } catch (e) {
-        console.log(e)
+        //console.log(e)
         const icon = iconUndefined
         return icon;
     }

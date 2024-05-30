@@ -30,7 +30,6 @@ router.post('/submitRoomNumber',
     ],
     middleware,
     async (req: Request, res: Response) => {
-        console.log(req);
         const { number, rawMessage, platform, userId, userName, time, avatarUrl, bandoriStationToken } = req.body;
         const user = await userDB.getUser(platform, userId);
         let userPlayerInList: userPlayerInList

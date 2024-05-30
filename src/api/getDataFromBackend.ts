@@ -8,6 +8,6 @@ export async function getDataFromBackend(url: string, data: Object): Promise<obj
     if (result?.data?.status != 'success') {
         return {};
     }
-    console.log(result.data.data)
+    //console.log(result.data.data)
     return result.data.data;
 }

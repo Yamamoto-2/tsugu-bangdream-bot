@@ -52,7 +52,7 @@ export async function download(url: string, directory?: string, fileName?: strin
     if (directory && fileName) {
       fs.writeFileSync(path.join(directory, fileName), fileBuffer);
     }
-    console.log(`Downloaded file from "${url}"`);
+    //console.log(`Downloaded file from "${url}"`);
     return fileBuffer;
   } catch (e) {
     errUrl.push(url);
@@ -70,7 +70,7 @@ function createDirIfNonExist(filepath: string) {
     try {
       fs.mkdirSync(filepath, { recursive: true });
     } catch (err) {
-      console.log(`creating ${filepath} failed`, err);
+      //console.log(`creating ${filepath} failed`, err);
     }
   }
 }
@@ -124,7 +124,7 @@ export async function getJsonAndSave(url: string, directory?: string, fileName?:
       fs.writeFileSync(path.join(directory, fileName), fileContent);
     }
 
-    console.log(`Downloaded JSON data from "${url}"`);
+    //console.log(`Downloaded JSON data from "${url}"`);
     return jsonObject;
   } catch (e) {
     throw new Error(`Failed to download JSON data from "${url}". Error: ${e.message}`);

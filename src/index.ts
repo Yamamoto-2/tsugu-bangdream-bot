@@ -17,7 +17,7 @@ import { commandBindPlayer, commandPlayerInfo, commandSwitchDisplayedServerList,
 import { commandSongChart } from './commands/songChart'
 import { commandEventStage } from './commands/eventStage'
 import { Server } from './types/Server'
-import { globalDefaultServer, BindingStatus, tsuguUser } from './config'
+import { globalDefaultServer,  tsuguUser } from './config'
 import { tierListOfServerToString, checkLeftDigits, paresMessageList, stringArrayToNumberArray } from './utils'
 import { getRemoteDBUserData } from './api/remoteDB'
 import { serverNameFuzzySearchResult } from './api/fuzzySearch'

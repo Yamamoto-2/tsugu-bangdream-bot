@@ -19,7 +19,7 @@ async function loadMainAPI(useCache: boolean = false) {
                 try {
                     return mainAPI[key] = await callAPIAndCacheResponse(Bestdoriurl + BestdoriapiPath[key]);
                 } catch (e) {
-                    console.log(`Load ${key} failed, retry (${i + 1}/${maxRetry})`)
+                    logger('mainAPI', `Load ${key} failed, retry (${i + 1}/${maxRetry})`)
                     //等待3秒后重试
                     await new Promise(resolve => setTimeout(resolve, 3000));
                 }

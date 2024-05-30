@@ -54,8 +54,6 @@ export async function commandSong(displayedServerList: Server[], input: string |
         fuzzySearchResult = input
     }
 
-    console.log(fuzzySearchResult)
-
     if (Object.keys(fuzzySearchResult).length == 0) {
         return ['错误: 没有有效的关键词']
     }
