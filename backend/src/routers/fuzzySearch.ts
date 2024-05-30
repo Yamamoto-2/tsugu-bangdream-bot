@@ -24,7 +24,7 @@ router.post(
             res.send({ status: 'success', data: result });
         } catch (e) {
             console.log(e);
-            res.send({ status: 'failed', string: '内部错误' });
+            res.send({ status: 'failed', data: '内部错误' });
         }
     }
 );
