@@ -142,6 +142,20 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
         list.push(line)
     }
 
+    //活动表情
+    const stampImage = await event.getRewardStamp(defaultServerList[0])
+    if(stampImage){
+        list.push(
+            await drawList({
+                key: '活动表情',
+                content: [stampImage],
+                textSize: 160,
+                lineHeight: 160
+            })
+        )
+        list.push(line)
+    }
+
     //奖励卡牌
     var rewardCardList: Card[] = []
     for (let i = 0; i < event.rewardCards.length; i++) {

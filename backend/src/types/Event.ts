@@ -7,6 +7,7 @@ import { Attribute } from '@/types/Attribute';
 import { Character } from '@/types/Character';
 import { globalDefaultServer, Bestdoriurl } from '@/config';
 import { stringToNumberArray } from '@/types/utils'
+import { Time } from 'koishi';
 
 var eventDataCache = {}
 
@@ -284,6 +285,38 @@ export class Event {
         }
         return (characterList)
     }
+    async getRewardStamp(server:Server): Promise<Image> {
+        const allStamps = await callAPIAndCacheResponse(`https://bestdori.com/api/stamps/all.2.json`)
+        const rewards = this.pointRewards[0]
+        let rewardId = -1
+        for(let i = 0; i < rewards.length; i++){
+            if(rewards[i].rewardType == 'stamp'){
+                rewardId = rewards[i].rewardId
+                break
+            }
+        }
+        let stampAssentName = ''
+        for(const i in allStamps){
+            if(i == rewardId.toString()){
+                stampAssentName = allStamps[i]['imageName']
+            }
+        }
+        if(stampAssentName == ''){
+            return undefined
+        }
+        let serverName = 'jp'
+        if(this.startAt[server] && this.startAt[server] > Date.now()){
+            serverName = Server[server]
+        }
+        try {
+            const stampBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${serverName}/stamp/01_rip/${stampAssentName}.png`)
+            return await loadImage(stampBuffer)
+        }
+        catch{
+            return undefined
+        }
+    }
+
 }
 
 //获取当前进行中的活动,如果期间没有活动，则返回上一个刚结束的活动
