@@ -305,7 +305,7 @@ export class Event {
             return undefined
         }
         let serverName = 'jp'
-        if(this.startAt[server] && this.startAt[server] > Date.now()){
+        if(this.startAt[server] && this.startAt[server] < Date.now()){
             serverName = Server[server]
         }
         try {
