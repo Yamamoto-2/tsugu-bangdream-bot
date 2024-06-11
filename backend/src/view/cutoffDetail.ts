@@ -43,12 +43,23 @@ export async function drawCutoffDetail(eventId: number, tier: number, mainServer
         else {
             var predictText = cutoff.predictEP.toString()
         }
-        //预测线
-        list.push(drawList({
-            key: '预测线',
-            text: predictText
-        }))
+
+        //预测线和时速
+        const cutoffs = cutoff.cutoffs
+        const lastep = cutoffs.length > 1 ? cutoffs[cutoffs.length - 2].ep : 0
+        const timeSpan = (cutoffs.length > 1 ? cutoff.latestCutoff.time - cutoffs[cutoffs.length - 2].time : cutoff.latestCutoff.time - cutoff.startAt) / (1000 * 3600)
+        list.push(drawListMerge([
+            drawList({
+                key: '预测线',
+                text: predictText
+            }),
+            drawList({
+                key: '当前时速',
+                text: `${Math.round((cutoff.latestCutoff.ep - lastep) / timeSpan)} pt/h`
+            })
+        ]))
         list.push(line)
+
 
         const tempImageList = []
         //最新分数线
