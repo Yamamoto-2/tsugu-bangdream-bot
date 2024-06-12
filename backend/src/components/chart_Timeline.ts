@@ -5,7 +5,7 @@ import { assetErrorImageBuffer } from '@/image/utils';
 import 'chartjs-adapter-moment';
 FontLibrary.use("old", [`${assetsRootPath}/Fonts/old.ttf`])
 var width = 800
-var height = 1200
+var height = 900
 const chartJSNodeCanvas = new ChartJSNodeCanvas({
     width, height, chartCallback: (ChartJS) => {
         ChartJS.defaults.font.family = 'old,Microsoft Yahei';
