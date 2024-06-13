@@ -23,7 +23,7 @@ router.post('/',
       res.send(listToBase64(images));
     } catch (error) {
       console.log(error);
-      res.status(500).send('内部服务器错误');
+      res.status(500).send({ status: 'failed', data: '内部服务器错误' });
     }
   }
 );
