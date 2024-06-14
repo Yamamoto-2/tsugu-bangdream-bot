@@ -27,7 +27,7 @@ router.post('/',
       tempRoomlist = getRoomList(roomList);
     } catch (e) {
       console.log(req.url + ' ' + req.body);
-      res.send([{ type: 'string', string: '车牌格式错误' }]);
+      res.status(422).send({ status: 'failed', data: '车牌格式错误' });
       return;
     }
     try {
@@ -35,7 +35,7 @@ router.post('/',
       res.send(listToBase64(result));
     } catch (e) {
       console.log(e);
-      res.send([{ type: 'string', string: '内部错误' }]);
+      res.status(500).send({ status: 'failed', data: '内部错误' });
     }
   }
 );

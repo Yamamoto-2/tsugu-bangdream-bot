@@ -44,7 +44,7 @@ router.post('/getUserData',
             });
         }
         catch (error) {
-            res.status(400).json({ status: 'failed', data: `错误: ${error.message}` });
+            res.status(500).json({ status: 'failed', data: `错误: ${error.message}` });
         }
     }
 );
@@ -67,7 +67,7 @@ router.post('/changeUserData',
             await userDB.updateUser(platform, userId, updateData);
             res.json({ status: 'success' });
         } catch (error) {
-            res.status(400).json({ status: 'failed', data: `错误: ${error.message}` });
+            res.status(500).json({ status: 'failed', data: `错误: ${error.message}` });
         }
     }
 );
@@ -108,7 +108,7 @@ router.post('/bindPlayerVerification',
         const verifyCode = verifyCodeCache[`${platform}:${userId}`]
         //检查验证码是否存在
         if (verifyCode == undefined) {
-            res.status(400).json({ status: 'failed', data: '错误: 请先请求验证码' });
+            res.status(409).json({ status: 'failed', data: '错误: 请先请求验证码' });
             return
         }
         //验证验证码
@@ -118,7 +118,7 @@ router.post('/bindPlayerVerification',
         if (!player.isExist) {
             //删除验证码
             delete verifyCodeCache[`${platform}:${userId}`]
-            res.status(400).json({ status: 'failed', data: `错误: 不存在玩家或服务器错误: ${playerId}` });
+            res.status(404).json({ status: 'failed', data: `错误: 不存在玩家或服务器错误: ${playerId}` });
             return
         }
         //判断验证码是否正确
@@ -126,7 +126,7 @@ router.post('/bindPlayerVerification',
             //删除验证码
             delete verifyCodeCache[`${platform}:${userId}`]
             const text = `错误: \n评论为: "${player.profile.introduction}", \n卡组名为: "${player.profile.mainUserDeck.deckName}", \n都与验证码不匹配`
-            res.status(400).json({ status: 'failed', data: text });
+            res.status(422).json({ status: 'failed', data: text });
             return
         }
         //验证通过
@@ -141,7 +141,7 @@ router.post('/bindPlayerVerification',
             delete verifyCodeCache[`${platform}:${userId}`]
         }
         catch (error) {
-            res.status(400).json({ status: 'failed', data: `错误: ${error.message}` });
+            res.status(500).json({ status: 'failed', data: `错误: ${error.message}` });
         }
     }
 )

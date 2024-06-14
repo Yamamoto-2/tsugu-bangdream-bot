@@ -58,7 +58,7 @@ router.post('/submitRoomNumber',
             });
         }
         catch (e) {
-            res.status(400).json({ status: 'failed', data: `错误: ${e.message}` });
+            res.status(500).json({ status: 'failed', data: `错误: ${e.message}` });
         }
 
     }
@@ -75,7 +75,7 @@ router.get('/queryAllRoom',
             });
         }
         catch (e) {
-            res.status(400).json({ status: 'failed', data: `错误: ${e.message}` });
+            res.status(500).json({ status: 'failed', data: `错误: ${e.message}` });
         }
 
     }

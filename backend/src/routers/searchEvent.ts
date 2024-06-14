@@ -27,14 +27,14 @@ router.post('/',
         const { displayedServerList, fuzzySearchResult, text, useEasyBG, compress } = req.body;
 
         if (!text && !fuzzySearchResult) {
-            return res.status(400).json({ status: 'failed', data: '不能同时不存在text与fuzzySearchResult' });
+            return res.status(422).json({ status: 'failed', data: '不能同时不存在text与fuzzySearchResult' });
         }
         try {
             const result = await commandEvent(displayedServerList, text || fuzzySearchResult, useEasyBG, compress);
             res.send(listToBase64(result));
         } catch (e) {
             console.log(e);
-            res.send([{ type: 'string', string: '内部错误' }]);
+            res.status(500).json({ status: 'failed', data: '内部错误' });
         }
     }
 );
