@@ -118,7 +118,7 @@ router.post('/bindPlayerVerification',
         if (!player.isExist) {
             //删除验证码
             delete verifyCodeCache[`${platform}:${userId}`]
-            res.status(404).json({ status: 'failed', data: `错误: 不存在玩家或服务器错误: ${playerId}` });
+            res.status(422).json({ status: 'failed', data: `错误: 不存在玩家或服务器错误: ${playerId}` });
             return
         }
         //判断验证码是否正确

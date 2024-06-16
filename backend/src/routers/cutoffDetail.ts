@@ -29,7 +29,7 @@ router.post(
             res.send(listToBase64(result));
         } catch (e) {
             console.log(e);
-            res.status.send({ status: 'failed', data: '内部错误' });
+            res.status(500).send({ status: 'failed', data: '内部错误' });
         }
     }
 );
