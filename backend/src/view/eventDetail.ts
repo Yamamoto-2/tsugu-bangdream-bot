@@ -143,7 +143,7 @@ export async function drawEventDetail(eventId: number, displayedServerList: Serv
     }
 
     //活动表情
-    const stampImage = await event.getRewardStamp(defaultServerList[0])
+    const stampImage = await event.getRewardStamp(displayedServerList[0])
     if(stampImage){
         list.push(
             await drawList({
