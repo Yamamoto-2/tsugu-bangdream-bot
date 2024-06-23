@@ -11,7 +11,7 @@ import { searchSongRouter } from '@/routers/searchSong';
 import { songMetaRouter } from '@/routers/songMeta';
 import { cutoffDetailRouter } from '@/routers/cutoffDetail';
 import { cutoffListOfRecentEventRouter } from '@/routers/cutoffListOfEvent';
-import { cutoffCompareRouter } from '@/routers/cutoffCompare';
+import { cutoffAllRouter } from '@/routers/cutoffAll';
 import { songChartRouter } from '@/routers/songChart'; 1
 import { userRouter } from '@/routers/user'
 import { stationRouter } from '@/routers/station'
@@ -44,7 +44,7 @@ app.use('/songMeta', songMetaRouter);
 app.use('/songChart', songChartRouter);
 app.use('/cutoffDetail', cutoffDetailRouter);
 app.use('/cutoffListOfRecentEvent', cutoffListOfRecentEventRouter);
-app.use('/cutoffCompare', cutoffCompareRouter)
+app.use('/cutoffAll', cutoffAllRouter)
 app.use('/eventStage', eventStageRouter)
 app.use('/fuzzySearch', fuzzySearchRouter);
 

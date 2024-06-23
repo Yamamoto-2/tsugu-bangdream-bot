@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { drawCutoffComprare } from '@/view/cutoffCompare';
+import { drawCutoffAll } from '@/view/cutoffAll';
 import { Server, getServerByServerId } from '@/types/Server';
 import { getPresentEvent } from '@/types/Event';
 import { listToBase64 } from '@/routers/utils';
@@ -22,7 +22,7 @@ router.post(
 
         const { mainServer, eventId, compress } = req.body;
         try {
-            const result = await commandCutoffCompare(getServerByServerId(mainServer), compress, eventId);
+            const result = await commandCutoffAll(getServerByServerId(mainServer), compress, eventId);
             res.send(listToBase64(result));
         } catch (e) {
             console.log(e);
@@ -31,13 +31,13 @@ router.post(
     }
 );
 
-export async function commandCutoffCompare(mainServer: Server, compress: boolean, eventId?: number): Promise<Array<Buffer | string>> {
+export async function commandCutoffAll(mainServer: Server, compress: boolean, eventId?: number): Promise<Array<Buffer | string>> {
 
     if (!eventId) {
         eventId = getPresentEvent(mainServer).eventId
     }
-    return drawCutoffComprare(eventId, mainServer, compress)
+    return drawCutoffAll(eventId, mainServer, compress)
 
 }
 
-export { router as cutoffCompareRouter }
+export { router as cutoffAllRouter }

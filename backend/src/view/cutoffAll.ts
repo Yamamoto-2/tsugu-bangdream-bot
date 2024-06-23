@@ -11,9 +11,8 @@ import { drawCutoffChart } from '@/components/chart/cutoffChart'
 import { serverNameFullList, tierListOfServer } from '@/config';
 import { drawEventDatablock } from '@/components/dataBlock/event';
 import { statusName } from '@/config';
-import { loadImageFromPath } from '@/image/utils';
 
-export async function drawCutoffComprare(eventId: number, mainServer: Server, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawCutoffAll(eventId: number, mainServer: Server, compress: boolean): Promise<Array<Buffer | string>> {
     var event = new Event(eventId)
     if (!event.isExist) {
         return ['活动不存在']

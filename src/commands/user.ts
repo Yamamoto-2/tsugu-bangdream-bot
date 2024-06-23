@@ -270,12 +270,12 @@ export async function commandSwitchDisplayedServerList(config: Config, session: 
             }
             else {
                 user.displayedServerList = servers
-                return `成功切换默认服务器顺序: ${servers.map(s => serverNameFullList[s]).join(", ")}`
+                return `成功切换默认显示服务器顺序: ${servers.map(s => serverNameFullList[s]).join(", ")}`
             }
         }
         else {
             user.displayedServerList = servers
-            return `成功切换默认服务器顺序: ${servers.map(s => serverNameFullList[s]).join(", ")}`
+            return `成功切换默认显示服务器顺序: ${servers.map(s => serverNameFullList[s]).join(", ")}`
         }
 
     }
