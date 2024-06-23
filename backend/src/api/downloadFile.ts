@@ -14,6 +14,9 @@ const ERROR_CACHE_EXPIRY = 12 * 60 * 60 * 1000; // 1 天
 async function downloadFile(url: string, IgnoreErr: boolean = true, overwrite = false, retryCount = 3): Promise<Buffer> {
   try {
     const currentTime = Date.now();
+    if(url.includes('undefined')) {
+      throw new Error("downloadFile: url.includes('undefined')");
+    }
 
     if (errUrl[url] && currentTime - errUrl[url] < ERROR_CACHE_EXPIRY) {
       throw new Error("downloadFile: errUrl includes url and not expired");
@@ -24,6 +27,7 @@ async function downloadFile(url: string, IgnoreErr: boolean = true, overwrite = 
     const fileName = getFileNameFromUrl(url);
 
     for (let attempt = 0; attempt < retryCount; attempt++) {
+      let assetNotExists = false;
       if (attempt > 0) {
         logger(`downloader`, `Retrying download for "${url}" (attempt ${attempt + 1}/${retryCount})`);
       }
@@ -31,11 +35,15 @@ async function downloadFile(url: string, IgnoreErr: boolean = true, overwrite = 
         const data = await download(url, cacheDir, fileName, cacheTime);
         if (data.toString().startsWith("<!DOCTYPE html>")) {
           fs.unlinkSync(path.join(cacheDir, fileName));
+          assetNotExists = true;
           throw new Error("downloadFile: data.toString().startsWith(\"<!DOCTYPE html>\")");
         }
         return data;
       } catch (e) {
         if (attempt === retryCount - 1) {
+          throw e;
+        }
+        if(assetNotExists){
           throw e;
         }
         //等待3秒后重试
