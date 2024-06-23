@@ -114,7 +114,7 @@
 
 查询与指定活动相关的指定档位的历史预测线。
 
-终结点: `POST /lsycx`
+终结点: `POST /cutoffListOfRecentEvent`
 
 #### 请求结构
 
@@ -303,7 +303,7 @@
 
 查询指定活动的指定档位的预测线。
 
-终结点: `POST /ycx`
+终结点: `POST /cutoffDetail`
 
 #### 请求结构
 
@@ -322,7 +322,7 @@
 
 查询指定活动的全档位预测线。
 
-终结点: `POST /ycxAll`
+终结点: `POST /cutoffAll`
 
 #### 请求结构
 
