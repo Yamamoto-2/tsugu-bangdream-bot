@@ -29,7 +29,6 @@ router.post('/getUserData',
     ],
     middleware,
     async (req: Request, res: Response) => {
-        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         const { platform, userId } = req.body;
 
         //检查参数
@@ -58,8 +57,6 @@ router.post('/changeUserData',
     ],
     middleware,
     async (req: Request, res: Response) => {
-        req.ip
-        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         const { platform, userId, update } = req.body;
         //检查参数
         try {
@@ -82,7 +79,6 @@ router.post('/bindPlayerRequest',
     ],
     middleware,
     async (req: Request, res: Response) => {
-        console.log(req.url, req.body);
         const { platform, userId } = req.body;
 
         //生成验证码

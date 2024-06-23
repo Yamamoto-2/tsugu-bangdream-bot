@@ -12,10 +12,14 @@ export class UserDB {
   constructor(uri: string, dbName: string) {
     this.client = new MongoClient(uri);
     this.db = this.client.db(dbName);
+    //尝试连接数据库，如果连接失败则抛出错误
+    this.connect().catch((err) => {
+      throw new Error(`连接数据库失败 Error: ${err.message}`);
+    });
   }
 
   private getCollection() {
-    return this.db.collection('users');
+    return this.db.collection('users_1');
   }
 
   private getKey(platform: string, userId: string): string {
