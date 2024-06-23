@@ -37,7 +37,7 @@ router.post('/submitRoomNumber',
             userPlayerInList = getUserPlayerByUser(user)
         }
         catch (e) {
-            logger('station', `error: ${e.message}`)
+            //logger('station', `error: ${e.message}`)
         }
         try {
             await submitRoomNumber({

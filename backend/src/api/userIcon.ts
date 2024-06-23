@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { assetsRootPath } from "@/config";
 import { Image, loadImage } from 'skia-canvas';
-import { download } from '@/api/downloader';
+import { downloadFile } from '@/api/downloadFile'
 import { loadImageFromPath } from '@/image/utils';
 
 let userIconCache = {};
@@ -22,12 +22,12 @@ export async function getUserIcon(avatarUrl?:string): Promise<Image> {
     }
 
     try {
-        const iconBuffer = await download(avatarUrl);
+        const iconBuffer = await downloadFile(avatarUrl,false,true);
         const icon = await loadImage(iconBuffer);
         userIconCache[avatarUrl] = icon;
         return icon;
     } catch (e) {
-        //console.log(e)
+        console.log(e)
         const icon = iconUndefined
         return icon;
     }

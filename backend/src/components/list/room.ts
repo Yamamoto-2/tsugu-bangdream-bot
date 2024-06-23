@@ -39,9 +39,9 @@ export async function drawRoomListTitle() {
 const maxWidthText = 580
 export async function drawRoonInList(room: Room) {
     const timeNow = new Date().getTime()
+
     //头像
-    let Icon: Image
-    Icon = await getUserIcon(room.avatarUrl)
+    const Icon = await getUserIcon(room.avatarUrl)
 
     //文本
     const textList: Canvas[] = []
@@ -73,7 +73,6 @@ export async function drawRoonInList(room: Room) {
     ctxUp.fillRect(200, 0, 5, height)
     let list = [canvasUp]
     if (room.player != undefined) {
-        console.log(room)
         const player = new Player(room.player.playerId, room.player.server)
         await player.initFull(false)
         if (player.isExist) {

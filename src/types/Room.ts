@@ -142,7 +142,7 @@ export async function queryRoomNumberFromBandoriStation(): Promise<Room[]> {
             userName: decodeUrl(roomData['user_info']['username']),
             userId: roomData['user_info']['user_id'],
             time: roomData['time'],
-            avatarUrl: roomData['user_info']['avatar']
+            avatarUrl: roomData['user_info']['avatar'] == '' ? undefined : `https://asset.bandoristation.com/images/user-avatar/${roomData['user_info']['avatar']}`
         })
         if (roomData['user_info']?.['bandori_player_brief_info']?.['user_id'] != undefined) {
             const player = new Player(

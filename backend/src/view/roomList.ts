@@ -4,11 +4,10 @@ import { Room } from "@/types/Room";
 
 export async function drawRoomList(roomList: Room[], compress: boolean): Promise<Array<Buffer | string>> {
     let all = []
-    all.push(await drawRoomListTitle())
-    //let roomList = await queryAllRoom()
     if (roomList.length == 0) {
         return ['myc']
     }
+    all.push(await drawRoomListTitle())
     for (let i = 0; i < roomList.length; i++) {
         const room = roomList[i]
         all.push(await drawRoonInList(room))

@@ -532,7 +532,7 @@
 | `userId` | number | 上传房间号的用户 ID 。 |
 | `time` | number | 房间号上传时的时间戳。 |
 | `player` | [Player](#player-玩家信息) | 上传用户的默认玩家信息。 |
-| `avanter` | string? | 上传房间号的用户头像。 |
+| `avatarUrl` | string? | 上传房间号的用户头像。 |
 | `userName` | string? | 上传房间号的用户名称。 |
 
 ##### Player 玩家信息
