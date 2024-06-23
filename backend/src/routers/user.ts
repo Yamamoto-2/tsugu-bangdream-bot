@@ -85,7 +85,7 @@ router.post('/bindPlayerRequest',
         const verifyCode = generateVerifyCode()
         verifyCodeCache[`${platform}:${userId}`] = verifyCode
 
-        res.json({ status: 'success', data: (verifyCode) })
+        res.json({ status: 'success', data: { verifyCode } })
     }
 );
 
