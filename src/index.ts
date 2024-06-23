@@ -13,7 +13,7 @@ import { commandCharacter } from './commands/searchCharacter'
 import { commandSongMeta } from './commands/songMeta'
 import { roomNumber } from './commands/roomNumber'
 import { commandRoomList } from './commands/roomList'
-import { commandBindPlayer, commandPlayerInfo, commandSwitchDisplayedServerList, commandSwitchServerMode, commandUnbindPlayer, commandSwitchCarMode } from './commands/user'
+import { commandBindPlayer, commandPlayerInfo, commandSwitchDisplayedServerList, commandSwitchServerMode, commandUnbindPlayer, commandSwitchShareRoomNumberMode } from './commands/user'
 import { commandSongChart } from './commands/songChart'
 import { commandEventStage } from './commands/eventStage'
 import { Server } from './types/Server'
@@ -242,12 +242,12 @@ export function apply(ctx: Context, config: Config) {
   ctx.command('开启车牌转发', '开启车牌转发')
     .userFields(['tsugu'])
     .action(async ({ session }) => {
-      return await commandSwitchCarMode(config, session, true)
+      return await commandSwitchShareRoomNumberMode(config, session, true)
     })
   ctx.command('关闭车牌转发', '关闭车牌转发')
     .userFields(['tsugu'])
     .action(async ({ session }) => {
-      return await commandSwitchCarMode(config, session, false)
+      return await commandSwitchShareRoomNumberMode(config, session, false)
     })
 
   ctx.command('绑定玩家 [serverName:text]', '绑定玩家信息')

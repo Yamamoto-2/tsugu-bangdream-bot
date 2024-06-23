@@ -1,7 +1,7 @@
 import { Session, h } from "koishi";
 import { Server, getServerByName } from "../types/Server";
 import { Player } from "../types/Player";
-import { tsuguUser, bindingPlayerPromptWaitingTime, serverNameFullList,  Config, userPlayerInList } from "../config";
+import { tsuguUser, bindingPlayerPromptWaitingTime, serverNameFullList, Config, userPlayerInList } from "../config";
 import { commandSearchPlayer } from "./searchPlayer";
 import { generateVerifyCode } from './utils';
 import { paresMessageList } from '../utils';
@@ -123,6 +123,15 @@ export async function commandUnbindPlayer(config: Config, session: Session<'tsug
     } catch (error) {
         return error.message
     }
+    let playerInList: userPlayerInList
+    try {
+        playerInList = getUserPlayerByUser(user, server)
+    }
+    catch (e) {
+        return e.message
+    }
+
+    const playerId = playerInList.playerId
 
     // 生成验证码
     let tempID: number
@@ -135,25 +144,24 @@ export async function commandUnbindPlayer(config: Config, session: Session<'tsug
         tempID = (tempData.data as { verifyCode: number }).verifyCode
     }
     else {
-        // 生成从10000到99999的随机数，且不包含64和89
-        tempID = generateVerifyCode()
+        // 本地解除绑定不需要验证码
+        const userPlayerInList = { playerId, server }
+        try {
+            await updateUserPlayerList(session, 'unbind', userPlayerInList, true)
+        }
+        catch (e) {
+            return e.message
+        }
+        session.send(`解除绑定${serverNameFullList[server]}玩家${playerId}成功`)
+        return
     }
-    await session.send(`正在解除绑定绑定来自 ${serverNameFullList[server]} 账号，请将你的\n评论(个性签名)\n或者\n你的当前使用的卡组的卡组名(乐队编队名称)\n改为以下数字后，直接发送你的玩家id\n${tempID}`)
+    await session.send(`正在解除绑定绑定来自 ${serverNameFullList[server]} 账号 ${playerId}，请将你的\n评论(个性签名)\n或者\n你的当前使用的卡组的卡组名(乐队编队名称)\n改为以下数字后，发送任意消息继续`)
 
     // 等待下一步录入
     const input = await session.prompt(bindingPlayerPromptWaitingTime)
 
-    // 处理input，检测是否为数字
-    let playerId: number
-    // prompt超时
     if (!input) {
         return '错误: 等待超时'
-    }
-
-    playerId = parseInt(input)
-
-    if (Number.isNaN(playerId)) {
-        return '错误: 无效的玩家id'
     }
 
     // 验证玩家信息，如果使用远程服务器，则从远程服务器获取验证码
@@ -171,34 +179,9 @@ export async function commandUnbindPlayer(config: Config, session: Session<'tsug
             return
         }
     }
-    else {
-        const player = new Player(playerId, server)
-        await session.send(`正在验证玩家信息${playerId}，请稍后...`)
-        await player.initFull()
-        if (player.initError) {
-            return '错误: 请求api超时, 请稍后重试'
-        }
-        else if (!player.isExist) {
-            return `错误: 不存在玩家${playerId}`
-        }
-        else if (player.profile.mainUserDeck.deckName == tempID.toString() || player.profile.introduction == tempID.toString()) {
-            const userPlayerInList = { playerId, server }
-            try {
-                await updateUserPlayerList(session, 'unbind', userPlayerInList, true)
-            }
-            catch (e) {
-                return e.message
-            }
-            session.send(`绑定${serverNameFullList[server]}玩家${playerId}成功, 正在生成玩家状态图片`)
-            const result = paresMessageList(await commandSearchPlayer(config, playerId, server))
-            return result
-        }
-        else {
-            return `错误: \n评论为: "${player.profile.introduction}", \n卡组名为: "${player.profile.mainUserDeck.deckName}", \n都与验证码不匹配`
-        }
-    }
 }
 
+// 玩家状态
 export async function commandPlayerInfo(config: Config, session: Session<'tsugu', never>, server: Server,) {
     let user: tsuguUser
     try {
@@ -215,6 +198,55 @@ export async function commandPlayerInfo(config: Config, session: Session<'tsugu'
     }
     const result = paresMessageList(await commandSearchPlayer(config, playerInList.playerId, playerInList.server))
     return result
+}
+
+// 玩家绑定信息列表
+export async function commandPlayerList(config: Config, session: Session<'tsugu', never>) {
+    let user: tsuguUser
+    try {
+        user = await getUser(session, config)
+    } catch (error) {
+        return error.message
+    }
+    if (user.userPlayerList.length == 0) {
+        return '未绑定任何玩家'
+    }
+    let result = ''
+    result += '已绑定玩家列表:\n'
+    for (let i = 0; i < user.userPlayerList.length; i++) {
+        const playerInList = user.userPlayerList[i]
+        result += `${i + 1}. ${serverNameFullList[playerInList.server]}: ${playerInList.playerId}\n`
+    }
+    result += `当前主服务器: ${serverNameFullList[user.mainServer]}\n`
+    result += `当前默认玩家绑定信息ID: ${user.userPlayerIndex + 1}\n`
+    return result
+}
+
+// 切换玩家绑定信息ID
+export async function commandSwitchPlayerIndex(config: Config, session: Session<'tsugu', never>, index: number) {
+    let user: tsuguUser
+    try {
+        user = await getUser(session, config)
+    } catch (error) {
+        return error.message
+    }
+    if (index < 1 || index > user.userPlayerList.length) {
+        return '错误: 无效的绑定信息ID'
+    }
+    user.userPlayerIndex = index - 1
+    if (config.RemoteDBSwitch) {
+        const tempData = await changeUserData(config.RemoteDBUrl, session.platform, session.userId, { userPlayerIndex: user.userPlayerIndex })
+        if (tempData.status != 'success') {
+            return (tempData.data as string)
+        }
+        else {
+            return `已切换至绑定信息ID: ${index}`
+        }
+    }
+    else {
+        user.userPlayerIndex = index - 1
+        return `已切换至绑定信息ID: ${index}`
+    }
 }
 
 export async function commandSwitchServerMode(config: Config, session: Session<'tsugu', never>, server: Server) {
@@ -281,7 +313,7 @@ export async function commandSwitchDisplayedServerList(config: Config, session: 
     }
 }
 
-export async function commandSwitchCarMode(config: Config, session: Session<'tsugu', never>, mode: boolean) {
+export async function commandSwitchShareRoomNumberMode(config: Config, session: Session<'tsugu', never>, mode: boolean) {
     if (mode == undefined) {
         return '错误: 未知的车辆模式'
     }
