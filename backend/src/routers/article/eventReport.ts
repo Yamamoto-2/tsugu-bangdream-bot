@@ -46,7 +46,6 @@ router.post('/eventReportCutoffListOfEvent', [
     body('server').custom(value => isServer(value)),
     body('eventId').optional().isInt(),
 ], async (req, res) => {
-    console.log(req.ip, `${req.baseUrl}${req.path}`, JSON.stringify(req.body));
     const { server, eventId } = req.body;
     try {
         const result = await drawEventReportCutoffListOfEvent(eventId, server);
@@ -61,7 +60,6 @@ router.post('/eventReportCutoffListOfEvent', [
 router.post('/eventReportTitle', [
     body('eventId').optional().isInt(),
 ], async (req, res) => {
-    console.log(req.ip, `${req.baseUrl}${req.path}`, JSON.stringify(req.body));
     const { eventId } = req.body;
     try {
         const result = await drawEventReportTitle(eventId);

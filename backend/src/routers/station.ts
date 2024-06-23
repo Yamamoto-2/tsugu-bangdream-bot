@@ -65,8 +65,8 @@ router.post('/submitRoomNumber',
 );
 
 router.get('/queryAllRoom',
+    middleware,
     async (req: Request, res: Response) => {
-        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         try {
             let roomList = await queryAllRoom()
             res.status(200).json({

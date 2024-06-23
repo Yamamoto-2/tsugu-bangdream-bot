@@ -20,10 +20,10 @@ router.post(
 
         try {
             const result = fuzzySearch(text.split(' '));
-            console.log(result)
+            //console.log(result)
             res.send({ status: 'success', data: result });
         } catch (e) {
-            console.log(e);
+            //console.log(e);
             res.status(500).send({ status: 'failed', data: '内部错误' });
         }
     }
