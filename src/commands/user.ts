@@ -109,13 +109,10 @@ export async function commandBindPlayer(config: Config, session: Session<'tsugu'
             return `错误: \n评论为: "${player.profile.introduction}", \n卡组名为: "${player.profile.mainUserDeck.deckName}", \n都与验证码不匹配`
         }
     }
-
-
-
 }
 
 // 解绑玩家，如果使用远程服务器，需要验证
-export async function commandUnbindPlayer(config: Config, session: Session<'tsugu', never>, server: Server) {
+export async function commandUnbindPlayer(config: Config, session: Session<'tsugu', never>, server: Server, index?: number) {
     //const backendUrl = config.backendUrl
     let user: tsuguUser
     try {
@@ -155,7 +152,7 @@ export async function commandUnbindPlayer(config: Config, session: Session<'tsug
         session.send(`解除绑定${serverNameFullList[server]}玩家${playerId}成功`)
         return
     }
-    await session.send(`正在解除绑定绑定来自 ${serverNameFullList[server]} 账号 ${playerId}，请将你的\n评论(个性签名)\n或者\n你的当前使用的卡组的卡组名(乐队编队名称)\n改为以下数字后，发送任意消息继续`)
+    await session.send(`正在解除绑定绑定来自 ${serverNameFullList[server]} 账号 玩家ID: ${playerId}，请将你的\n评论(个性签名)\n或者\n你的当前使用的卡组的卡组名(乐队编队名称)\n改为以下数字后，发送任意消息继续\n${tempID}`)
 
     // 等待下一步录入
     const input = await session.prompt(bindingPlayerPromptWaitingTime)
@@ -182,7 +179,7 @@ export async function commandUnbindPlayer(config: Config, session: Session<'tsug
 }
 
 // 玩家状态
-export async function commandPlayerInfo(config: Config, session: Session<'tsugu', never>, server: Server,) {
+export async function commandPlayerInfo(config: Config, session: Session<'tsugu', never>, index?: number) {
     let user: tsuguUser
     try {
         user = await getUser(session, config)
@@ -190,11 +187,23 @@ export async function commandPlayerInfo(config: Config, session: Session<'tsugu'
         return error.message
     }
     let playerInList: userPlayerInList
-    try {
-        playerInList = getUserPlayerByUser(user, server)
+    if (user.userPlayerList.length == 0) {
+        return '未绑定任何玩家'
     }
-    catch (e) {
-        return e.message
+
+    if (index != undefined) {
+        if (index > user.userPlayerList.length || index < 1) {
+            return '错误: 无效的绑定信息ID'
+        }
+        playerInList = user.userPlayerList[index - 1]
+    }
+    else {
+        try {
+            playerInList = getUserPlayerByUser(user, user.mainServer)
+        }
+        catch (e) {
+            return e.message
+        }
     }
     const result = paresMessageList(await commandSearchPlayer(config, playerInList.playerId, playerInList.server))
     return result

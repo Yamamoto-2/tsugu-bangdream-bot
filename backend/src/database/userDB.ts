@@ -71,19 +71,19 @@ export class UserDB {
     await this.getCollection().updateOne({ _id: key }, { $set: update });
   }
 
-  async updateUserPlayerList(platform: string, userId: string, bindingAction: 'bind' | 'unbind', tsuguUserServer: userPlayerInList, verifyed: boolean): Promise<void> {
+  async updateUserPlayerList(platform: string, userId: string, bindingAction: 'bind' | 'unbind', tsuguUserServer: userPlayerInList, verifyed: boolean): Promise<{ status: string, data: string }> {
     const key = this.getKey(platform, userId);
     const user = await this.getUser(platform, userId);
-    //如果用户不存在，抛出错误
+    //如果用户不存在
     if (user == null) {
-      throw new Error('用户不存在');
+      return { status: 'failed', data: '用户不存在' };
     }
     let userPlayerList = user['userPlayerList'];
     //判断是否已经绑定
     const index = userPlayerList.findIndex((item: userPlayerInList) => item.playerId == tsuguUserServer.playerId);
     if (bindingAction == 'bind') {
       if (index != -1) {
-        throw new Error('该 player 已经绑定');
+        return { status: 'failed', data: '该 player 已被绑定' };
       }
       if (verifyed) {
         userPlayerList.push(tsuguUserServer);
@@ -91,7 +91,7 @@ export class UserDB {
 
     } else if (bindingAction == 'unbind') {
       if (index == -1) {
-        throw new Error('该 player 未绑定');
+        return { status: 'failed', data: '该 player 未被绑定' };
       }
       if (verifyed) {
         userPlayerList.splice(index, 1);
@@ -99,6 +99,7 @@ export class UserDB {
     }
     if (verifyed) {
       await this.getCollection().updateOne({ _id: key }, { $set: { userPlayerList: userPlayerList } });
+      return { status: 'success', data: `${bindingAction} ${tsuguUserServer.playerId} 成功` };
     }
   }
 

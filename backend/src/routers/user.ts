@@ -125,16 +125,22 @@ router.post('/bindPlayerVerification',
             res.status(422).json({ status: 'failed', data: text });
             return
         }
-        //验证通过
+        //验证
         try {
             const userPlayerInList = {
                 playerId: playerId,
                 server: server,
             }
             //检查是否可以绑定
-            userDB.updateUserPlayerList(platform, userId, bindingAction, userPlayerInList, true)
-            res.json({ status: 'success', data: `${bindingAction} ${playerId} 成功` })
+            const result = await userDB.updateUserPlayerList(platform, userId, bindingAction, userPlayerInList, true)
             delete verifyCodeCache[`${platform}:${userId}`]
+            if (result.status == 'failed') {
+                res.status(422).json({ status: 'failed', data: `错误: ${result.data}` });
+                return
+            }
+            else {
+                res.json(result)
+            }
         }
         catch (error) {
             res.status(500).json({ status: 'failed', data: `错误: ${error.message}` });

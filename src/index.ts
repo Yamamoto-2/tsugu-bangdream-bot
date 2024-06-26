@@ -13,7 +13,7 @@ import { commandCharacter } from './commands/searchCharacter'
 import { commandSongMeta } from './commands/songMeta'
 import { roomNumber } from './commands/roomNumber'
 import { commandRoomList } from './commands/roomList'
-import { commandBindPlayer, commandPlayerInfo, commandSwitchDisplayedServerList, commandSwitchServerMode, commandUnbindPlayer, commandSwitchShareRoomNumberMode } from './commands/user'
+import { commandBindPlayer, commandPlayerInfo, commandSwitchDisplayedServerList, commandSwitchServerMode, commandUnbindPlayer, commandSwitchShareRoomNumberMode, commandPlayerList, commandSwitchPlayerIndex } from './commands/user'
 import { commandSongChart } from './commands/songChart'
 import { commandEventStage } from './commands/eventStage'
 import { Server } from './types/Server'
@@ -300,28 +300,31 @@ export function apply(ctx: Context, config: Config) {
       }
       return await commandSwitchServerMode(config, session, mainServer)
     })
-  ctx.command('设置默认服务器 <...serverList>', '设定信息显示中的默认服务器排序')
-    .alias('默认服务器')
+  ctx.command('设置显示服务器 <...serverList>', '设定信息显示中的默认服务器排序')
+    .alias('默认服务器', '设置默认服务器')
     .usage('使用空格分隔服务器列表')
     .example('设置默认服务器 国服 日服 : 将国服设置为第一服务器, 日服设置为第二服务器')
     .userFields(['tsugu'])
     .action(async ({ session }, ...serverList) => {
       return await commandSwitchDisplayedServerList(config, session, serverList)
     })
-  ctx.command('玩家状态 [serverName:text]', '查询自己的玩家状态')
+  ctx.command('玩家状态 [index:number]', '查询自己的玩家状态')
     .shortcut(/^(.+服)玩家状态$/, { args: ['$1'] })
     .userFields(['tsugu'])
-    .action(async ({ session }, serverName) => {
-      const tsuguUserData = await observeUserTsugu(session)
-      let mainServer: Server = tsuguUserData.mainServer
-      if (serverName) {
-        const serverFromServerNameFuzzySearch = await serverNameFuzzySearchResult(config, serverName)
-        if (serverFromServerNameFuzzySearch == -1) {
-          return '错误: 服务器名未能匹配任何服务器'
-        }
-        mainServer = serverFromServerNameFuzzySearch
-      }
-      return await commandPlayerInfo(config, session, mainServer)
+    .action(async ({ session }, index) => {
+      return await commandPlayerInfo(config, session, index)
+    })
+  ctx.command('玩家状态列表', '查询目前已经绑定的所有玩家信息')
+    .alias('玩家列表', '玩家信息列表')
+    .userFields(['tsugu'])
+    .action(async ({ session }) => {
+      return await commandPlayerList(config, session)
+    })
+  ctx.command('玩家默认ID [index:number]', '查询摸钱已经绑定的所有玩家信息')
+    .alias('默认玩家ID', '默认玩家', '玩家ID')
+    .userFields(['tsugu'])
+    .action(async ({ session }, index) => {
+      return await commandSwitchPlayerIndex(config, session, index)
     })
 
   //其他

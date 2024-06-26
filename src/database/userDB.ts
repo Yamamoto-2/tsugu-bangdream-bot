@@ -108,16 +108,21 @@ export interface userPlayerInList {
     server: Server,
 }
 
-export function getUserPlayerByUser(tsuguUser: tsuguUser, server?: Server): userPlayerInList {
+export function getUserPlayerByUser(tsuguUser: tsuguUser, server?: Server, index?:number): userPlayerInList {
     server ??= tsuguUser.mainServer;
     const userPlayerList = tsuguUser.userPlayerList;
+    const userPlayerIndex = index ?? tsuguUser.userPlayerIndex;
     //如果用户未绑定角色
     if (userPlayerList.length == 0) {
         throw new Error('用户未绑定player');
     }
+    //如果index存在，直接返回
+    if (index != undefined) {
+        return userPlayerList[index];
+    }
     //如果index的player在主服务器上，直接返回
-    if (tsuguUser.userPlayerList[tsuguUser.userPlayerIndex].server == server) {
-        return userPlayerList[tsuguUser.userPlayerIndex];
+    if (tsuguUser.userPlayerList[userPlayerIndex].server == server) {
+        return userPlayerList[userPlayerIndex];
     }
     //如果index的player不在主服务器上，遍历查找第一个在主服务器上的player
     for (let i = 0; i < userPlayerList.length; i++) {

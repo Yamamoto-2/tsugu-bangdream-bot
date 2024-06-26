@@ -2,7 +2,8 @@ import axios from 'axios';
 import { tsuguUser } from '../config';
 import { Logger } from 'koishi'
 export const remoteDBLogger = new Logger('tsugu-remoteDB');
-import { Config } from '../config'
+
+const statusCodeList = [200, 409, 422]
 
 function parseError(e: any): { status: string; data: string; } {
     //如果404，且报错原因为user api is not available，则说明是本地数据库未开启
@@ -25,7 +26,7 @@ export async function getRemoteDBUserData(RemoteDBUrl: string, platform: string,
         const postData = { platform, userId };
         remoteDBLogger.info(`${RemoteDBUrl}${postPath}`, postData);
         const result = await axios.post(`${RemoteDBUrl}${postPath}`, postData);
-        if (result.status != 200) {
+        if (!statusCodeList.includes(result.status)) {
             throw new Error()
         }
         return result.data as { status: string; data: tsuguUser };
@@ -41,7 +42,7 @@ export async function changeUserData(RemoteDBUrl: string, platform: string, user
         const postData = { platform, userId, update }
         remoteDBLogger.info(`${RemoteDBUrl}${postPath}`, postData);
         const result = await axios.post(`${RemoteDBUrl}${postPath}`, postData);
-        if (result.status != 200) {
+        if (!statusCodeList.includes(result.status)) {
             throw new Error()
         }
         return result.data;
@@ -58,7 +59,7 @@ export async function bindPlayerRequest(RemoteDBUrl: string, platform: string, u
         const postData = { platform, userId }
         remoteDBLogger.info(`${RemoteDBUrl}${postPath}`, postData);
         const result = await axios.post(`${RemoteDBUrl}${postPath}`, postData);
-        if (result.status != 200) {
+        if (!statusCodeList.includes(result.status)) {
             throw new Error()
         }
         return result.data;
@@ -74,7 +75,8 @@ export async function bindPlayerVerify(RemoteDBUrl: string, platform: string, us
         const postData = { platform, userId, server, playerId, bindingAction }
         remoteDBLogger.info(`${RemoteDBUrl}${postPath}`, postData);
         const result = await axios.post(`${RemoteDBUrl}${postPath}`, postData);
-        if (result.status != 200) {
+        console.log(result.data)
+        if (!statusCodeList.includes(result.status)) {
             throw new Error()
         }
         return result.data;
