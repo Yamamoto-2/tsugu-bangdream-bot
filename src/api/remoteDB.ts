@@ -75,7 +75,6 @@ export async function bindPlayerVerify(RemoteDBUrl: string, platform: string, us
         const postData = { platform, userId, server, playerId, bindingAction }
         remoteDBLogger.info(`${RemoteDBUrl}${postPath}`, postData);
         const result = await axios.post(`${RemoteDBUrl}${postPath}`, postData);
-        console.log(result.data)
         if (!statusCodeList.includes(result.status)) {
             throw new Error()
         }
