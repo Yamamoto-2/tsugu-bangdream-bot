@@ -68,6 +68,11 @@ export class UserDB {
     if (update['userPlayerList'] != undefined) {
       throw new Error('不允许直接修改绑定信息');
     }
+    //如果index大于绑定列表长度或小于0，或者不为整数，抛出错误
+    if (update['userPlayerIndex'] != undefined && (update['userPlayerIndex'] >= user.userPlayerList.length || update['userPlayerIndex'] < 0 || !Number.isInteger(update['userPlayerIndex']))) {
+      throw new Error('index 越界或不为整数');
+    }
+
     await this.getCollection().updateOne({ _id: key }, { $set: update });
   }
 
@@ -136,6 +141,9 @@ export function isPartialTsuguUser(obj: any): obj is Partial<tsuguUser> {
   }
 
   if ('shareRoomNumber' in obj && typeof obj.shareRoomNumber !== 'boolean') {
+    return false;
+  }
+  if ('userPlayerIndex' in obj && typeof obj.userPlayerIndex !== 'number') {
     return false;
   }
 

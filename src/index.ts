@@ -308,7 +308,7 @@ export function apply(ctx: Context, config: Config) {
     .action(async ({ session }, ...serverList) => {
       return await commandSwitchDisplayedServerList(config, session, serverList)
     })
-  ctx.command('玩家状态 [index:number]', '查询自己的玩家状态')
+  ctx.command('玩家状态 [index:integer]', '查询自己的玩家状态')
     .shortcut(/^(.+服)玩家状态$/, { args: ['$1'] })
     .userFields(['tsugu'])
     .action(async ({ session }, index) => {
@@ -320,7 +320,8 @@ export function apply(ctx: Context, config: Config) {
     .action(async ({ session }) => {
       return await commandPlayerList(config, session)
     })
-  ctx.command('玩家默认ID [index:number]', '查询摸钱已经绑定的所有玩家信息')
+  ctx.command('玩家默认ID <index:integer>', '设置默认显示的玩家ID')
+    .usage('调整玩家状态指令，和发送车牌时的默认玩家信息。\n规则: \n如果该ID对应的玩家信息在当前默认服务器中, 显示。\n如果不在当前默认服务器中, 显示当前默认服务器的编号最靠前的玩家信息')
     .alias('默认玩家ID', '默认玩家', '玩家ID')
     .userFields(['tsugu'])
     .action(async ({ session }, index) => {
@@ -337,7 +338,7 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandRoomList(config, keyword)
       return (paresMessageList(list))
     })
-  ctx.command('查玩家 <playerId:number> [serverName:text]', '查询玩家信息')
+  ctx.command('查玩家 <playerId:integer> [serverName:text]', '查询玩家信息')
     .alias('查询玩家')
     .usage('查询指定ID玩家的信息。省略服务器名时, 默认从你当前的主服务器查询')
     .example('查玩家 10000000 : 查询你当前默认服务器中, 玩家ID为10000000的玩家信息')
@@ -364,7 +365,7 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandCard(config, displayedServerList, text)
       return (paresMessageList(list))
     })
-  ctx.command('查卡面 <cardId:number>', '查卡面').alias('查卡插画', '查插画')
+  ctx.command('查卡面 <cardId:integer>', '查卡面').alias('查卡插画', '查插画')
     .usage('根据卡片ID查询卡片插画').example('查卡面 1399 :返回1399号卡牌的插画')
     .action(async ({ session }, cardId) => {
       const list = await commandGetCardIllustration(config, cardId)
@@ -395,7 +396,7 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandSong(config, displayedServerList, text)
       return paresMessageList(list)
     })
-  ctx.command("查谱面 <songId:number> [difficultyText:text]", "查谱面").usage('根据曲目ID与难度查询铺面信息')
+  ctx.command("查谱面 <songId:integer> [difficultyText:text]", "查谱面").usage('根据曲目ID与难度查询铺面信息')
     .example('查谱面 1 :返回1号曲的所有铺面').example('查谱面 1 expert :返回1号曲的expert难度铺面')
     .action(async ({ session }, songId, difficultyText) => {
       const tsuguUserData = await observeUserTsugu(session)
@@ -429,7 +430,7 @@ export function apply(ctx: Context, config: Config) {
 
     })
 
-  ctx.command("查试炼 <eventId:number>", "查试炼").usage('查询当前服务器当前活动试炼信息\n可以自定义活动ID\n参数:-m 显示歌曲meta(相对效率)')
+  ctx.command("查试炼 <eventId:integer>", "查试炼").usage('查询当前服务器当前活动试炼信息\n可以自定义活动ID\n参数:-m 显示歌曲meta(相对效率)')
     .alias('查stage', '查舞台', '查festival', '查5v5')
     .example('查试炼 157 -m :返回157号活动的试炼信息, 包含歌曲meta')
     .example('查试炼 -m :返回当前活动的试炼信息, 包含歌曲meta')
@@ -442,7 +443,7 @@ export function apply(ctx: Context, config: Config) {
       return paresMessageList(list)
     })
 
-  ctx.command("查卡池 <gachaId:number>", "查卡池").usage('根据卡池ID查询卡池信息')
+  ctx.command("查卡池 <gachaId:integer>", "查卡池").usage('根据卡池ID查询卡池信息')
     .action(async ({ session }, gachaId) => {
       const tsuguUserData = await observeUserTsugu(session)
       const displayedServerList = tsuguUserData.displayedServerList
@@ -450,7 +451,7 @@ export function apply(ctx: Context, config: Config) {
       return paresMessageList(list)
     })
 
-  ctx.command("ycx <tier:number> [eventId:number] [serverName]", "查询指定档位的预测线").usage(`查询指定档位的预测线, 如果没有服务器名的话, 服务器为用户的默认服务器。如果没有活动ID的话, 活动为当前活动\n可用档线:\n:\n${tierListOfServerToString()}`)
+  ctx.command("ycx <tier:integer> [eventId:integer] [serverName]", "查询指定档位的预测线").usage(`查询指定档位的预测线, 如果没有服务器名的话, 服务器为用户的默认服务器。如果没有活动ID的话, 活动为当前活动\n可用档线:\n:\n${tierListOfServerToString()}`)
     .example('ycx 1000 :返回默认服务器当前活动1000档位的档线与预测线').example('ycx 1000 177 jp:返回日服177号活动1000档位的档线与预测线')
     .action(async ({ session }, tier, eventId, serverName) => {
       const tsuguUserData = await observeUserTsugu(session)
@@ -465,7 +466,7 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandCutoffDetail(config, mainServer, tier, eventId)
       return paresMessageList(list)
     })
-  ctx.command("ycxall [eventId:number] [serverName]", "查询所有档位的预测线").usage(`查询所有档位的预测线, 如果没有服务器名的话, 服务器为用户的默认服务器。如果没有活动ID的话, 活动为当前活动\n可用档线:\n${tierListOfServerToString()}`)
+  ctx.command("ycxall [eventId:integer] [serverName]", "查询所有档位的预测线").usage(`查询所有档位的预测线, 如果没有服务器名的话, 服务器为用户的默认服务器。如果没有活动ID的话, 活动为当前活动\n可用档线:\n${tierListOfServerToString()}`)
     .example('ycxall :返回默认服务器当前活动所有档位的档线与预测线').example('ycxall 177 jp:返回日服177号活动所有档位的档线与预测线')
     .alias('myycx')
     .action(async ({ session }, eventId, serverName) => {
@@ -481,7 +482,7 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandCutoffAll(config, mainServer, eventId)
       return paresMessageList(list)
     })
-  ctx.command("lsycx <tier:number> [eventId:number] [serverName]", "查询指定档位的预测线").usage(`查询指定档位的预测线, 与最近的4期活动类型相同的活动的档线数据, 如果没有服务器名的话, 服务器为用户的默认服务器。如果没有活动ID的话, 活动为当前活动\n可用档线:\n${tierListOfServerToString()}`)
+  ctx.command("lsycx <tier:integer> [eventId:integer] [serverName]", "查询指定档位的预测线").usage(`查询指定档位的预测线, 与最近的4期活动类型相同的活动的档线数据, 如果没有服务器名的话, 服务器为用户的默认服务器。如果没有活动ID的话, 活动为当前活动\n可用档线:\n${tierListOfServerToString()}`)
     .example('lsycx 1000 :返回默认服务器当前活动的档线与预测线, 与最近的4期活动类型相同的活动的档线数据').example('lsycx 1000 177 jp:返回日服177号活动1000档位档线与最近的4期活动类型相同的活动的档线数据')
     .action(async ({ session }, tier, eventId, serverName) => {
       const tsuguUserData = await observeUserTsugu(session)
@@ -497,7 +498,7 @@ export function apply(ctx: Context, config: Config) {
       return paresMessageList(list)
     })
 
-  ctx.command('抽卡模拟 [times:number] [gachaId:number]').usage('模拟抽卡, 如果没有卡池ID的话, 卡池为当前活动的卡池')
+  ctx.command('抽卡模拟 [times:integer] [gachaId:integer]').usage('模拟抽卡, 如果没有卡池ID的话, 卡池为当前活动的卡池')
     .example('抽卡模拟:模拟抽卡10次').example('抽卡模拟 300 922 :模拟抽卡300次, 卡池为922号卡池')
     .channelFields(['tsugu_gacha'])
     .action(async ({ session }, times, gachaId) => {
