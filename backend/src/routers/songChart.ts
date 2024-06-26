@@ -16,7 +16,7 @@ router.post(
         // Express-validator checks for type validation
         body('displayedServerList').custom(isServerList),
         body('songId').isInt(),
-        body('difficultyId').isInt(),
+        body('difficultyId').isInt().optional(),
         body('compress').optional().isBoolean(),
     ],
     middleware,
