@@ -194,12 +194,12 @@ export class Song {
         var server = getServerByPriority(this.publishedAt, displayedServerList)
         var jacketImageName = this.jacketImage[this.jacketImage.length - 1]
         if (this.songId == 13) {
-            return 'https://bestdori.com/assets/cn/musicjacket/musicjacket30_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket30-miracle-jacket.png'
+            return `${Bestdoriurl}/assets/cn/musicjacket/musicjacket30_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket30-miracle-jacket.png`;
         }
         if (this.songId == 40) {
-            return 'https://bestdori.com/assets/cn/musicjacket/musicjacket30_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket30-kirayume-jacket.png';
+            return `${Bestdoriurl}/assets/cn/musicjacket/musicjacket30_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket30-kirayume-jacket.png`;
         }
-        var jacketImageUrl = `https://bestdori.com/assets/${Server[server]}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`
+        var jacketImageUrl = `${Bestdoriurl}/assets/${Server[server]}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`
         return jacketImageUrl
     }
     getTagName(): string {

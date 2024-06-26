@@ -286,7 +286,7 @@ export class Event {
         return (characterList)
     }
     async getRewardStamp(server:Server): Promise<Image> {
-        const allStamps = await callAPIAndCacheResponse(`https://bestdori.com/api/stamps/all.2.json`)
+        const allStamps = await callAPIAndCacheResponse(`${Bestdoriurl}/api/stamps/all.2.json`)
         const rewards = this.pointRewards[0]
         let rewardId = -1
         for(let i = 0; i < rewards.length; i++){
