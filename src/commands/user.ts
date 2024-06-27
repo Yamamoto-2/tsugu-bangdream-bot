@@ -212,22 +212,25 @@ export async function commandPlayerInfo(config: Config, session: Session<'tsugu'
 // 玩家绑定信息列表
 export async function commandPlayerList(config: Config, session: Session<'tsugu', never>) {
     let user: tsuguUser
+    let result = ''
     try {
         user = await getUser(session, config)
     } catch (error) {
         return error.message
     }
     if (user.userPlayerList.length == 0) {
-        return '未绑定任何玩家'
+        result += '未绑定任何玩家\n'
     }
-    let result = ''
-    result += '已绑定玩家列表:\n'
-    for (let i = 0; i < user.userPlayerList.length; i++) {
-        const playerInList = user.userPlayerList[i]
-        result += `${i + 1}. ${serverNameFullList[playerInList.server]}: ${playerInList.playerId}\n`
+    else {
+        result += '已绑定玩家列表:\n'
+        for (let i = 0; i < user.userPlayerList.length; i++) {
+            const playerInList = user.userPlayerList[i]
+            result += `${i + 1}. ${serverNameFullList[playerInList.server]}: ${playerInList.playerId}\n`
+        }
+        result += `当前默认玩家绑定信息ID: ${user.userPlayerIndex + 1}\n`
     }
     result += `当前主服务器: ${serverNameFullList[user.mainServer]}\n`
-    result += `当前默认玩家绑定信息ID: ${user.userPlayerIndex + 1}\n`
+    result += `默认显示服务器顺序: ${user.displayedServerList.map(s => serverNameFullList[s]).join(", ")}\n`
     return result
 }
 
