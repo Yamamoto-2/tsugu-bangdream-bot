@@ -1,11 +1,12 @@
 import { Server } from "../types/Server"
-import { getDataFromBackend } from './utils'
+import { getReplyFromBackend } from "../api/getReplyFromBackend"
+import { Config } from '../config';
 
-export async function commandSongChart(backendUrl: string, default_servers: Server[], songId: number, compress: boolean, difficultyText: string = 'ex'): Promise<Array<Buffer | string>> {
-    return await getDataFromBackend(`${backendUrl}/songChart`, {
-        default_servers,
+export async function commandSongChart(config: Config, displayedServerList: Server[], songId: number, difficultyId?: number): Promise<Array<Buffer | string>> {
+    return await getReplyFromBackend(`${config.backendUrl}/songChart`, {
+        displayedServerList,
         songId,
-        compress,
-        difficultyText
+        compress: config.compress,
+        difficultyId
     })
 }

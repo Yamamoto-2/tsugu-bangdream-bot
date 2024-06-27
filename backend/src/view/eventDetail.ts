@@ -21,7 +21,7 @@ import { globalDefaultServer, serverNameFullList } from '@/config';
 import { drawSongInList, drawSongListInList } from '@/components/list/song';
 import { resizeImage } from '@/components/utils';
 
-export async function drawEventDetail(eventId: number, defaultServerList: Server[] = globalDefaultServer, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawEventDetail(eventId: number, displayedServerList: Server[] = globalDefaultServer, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
     const event = new Event(eventId)
     if (!event.isExist) {
         return ['错误: 活动不存在']
@@ -36,7 +36,7 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     list.push(new Canvas(800, 30))
 
     //标题
-    list.push(await drawListByServerList(event.eventName, '活动名称', defaultServerList))
+    list.push(await drawListByServerList(event.eventName, '活动名称', displayedServerList))
     list.push(line)
 
     //类型
@@ -124,15 +124,15 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     }
 
     //牌子
-    list.push(await drawDegreeListOfEvent(event, defaultServerList))
+    list.push(await drawDegreeListOfEvent(event, displayedServerList))
     list.push(line)
 
     //有歌榜活动的歌榜歌曲
     const eventTypes: string[] = ['versus', 'challenge', 'medley']
     if (eventTypes.includes(event.eventType) && event.musics != undefined && event.musics.length > 0) {
         let songs: Song[] = []
-        let defaultServer = defaultServerList[0]
-        if (!event.musics[defaultServerList[0]]) {
+        let defaultServer = displayedServerList[0]
+        if (!event.musics[displayedServerList[0]]) {
             defaultServer = Server.jp
         }
         for (let i = 0; i < event.musics[defaultServer].length; i++) {
@@ -143,7 +143,7 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     }
 
     //活动表情
-    const stampImage = await event.getRewardStamp(defaultServerList[0])
+    const stampImage = await event.getRewardStamp(displayedServerList[0])
     if(stampImage){
         list.push(
             await drawList({
@@ -177,8 +177,8 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     var gachaImageList: Canvas[] = []
     var gachaIdList: number[] = []//用于去重
     //活动期间卡池卡牌
-    for (var i = 0; i < defaultServerList.length; i++) {
-        var server = defaultServerList[i]
+    for (var i = 0; i < displayedServerList.length; i++) {
+        var server = displayedServerList[i]
         if (event.startAt[server] == null) {
             continue
         }
@@ -228,8 +228,8 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     all.push(listImage)
 
     //歌曲
-    for (let i = 0; i < defaultServerList.length; i++) {
-        const server = defaultServerList[i];
+    for (let i = 0; i < displayedServerList.length; i++) {
+        const server = displayedServerList[i];
         if (event.startAt[server] == null) {
             continue
         }
@@ -265,13 +265,13 @@ export async function drawEventDetail(eventId: number, defaultServerList: Server
     return [buffer];
 }
 
-export async function getEventGachaAndCardList(event: Event, server: Server, useCache = false) {
+export async function getEventGachaAndCardList(event: Event, mainServer: Server, useCache = false) {
     var gachaList: Gacha[] = []
     var gachaIdList = []//用于去重
-    if (event.startAt[server] == null) {
+    if (event.startAt[mainServer] == null) {
         return { gachaCardList: [], gachaList: [] }
     }
-    let tempGachaList = await getPresentGachaList(server, event.startAt[server], event.endAt[server])
+    let tempGachaList = await getPresentGachaList(mainServer, event.startAt[mainServer], event.endAt[mainServer])
     for (var j = 0; j < tempGachaList.length; j++) {
         if (gachaIdList.indexOf(tempGachaList[j].gachaId) == -1) {
             gachaList.push(tempGachaList[j])
@@ -311,7 +311,7 @@ export async function getEventGachaAndCardList(event: Event, server: Server, use
         var tempCardId = gachaCardIdList[i]
         var tempCard = new Card(tempCardId)
         //如果卡牌的发布时间不在活动期间内，则不显示
-        if (tempCard.releasedAt[server] < event.startAt[server] - 1000 * 60 * 60 * 24 || tempCard.releasedAt[server] > event.endAt[server]) {
+        if (tempCard.releasedAt[mainServer] < event.startAt[mainServer] - 1000 * 60 * 60 * 24 || tempCard.releasedAt[mainServer] > event.endAt[mainServer]) {
             continue
         }
         gachaCardList.push(tempCard)
@@ -321,8 +321,8 @@ export async function getEventGachaAndCardList(event: Event, server: Server, use
         return a.rarity - b.rarity
     })
     gachaList.sort((a, b) => {
-        if (a.publishedAt[server] != b.publishedAt[server]) {
-            return a.publishedAt[server] - b.publishedAt[server]
+        if (a.publishedAt[mainServer] != b.publishedAt[mainServer]) {
+            return a.publishedAt[mainServer] - b.publishedAt[mainServer]
         }
         else {
             return a.gachaId - b.gachaId

@@ -2,53 +2,60 @@ import express from 'express';
 import { body, validationResult } from 'express-validator';
 import { drawCardDetail } from '@/view/cardDetail';
 import { drawCardList } from '@/view/cardList';
-import { isInteger, isServerList, listToBase64 } from '@/routers/utils';
-import { fuzzySearch } from '@/routers/fuzzySearch';
+import { isInteger, listToBase64 } from '@/routers/utils';
+import { isServerList } from '@/types/Server';
+import { fuzzySearch, FuzzySearchResult, isFuzzySearchResult } from '@/fuzzySearch';
 import { getServerByServerId, Server } from '@/types/Server';
+import { middleware } from '@/routers/middleware';
+import { Request, Response } from 'express';
 
 const router = express.Router();
 
 router.post(
     '/',
     [
-        body('default_servers').custom(isServerList),
-        body('text').isString(),
+        body('displayedServerList').custom(isServerList),
+        body('text').optional().isString(),
+        body('fuzzySearchResult').optional().custom(isFuzzySearchResult),
         body('useEasyBG').isBoolean(),
         body('compress').optional().isBoolean(),
     ],
-    async (req, res) => {
-        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
-        // Check for validation errors
-        const errors = validationResult(req);
-        console.log(errors)
-        if (!errors.isEmpty()) {
-            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+    middleware,
+    async (req: Request, res: Response) => {
+        const { displayedServerList, text, fuzzySearchResult, useEasyBG, compress } = req.body;
+        if (!text && !fuzzySearchResult) {
+            return res.status(422).json({ status: 'failed', data: '不能同时不存在text与fuzzySearchResult' });
         }
-        const { default_servers, text, useEasyBG, compress } = req.body;
         try {
-            const result = await commandCard(default_servers, text, useEasyBG, compress);
+            const result = await commandCard(displayedServerList, text || fuzzySearchResult, useEasyBG, compress);
             res.send(listToBase64(result));
         } catch (e) {
             console.log(e);
-            res.send([{ type: 'string', string: '内部错误' }]);
+            res.status(500).send({ status: 'failed', data: '内部错误' });
         }
     }
 );
 
-
-export async function commandCard(default_servers: Server[], text: string, useEasyBG: boolean, compress:boolean): Promise<Array<string | Buffer>> {
-    if (isInteger(text)) {
-        return await drawCardDetail(parseInt(text), default_servers, useEasyBG, compress)
+async function commandCard(displayedServerList: Server[], input: string | FuzzySearchResult, useEasyBG: boolean, compress?: boolean) {
+    let fuzzySearchResult: FuzzySearchResult
+    // 根据 input 的类型执行不同的逻辑
+    if (typeof input === 'string') {
+        if (isInteger(input)) {
+            return await drawCardDetail(parseInt(input), displayedServerList, useEasyBG, compress)
+        }
+        fuzzySearchResult = fuzzySearch(input.split(' '))
+    } else {
+        // 使用 fuzzySearch 逻辑
+        fuzzySearchResult = input
     }
-    var fuzzySearchResult = fuzzySearch(text.split(' '))
-    console.log(fuzzySearchResult)
+
     if (Object.keys(fuzzySearchResult).length == 0) {
         return ['错误: 没有有效的关键词']
     }
-    for(let i = 0; i < default_servers.length; i++) {
-        default_servers[i] = getServerByServerId(default_servers[i])
+    for (let i = 0; i < displayedServerList.length; i++) {
+        displayedServerList[i] = getServerByServerId(displayedServerList[i])
     }
-    return await drawCardList(fuzzySearchResult, default_servers, compress)
+    return await drawCardList(fuzzySearchResult, displayedServerList, compress)
 
 }
 

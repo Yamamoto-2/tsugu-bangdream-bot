@@ -14,32 +14,32 @@ import { drawAttributeInList } from '@/components/list/attribute'
 import { drawCharacterInList } from '@/components/list/character'
 import { loadImageFromPath } from '@/image/utils';
 
-export async function drawCutoffComprare(eventId: number, tier: number, server: Server, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawCutoffListOfRecentEvent(eventId: number, tier: number, mainServer: Server, compress: boolean): Promise<Array<Buffer | string>> {
     //检查
     var event = new Event(eventId)
     if (!event.isExist) {
         return ['活动不存在']
     }
-    if (event.startAt[server] == undefined) {
+    if (event.startAt[mainServer] == undefined) {
         return ['活动在该服务器不存在']
     }
-    var tempcutoff = new Cutoff(eventId, server, tier)
+    var tempcutoff = new Cutoff(eventId, mainServer, tier)
     if (tempcutoff.isExist == false) {
-        return [`错误: ${serverNameFullList[server]} 活动或档线不存在`]
+        return [`错误: ${serverNameFullList[mainServer]} 活动或档线不存在`]
     }
 
 
     var all = []
-    all.push(drawTitle('历史的档线对比', `${serverNameFullList[server]} ${tier}档线`))
-    all.push(await drawEventDatablock(event, [server]))
+    all.push(drawTitle('历史的档线对比', `${serverNameFullList[mainServer]} ${tier}档线`))
+    all.push(await drawEventDatablock(event, [mainServer]))
 
     const list: Array<Image | Canvas> = []
 
     //初始化档线列表
     var cutoffList: Array<Cutoff> = []
-    const eventList = getRecentEventListByEventAndServer(event, server, 5, true)
+    const eventList = getRecentEventListByEventAndServer(event, mainServer, 5, true)
     for (let i = eventList.length - 1; i >= 0; i--) {
-        const cutoff = new Cutoff(eventList[i].eventId, server, tier)
+        const cutoff = new Cutoff(eventList[i].eventId, mainServer, tier)
         await cutoff.initFull()
         cutoffList.push(cutoff)
     }
@@ -48,7 +48,7 @@ export async function drawCutoffComprare(eventId: number, tier: number, server: 
         const cutoff = cutoffList[i]
         const tempEvent = new Event(cutoff.eventId)
         list.push(drawList({
-            key: `ID:${cutoff.eventId} ${tempEvent.eventName[server]}`,
+            key: `ID:${cutoff.eventId} ${tempEvent.eventName[mainServer]}`,
         }))
         //添加活动粗略信息，包括Attribute，Charactor
         //attribute
@@ -102,7 +102,7 @@ export async function drawCutoffComprare(eventId: number, tier: number, server: 
     list.push(new Canvas(800, 50))
 
     //折线图
-    list.push(await drawCutoffChart(cutoffList, true, server))
+    list.push(await drawCutoffChart(cutoffList, true, mainServer))
 
     //创建最终输出数组
     var listImage = drawDatablock({ list })

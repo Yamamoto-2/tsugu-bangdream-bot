@@ -14,7 +14,7 @@ import { drawSongMetaListDataBlock } from '@/components/dataBlock/songMetaList'
 import { globalDefaultServer, serverNameFullList } from '@/config';
 import { formatSeconds } from '@/components/list/time'
 
-export async function drawSongDetail(song: Song, defaultServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawSongDetail(song: Song, displayedServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
     if (song.isExist == false) {
         return ['错误: 歌曲不存在']
     }
@@ -37,17 +37,17 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
 
     //乐队
     var band = new Band(song.bandId)
-    list.push(await drawListByServerList(band.bandName, '乐队', defaultServerList))
+    list.push(await drawListByServerList(band.bandName, '乐队', displayedServerList))
     list.push(line)
 
     //作词
-    list.push(await drawListByServerList(song.detail.lyricist, '作词', defaultServerList))
+    list.push(await drawListByServerList(song.detail.lyricist, '作词', displayedServerList))
     list.push(line)
     //作曲
-    list.push(await drawListByServerList(song.detail.composer, '作曲', defaultServerList))
+    list.push(await drawListByServerList(song.detail.composer, '作曲', displayedServerList))
     list.push(line)
     //编曲
-    list.push(await drawListByServerList(song.detail.arranger, '编曲', defaultServerList))
+    list.push(await drawListByServerList(song.detail.arranger, '编曲', displayedServerList))
     list.push(line)
     //时长
     list.push(drawList({
@@ -82,7 +82,7 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
     list.push(await drawTimeInList({
         key: '发布时间',
         content: song.publishedAt
-    }, defaultServerList))
+    }, displayedServerList))
 
     //special难度发布时间
     if (song.difficulty['4']?.publishedAt != undefined) {
@@ -90,7 +90,7 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
         list.push(await drawTimeInList({
             key: 'special难度发布时间',
             content: song.difficulty['4'].publishedAt
-        }, defaultServerList))
+        }, displayedServerList))
     }
     if (song.nickname != null) {
         list.push(line)
@@ -115,21 +115,21 @@ export async function drawSongDetail(song: Song, defaultServerList: Server[] = g
     var ferverStatusList = [true, false]
     for (let j = 0; j < ferverStatusList.length; j++) {
         const feverStatus = ferverStatusList[j];
-        var songMetaListDataBlockImage = await drawSongMetaListDataBlock(feverStatus, song, `${feverStatus ? 'Fever' : '无Fever'}`, defaultServerList)
+        var songMetaListDataBlockImage = await drawSongMetaListDataBlock(feverStatus, song, `${feverStatus ? 'Fever' : '无Fever'}`, displayedServerList)
         all.push(songMetaListDataBlockImage)
     }
 
     //相关活动
     var eventIdList = []//防止重复
-    for (var i = 0; i < defaultServerList.length; i++) {
-        var server = defaultServerList[i]
+    for (var i = 0; i < displayedServerList.length; i++) {
+        var server = displayedServerList[i]
         if (song.publishedAt[server] == null) {
             continue
         }
         var event = getPresentEvent(server, song.publishedAt[server])
         if (event != undefined && eventIdList.indexOf(event.eventId) == -1) {
             eventIdList.push(event.eventId)
-            var eventDatablockImage = await drawEventDatablock(event, defaultServerList, `${serverNameFullList[server]}相关活动`)
+            var eventDatablockImage = await drawEventDatablock(event, displayedServerList, `${serverNameFullList[server]}相关活动`)
             all.push(eventDatablockImage)
         }
     }

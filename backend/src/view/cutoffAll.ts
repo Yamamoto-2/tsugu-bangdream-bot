@@ -1,7 +1,7 @@
 import { Event } from '@/types/Event';
 import { drawList, line } from '@/components/list';
 import { drawDatablock } from '@/components/dataBlock'
-import { Image, Canvas} from 'skia-canvas'
+import { Image, Canvas } from 'skia-canvas'
 import { changeTimefomant } from '@/components/list/time';
 import { Server } from '@/types/Server';
 import { drawTitle } from '@/components/title'
@@ -11,27 +11,26 @@ import { drawCutoffChart } from '@/components/chart/cutoffChart'
 import { serverNameFullList, tierListOfServer } from '@/config';
 import { drawEventDatablock } from '@/components/dataBlock/event';
 import { statusName } from '@/config';
-import { loadImageFromPath } from '@/image/utils';
 
-export async function drawCutoffListOfEvent(eventId: number, server: Server, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawCutoffAll(eventId: number, mainServer: Server, compress: boolean): Promise<Array<Buffer | string>> {
     var event = new Event(eventId)
     if (!event.isExist) {
         return ['活动不存在']
     }
-    if (event.startAt[server] == undefined) {
+    if (event.startAt[mainServer] == undefined) {
         return ['活动在该服务器不存在']
     }
     var all = []
-    all.push(drawTitle('档线列表', `${serverNameFullList[server]}`))
-    all.push(await drawEventDatablock(event,[server]))
+    all.push(drawTitle('档线列表', `${serverNameFullList[mainServer]}`))
+    all.push(await drawEventDatablock(event, [mainServer]))
 
     const list: Array<Image | Canvas> = []
 
     //初始化档线列表
-    var tierList = tierListOfServer[Server[server]]
+    var tierList = tierListOfServer[Server[mainServer]]
     var cutoffList: Array<Cutoff> = []
     for (var i in tierList) {
-        var tempCutoff = new Cutoff(eventId, server, tierList[i])
+        var tempCutoff = new Cutoff(eventId, mainServer, tierList[i])
         await tempCutoff.initFull()
         if (tempCutoff.status == 'in_progress') {
             tempCutoff.predict()

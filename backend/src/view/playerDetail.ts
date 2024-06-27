@@ -20,8 +20,8 @@ async function loadImageOnce() {
 }
 loadImageOnce()
 
-export async function drawPlayerDetail(playerId: number, server: Server, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
-    var player = new Player(playerId, server)
+export async function drawPlayerDetail(playerId: number, mainServer: Server, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
+    var player = new Player(playerId, mainServer)
     await player.initFull()
     if (!player.isExist) {
         return ['错误: 玩家不存在，请检查服务器是否正确']

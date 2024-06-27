@@ -12,7 +12,7 @@ import { Band } from '@/types/Band';
 import { changeTimefomantMonthDay } from '@/components/list/time';
 import { stackImage, stackImageHorizontal } from '@/components/utils';
 import { drawBandInList } from '@/components/list/band';
-import { config } from '@/routers/fuzzySearch'
+import { config } from '@/fuzzySearch'
 import { getColorFromHex } from '@/types/Color'
 
 
@@ -44,7 +44,7 @@ const constellationList = {
     'sagittarius': '射手座',
 }
 
-export async function drawCharacterDetail(characterId: number, defaultServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawCharacterDetail(characterId: number, displayedServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
     const character = new Character(characterId)
     if (!character.isExist) {
         return ['错误: 角色不存在']
@@ -57,7 +57,7 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
     listRight.push(await drawListByServerList(
         character.characterName,
         '角色名',
-        defaultServerList,
+        displayedServerList,
         rightListWidth
     ))
     listRight.push(rightListLine)
@@ -66,7 +66,7 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
     listRight.push(await drawListByServerList(
         character.ruby,
         'ruby',
-        defaultServerList,
+        displayedServerList,
         rightListWidth
     ))
     listRight.push(rightListLine)
@@ -76,7 +76,7 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
         listRight.push(await drawListByServerList(
             character.nickname,
             '昵称',
-            defaultServerList,
+            displayedServerList,
             rightListWidth
         ))
         listRight.push(rightListLine)
@@ -85,7 +85,7 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
     listRight.push(await drawListByServerList(
         character.profile.characterVoice,
         '配音',
-        defaultServerList,
+        displayedServerList,
         rightListWidth
     ))
     listRight.push(rightListLine)
@@ -150,7 +150,7 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
     list.push(await drawListByServerList(
         character.profile.school,
         '学校',
-        defaultServerList,
+        displayedServerList,
     ))
     list.push(line)
 
@@ -158,13 +158,13 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
     const schoolYearTextImage = await drawListByServerList(
         character.profile.schoolYear,
         '年级',
-        defaultServerList,
+        displayedServerList,
     )
     //班级
     const schoolClsTextImage = await drawListByServerList(
         character.profile.schoolCls,
         '班级',
-        defaultServerList,
+        displayedServerList,
     )
     list.push(drawListMerge([schoolYearTextImage, schoolClsTextImage]))
     list.push(line)
@@ -173,14 +173,14 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
     list.push(await drawListByServerList(
         character.profile.hobby,
         '兴趣',
-        defaultServerList
+        displayedServerList
     ))
     list.push(line)
     //喜欢的食物
     list.push(await drawListByServerList(
         character.profile.favoriteFood,
         '喜欢的食物',
-        defaultServerList
+        displayedServerList
     ))
     list.push(line)
 
@@ -188,7 +188,7 @@ export async function drawCharacterDetail(characterId: number, defaultServerList
     list.push(await drawListByServerList(
         character.profile.hatedFood,
         '讨厌的食物',
-        defaultServerList
+        displayedServerList
     ))
     list.push(line)
 

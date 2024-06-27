@@ -9,8 +9,8 @@ import { globalDefaultServer } from "@/config"
 import { drawList } from '../list'
 import { drawDottedLine } from '@/image/dottedLine'
 
-export async function drawSongInList(song: Song, difficulty?: number, text?: string, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
-    var server = getServerByPriority(song.publishedAt, defaultServerList)
+export async function drawSongInList(song: Song, difficulty?: number, text?: string, displayedServerList: Server[] = globalDefaultServer): Promise<Canvas> {
+    var server = getServerByPriority(song.publishedAt, displayedServerList)
     var songImage = resizeImage({
         image: await song.getSongJacketImage(),
         widthMax: 80,
@@ -57,7 +57,7 @@ export async function drawSongInList(song: Song, difficulty?: number, text?: str
     return canvas
 }
 
-export async function drawSongListInList(songs: Song[], difficulty?: number, text?: string, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
+export async function drawSongListInList(songs: Song[], difficulty?: number, text?: string, displayedServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     let height: number = 75 * songs.length + 10 * (songs.length - 1)
     let canvas = new Canvas(760, height)
     let ctx = canvas.getContext("2d")
@@ -76,7 +76,7 @@ export async function drawSongListInList(songs: Song[], difficulty?: number, tex
         color: "#a8a8a8"
     })
     for (let i = 0; i < songs.length; i++) {
-        views.push(resizeImage({ image: await drawSongInList(songs[i], difficulty, text, defaultServerList), widthMax: 760 }))
+        views.push(resizeImage({ image: await drawSongInList(songs[i], difficulty, text, displayedServerList), widthMax: 760 }))
         views.push(line)
     }
     views.pop()

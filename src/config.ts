@@ -6,7 +6,7 @@ export const configPath: string = path.join(projectRoot, '/config');
 export const carKeywordPath = path.join(configPath, '/car_keyword.json');
 export const cacheRootPath: string = path.join(projectRoot, '/cache');
 
-export const bindingPlayerPromptWaitingTime: number = 5 * 60 * 10000
+export const bindingPlayerPromptWaitingTime: number = 5 * 60 * 10000 //绑定玩家的等待时间
 
 export const Bestdoriurl: string = 'https://bestdori.com'; //Bestdori网站的url
 export const BandoriStationurl: string = 'https://api.bandoristation.com/'; //BandoriStation网站的url
@@ -34,33 +34,56 @@ export const tierListOfServer = {
     'cn': [20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000, 30000, 50000]
 }
 
-export enum BindingStatus {
-    None, Verifying, Success
-}
-
 export interface tsuguUser {
-    user_id: string,
+    userId: string,
     platform: string,
-    server_mode: Server,
-    default_server: Server[],
-    car: boolean,
-    server_list: tsuguUserServerInList[]
+    mainServer: Server,
+    displayedServerList: Server[],
+    shareRoomNumber: boolean,
+    userPlayerIndex: number,
+    userPlayerList: userPlayerInList[],
 }
 
-export interface tsuguUserServerInList {
+export interface userPlayerInList {
     playerId: number,
-    bindingStatus: BindingStatus,
-    verifyCode?: number
+    server: Server,
 }
+
+export function getUserPlayerByUser(tsuguUser: tsuguUser, server?: Server): userPlayerInList {
+    server ??= tsuguUser.mainServer;
+    const userPlayerList = tsuguUser.userPlayerList;
+    //如果用户未绑定角色
+    if (userPlayerList.length == 0) {
+      throw new Error('用户未绑定player');
+    }
+    //如果index的player在主服务器上，直接返回
+    if (tsuguUser.userPlayerList[tsuguUser.userPlayerIndex].server == server) {
+      return userPlayerList[tsuguUser.userPlayerIndex];
+    }
+    //如果index的player不在主服务器上，遍历查找第一个在主服务器上的player
+    for (let i = 0; i < userPlayerList.length; i++) {
+      const userPlayerInList: userPlayerInList = userPlayerList[i];
+      if (userPlayerInList.server == server) {
+        return userPlayerInList;
+      }
+    }
+    //如果没有在主服务器上的player
+    throw new Error('用户在对应服务器上未绑定player');
+  }
 
 export interface Channel {
-    tsugu_gacha: boolean
+    tsuguGacha: boolean
 }
 
 export interface Config {
     useEasyBG: boolean,
-    compress:boolean,
+    compress: boolean,
+    bandoriStationToken: string,
     backendUrl: string,
     RemoteDBSwitch: boolean,
-    RemoteDBHost: string,
-}
+    RemoteDBUrl: string,
+  
+    noSpace: boolean,
+    reply: boolean,
+    at: boolean,
+  }

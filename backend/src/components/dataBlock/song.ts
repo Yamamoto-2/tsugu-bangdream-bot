@@ -23,8 +23,8 @@ const line = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawSongDataBlock(song: Song, text?: string, defaultServerList: Server[] = globalDefaultServer) {
-    var server = getServerByPriority(song.publishedAt, defaultServerList)
+export async function drawSongDataBlock(song: Song, text?: string, displayedServerList: Server[] = globalDefaultServer) {
+    var server = getServerByPriority(song.publishedAt, displayedServerList)
     var songJacketImage = await song.getSongJacketImage()
     // 缩放封面
     var songJacketCanvas = resizeImage({

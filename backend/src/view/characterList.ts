@@ -1,6 +1,6 @@
 import { Character } from "@/types/Character";
 import mainAPI from "@/types/_Main"
-import { match } from "@/routers/fuzzySearch"
+import { match, FuzzySearchResult } from "@/fuzzySearch"
 import { Canvas } from 'skia-canvas'
 import { drawDatablock, } from '@/components/dataBlock';
 import { drawTitle } from '@/components/title';
@@ -13,7 +13,7 @@ import { drawCharacterDetail } from './characterDetail'
 
 const maxWidth = 1370
 
-export async function drawCharacterList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawCharacterList(matches: FuzzySearchResult, displayedServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
     //计算模糊搜索结果
     var tempCharacterList: Array<Character> = [];//最终输出的角色列表
     var characterIdList: Array<number> = Object.keys(mainAPI['characters']).map(Number);//所有卡牌ID列表
@@ -22,14 +22,14 @@ export async function drawCharacterList(matches: { [key: string]: string[] }, de
         var isMatch = match(matches, tempCharacter, ['scoreUpMaxValue']);
         //如果在所有所选服务器列表中都不存在，则不输出
         var numberOfNotReleasedServer = 0;
-        for (var j = 0; j < defaultServerList.length; j++) {
-            var server = defaultServerList[j];
+        for (var j = 0; j < displayedServerList.length; j++) {
+            var server = displayedServerList[j];
             //通过该服务器是否有角色名来判断是否已经发布
             if (tempCharacter.characterName[server] == null) {
                 numberOfNotReleasedServer++;
             }
         }
-        if (numberOfNotReleasedServer == defaultServerList.length) {
+        if (numberOfNotReleasedServer == displayedServerList.length) {
             isMatch = false;
         }
         if (isMatch) {
@@ -40,12 +40,12 @@ export async function drawCharacterList(matches: { [key: string]: string[] }, de
         return ['没有搜索到符合条件的角色']
     }
     if (tempCharacterList.length == 1) {
-        return (await drawCharacterDetail(tempCharacterList[0].characterId, defaultServerList, compress))
+        return (await drawCharacterDetail(tempCharacterList[0].characterId, displayedServerList, compress))
     }
     const characterImageList: Canvas[] = []
     for (let i = 0; i < tempCharacterList.length; i++) {
         const element = tempCharacterList[i];
-        characterImageList.push(await drawCharacterHalfBlock(element, defaultServerList))
+        characterImageList.push(await drawCharacterHalfBlock(element, displayedServerList))
     }
     const characterListImage = drawList({
         content: characterImageList,
@@ -62,7 +62,7 @@ export async function drawCharacterList(matches: { [key: string]: string[] }, de
     var buffer = await outputFinalBuffer({
         imageList: all,
         useEasyBG: true,
-        compress:compress,
+        compress: compress,
     })
     return [buffer];
 }

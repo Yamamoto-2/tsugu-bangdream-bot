@@ -15,9 +15,9 @@ export async function drawSkillInList({
     key,
     card,
     content
-}: SkillInListOptions, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
-    var listImage = await drawListByServerList(card.skillName, key, defaultServerList)
-    var server = getServerByPriority(content.description, defaultServerList)
+}: SkillInListOptions, displayedServerList: Server[] = globalDefaultServer): Promise<Canvas> {
+    var listImage = await drawListByServerList(card.skillName, key, displayedServerList)
+    var server = getServerByPriority(content.description, displayedServerList)
     var tipsImage = drawTipsInList({
         text: content.getSkillDescription()[server]
     })

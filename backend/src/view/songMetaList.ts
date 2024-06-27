@@ -22,15 +22,15 @@ const line = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawSongMetaList(server: Server, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawSongMetaList(mainServer: Server, compress: boolean): Promise<Array<Buffer | string>> {
     const feverMode = [true, false]
     const imageList = []
     for (let i = 0; i < feverMode.length; i++) {
         const element = feverMode[i];
-        imageList.push(await drawMetaRankListDatablock(element, server))
+        imageList.push(await drawMetaRankListDatablock(element, mainServer))
     }
     var all = []
-    all.push(drawTitle('查询', `${serverNameFullList[server]} 分数排行榜`))
+    all.push(drawTitle('查询', `${serverNameFullList[mainServer]} 分数排行榜`))
     all.push(stackImageHorizontal(imageList))
     var buffer = await outputFinalBuffer({
         imageList: all,
@@ -40,8 +40,8 @@ export async function drawSongMetaList(server: Server, compress: boolean): Promi
     return [buffer]
 }
 
-async function drawMetaRankListDatablock(Fever: boolean, server: Server): Promise<Canvas> {
-    const metaRanking = getMetaRanking(Fever, server);
+async function drawMetaRankListDatablock(Fever: boolean, mainServer: Server): Promise<Canvas> {
+    const metaRanking = getMetaRanking(Fever, mainServer);
     const maxMeta = metaRanking[0].meta
     let list: Array<Canvas> = []
     for (let i = 0; i < 50; i++) {

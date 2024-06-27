@@ -16,7 +16,7 @@ export async function drawTimeInList({
     content,
     eventId,
     estimateCNTime = false
-}: timeInListOptions, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
+}: timeInListOptions, displayedServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     var formatedTimeList: Array<string> = []
     for (let i = 0; i < content.length; i++) {
         const element = content[i];
@@ -33,7 +33,7 @@ export async function drawTimeInList({
         }
         formatedTimeList.push(changeTimefomant(element))
     }
-    var canvas = await drawListByServerList(formatedTimeList, key, defaultServerList)
+    var canvas = await drawListByServerList(formatedTimeList, key, displayedServerList)
     return canvas
 }
 //获取当前活动与查询活动的大致时间差(国服)

@@ -1,11 +1,12 @@
 import { Server } from '../types/Server';
-import { getDataFromBackend } from './utils'
+import { getReplyFromBackend } from "../api/getReplyFromBackend"
+import { Config } from '../config';
 
-export async function commandGachaSimulate(backendUrl: string, server_mode: Server, times: number = 10, compress: boolean, gachaId?: number): Promise<Array<Buffer | string>> {
-    return await getDataFromBackend(`${backendUrl}/gachaSimulate`, {
-        server_mode,
+export async function commandGachaSimulate(config: Config, mainServer: Server, times: number = 10, gachaId?: number): Promise<Array<Buffer | string>> {
+    return await getReplyFromBackend(`${config.backendUrl}/gachaSimulate`, {
+        mainServer,
         times,
-        compress,
+        compress: config.compress,
         gachaId
     })
 }

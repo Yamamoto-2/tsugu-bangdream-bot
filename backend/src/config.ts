@@ -34,6 +34,7 @@ export const BandoriStationurl: string = 'https://api.bandoristation.com/'; //Ba
 
 export const globalDefaultServer: Array<Server> = [Server.cn, Server.jp]//默认服务器列表
 export const globalServerPriority: Array<Server> = [Server.cn, Server.jp, Server.tw, Server.en, Server.kr]//默认服务器优先级
+
 export const serverNameFullList = [
     '日服',
     '国际服',
@@ -48,29 +49,6 @@ export const tierListOfServer = {
     'en': [50, 100, 300, 500, 1000, 2000, 2500],
     'kr': [100],
     'cn': [20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000, 30000, 50000]
-}
-
-export enum BindingStatus {
-    None, Verifying, Success
-}
-
-export interface tsuguUser {
-    user_id: string,
-    platform: string,
-    server_mode: Server,
-    default_server: Server[],
-    car: boolean,
-    server_list: tsuguUserServerInList[]
-}
-
-export interface tsuguUserServerInList {
-    playerId: number,
-    bindingStatus: BindingStatus,
-    verifyCode?: number
-}
-
-export interface Channel {
-    tsugu_gacha: boolean
 }
 
 export const statusName = {

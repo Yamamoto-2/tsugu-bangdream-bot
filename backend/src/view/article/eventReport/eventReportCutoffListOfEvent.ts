@@ -13,25 +13,25 @@ import { drawEventDatablock } from '@/components/dataBlock/event';
 import { drawTips } from '@/components/tips'
 import { statusName } from '@/config';
 
-export async function drawEventReportCutoffListOfEvent(eventId: number, server: Server): Promise<Array<Buffer | string>> {
+export async function drawEventReportCutoffListOfEvent(eventId: number, mainServer: Server): Promise<Array<Buffer | string>> {
     var event = new Event(eventId)
     if (!event.isExist) {
         return ['活动不存在']
     }
-    if (event.startAt[server] == undefined) {
+    if (event.startAt[mainServer] == undefined) {
         return ['活动在该服务器不存在']
     }
     var all = []
     all.push(drawTitle('数据总览', '档线数据'))
-    all.push(await drawEventDatablock(event, [server]))
+    all.push(await drawEventDatablock(event, [mainServer]))
 
     const list: Array<Image | Canvas> = []
 
     //初始化档线列表
-    var tierList = tierListOfServer[Server[server]]
+    var tierList = tierListOfServer[Server[mainServer]]
     var cutoffList: Array<Cutoff> = []
     for (var i in tierList) {
-        var tempCutoff = new Cutoff(eventId, server, tierList[i])
+        var tempCutoff = new Cutoff(eventId, mainServer, tierList[i])
         await tempCutoff.initFull()
         if (tempCutoff.status == 'in_progress') {
             tempCutoff.predict()

@@ -9,7 +9,7 @@ import { drawTimeInList } from '@/components/list/time'
 import { Server } from '@/types/Server';
 import { globalDefaultServer } from '@/config'
 
-export async function drawEventDatablock(event: Event, defaultServerList: Server[] = globalDefaultServer, topLeftText?: string) {
+export async function drawEventDatablock(event: Event, displayedServerList: Server[] = globalDefaultServer, topLeftText?: string) {
     await event.initFull()
     var list = []
     var eventBannerImage = await event.getBannerImage()
@@ -59,7 +59,7 @@ export async function drawEventDatablock(event: Event, defaultServerList: Server
         content: event.startAt,
         eventId: event.eventId,
         estimateCNTime: true
-    }, defaultServerList))
+    }, displayedServerList))
 
     //画左侧有竖线的排版
     var textImageListImage = drawListWithLine(textImageList)

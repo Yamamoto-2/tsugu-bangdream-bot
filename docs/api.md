@@ -4,7 +4,7 @@
 
 ## 请求结构
 
-对于请求中的 `Server` 型字段，在 **[查询 API](#查询-api)** 中，该字段为 [Server](#server-服务器) 列举中的值，而在 **[用户数据 API](#用户数据-api)** 中，该字段为 [ServerId](#serverid-服务器-id) 列举中的值。
+对于请求中的 `mainServer` 型字段，在 **[查询 API](#查询-api)** 中，该字段为 [Server](#server-服务器) 列举中的值，而在 **[用户数据 API](#用户数据-api)** 中，该字段为 [ServerId](#serverid-服务器-id) 列举中的值。
 
 ### Server 服务器
 
@@ -25,6 +25,19 @@
 | TW | `2` | 台服 |
 | CN | `3` | 国服 |
 | KR | `4` | 韩服 (已停服) |
+
+
+对于请求中的 `fuzzySearchResult` (模糊搜索过滤器) 型字段与 `text` 字段，在 **[查询 API](#查询-api)** 中，该字段用于在查询时进行过滤。
+
+`fuzzySearchResult` 字段的格式为 `{ [key: string]: (string | number)[]; }`, 其中 `key` 代表需要过滤的键， `(string | number)[]` 为需要过滤的值。如果值为`string`类型`Array`，需要全部小写。
+
+`key`中，`_all`, `_relationStr` 与 `_number`为特殊键，其中`_all`中的值代表从所有键过滤。`_relationStr`中包括表示数值关系的值，比如`>100`,`1-99`，`_number`中为常用的数字类型值(目前只有卡牌加成数值) (因为指令在只有数字的时候，会直接查询数字对应的的ID的内容，所以数字值需要特殊考虑)。
+
+目前有接口可以将 `text` 转换为 `fuzzySearchResult` **[模糊搜索过滤器](#模糊搜索过滤器)**
+
+例: 在查卡时(`/searchCardg`) `{ characterId: [ 10 ], _number: [ 100 ] }` 表示查询角色Id为10(Tsugu)，技能加成为100%的卡
+
+例子: 在查曲时(`/searchSong`)  `fuzzySearchResult` 为 `{ _all: [ 'bird' ] }` 表示查询任何位置包括bird关键词的曲。
 
 ## 响应结构
 
@@ -53,7 +66,7 @@
 
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
-| `server` | [Server](#server-服务器) | - | 用户所在的服务器。 |
+| `mainServer` | [Server](#server-服务器) | - | 用户所在的服务器。 |
 | `eventId` | number? | `null` | 指定的活动 ID ，不指定则为当前活动。 |
 | `meta` | boolean? | `false` | 是否携带歌曲分数信息。 |
 | `compress` | boolean? | `false` | 是否在后端压缩图像，压缩图像可以加快传输速度，但是会降低图片清晰度。|
@@ -72,7 +85,7 @@
 
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
-| `server_mode` | [Server](#server-服务器) | - | 抽卡模拟使用的服务器，同一卡池在不同服务器的表现可能不同。 |
+| `mainServer` | [Server](#server-服务器) | - | 抽卡模拟使用的服务器，同一卡池在不同服务器的表现可能不同。 |
 | `times` | number? | `10` | 模拟抽卡的次数。 |
 |`compress`| boolean? | `false` | 是否在后端压缩图像，压缩图像可以加快传输速度，但是会降低图片清晰度。 |
 | `gachaId` | number? | `null` | 若传入则模拟指定卡池的抽卡结果，不传入则默认为指定服务器的最新卡池。|
@@ -91,7 +104,7 @@
 
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
-| `cardId` | number | - | 要获取卡面的卡牌 ID 。 |
+| `shareRoomNumberdId` | number | - | 要获取卡面的卡牌 ID 。 |
 
 #### 响应结构
 
@@ -101,13 +114,13 @@
 
 查询与指定活动相关的指定档位的历史预测线。
 
-终结点: `POST /lsycx`
+终结点: `POST /cutoffListOfRecentEvent`
 
 #### 请求结构
 
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
-| `server` | [Server](#server-服务器) | - | 要查询的指定服务器。 |
+| `mainServer` | [Server](#server-服务器) | - | 要查询的指定服务器。 |
 | `tier` | number | - | 要查询的档位排名。若传入不存在的档位会出现错误。 |
 | `eventId` | number? | `null` | 若传入则查询指定活动，不传入则默认为指定服务器的最新活动。 |
 | `compress` | boolean? | `false` | 是否在后端压缩图像，压缩图像可以加快传输速度，但是会降低图片清晰度。 |
@@ -143,8 +156,9 @@
 
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
-| `default_servers` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
-| `text` | string | - | 将要查询的查询参数。 |
+| `displayedServerList` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
+| `text` | string | - | 将要查询的查询文本。 |
+| `fuzzySearchResult` | FuzzySearchResult | - | 将要查询的查询模糊搜索过滤器。 |
 | `useEasyBG` | boolean | - | 是否使用简易背景。 `false` 即为不使用简易背景，此时后端图片生成耗时可能会大幅增加。 |
 | `compress` | boolean? | `false` | 是否在后端压缩图像，压缩图像可以加快传输速度，但是会降低图片清晰度。 |
 
@@ -162,8 +176,9 @@
 
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
-| `default_servers` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
+| `displayedServerList` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
 | `text` | string | - | 将要查询的查询参数。 |
+| `fuzzySearchResult` | FuzzySearchResult | - | 将要查询的查询模糊搜索过滤器。 |
 | `compress` | boolean? | `false` | 是否在后端压缩图像，压缩图像可以加快传输速度，但是会降低图片清晰度。 |
 
 #### 响应结构
@@ -180,8 +195,9 @@
 
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
-| `default_servers` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
+| `displayedServerList` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
 | `text` | string | - | 将要查询的查询参数。 |
+| `fuzzySearchResult` | FuzzySearchResult | - | 将要查询的查询模糊搜索过滤器。 |
 | `useEasyBG` | boolean | - | 是否使用简易背景。 `false` 即为不使用简易背景，此时后端图片生成耗时可能会大幅增加。 |
 | `compress` | boolean? | `false` | 是否在后端压缩图像，压缩图像可以加快传输速度，但是会降低图片清晰度。 |
 
@@ -199,7 +215,7 @@
 
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
-| `default_servers` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
+| `displayedServerList` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
 | `gachaId` | number | - | 查询的卡池 ID 。 |
 | `useEasyBG` | boolean | - | 是否使用简易背景。 `false` 即为不使用简易背景，此时后端图片生成耗时可能会大幅增加。 |
 | `compress` | boolean? | `false` | 是否在后端压缩图像，压缩图像可以加快传输速度，但是会降低图片清晰度。 |
@@ -219,7 +235,7 @@
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
 | `playerId` | number | - | 查询的用户 ID 。 |
-| `server` | [Server](#server-服务器) | - | 用户所在的服务器。 |
+| `mainServer` | [Server](#server-服务器) | - | 用户所在的服务器。 |
 | `useEasyBG` | boolean | - | 是否使用简易背景。 `false` 即为不使用简易背景，此时后端图片生成耗时可能会大幅增加。 |
 | `compress` | boolean? | `false` | 是否在后端压缩图像，压缩图像可以加快传输速度，但是会降低图片清晰度。 |
 
@@ -237,8 +253,9 @@
 
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
-| `default_servers` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
+| `displayedServerList` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
 | `text` | string | - | 将要查询的查询参数。 |
+| `fuzzySearchResult` | FuzzySearchResult | - | 将要查询的查询模糊搜索过滤器。 |
 | `compress` | boolean? | `false` | 是否在后端压缩图像，压缩图像可以加快传输速度，但是会降低图片清晰度。 |
 
 #### 响应结构
@@ -255,7 +272,7 @@
 
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
-| `default_servers` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
+| `displayedServerList` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
 | `songId` | number | - | 指定的歌曲 ID 。 |
 | `difficultyText` | string | - | 指定谱面难度文本。 |
 | `compress` | boolean? | `false` | 是否在后端压缩图像，压缩图像可以加快传输速度，但是会降低图片清晰度。 |
@@ -274,8 +291,8 @@
 
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
-| `default_servers` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
-| `server` | [Server](#server-服务器) | - | 要查询的主服务器。 |
+| `displayedServerList` | [Server](#server-服务器)[] | - | 默认服务器列表，将会按顺序查询第一个有效的服务器。 |
+| `mainServer` | [Server](#server-服务器) | - | 要查询的主服务器。 |
 | `compress` | boolean? | `false` | 是否在后端压缩图像，压缩图像可以加快传输速度，但是会降低图片清晰度。 |
 
 #### 响应结构
@@ -286,13 +303,13 @@
 
 查询指定活动的指定档位的预测线。
 
-终结点: `POST /ycx`
+终结点: `POST /cutoffDetail`
 
 #### 请求结构
 
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
-| `server` | [Server](#server-服务器) | - | 要查询的指定服务器。 |
+| `mainServer` | [Server](#server-服务器) | - | 要查询的指定服务器。 |
 | `tier` | number | - | 要查询的档位排名。若传入不存在的档位会出现错误。 |
 | `eventId` | number? | `null` | 若传入则查询指定活动，不传入则默认为指定服务器的最新活动。 |
 | `compress` | boolean? | `false` | 是否在后端压缩图像，压缩图像可以加快传输速度，但是会降低图片清晰度。 |
@@ -305,13 +322,13 @@
 
 查询指定活动的全档位预测线。
 
-终结点: `POST /ycxAll`
+终结点: `POST /cutoffAll`
 
 #### 请求结构
 
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
-| `server` | [Server](#server-服务器) | - | 要查询的指定服务器。 |
+| `mainServer` | [Server](#server-服务器) | - | 要查询的指定服务器。 |
 | `eventId` | number? | `null` | 若传入则查询指定活动，不传入则默认为指定服务器的最新活动。 |
 | `compress` | boolean? | `false` | 是否在后端压缩图像，压缩图像可以加快传输速度，但是会降低图片清晰度。 |
 
@@ -323,7 +340,7 @@
 
 进行用户数据获取和用户绑定的 API 。所有的 API 都有一个统一的 `/user` 终结点前缀。
 
-单个用户通过 `platform` 和 `user_id` 字段进行联合指定。其中由于历史原因，QQ 平台的 `platform` 最好指定为 `red` ，否则对于之前绑定过的用户可能无法被指定到。**`onebot` 以及 `chronocat` 平台都将被后端处理为 `red` 。**
+单个用户通过 `platform` 和 `userId` 字段进行联合指定。其中由于历史原因，QQ 平台的 `platform` 最好指定为 `red` ，否则对于之前绑定过的用户可能无法被指定到。**`onebot` 以及 `chronocat` 平台都将被后端处理为 `red` 。**
 
 ### 获取用户数据
 
@@ -336,7 +353,7 @@
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
 | `platform` | string | - | 用户的平台名称。 |
-| `user_id` | string | - | 用户的 ID 。 |
+| `userId` | string | - | 用户的 ID 。 |
 
 #### 响应结构
 
@@ -350,19 +367,19 @@
 | 字段名 | 数据类型 | 说明 |
 |:------:|:-------:|:-----|
 | `_id` | string? | 可能存在。若用户已存在，此字段为用户的唯一标识符。 |
-| `user_id` | string | 用户 ID 。 |
+| `userId` | string | 用户 ID 。 |
 | `platform` | string | 用户所在平台。 |
-| `server_mode` | [Server](#serverid-服务器-id) | 用户的主服务器模式。 |
-| `default_server` | [Server](#serverid-服务器-id)[] | 用户的默认服务器列表。 |
-| `car` | boolean | 是否转发该用户的房间号。 `false` 则会忽视来自该用户的房间号。 |
-| `server_list` | [tsuguUserServerInList](#tsuguuserserverinlist-服务器绑定数据)[] | 该用户绑定的服务器数据列表。长度必定等于全部服务器数，列表中每一项代表着对应服务器上的绑定数据，下标与 [Server](#serverid-服务器-id) 对应。 |
+| `mainServer` | [Server](#serverid-服务器-id) | 用户的主服务器模式。 |
+| `displayedServerList` | [Server](#serverid-服务器-id)[] | 用户的默认服务器列表。 |
+| `shareRoomNumber` | boolean | 是否转发该用户的房间号。 `false` 则会忽视来自该用户的房间号。 |
+| `userPlayerList` | [tsuguUserServerInList](#tsuguuserserverinlist-服务器绑定数据)[] | 该用户绑定的服务器数据列表 |
 
 ##### tsuguUserServerInList 服务器绑定数据
 
 | 字段名 | 数据类型 | 说明 |
 |:------:|:-------:|:-----|
-| `playerId` | number | 用户在该服务器绑定的玩家 ID 。 |
-| `bindingStatus` | [BindingStatus](#bindingstatus-绑定状态) | 用户在该服务器上的绑定状态。 |
+| `playerId` | number | 玩家ID 。 |
+| `server` | Server | 玩家ID 对应的服务器 |
 
 ##### BindingStatus 绑定状态
 
@@ -376,7 +393,7 @@
 
 修改指定用户的数据。
 
-尽管接收一个 [PartialTsuguUser](#partialtsuguuser-修改用户数据) 作为参数，实际上只能够通过该 API 修改 `server_mode` , `default_server` 和 `car` 字段数据。
+尽管接收一个 [PartialTsuguUser](#partialtsuguuser-修改用户数据) 作为参数，实际上只能够通过该 API 修改 `mainServer` , `displayedServerList` 和 `shareRoomNumber` 字段数据。
 
 终结点: `POST /user/changeUserData`
 
@@ -385,19 +402,19 @@
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
 | `platform` | string | - | 用户的平台名称。 |
-| `user_id` | string | - | 用户的 ID 。 |
+| `userId` | string | - | 用户的 ID 。 |
 | `update` | [PartialTsuguUser](#partialtsuguuser-修改用户数据) | - | 一个数据结构，用以传入想要修改的用户数据字段以及对应的值。 |
 
 ##### PartialTsuguUser 修改用户数据
 
 | 字段名 | 数据类型 | 说明 |
 |:------:|:-------:|:-----|
-| `user_id` | string? | 用户 ID 。 |
+| `userId` | string? | 用户 ID 。 |
 | `platform` | string? | 用户所在平台。 |
-| `server_mode` | [Server](#serverid-服务器-id)? | 用户的主服务器模式。 |
-| `default_server` | [Server](#serverid-服务器-id)[]? | 用户的默认服务器列表。 |
-| `car` | boolean? | 是否转发该用户的房间号。 `false` 则会忽视来自该用户的房间号。 |
-| `server_list` | [tsuguUserServerInList](#tsuguuserserverinlist-服务器绑定数据)[]? | 该用户绑定的服务器数据列表。长度必定等于全部服务器数，列表中每一项代表着对应服务器上的绑定数据，下标与 [Server](#serverid-服务器-id) 对应。 |
+| `mainServer` | [Server](#serverid-服务器-id)? | 用户的主服务器模式。 |
+| `displayedServerList` | [Server](#serverid-服务器-id)[]? | 用户的默认服务器列表。 |
+| `shareRoomNumber` | boolean? | 是否转发该用户的房间号。 `false` 则会忽视来自该用户的房间号。 |
+| `userPlayerList` | [tsuguUserServerInList](#tsuguuserserverinlist-服务器绑定数据)[]? | 该用户绑定的服务器数据列表。长度必定等于全部服务器数，列表中每一项代表着对应服务器上的绑定数据，下标与 [Server](#serverid-服务器-id) 对应。 |
 
 #### 响应结构
 
@@ -417,8 +434,8 @@
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
 | `platform` | string | - | 用户的平台名称。 |
-| `user_id` | string | - | 用户的 ID 。 |
-| `server` | [Server](#serverid-服务器-id) | - | 要绑定的服务器。 |
+| `userId` | string | - | 用户的 ID 。 |
+| `mainServer` | [Server](#serverid-服务器-id) | - | 要绑定的服务器。 |
 | `bindType` | boolean | - | `true` 为绑定玩家， `false` 为进行解绑。 |
 
 #### 响应结构
@@ -445,8 +462,8 @@
 | 字段名 | 数据类型 | 默认值 | 说明 |
 |:------:|:-------:|:-----:|:-----|
 | `platform` | string | - | 用户的平台名称。 |
-| `user_id` | string | - | 用户的 ID 。 |
-| `server` | [Server](#serverid-服务器-id) | - | 要绑定的服务器。 |
+| `userId` | string | - | 用户的 ID 。 |
+| `mainServer` | [Server](#serverid-服务器-id) | - | 要绑定的服务器。 |
 | `playerId` | number | - | 要进行操作的玩家 ID 。 |
 | `bindType` | boolean | - | `true` 为绑定玩家， `false` 为进行解绑。 |
 
@@ -474,7 +491,7 @@
 | `number` | number | - | 上传的房间号。 |
 | `rawMessage` | string | - | 房间号的备注信息，用于对房间进行说明。 |
 | `platform` | string | - | 用户所在平台。 |
-| `user_id` | string | - | 用户的 ID 。 |
+| `userId` | string | - | 用户的 ID 。 |
 | `userName` | string | - | 用户的名称。 |
 | `time` | number | - | 房间上传的时间。 |
 | `bandoriStationToken` | string? | - | 使用的车站令牌，不传入则使用 Tsugu 的令牌。 |
@@ -515,7 +532,7 @@
 | `userId` | number | 上传房间号的用户 ID 。 |
 | `time` | number | 房间号上传时的时间戳。 |
 | `player` | [Player](#player-玩家信息) | 上传用户的默认玩家信息。 |
-| `avanter` | string? | 上传房间号的用户头像。 |
+| `avatarUrl` | string? | 上传房间号的用户头像。 |
 | `userName` | string? | 上传房间号的用户名称。 |
 
 ##### Player 玩家信息
@@ -523,4 +540,23 @@
 | 字段名 | 数据类型 | 说明 |
 |:------:|:-------:|:-----|
 | `id` | number | 玩家 ID 。 |
-| `server` | [Server](#serverid-服务器-id) | 服务器 ID 。 |
+| `mainServer` | [Server](#serverid-服务器-id) | 服务器 ID 。 |
+
+### 模糊搜索过滤器
+
+向车站上传房间信息。
+
+终结点: `POST /fuzzySearch`
+
+#### 请求结构
+
+| 字段名 | 数据类型 | 默认值 | 说明 |
+|:------:|:-------:|:------:|:----|
+| `text` | string | - | 将要查询的查询参数。 |
+
+#### 响应结构
+
+| 字段名 | 数据类型 | 可能的值 | 说明 |
+|:------:|:-------:|:-------:|:-----|
+| `status` | string | `success` / `failed` | 后端是否成功处理请求。 |
+| `data` | string | - | 后端响应结果。若 `status` 为 `success` 则该字段为成功信息，为 `failed` 则为错误原因。 |

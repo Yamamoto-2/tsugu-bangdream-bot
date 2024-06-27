@@ -1,16 +1,19 @@
 import express, { Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
 import bodyParser from 'body-parser';
-import { UserDB } from '@/database/userDB';
-import { Room, submitRoomNumber, queryAllRoom } from '@/types/Room';
+import { UserDB, getUserPlayerByUser, userPlayerInList } from '@/database/userDB';
+import { submitRoomNumber, queryAllRoom } from '@/types/Room';
+import { logger } from '@/logger';
+import { middleware } from '@/routers/middleware';
 import * as dotenv from 'dotenv';
+
 dotenv.config();
 
 const router = express.Router();
 let userDB: UserDB
 if (process.env.LOCAL_DB == 'true') {
     userDB = new UserDB(process.env.MONGODB_URI, process.env.MONGODB_DATABASE_NAME);
-    console.log(`station: 已连接至数据库: ${process.env.MONGODB_URI}`);
+    logger('station', `已连接至数据库: ${process.env.MONGODB_URI}`);
 }
 router.use(bodyParser.json());
 
@@ -19,46 +22,51 @@ router.post('/submitRoomNumber',
         body('number').isInt(),
         body('rawMessage').isString(),
         body('platform').isString(),
-        body('user_id').isString(),
+        body('userId').isString(),
         body('userName').isString(),
         body('time').isInt(),
+        body('avatarUrl').isString().optional(),
         body('bandoriStationToken').isString().optional(),
     ],
+    middleware,
     async (req: Request, res: Response) => {
-
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ status: 'failed', data: '参数错误' });
+        const { number, rawMessage, platform, userId, userName, time, avatarUrl, bandoriStationToken } = req.body;
+        const user = await userDB.getUser(platform, userId);
+        let userPlayerInList: userPlayerInList
+        try {
+            userPlayerInList = getUserPlayerByUser(user)
         }
-
-        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
-        const { number, rawMessage, platform, user_id, userName, time, bandoriStationToken } = req.body;
-        const user = await userDB.getUser(platform, user_id);
+        catch (e) {
+            //logger('station', `error: ${e.message}`)
+        }
         try {
             await submitRoomNumber({
                 number: number,
                 rawMessage: rawMessage,
                 source: platform,
-                userId: user_id,
+                userId: userId,
                 time: time,
                 userName: userName,
+                avatarUrl: avatarUrl,
                 bandoriStationToken
-            }, user)
+            },
+                userPlayerInList
+            )
             res.status(200).json({
                 status: 'success',
                 data: '提交成功'
             });
         }
         catch (e) {
-            res.status(400).json({ status: 'failed', data: `错误: ${e.message}` });
+            res.status(500).json({ status: 'failed', data: `错误: ${e.message}` });
         }
 
     }
 );
 
 router.get('/queryAllRoom',
+    middleware,
     async (req: Request, res: Response) => {
-        console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
         try {
             let roomList = await queryAllRoom()
             res.status(200).json({
@@ -67,7 +75,7 @@ router.get('/queryAllRoom',
             });
         }
         catch (e) {
-            res.status(400).json({ status: 'failed', data: `错误: ${e.message}` });
+            res.status(500).json({ status: 'failed', data: `错误: ${e.message}` });
         }
 
     }

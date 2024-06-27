@@ -20,7 +20,7 @@ import { Gacha } from '@/types/Gacha';
 import { globalDefaultServer, serverNameFullList } from '@/config';
 
 
-async function drawCardDetail(cardId: number, defaultServerList: Server[] = globalDefaultServer, useEasyBG: boolean, compress: boolean): Promise<Array<string | Buffer>> {
+async function drawCardDetail(cardId: number, displayedServerList: Server[] = globalDefaultServer, useEasyBG: boolean, compress: boolean): Promise<Array<string | Buffer>> {
     const card = new Card(cardId)
     if (!card.isExist) {
         return ['错误: 卡牌不存在']
@@ -31,7 +31,7 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
     var list: Array<Image | Canvas> = []
 
     //标题
-    list.push(await drawCardPrefixInList(card, defaultServerList))
+    list.push(await drawCardPrefixInList(card, displayedServerList))
     var trainingStatusList = card.getTrainingStatusList()
     list.push(new Canvas(800, 30))
 
@@ -85,17 +85,17 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
     */
     //技能
     var skill = new Skill(card.skillId)
-    list.push(await drawSkillInList({ key: '技能', card: card, content: skill }, defaultServerList))
+    list.push(await drawSkillInList({ key: '技能', card: card, content: skill }, displayedServerList))
     list.push(line)
 
     //标题
-    list.push(await drawListByServerList(card.prefix, '标题', defaultServerList))
+    list.push(await drawListByServerList(card.prefix, '标题', displayedServerList))
     list.push(line)
 
     //判断是否来自卡池
-    for (let j = 0; j < defaultServerList.length; j++) {
+    for (let j = 0; j < displayedServerList.length; j++) {
         var releaseFromGacha = false
-        var server = defaultServerList[j];
+        var server = displayedServerList[j];
         if (card.releasedAt[server] == null) {
             continue
         }
@@ -104,7 +104,7 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
             if (Object.prototype.hasOwnProperty.call(sourceOfServer, i)) {
                 if (i == 'gacha' && card.rarity > 2) {
                     //招募语
-                    list.push(await drawListByServerList(card.gachaText, '招募语', defaultServerList))
+                    list.push(await drawListByServerList(card.gachaText, '招募语', displayedServerList))
                     list.push(line)
                     releaseFromGacha = true
                     break
@@ -122,7 +122,7 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
     list.push(await drawTimeInList({
         key: '发布日期',
         content: card.releasedAt
-    }, defaultServerList))
+    }, displayedServerList))
     list.push(line)
 
     //缩略图
@@ -148,13 +148,13 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
     var tempGachaIdList = []
     var eventImageList: Array<Canvas | Image> = []
     var gachaImageList: Array<Canvas | Image> = []
-    for (let k = 0; k < defaultServerList.length; k++) {
-        let server = defaultServerList[k];
+    for (let k = 0; k < displayedServerList.length; k++) {
+        let server = displayedServerList[k];
         //如果卡牌有关联活动
         if (card.releaseEvent[server].length != 0) {
             var tempEvent = new Event(card.releaseEvent[server][0])
             if (!tempEventIdList.includes(tempEvent.eventId)) {
-                eventImageList.push(await drawEventDatablock(tempEvent, defaultServerList, `${serverNameFullList[server]}相关活动`))
+                eventImageList.push(await drawEventDatablock(tempEvent, displayedServerList, `${serverNameFullList[server]}相关活动`))
                 tempEventIdList.push(tempEvent.eventId)
             }
         }
@@ -176,7 +176,7 @@ async function drawCardDetail(cardId: number, defaultServerList: Server[] = glob
             if (tempEventId != null) {
                 var tempEvent = new Event(tempEventId)
                 if (!tempEventIdList.includes(tempEvent.eventId)) {
-                    eventImageList.push(await drawEventDatablock(tempEvent, defaultServerList, `${serverNameFullList[server]}相关活动`))
+                    eventImageList.push(await drawEventDatablock(tempEvent, displayedServerList, `${serverNameFullList[server]}相关活动`))
                     tempEventIdList.push(tempEvent.eventId)
                 }
             }

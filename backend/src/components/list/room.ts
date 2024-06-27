@@ -1,6 +1,6 @@
 import { Room } from "@/types/Room";
 import { Player } from "@/types/Player";
-import { getQQUserIcon, getBandoriStationUserIcon } from "@/api/userIcon"
+import { getUserIcon } from "@/api/userIcon"
 import { Canvas, Image } from 'skia-canvas';
 import { drawDatablock } from "@/components/dataBlock";
 import { drawList, line, drawListWithLine } from "@/components/list";
@@ -11,8 +11,6 @@ import { drawPlayerCardInList } from '@/components/list/playerCardIconList'
 import { drawDegree } from '@/components/degree'
 import { Degree } from "@/types/Degree";
 import { resizeImage } from "@/components/utils";
-import { getServerByServerId } from '@/types/Server'
-
 
 
 export async function drawRoomListTitle() {
@@ -41,14 +39,9 @@ export async function drawRoomListTitle() {
 const maxWidthText = 580
 export async function drawRoonInList(room: Room) {
     const timeNow = new Date().getTime()
+
     //头像
-    let Icon: Image
-    if (room.avanter != undefined && room.avanter != '') {
-        Icon = await getBandoriStationUserIcon(room.avanter)
-    }
-    else if (room.source = 'qq') {
-        Icon = await getQQUserIcon(Number(room.userId))
-    }
+    const Icon = await getUserIcon(room.avatarUrl)
 
     //文本
     const textList: Canvas[] = []
@@ -80,8 +73,7 @@ export async function drawRoonInList(room: Room) {
     ctxUp.fillRect(200, 0, 5, height)
     let list = [canvasUp]
     if (room.player != undefined) {
-        console.log(room)
-        const player = new Player(room.player.id, room.player.server)
+        const player = new Player(room.player.playerId, room.player.server)
         await player.initFull(false)
         if (player.isExist) {
             list.push(line)

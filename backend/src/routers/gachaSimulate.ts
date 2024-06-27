@@ -1,9 +1,12 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
 import { drawRandomGacha } from '@/view/gachaSimulate';
 import { Gacha, getPresentGachaList } from '@/types/Gacha';
 import { getServerByServerId, Server } from '@/types/Server';
-import { listToBase64, isServer } from '@/routers/utils';
+import { listToBase64 } from '@/routers/utils';
+import { isServer } from '@/types/Server';
+import { middleware } from '@/routers/middleware';
+import { Request, Response } from 'express';
 
 const router = express.Router();
 
@@ -11,9 +14,9 @@ const router = express.Router();
 router.post(
   '/',
   [
-    body('server_mode').custom((value) => {
+    body('mainServer').custom((value) => {
       if (!isServer(value)) {
-        throw new Error('default_server must be a Server');
+        throw new Error('mainServer must be a Server');
       }
       return true;
     }),
@@ -21,30 +24,23 @@ router.post(
     body('compress').optional().isBoolean(),
     body('gachaId').optional().isInt(),
   ],
-  async (req, res) => {
-    console.log(req.ip, `${req.baseUrl}${req.path}`, req.body);
+  middleware,
+  async (req: Request, res: Response) => {
 
-    // Check for validation errors
-    const errors = validationResult(req);
-    console.log(errors)
-    if (!errors.isEmpty()) {
-      return res.status(400).send([{ type: 'string', string: '参数错误' }]);
-    }
-
-    const { server_mode, times, compress, gachaId } = req.body;
+    const { mainServer, times, compress, gachaId } = req.body;
 
     try {
-      const result = await commandGachaSimulate(getServerByServerId(server_mode), times, compress, gachaId);
+      const result = await commandGachaSimulate(getServerByServerId(mainServer), times, compress, gachaId);
       res.send(listToBase64(result));
     } catch (e) {
       console.log(e);
-      res.send([{ type: 'string', string: '内部错误' }]);
+      res.status(500).send({ status: 'failed', data: '内部错误' });
     }
   }
 );
 
 async function commandGachaSimulate(
-  server_mode: Server,
+  mainServer: Server,
   times?: number,
   compress?: boolean,
   gachaId?: number
@@ -53,7 +49,7 @@ async function commandGachaSimulate(
 
 
   if (!gachaId) {
-    const gachaList = await getPresentGachaList(server_mode)
+    const gachaList = await getPresentGachaList(mainServer)
     if (gachaList.length === 0) {
       return ['错误: 该服务器没有正在进行的卡池']
     }
@@ -74,7 +70,7 @@ async function commandGachaSimulate(
       return ['错误: 该卡池不存在'];
     }
   }
-  return await drawRandomGacha(gacha, times || 10, server_mode, compress);
+  return await drawRandomGacha(gacha, times || 10, compress);
 
 }
 

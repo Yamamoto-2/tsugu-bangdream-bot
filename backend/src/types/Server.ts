@@ -55,8 +55,8 @@ export async function getIcon(server: Server): Promise<Image> {
     return image
 }
 
-export function getServerByPriority(content: Array<any>, defaultServerList: Server[] = globalDefaultServer) {
-    const serverPriority: Server[] = [...new Set([...defaultServerList, ...globalServerPriority])];
+export function getServerByPriority(content: Array<any>, displayedServerList: Server[] = globalDefaultServer) {
+    const serverPriority: Server[] = [...new Set([...displayedServerList, ...globalServerPriority])];
     for (let i = 0; i < serverPriority.length; i++) {
         const tempServer = serverPriority[i];
         if (content[tempServer] != null) {
@@ -66,4 +66,24 @@ export function getServerByPriority(content: Array<any>, defaultServerList: Serv
     return undefined;
 }
 
+export function isServer(server: any): boolean {
+    if (typeof server == 'number') {
+        server = Server[server]
+    }
+    else{
+        return false
+    }
+    return Object.keys(Server).includes(server)
+}
 
+export function isServerList(serverList: Array<any>): boolean {
+    let result = true
+    for (let i = 0; i < serverList.length; i++) {
+        const element = serverList[i];
+        if (!isServer(element)) {
+            result = false
+            break
+        }
+    }
+    return result
+}

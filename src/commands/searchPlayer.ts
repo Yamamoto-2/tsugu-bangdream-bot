@@ -1,24 +1,12 @@
-import { Server, getServerByName } from "../types/Server";
-import { tsuguUser } from "../config";
-import {getDataFromBackend} from './utils'
+import { Server } from "../types/Server";
+import { getReplyFromBackend } from "../api/getReplyFromBackend"
+import { Config } from '../config';
 
-
-export async function commandSearchPlayer(backendUrl:string,user: tsuguUser, playerId: number, serverName: string, useEasyBG: boolean, compress: boolean=false): Promise<Array<Buffer | string>> {
-    let server: Server
-    if (!serverName) {
-        server = user.server_mode
-    }
-    else {
-        server = getServerByName(serverName)
-    }
-    if (server == undefined) {
-        return ['错误: 服务器不存在']
-    }
-    
-    return await getDataFromBackend(`${backendUrl}/searchPlayer`, {
-        server,
+export async function commandSearchPlayer(config: Config, playerId: number, mainServer: Server): Promise<Array<Buffer | string>> {
+    return await getReplyFromBackend(`${config.backendUrl}/searchPlayer`, {
+        mainServer,
         playerId,
-        useEasyBG,
-        compress
+        useEasyBG: config.useEasyBG,
+        compress: config.compress,
     })
 }

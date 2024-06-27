@@ -1,11 +1,14 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
 import { drawSongList } from '@/view/songList';
-import { fuzzySearch } from '@/routers/fuzzySearch';
-import { isInteger, listToBase64, isServerList } from '@/routers/utils';
+import { fuzzySearch, FuzzySearchResult, isFuzzySearchResult } from '@/fuzzySearch';
+import { isInteger, listToBase64 } from '@/routers/utils';
+import { isServerList } from '@/types/Server';
 import { drawSongDetail } from '@/view/songDetail';
 import { Song } from '@/types/Song';
 import { getServerByServerId, Server } from '@/types/Server';
+import { middleware } from '@/routers/middleware';
+import { Request, Response } from 'express';
 
 const router = express.Router();
 
@@ -13,48 +16,52 @@ router.post(
     '/',
     [
         // Express-validator checks for type validation
-        body('default_servers').custom(isServerList),
-        body('text').isString(),
+        body('displayedServerList').custom(isServerList),
+        body('fuzzySearchResult').optional().custom(isFuzzySearchResult),
+        body('text').optional().isString(),
         body('compress').optional().isBoolean(),
     ],
-    async (req, res) => {
-        console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
+    middleware,
+    async (req: Request, res: Response) => {
 
-        // Check for validation errors
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+        const { displayedServerList, fuzzySearchResult, text, compress } = req.body;
+
+        if (!text && !fuzzySearchResult) {
+            return res.status(422).json({ status: 'failed', data: '不能同时不存在text与fuzzySearchResult' });
         }
-
-
-        const { default_servers, text, compress } = req.body;
-
         try {
-            const result = await commandSong(default_servers, text, compress);
+            const result = await commandSong(displayedServerList, text || fuzzySearchResult, compress);
             res.send(listToBase64(result));
         } catch (e) {
             console.log(e);
-            res.send([{ type: 'string', string: '内部错误' }]);
+            res.status(500).send({ status: 'failed', data: '内部错误' });
         }
     }
 );
 
 
-export async function commandSong(default_servers: Server[], text: string, compress: boolean): Promise<Array<Buffer | string>> {
+export async function commandSong(displayedServerList: Server[], input: string | FuzzySearchResult, compress: boolean): Promise<Array<Buffer | string>> {
 
-    if (isInteger(text)) {
-        return await drawSongDetail(new Song(parseInt(text)), default_servers, compress)
+    let fuzzySearchResult: FuzzySearchResult
+    // 根据 input 的类型执行不同的逻辑
+    if (typeof input === 'string') {
+        if (isInteger(input)) {
+            return await drawSongDetail(new Song(parseInt(input)), displayedServerList, compress)
+        }
+        fuzzySearchResult = fuzzySearch(input.split(' '))
+    } else {
+        // 使用 fuzzySearch 逻辑
+        fuzzySearchResult = input
     }
-    var fuzzySearchResult = fuzzySearch(text.split(' '))
-    console.log(fuzzySearchResult)
+
     if (Object.keys(fuzzySearchResult).length == 0) {
         return ['错误: 没有有效的关键词']
     }
-    
-    for(let i = 0; i < default_servers.length; i++) {
-        default_servers[i] = getServerByServerId(default_servers[i])
+
+    for (let i = 0; i < displayedServerList.length; i++) {
+        displayedServerList[i] = getServerByServerId(displayedServerList[i])
     }
-    return await drawSongList(fuzzySearchResult, default_servers, compress)
+    return await drawSongList(fuzzySearchResult, displayedServerList, compress)
 }
 
 export { router as searchSongRouter }

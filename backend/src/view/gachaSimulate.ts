@@ -11,7 +11,7 @@ import { resizeImage } from "@/components/utils";
 import { drawGachaDatablock } from "@/components/dataBlock/gacha";
 
 const maxWidth = 230 * 5
-export async function drawRandomGacha(gacha: Gacha, times: number = 10, server: Server, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawRandomGacha(gacha: Gacha, times: number = 10, compress: boolean): Promise<Array<Buffer | string>> {
     if (times > 10000) {
         return ['错误: 抽卡次数过多, 请不要超过10000次']
     }

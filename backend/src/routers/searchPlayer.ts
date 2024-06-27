@@ -1,38 +1,39 @@
 import { drawPlayerDetail } from "@/view/playerDetail";
 import { Server } from "@/types/Server";
-import { listToBase64, isServer } from '@/routers/utils';
+import { listToBase64 } from '@/routers/utils';
+import { isServer } from '@/types/Server';
 import { getServerByServerId } from '@/types/Server';
 import express from 'express';
-import { body, validationResult } from 'express-validator'; // Import express-validator functions
+import { body } from 'express-validator'; // Import express-validator functions
+import { middleware } from '@/routers/middleware';
+import { Request, Response } from 'express';
 
 const router = express.Router();
 
-router.post('/', [
-    body('playerId').isInt(), // Validation for 'playerId' field
-    body('server').custom(isServer), // Custom validation for 'server' field
-    body('useEasyBG').isBoolean(), // Validation for 'useEasyBG' field
-    body('compress').optional().isBoolean(),
-], async (req, res) => {
-    console.log(req.ip,`${req.baseUrl}${req.path}`, req.body);
+router.post('/',
+    [
+        body('playerId').isInt(), // Validation for 'playerId' field
+        body('mainServer').custom(isServer), // Custom validation for 'server' field
+        body('useEasyBG').isBoolean(), // Validation for 'useEasyBG' field
+        body('compress').optional().isBoolean(),
+    ],
+    middleware,
+    async (req: Request, res: Response) => {
+        const { playerId, mainServer, useEasyBG, compress } = req.body;
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).send([{ type: 'string', string: '参数错误' }]);
+        try {
+            const result = await commandSearchPlayer(playerId, getServerByServerId(mainServer), useEasyBG, compress);
+            res.send(listToBase64(result));
+        } catch (e) {
+            console.log(e);
+            res.status(500).send({ status: 'failed', data: '内部错误' });
+        }
     }
-    const { playerId, server, useEasyBG, compress } = req.body;
+);
 
-    try {
-        const result = await commandSearchPlayer(playerId, getServerByServerId(server), useEasyBG, compress);
-        res.send(listToBase64(result));
-    } catch (e) {
-        console.log(e);
-        res.send([{ type: 'string', string: '内部错误' }]);
-    }
-});
+export async function commandSearchPlayer(playerId: number, mainServer: Server, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
 
-export async function commandSearchPlayer(playerId: number, server: Server, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
-
-    return await drawPlayerDetail(playerId, server, useEasyBG, compress)
+    return await drawPlayerDetail(playerId, mainServer, useEasyBG, compress)
 
 }
 

@@ -245,9 +245,9 @@ export class Card {
         }
         return true
     }
-    getFirstReleasedServer(defaultServerList: Server[] = globalDefaultServer): Server {//获得确保已经发布了的服务器
-        if (!defaultServerList) defaultServerList = globalDefaultServer
-        return getServerByPriority(this.releasedAt, defaultServerList)
+    getFirstReleasedServer(displayedServerList: Server[] = globalDefaultServer): Server {//获得确保已经发布了的服务器
+        if (!displayedServerList) displayedServerList = globalDefaultServer
+        return getServerByPriority(this.releasedAt, displayedServerList)
     }
     getRip(): string {
         if (this.cardId < 9999) {//确定目录位置，50为一组

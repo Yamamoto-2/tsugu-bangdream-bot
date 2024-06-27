@@ -19,10 +19,10 @@ const line = drawDottedLine({
     color: "#a8a8a8"
 })
 
-export async function drawSongMetaListDataBlock(Fever: boolean, song: Song, topLeftText?: string, defaultServerList: Server[] = globalDefaultServer) {
+export async function drawSongMetaListDataBlock(Fever: boolean, song: Song, topLeftText?: string, displayedServerList: Server[] = globalDefaultServer) {
     var metaRanking = {}
-    for (let i = 0; i < defaultServerList.length; i++) {
-        const server = defaultServerList[i];
+    for (let i = 0; i < displayedServerList.length; i++) {
+        const server = displayedServerList[i];
         metaRanking[server] = {}
         metaRanking[server].data = getMetaRanking(Fever, server)
         metaRanking[server].maxMeta = metaRanking[server].data[0].meta
@@ -30,8 +30,8 @@ export async function drawSongMetaListDataBlock(Fever: boolean, song: Song, topL
     var list: Array<Image | Canvas> = []
 
     var songMetaRanking = {}
-    for (let i = 0; i < defaultServerList.length; i++) {
-        const server = defaultServerList[i];
+    for (let i = 0; i < displayedServerList.length; i++) {
+        const server = displayedServerList[i];
         songMetaRanking[server] = {}
         let tempMetaRanking = metaRanking[server].data
         //过滤出所有属于这首歌的数据
@@ -42,13 +42,13 @@ export async function drawSongMetaListDataBlock(Fever: boolean, song: Song, topL
     for (var difficulty in song.difficulty) {
         var difficultyId = parseInt(difficulty)
         var text = ''
-        for (let i = 0; i < defaultServerList.length; i++) {
-            var tempSongMetaRanking = songMetaRanking[defaultServerList[i]].data
+        for (let i = 0; i < displayedServerList.length; i++) {
+            var tempSongMetaRanking = songMetaRanking[displayedServerList[i]].data
             for (let j = 0; j < tempSongMetaRanking.length; j++) {
                 if (tempSongMetaRanking[j].difficulty == difficultyId) {
-                    var precent = tempSongMetaRanking[j].meta / metaRanking[defaultServerList[i]].maxMeta * 100
+                    var precent = tempSongMetaRanking[j].meta / metaRanking[displayedServerList[i]].maxMeta * 100
                     precent = Math.round(precent * 100) / 100
-                    text += `${serverNameFullList[defaultServerList[i]]}: ${precent}% #${tempSongMetaRanking[j].rank + 1} `
+                    text += `${serverNameFullList[displayedServerList[i]]}: ${precent}% #${tempSongMetaRanking[j].rank + 1} `
                 }
             }
         }
@@ -73,8 +73,7 @@ export async function drawMetaListDataBlock(Fever: boolean, server: Server, topL
         var difficultyId = metaRanking[i].difficulty
         //保留两位小数
         var precent = metaRanking[i].meta / maxMeta * 100
-        precent = Math.round(precent * 100) / 100
-        list.push(await drawSongInList(song, difficultyId, `相对分数: ${precent}% #${metaRanking[i].rank + 1}`))
+        list.push(await drawSongInList(song, difficultyId, `相对分数: ${precent.toFixed(2)}% #${metaRanking[i].rank + 1}`))
         list.push(line)
     }
     list.pop()

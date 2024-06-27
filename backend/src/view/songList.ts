@@ -1,6 +1,6 @@
 import { Song } from "@/types/Song";
 import mainAPI from "@/types/_Main"
-import { match, checkRelationList } from "@/routers/fuzzySearch"
+import { match, checkRelationList, FuzzySearchResult } from "@/fuzzySearch"
 import { Canvas } from 'skia-canvas'
 import { drawTitle } from '@/components/title';
 import { outputFinalBuffer } from '@/image/output'
@@ -40,7 +40,7 @@ const line2: Canvas = drawDottedLine({
 })
 
 
-export async function drawSongList(matches: { [key: string]: string[] }, defaultServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawSongList(matches: FuzzySearchResult, displayedServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
     // 计算歌曲模糊搜索结果
     var tempSongList: Array<Song> = [];
     var songIdList: Array<number> = Object.keys(mainAPI['songs']).map(Number)
@@ -49,13 +49,13 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
         var isMatch = match(matches, tempSong, []);
         //如果在所有所选服务器列表中都不存在，则不输出
         var numberOfNotReleasedServer = 0;
-        for (var j = 0; j < defaultServerList.length; j++) {
-            var server = defaultServerList[j];
+        for (var j = 0; j < displayedServerList.length; j++) {
+            var server = displayedServerList[j];
             if (tempSong.publishedAt[server] == null) {
                 numberOfNotReleasedServer++;
             }
         }
-        if (numberOfNotReleasedServer == defaultServerList.length) {
+        if (numberOfNotReleasedServer == displayedServerList.length) {
             isMatch = false;
         }
 
@@ -63,7 +63,7 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
         if (matches._relationStr != undefined) {
             //如果之后范围的话则直接判断
             if (isMatch || Object.keys(matches).length == 1) {
-                isMatch = checkRelationList(tempSong.songId, matches._relationStr)
+                isMatch = checkRelationList(tempSong.songId, matches._relationStr as string[])
             }
         }
 
@@ -75,7 +75,7 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
         return ['没有搜索到符合条件的歌曲']
     }
     if (tempSongList.length == 1) {
-        return await drawSongDetail(tempSongList[0], defaultServerList, compress)
+        return await drawSongDetail(tempSongList[0], displayedServerList, compress)
     }
 
     const maxHeight = 6000
@@ -86,7 +86,7 @@ export async function drawSongList(matches: { [key: string]: string[] }, default
     var songPromises: Promise<Canvas>[] = [];
 
     for (let i = 0; i < tempSongList.length; i++) {
-        songPromises.push(drawSongInList(tempSongList[i], undefined, undefined, defaultServerList));
+        songPromises.push(drawSongInList(tempSongList[i], undefined, undefined, displayedServerList));
     }
 
     var songImages = await Promise.all(songPromises);

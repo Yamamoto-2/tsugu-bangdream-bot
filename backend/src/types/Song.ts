@@ -185,21 +185,21 @@ export class Song {
     getSongRip(): number {
         return Math.ceil(this.songId / 10) * 10
     }
-    async getSongJacketImage(defaultServerList: Server[] = [Server.jp, Server.cn]): Promise<Image> {
-        const jacketImageUrl = this.getSongJacketImageURL(defaultServerList)
+    async getSongJacketImage(displayedServerList: Server[] = [Server.jp, Server.cn]): Promise<Image> {
+        const jacketImageUrl = this.getSongJacketImageURL(displayedServerList)
         var jacketImageBuffer = await downloadFile(jacketImageUrl)
         return await loadImage(jacketImageBuffer)
     }
-    getSongJacketImageURL(defaultServerList?: Server[]): string {
-        var server = getServerByPriority(this.publishedAt, defaultServerList)
+    getSongJacketImageURL(displayedServerList?: Server[]): string {
+        var server = getServerByPriority(this.publishedAt, displayedServerList)
         var jacketImageName = this.jacketImage[this.jacketImage.length - 1]
         if (this.songId == 13) {
-            return 'https://bestdori.com/assets/cn/musicjacket/musicjacket30_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket30-miracle-jacket.png'
+            return `${Bestdoriurl}/assets/cn/musicjacket/musicjacket30_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket30-miracle-jacket.png`;
         }
         if (this.songId == 40) {
-            return 'https://bestdori.com/assets/cn/musicjacket/musicjacket30_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket30-kirayume-jacket.png';
+            return `${Bestdoriurl}/assets/cn/musicjacket/musicjacket30_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket30-kirayume-jacket.png`;
         }
-        var jacketImageUrl = `https://bestdori.com/assets/${Server[server]}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`
+        var jacketImageUrl = `${Bestdoriurl}/assets/${Server[server]}/musicjacket/musicjacket${this.getSongRip()}_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket${this.getSongRip()}-${jacketImageName.toLowerCase()}-jacket.png`
         return jacketImageUrl
     }
     getTagName(): string {
@@ -242,7 +242,7 @@ export class Song {
 }
 
 //获取时间范围内指定服务器推出的新歌
-export function getPresentSongList(server: Server, start: number = Date.now(), end: number = Date.now()): Song[] {
+export function getPresentSongList(mainServer: Server, start: number = Date.now(), end: number = Date.now()): Song[] {
     var songList: Array<Song> = []
     var songListMain = mainAPI['songs']
 
@@ -250,15 +250,15 @@ export function getPresentSongList(server: Server, start: number = Date.now(), e
         if (Object.prototype.hasOwnProperty.call(songListMain, songId)) {
             const song = new Song(parseInt(songId))
             // 检查活动的发布时间和结束时间是否在指定范围内
-            if (song.publishedAt[server] == null) {
+            if (song.publishedAt[mainServer] == null) {
                 continue
             }
-            if (song.publishedAt[server] <= end && song.publishedAt[server] >= start) {
+            if (song.publishedAt[mainServer] <= end && song.publishedAt[mainServer] >= start) {
                 songList.push(song)
             }
             for (let i in song.difficulty) {
                 if (song.difficulty[i].publishedAt != undefined) {
-                    if (song.difficulty[i].publishedAt[server] <= end && song.difficulty[i].publishedAt[server] >= start) {
+                    if (song.difficulty[i].publishedAt[mainServer] <= end && song.difficulty[i].publishedAt[mainServer] >= start) {
                         songList.push(song)
                     }
                 }
@@ -274,14 +274,14 @@ export interface songInRank {
     meta: number,
     rank: number
 }
-export function getMetaRanking(Fever: boolean, server: Server): songInRank[] {
+export function getMetaRanking(Fever: boolean, mainServer: Server): songInRank[] {
     var songIdList = Object.keys(mainAPI['meta'])
     var songRankList: songInRank[] = []
     for (let i = 0; i < songIdList.length; i++) {
         const songId = songIdList[i];
         var song = new Song(parseInt(songId))
         //如果在所选服务器都没有发布，则跳过
-        if (song.publishedAt[server] == null) {
+        if (song.publishedAt[mainServer] == null) {
             continue
         }
         //如果没有meta数据，则跳过

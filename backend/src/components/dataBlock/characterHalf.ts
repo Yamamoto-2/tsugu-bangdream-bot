@@ -10,7 +10,7 @@ import { drawText } from '@/image/text';
 const width = 250
 const height = 800
 
-export async function drawCharacterHalfBlock(character: Character, defaultServerList: Server[] = globalDefaultServer): Promise<Canvas> {
+export async function drawCharacterHalfBlock(character: Character, displayedServerList: Server[] = globalDefaultServer): Promise<Canvas> {
     const canvas = new Canvas(250, 800)
     const ctx = canvas.getContext('2d')
     await character.initFull(false)
@@ -57,7 +57,7 @@ export async function drawCharacterHalfBlock(character: Character, defaultServer
     //画底部文字
     //名字
     const list: Canvas[] = []
-    const server = getServerByPriority(character.characterName, defaultServerList)
+    const server = getServerByPriority(character.characterName, displayedServerList)
     const nameText = character.characterName[server]
     const nameTextImage = drawText({
         text: nameText,

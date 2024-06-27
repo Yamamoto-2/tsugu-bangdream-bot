@@ -11,10 +11,10 @@ import { serverNameFullList } from '@/config';
 import { drawTips } from '@/components/tips'
 import { drawCutoffHistoryChart } from '@/components/chart/cutoffHistoryChart'
 
-export async function drawEventReportCutoffDetail(eventId: number, tier: number, server: Server): Promise<Array<Buffer | string>> {
-    var cutoff = new Cutoff(eventId, server, tier)
+export async function drawEventReportCutoffDetail(eventId: number, tier: number, mainServer: Server): Promise<Array<Buffer | string>> {
+    var cutoff = new Cutoff(eventId, mainServer, tier)
     if (cutoff.isExist == false) {
-        return [`错误: ${serverNameFullList[server]} 活动或档线不存在`]
+        return [`错误: ${serverNameFullList[mainServer]} 活动或档线不存在`]
     }
     await cutoff.initFull()
 
@@ -23,7 +23,7 @@ export async function drawEventReportCutoffDetail(eventId: number, tier: number,
     }
 
     var all = []
-    all.push(drawTitle('档线分析', `${serverNameFullList[server]} ${cutoff.tier}`))
+    all.push(drawTitle('档线分析', `${serverNameFullList[mainServer]} ${cutoff.tier}`))
     var list: Array<Image | Canvas> = []
     var event = new Event(eventId)
     await event.initFull(false)
@@ -41,9 +41,9 @@ export async function drawEventReportCutoffDetail(eventId: number, tier: number,
 
     //初始化档线列表
     let cutoffList: Array<Cutoff> = []
-    const eventList = getRecentEventListByEventAndServer(event, server, 5, true)
+    const eventList = getRecentEventListByEventAndServer(event, mainServer, 5, true)
     for (let i = eventList.length - 1; i >= 0; i--) {
-        const cutoff = new Cutoff(eventList[i].eventId, server, tier)
+        const cutoff = new Cutoff(eventList[i].eventId, mainServer, tier)
         await cutoff.initFull()
         cutoffList.push(cutoff)
     }
@@ -55,7 +55,7 @@ export async function drawEventReportCutoffDetail(eventId: number, tier: number,
     }))
 
     //每个档线详细数据
-    list.push(await drawCutoffChart(cutoffList, true, server))
+    list.push(await drawCutoffChart(cutoffList, true, mainServer))
 
     list.push(line)
 
@@ -66,9 +66,9 @@ export async function drawEventReportCutoffDetail(eventId: number, tier: number,
 
     const recentEventCount = 10
     let recentEventCutoffList: Array<Cutoff> = []
-    const recentEventList = getRecentEventListByEventAndServer(event, server, recentEventCount, false)
+    const recentEventList = getRecentEventListByEventAndServer(event, mainServer, recentEventCount, false)
     for (let i = recentEventList.length - 1; i >= 0; i--) {
-        const cutoff = new Cutoff(recentEventList[i].eventId, server, tier)
+        const cutoff = new Cutoff(recentEventList[i].eventId, mainServer, tier)
         await cutoff.initFull()
         recentEventCutoffList.push(cutoff)
     }

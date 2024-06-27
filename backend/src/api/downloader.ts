@@ -22,7 +22,7 @@ export async function download(url: string, directory?: string, fileName?: strin
         const stat = fs.statSync(cacheFilePath);
         const now = Date.now();
         if (now - stat.mtimeMs < cacheTime * 1000) {
-          console.log(`Cache time for "${url}" has not expired. Using cached file.`);
+          //console.log(`Cache time for "${url}" has not expired. Using cached file.`);
           const cachedData = fs.readFileSync(cacheFilePath);
           return cachedData;
         }
@@ -34,7 +34,7 @@ export async function download(url: string, directory?: string, fileName?: strin
       response = await axios.get(url, { headers, responseType: 'arraybuffer' });
     } catch (error) {
       if (error.response && error.response.status === 304) {
-        console.log(`ETag matches for "${url}". Using cached file.`);
+        //console.log(`ETag matches for "${url}". Using cached file.`);
         const cachedData = fs.readFileSync(cacheFilePath);
         return cachedData;
       } else {
@@ -52,7 +52,7 @@ export async function download(url: string, directory?: string, fileName?: strin
     if (directory && fileName) {
       fs.writeFileSync(path.join(directory, fileName), fileBuffer);
     }
-    console.log(`Downloaded file from "${url}"`);
+    //console.log(`Downloaded file from "${url}"`);
     return fileBuffer;
   } catch (e) {
     errUrl.push(url);
@@ -66,11 +66,11 @@ export async function download(url: string, directory?: string, fileName?: strin
 
 function createDirIfNonExist(filepath: string) {
   if (!fs.existsSync(filepath)) {
-    console.log('creating ' + filepath);
+    //console.log('creating ' + filepath);
     try {
       fs.mkdirSync(filepath, { recursive: true });
     } catch (err) {
-      console.log(`creating ${filepath} failed`, err);
+      //console.log(`creating ${filepath} failed`, err);
     }
   }
 }
@@ -89,7 +89,7 @@ export async function getJsonAndSave(url: string, directory?: string, fileName?:
         const stat = fs.statSync(cacheFilePath);
         const now = Date.now();
         if (now - stat.mtimeMs < cacheTime * 1000) {
-          console.log(`Cache time for "${url}" has not expired. Using cached JSON data.`);
+          //console.log(`Cache time for "${url}" has not expired. Using cached JSON data.`);
           const cachedData = fs.readFileSync(cacheFilePath, 'utf-8');
           const cachedJson = JSON.parse(cachedData);
           return cachedJson;
@@ -102,7 +102,7 @@ export async function getJsonAndSave(url: string, directory?: string, fileName?:
       response = await axios.get(url, { headers, responseType: 'arraybuffer' });
     } catch (error) {
       if (error.response && error.response.status === 304) {
-        console.log(`ETag matches for "${url}". Using cached JSON data.`);
+        //console.log(`ETag matches for "${url}". Using cached JSON data.`);
         const cachedData = fs.readFileSync(cacheFilePath, 'utf-8');
         const cachedJson = JSON.parse(cachedData);
         return cachedJson;
@@ -124,7 +124,7 @@ export async function getJsonAndSave(url: string, directory?: string, fileName?:
       fs.writeFileSync(path.join(directory, fileName), fileContent);
     }
 
-    console.log(`Downloaded JSON data from "${url}"`);
+    //console.log(`Downloaded JSON data from "${url}"`);
     return jsonObject;
   } catch (e) {
     throw new Error(`Failed to download JSON data from "${url}". Error: ${e.message}`);

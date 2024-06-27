@@ -4,7 +4,7 @@ import { Bestdoriurl, globalDefaultServer } from '@/config';
 import mainAPI from '@/types/_Main';
 import { Server, getServerByPriority } from '@/types/Server';
 import { Image, loadImage } from 'skia-canvas';
-import {stringToNumberArray} from '@/types/utils'
+import { stringToNumberArray } from '@/types/utils'
 
 export class Costume {
     costumeId: number;
@@ -45,9 +45,9 @@ export class Costume {
         this.sdResourceName = costumeData['sdResourceName'];
         this.isInitfull = true;
     }
-    async getSdchara(defaultServerList: Server[] = globalDefaultServer): Promise<Image> {
-        if (!defaultServerList) defaultServerList = globalDefaultServer
-        var server = getServerByPriority(this.publishedAt, defaultServerList)
+    async getSdchara(displayedServerList: Server[] = globalDefaultServer): Promise<Image> {
+        if (!displayedServerList) displayedServerList = globalDefaultServer
+        var server = getServerByPriority(this.publishedAt, displayedServerList)
         var sdCharaBuffer = await downloadFile(`${Bestdoriurl}/assets/${Server[server]}/characters/livesd/${this.sdResourceName}_rip/sdchara.png`)
         return await loadImage(sdCharaBuffer)
     }
