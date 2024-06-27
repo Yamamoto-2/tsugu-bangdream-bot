@@ -18,3 +18,5 @@ tsconfig.tsbuildinfo
 *.env
 *.exe
 cache/*
+article/pythonSrc/eventPreview.exe
+article/pythonSrc/eventReport.exe
