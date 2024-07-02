@@ -20,7 +20,7 @@ import { Server } from './types/Server'
 import { globalDefaultServer, tsuguUser } from './config'
 import { tierListOfServerToString, checkLeftDigits, paresMessageList, stringArrayToNumberArray } from './utils'
 import { getRemoteDBUserData } from './api/remoteDB'
-import { serverNameFuzzySearchResult } from './api/fuzzySearch'
+import { serverNameFuzzySearchResult, getFuzzySearchResult } from './api/fuzzySearch'
 
 
 export const name = 'tsugu-bangdream-bot'
@@ -403,7 +403,7 @@ export function apply(ctx: Context, config: Config) {
       const displayedServerList = tsuguUserData.displayedServerList
       let difficultyId: number
       if (difficultyText) {
-        const fuzzySearchResult = await serverNameFuzzySearchResult(config, difficultyText)
+        const fuzzySearchResult = await getFuzzySearchResult(config, difficultyText)
         if (!fuzzySearchResult['difficulty']) {
           return '错误: 难度名未能匹配任何难度'
         }
