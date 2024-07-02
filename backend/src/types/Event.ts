@@ -7,7 +7,6 @@ import { Attribute } from '@/types/Attribute';
 import { Character } from '@/types/Character';
 import { globalDefaultServer, Bestdoriurl } from '@/config';
 import { stringToNumberArray } from '@/types/utils'
-import { Time } from 'koishi';
 
 var eventDataCache = {}
 
@@ -101,9 +100,9 @@ export class Event {
     } = {}
 
     //以下用于模糊搜索
-    characterId: string[]
+    characterId: number[]
     attribute: string[]
-    bandId: string[]
+    bandId: number[]
 
     isInitfull: boolean = false
 
@@ -127,7 +126,7 @@ export class Event {
         this.characterId = []
         for (let i = 0; i < this.characters.length; i++) {
             const element = this.characters[i];
-            this.characterId.push(element.characterId.toString())
+            this.characterId.push(element.characterId)
         }
         this.attribute = []
         for (let i = 0; i < this.attributes.length; i++) {
@@ -144,10 +143,10 @@ export class Event {
             }
         }
         if (isSameBand) {
-            this.bandId.push(new Character(this.characters[0].characterId).bandId.toString())
+            this.bandId.push(new Character(this.characters[0].characterId).bandId)
         }
         else {
-            this.bandId.push('0')
+            this.bandId.push(0)
         }
     }
     async initFull(update: boolean = true) {
