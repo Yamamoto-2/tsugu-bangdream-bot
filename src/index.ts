@@ -430,7 +430,7 @@ export function apply(ctx: Context, config: Config) {
 
     })
 
-  ctx.command("查试炼 <eventId:integer>", "查试炼").usage('查询当前服务器当前活动试炼信息\n可以自定义活动ID\n参数:-m 显示歌曲meta(相对效率)')
+  ctx.command("查试炼 [eventId:integer]", "查试炼").usage('查询当前服务器当前活动试炼信息\n可以自定义活动ID\n参数:-m 显示歌曲meta(相对效率)')
     .alias('查stage', '查舞台', '查festival', '查5v5')
     .example('查试炼 157 -m :返回157号活动的试炼信息, 包含歌曲meta')
     .example('查试炼 -m :返回当前活动的试炼信息, 包含歌曲meta')
