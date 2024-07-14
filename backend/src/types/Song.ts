@@ -88,7 +88,7 @@ export class Song {
     }
     howToGet: Array<string | null>
     //用于模糊搜索
-    songLevels: string[] = []
+    songLevels: number[] = []
     nickname: string | null = null;
 
     //meta数据
@@ -130,7 +130,7 @@ export class Song {
         this.nickname = songData['nickname']
         for (let i in this.difficulty) {
             const playLevel = this.difficulty[i].playLevel;
-            this.songLevels.push((playLevel !== undefined ? playLevel : 0).toString());
+            this.songLevels.push(playLevel !== undefined ? playLevel : 0);
         }
 
         //meta数据
