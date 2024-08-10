@@ -23,15 +23,18 @@ export function drawText({
     font = "old"
 }: warpTextOptions): Canvas {
     var wrappedTextData = wrapText({ text, maxWidth, lineHeight, textSize });
-    if (wrappedTextData.numberOfLines == 1) {
-        var canvas = new Canvas(1, 1);
+    if (wrappedTextData.numberOfLines == 0) {
+        var canvas: Canvas = new Canvas(1, lineHeight);
+    }
+    else if (wrappedTextData.numberOfLines == 1) {
+        var canvas: Canvas = new Canvas(1, 1);
         var ctx = canvas.getContext('2d');
         setFontStyle(ctx, textSize, font);
         var width = maxWidth = ctx.measureText(wrappedTextData.wrappedText[0]).width
         canvas = new Canvas(width, lineHeight);
     }
     else {
-        var canvas = new Canvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
+        var canvas: Canvas = new Canvas(maxWidth, lineHeight * wrappedTextData.numberOfLines);
     }
     var ctx = canvas.getContext('2d');
     let y = lineHeight / 2 + textSize / 3
@@ -111,8 +114,11 @@ export function drawTextWithImages({
     var wrappedTextData = warpTextWithImages({ textSize, maxWidth, lineHeight, content, spacing });
     var wrappedText = wrappedTextData.wrappedText
     var canvas: Canvas
+    if (wrappedTextData.numberOfLines == 0) {
+        var canvas: Canvas = new Canvas(1, lineHeight);
+    }
     //单行文字，宽度为第一行的宽度
-    if (wrappedTextData.numberOfLines == 1) {
+    else if (wrappedTextData.numberOfLines == 1) {
         canvas = new Canvas(1, 1);
         const ctx = canvas.getContext('2d');
         setFontStyle(ctx, textSize, font);
