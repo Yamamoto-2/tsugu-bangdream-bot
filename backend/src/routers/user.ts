@@ -119,8 +119,8 @@ router.post('/bindPlayerVerification',
         }
         //判断验证码是否正确
         if (player.profile.mainUserDeck.deckName != verifyCode.toString() && player.profile.introduction != verifyCode.toString()) {
-            //删除验证码
-            delete verifyCodeCache[`${platform}:${userId}`]
+            //验证码不正确不删除验证码
+            //delete verifyCodeCache[`${platform}:${userId}`]
             const text = `错误: \n评论为: "${player.profile.introduction}", \n卡组名为: "${player.profile.mainUserDeck.deckName}", \n都与验证码不匹配`
             res.status(422).json({ status: 'failed', data: text });
             return
