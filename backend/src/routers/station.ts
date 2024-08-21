@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import { UserDB, getUserPlayerByUser, userPlayerInList } from '@/database/userDB';
 import { submitRoomNumber, queryAllRoom } from '@/types/Room';
 import { logger } from '@/logger';
+import { getUserIcon } from "@/api/userIcon"
 import { middleware } from '@/routers/middleware';
 import * as dotenv from 'dotenv';
 
@@ -52,6 +53,9 @@ router.post('/submitRoomNumber',
             },
                 userPlayerInList
             )
+            if(avatarUrl){
+                await getUserIcon(avatarUrl)
+            }
             res.status(200).json({
                 status: 'success',
                 data: '提交成功'
