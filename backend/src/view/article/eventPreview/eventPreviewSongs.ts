@@ -35,7 +35,7 @@ export async function drawEventPreviewSongs(eventId: number): Promise<Array<Buff
         if (song.publishedAt[Server.cn] != null) {
             continue
         }
-        promises.push(drawEventSongDetail(song, [Server.jp, Server.tw], eventBGImage))
+        promises.push(drawEventSongDetail(song, [Server.jp, Server.tw, Server.cn], eventBGImage))
     }
     const songImages = await Promise.all(promises)
 

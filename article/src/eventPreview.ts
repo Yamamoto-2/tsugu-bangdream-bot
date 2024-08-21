@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as readline from 'readline';
 import { processRequest } from './utils';
 
-const url = 'http://localhost:3000';
+const url = 'http://192.168.0.106:3000';
 const projectRoot: string = path.resolve(path.dirname(__dirname));
 
 

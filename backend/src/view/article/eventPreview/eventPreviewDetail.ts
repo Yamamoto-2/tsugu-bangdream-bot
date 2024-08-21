@@ -28,7 +28,7 @@ export async function drawEventPreviewDetail(eventId: number): Promise<Array<Buf
     //活动信息表----------
     let list: Array<Image | Canvas> = []
     //标题
-    list.push(await drawListByServerList(event.eventName, '活动名称', [Server.jp, Server.tw]))
+    list.push(await drawListByServerList(event.eventName, '活动名称', [Server.jp, Server.tw, Server.cn]))
     list.push(line)
 
     //类型
@@ -50,14 +50,14 @@ export async function drawEventPreviewDetail(eventId: number): Promise<Array<Buf
         content: event.startAt,
         eventId: event.eventId,
         estimateCNTime: true
-    }))
+    }, [Server.jp, Server.tw, Server.cn]))
     list.push(line)
 
     //结束时间
     list.push(await drawTimeInList({
         key: '结束时间',
         content: event.endAt
-    }))
+    }, [Server.jp, Server.tw, Server.cn]))
     list.push(line)
 
 

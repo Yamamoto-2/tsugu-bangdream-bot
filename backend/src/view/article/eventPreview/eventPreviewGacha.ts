@@ -34,7 +34,7 @@ export async function drawEventPreviewGacha(eventId: number): Promise<Array<Buff
         if (gacha.type == 'birthday') {
             continue
         }
-        promises.push(await drawEventGachaDetail(gacha, [Server.jp, Server.tw]))
+        promises.push(await drawEventGachaDetail(gacha, [Server.jp, Server.tw, Server.cn]))
     }
     const gachaImages = await Promise.all(promises)
 
