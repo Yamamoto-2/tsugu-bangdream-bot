@@ -52,9 +52,7 @@ async function commandCard(displayedServerList: Server[], input: string | FuzzyS
     if (Object.keys(fuzzySearchResult).length == 0) {
         return ['错误: 没有有效的关键词']
     }
-    for (let i = 0; i < displayedServerList.length; i++) {
-        displayedServerList[i] = getServerByServerId(displayedServerList[i])
-    }
+
     return await drawCardList(fuzzySearchResult, displayedServerList, compress)
 
 }

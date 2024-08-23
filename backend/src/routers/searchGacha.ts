@@ -34,9 +34,6 @@ router.post('/',
 
 export async function commandGacha(displayedServerList: Server[], gachaId: number, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
 
-    for (let i = 0; i < displayedServerList.length; i++) {
-        displayedServerList[i] = getServerByServerId(displayedServerList[i])
-    }
     return await drawGachaDetail(gachaId, displayedServerList, useEasyBG, compress)
 
 }

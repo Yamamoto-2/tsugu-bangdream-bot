@@ -45,9 +45,7 @@ export async function commandSongChart(displayedServerList: Server[], songId: nu
         return ['错误: 不正确的难度关键词,可以使用以下关键词:easy,normal,hard,expert,special,EZ,NM,HD,EX,SP']
     }
     */
-    for (let i = 0; i < displayedServerList.length; i++) {
-        displayedServerList[i] = getServerByServerId(displayedServerList[i])
-    }
+
     return await drawSongChart(songId, difficultyId, displayedServerList, compress)
 }
 

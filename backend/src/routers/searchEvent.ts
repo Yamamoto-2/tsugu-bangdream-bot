@@ -56,9 +56,7 @@ export async function commandEvent(displayedServerList: Server[], input: string 
     if (Object.keys(fuzzySearchResult).length == 0) {
         return ['错误: 没有有效的关键词']
     }
-    for (let i = 0; i < displayedServerList.length; i++) {
-        displayedServerList[i] = getServerByServerId(displayedServerList[i])
-    }
+
     return await drawEventList(fuzzySearchResult, displayedServerList, compress)
 
 }

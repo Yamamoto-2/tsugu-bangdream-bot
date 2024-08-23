@@ -32,9 +32,7 @@ router.post('/',
 );
 
 export async function commandSongMeta(displayedServerList: Server[], mainServer: Server, compress: boolean): Promise<Array<Buffer | string>> {
-    for (let i = 0; i < displayedServerList.length; i++) {
-        displayedServerList[i] = getServerByServerId(displayedServerList[i])
-    }
+
     if (mainServer == undefined) {
         mainServer = displayedServerList[0]
     }

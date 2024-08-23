@@ -54,9 +54,7 @@ export async function commandCharacter(displayedServerList: Server[], input: str
     if (Object.keys(fuzzySearchResult).length == 0) {
         return ['错误: 没有有效的关键词']
     }
-    for (let i = 0; i < displayedServerList.length; i++) {
-        displayedServerList[i] = getServerByServerId(displayedServerList[i])
-    }
+
     return await drawCharacterList(fuzzySearchResult, displayedServerList, compress)
 
 }
