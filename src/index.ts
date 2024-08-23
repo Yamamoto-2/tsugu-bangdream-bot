@@ -1,4 +1,4 @@
-import { Context, Schema, h, Session, Element } from 'koishi'
+import { Context, Schema, h, Session } from 'koishi'
 import { commandCard } from './commands/searchCard'
 import { commandEvent } from './commands/searchEvent'
 import { commandSong } from './commands/searchSong'
@@ -23,7 +23,8 @@ import { getRemoteDBUserData } from './api/remoteDB'
 import { serverNameFuzzySearchResult, getFuzzySearchResult } from './api/fuzzySearch'
 
 
-export const name = 'tsugu-bangdream-bot'
+export const name = 'tsugu-bangdream-bot';
+export const inject = ['database'];
 
 
 declare module 'koishi' {
