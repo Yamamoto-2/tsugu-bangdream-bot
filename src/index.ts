@@ -16,6 +16,7 @@ import { commandRoomList } from './commands/roomList'
 import { commandBindPlayer, commandPlayerInfo, commandSwitchDisplayedServerList, commandSwitchServerMode, commandUnbindPlayer, commandSwitchShareRoomNumberMode, commandPlayerList, commandSwitchPlayerIndex } from './commands/user'
 import { commandSongChart } from './commands/songChart'
 import { commandEventStage } from './commands/eventStage'
+import { commandSongRandom } from './commands/songRandom'
 import { Server } from './types/Server'
 import { globalDefaultServer, tsuguUser } from './config'
 import { tierListOfServerToString, checkLeftDigits, paresMessageList, stringArrayToNumberArray } from './utils'
@@ -411,6 +412,15 @@ export function apply(ctx: Context, config: Config) {
         difficultyId = fuzzySearchResult['difficulty'][0]
       }
       const list = await commandSongChart(config, displayedServerList, songId, difficultyId)
+      return paresMessageList(list)
+    })
+    ctx.command("随机曲 <word:text>", "随机曲").usage('根据关键词或曲目ID查询曲目信息')
+    .alias('随机')
+    .example('随机曲 lv24 :在所有包含24等级难度的曲中, 随机返回其中一个').example('随机曲 lv24 ag :在所有包含24等级难度的afterglow曲中, 随机返回其中一个')
+    .action(async ({ session }, text) => {
+      const tsuguUserData = await observeUserTsugu(session)
+      const mainServer = tsuguUserData.mainServer
+      const list = await commandSongRandom(config, mainServer, text)
       return paresMessageList(list)
     })
   ctx.command('查询分数表 <serverName:string>', '查询分数表').usage('查询指定服务器的歌曲分数表, 如果没有服务器名的话, 服务器为用户的默认服务器')

@@ -18,6 +18,7 @@ import { stationRouter } from '@/routers/station'
 import { eventPreviewRouter } from '@/routers/article/eventPreview'
 import { eventReportRouter } from '@/routers/article/eventReport'
 import { eventStageRouter } from '@/routers/eventStage'
+import { songRandomRouter } from '@/routers/songRandom'
 import { fuzzySearchRouter } from '@/routers/fuzzySearch'
 
 import { logger } from '@/logger'
@@ -46,6 +47,7 @@ app.use('/cutoffDetail', cutoffDetailRouter);
 app.use('/cutoffListOfRecentEvent', cutoffListOfRecentEventRouter);
 app.use('/cutoffAll', cutoffAllRouter)
 app.use('/eventStage', eventStageRouter)
+app.use('/songRandom', songRandomRouter);
 app.use('/fuzzySearch', fuzzySearchRouter);
 
 
