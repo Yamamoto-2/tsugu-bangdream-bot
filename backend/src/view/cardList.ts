@@ -14,42 +14,10 @@ import { globalDefaultServer } from '@/config';
 const maxWidth = 7000
 
 export async function drawCardList(matches: FuzzySearchResult, displayedServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
+
     //计算模糊搜索结果
-    var tempCardList: Array<Card> = [];//最终输出的卡牌列表
-    var cardIdList: Array<number> = Object.keys(mainAPI['cards']).map(Number);//所有卡牌ID列表
-    for (let i = 0; i < cardIdList.length; i++) {
-        const tempCard = new Card(cardIdList[i]);
-        if (tempCard.type == 'others') {
-            continue;
-        }
-        var isMatch = match(matches, tempCard, ['scoreUpMaxValue']);
-        //console.log(tempCard.cardId, 1, isMatch)
-        //如果在所有所选服务器列表中都不存在，则不输出
-        var numberOfReleasedServer = 0;
-        for (var j = 0; j < displayedServerList.length; j++) {
-            var server = displayedServerList[j];
-            if (tempCard.releasedAt[server] != null) {
-                numberOfReleasedServer++;
-            }
-        }
-        if (numberOfReleasedServer == 0) {
-            isMatch = false;
-        }
-        //console.log(tempCard.cardId, 2, isMatch)
+    const tempCardList: Array<Card> = matchCardList(matches, displayedServerList);
 
-        //如果有数字关系词，则判断关系词
-        if (matches._relationStr != undefined) {
-            //如果之后范围的话则直接判断
-            if (isMatch || Object.keys(matches).length == 1) {
-                isMatch = checkRelationList(tempCard.cardId, matches._relationStr as string[])
-            }
-        }
-        //console.log(tempCard.cardId, 3, isMatch)
-
-        if (isMatch) {
-            tempCardList.push(tempCard);
-        }
-    }
     if (tempCardList.length == 0) {
         return ['没有搜索到符合条件的卡牌']
     }
@@ -179,8 +147,46 @@ export async function drawCardList(matches: FuzzySearchResult, displayedServerLi
         })
         return [buffer]
     }
+}
 
+//计算模糊搜索结果
+export function matchCardList(matches: FuzzySearchResult, displayedServerList: Server[]) {
+    var tempCardList: Array<Card> = [];//最终输出的卡牌列表
+    var cardIdList: Array<number> = Object.keys(mainAPI['cards']).map(Number);//所有卡牌ID列表
+    for (let i = 0; i < cardIdList.length; i++) {
+        const tempCard = new Card(cardIdList[i]);
+        if (tempCard.type == 'others') {
+            continue;
+        }
+        var isMatch = match(matches, tempCard, ['scoreUpMaxValue']);
+        //console.log(tempCard.cardId, 1, isMatch)
+        //如果在所有所选服务器列表中都不存在，则不输出
+        var numberOfReleasedServer = 0;
+        for (var j = 0; j < displayedServerList.length; j++) {
+            var server = displayedServerList[j];
+            if (tempCard.releasedAt[server] != null) {
+                numberOfReleasedServer++;
+            }
+        }
+        if (numberOfReleasedServer == 0) {
+            isMatch = false;
+        }
+        //console.log(tempCard.cardId, 2, isMatch)
 
+        //如果有数字关系词，则判断关系词
+        if (matches._relationStr != undefined) {
+            //如果之后范围的话则直接判断
+            if (isMatch || Object.keys(matches).length == 1) {
+                isMatch = checkRelationList(tempCard.cardId, matches._relationStr as string[])
+            }
+        }
+        //console.log(tempCard.cardId, 3, isMatch)
+
+        if (isMatch) {
+            tempCardList.push(tempCard);
+        }
+    }
+    return tempCardList;
 }
 
 function getCardListByAttributeAndCharacterId(cardFullList: Card[], attribute: 'cool' | 'happy' | 'pure' | 'powerful', characterId: number) {
@@ -193,7 +199,6 @@ function getCardListByAttributeAndCharacterId(cardFullList: Card[], attribute: '
     }
     return cardList;
 }
-
 
 //每个颜色和角色的一行
 async function drawCardListLine(cardList: Card[]) {

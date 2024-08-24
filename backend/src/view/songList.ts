@@ -39,38 +39,11 @@ const line2: Canvas = drawDottedLine({
     color: "#a8a8a8"
 })
 
-
 export async function drawSongList(matches: FuzzySearchResult, displayedServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
+
     // 计算歌曲模糊搜索结果
-    var tempSongList: Array<Song> = [];
-    var songIdList: Array<number> = Object.keys(mainAPI['songs']).map(Number)
-    for (let i = 0; i < songIdList.length; i++) {
-        const tempSong = new Song(songIdList[i]);
-        var isMatch = match(matches, tempSong, []);
-        //如果在所有所选服务器列表中都不存在，则不输出
-        var numberOfNotReleasedServer = 0;
-        for (var j = 0; j < displayedServerList.length; j++) {
-            var server = displayedServerList[j];
-            if (tempSong.publishedAt[server] == null) {
-                numberOfNotReleasedServer++;
-            }
-        }
-        if (numberOfNotReleasedServer == displayedServerList.length) {
-            isMatch = false;
-        }
+    const tempSongList = matchSongList(matches, displayedServerList)
 
-        //如果有数字关系词，则判断关系词
-        if (matches._relationStr != undefined) {
-            //如果之后范围的话则直接判断
-            if (isMatch || Object.keys(matches).length == 1) {
-                isMatch = checkRelationList(tempSong.songId, matches._relationStr as string[])
-            }
-        }
-
-        if (isMatch) {
-            tempSongList.push(tempSong);
-        }
-    }
     if (tempSongList.length == 0) {
         return ['没有搜索到符合条件的歌曲']
     }
@@ -126,4 +99,38 @@ export async function drawSongList(matches: FuzzySearchResult, displayedServerLi
         compress: compress
     })
     return [buffer]
+}
+
+// 计算歌曲模糊搜索结果
+export function matchSongList(matches: FuzzySearchResult, displayedServerList: Server[]) {
+    var tempSongList: Array<Song> = [];
+    var songIdList: Array<number> = Object.keys(mainAPI['songs']).map(Number)
+    for (let i = 0; i < songIdList.length; i++) {
+        const tempSong = new Song(songIdList[i]);
+        var isMatch = match(matches, tempSong, []);
+        //如果在所有所选服务器列表中都不存在，则不输出
+        var numberOfNotReleasedServer = 0;
+        for (var j = 0; j < displayedServerList.length; j++) {
+            var server = displayedServerList[j];
+            if (tempSong.publishedAt[server] == null) {
+                numberOfNotReleasedServer++;
+            }
+        }
+        if (numberOfNotReleasedServer == displayedServerList.length) {
+            isMatch = false;
+        }
+
+        //如果有数字关系词，则判断关系词
+        if (matches._relationStr != undefined) {
+            //如果之后范围的话则直接判断
+            if (isMatch || Object.keys(matches).length == 1) {
+                isMatch = checkRelationList(tempSong.songId, matches._relationStr as string[])
+            }
+        }
+
+        if (isMatch) {
+            tempSongList.push(tempSong);
+        }
+    }
+    return tempSongList
 }
