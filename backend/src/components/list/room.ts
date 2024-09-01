@@ -74,7 +74,7 @@ export async function drawRoonInList(room: Room) {
     let list = [canvasUp]
     if (room.player != undefined) {
         const player = new Player(room.player.playerId, room.player.server)
-        await player.initFull(false)
+        await player.initFull(true)
         if (player.isExist) {
             list.push(line)
             list.push(await drawPlayerDetailInRoomList(player))
