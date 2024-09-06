@@ -74,13 +74,18 @@ if (process.env.ARTICLE == 'true') {
     app.use('/eventReport', eventReportRouter);
 }
 
+const port: number = parseInt(process.env.PORT || '3000');
+
+if (isNaN(port)) {
+    logger('expressMainThread', 'port is not a number');
+    process.exit(1);
+}
 
 //404
 app.use((req, res) => {
     res.status(404).send('404 Not Found');
 });
 
-
-app.listen(3000, () => {
-    logger('expressMainThread', 'listening on port 3000');
+app.listen(port, () => {
+    logger(`expressMainThread`, `listening on port ${port}`);
 });
