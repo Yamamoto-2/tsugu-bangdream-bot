@@ -25,10 +25,16 @@ router.post(
     async (req: Request, res: Response) => {
 
         const { displayedServerList, fuzzySearchResult, text, compress } = req.body;
-
-        if (!text && !fuzzySearchResult) {
-            return res.status(422).json({ status: 'failed', data: '不能同时不存在text与fuzzySearchResult' });
+        
+        // 检查 text 和 fuzzySearchResult 是否同时存在
+        if (text && fuzzySearchResult) {
+            return res.status(422).json({ status: 'failed', data: 'text 与 fuzzySearchResult 不能同时存在' });
         }
+        // 检查 text 和 fuzzySearchResult 是否同时不存在
+        if (!text && !fuzzySearchResult) {
+            return res.status(422).json({ status: 'failed', data: '不能同时不存在 text 与 fuzzySearchResult' });
+        }
+
         try {
             const result = await commandSong(displayedServerList, text || fuzzySearchResult, compress);
             res.send(listToBase64(result));
