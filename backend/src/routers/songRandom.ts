@@ -42,14 +42,17 @@ router.post(
 );
 
 
-export async function commandSongRandom(mainServer: Server, input: string | FuzzySearchResult, compress: boolean): Promise<Array<Buffer | string>> {
+export async function commandSongRandom(mainServer: Server, input: string | FuzzySearchResult | null, compress: boolean): Promise<Array<Buffer | string>> {
     let fuzzySearchResult: FuzzySearchResult
     // 根据 input 的类型执行不同的逻辑
     if (typeof input === 'string') {
         fuzzySearchResult = fuzzySearch(input.split(' '))
-    } else {
+    } else if (fuzzySearchResult) {
         // 使用 fuzzySearch 逻辑
         fuzzySearchResult = input
+    }
+    else{
+        fuzzySearchResult = {}
     }
     return await drawSongRandom(fuzzySearchResult, [mainServer], true, compress)
 }
