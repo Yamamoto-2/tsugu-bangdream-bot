@@ -83,7 +83,7 @@ export interface Config {
     RemoteDBSwitch: boolean,
     RemoteDBUrl: string,
   
-    noSpace: boolean,
+    //noSpace: boolean,
     reply: boolean,
     at: boolean,
   }
