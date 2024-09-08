@@ -163,7 +163,7 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
     }
     roomStack.push(room)
 
-    if (process.env.USE_BANDORISTATION == 'true') {
+    if (process.env.USE_BANDORISTATION == 'true' && source == 'qq') {
         if (bandoriStationToken == '' || bandoriStationToken == undefined) {
             bandoriStationToken = 'ZtV4EX2K9Onb'
         }

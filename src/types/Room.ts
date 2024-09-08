@@ -138,7 +138,7 @@ export async function queryRoomNumberFromBandoriStation(): Promise<Room[]> {
     for (let i = 0; i < response.length; i++) {
         const roomData = response[i];
         let source = decodeUrl(roomData['source_info']['name'])
-        const room = new Room({ 
+        const room = new Room({
             number: Number(roomData['number']),
             rawMessage: decodeUrl(roomData['raw_message']),
             source: source,
@@ -188,24 +188,26 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
         await player.initFull()
         room.setPlayer(player)
     }
+
     roomStack.push(room)
+    if (source == 'qq') {
+        if (bandoriStationToken == '' || bandoriStationToken == undefined) {
+            bandoriStationToken = 'ZtV4EX2K9Onb'
+        }
 
-    if (bandoriStationToken == '' || bandoriStationToken == undefined) {
-        bandoriStationToken = 'ZtV4EX2K9Onb'
-    }
-
-    const url = `${BandoriStationurl}index.php`
-    const data = {
-        function: 'submit_room_number',
-        number: number,
-        user_id: userId,
-        raw_message: rawMessage,
-        source: 'Tsugu',
-        token: bandoriStationToken
-    }
-    try {
-        await axios.default.post(url, data)
-    } catch (e) {
-        console.log('station', `error: ${e}`)
+        const url = `${BandoriStationurl}index.php`
+        const data = {
+            function: 'submit_room_number',
+            number: number,
+            user_id: userId,
+            raw_message: rawMessage,
+            source: 'Tsugu',
+            token: bandoriStationToken
+        }
+        try {
+            await axios.default.post(url, data)
+        } catch (e) {
+            console.log('station', `error: ${e}`)
+        }
     }
 }
