@@ -54,7 +54,7 @@ router.post('/submitRoomNumber',
                 userPlayerInList
             )
             if(avatarUrl){
-                await getUserIcon(avatarUrl)
+                getUserIcon(avatarUrl)
             }
             res.status(200).json({
                 status: 'success',

@@ -24,7 +24,7 @@ router.post('/',
     let tempRoomlist: Room[];
     // 检查类型是否正确
     try {
-      tempRoomlist = getRoomList(roomList);
+      tempRoomlist = await getRoomList(roomList);
     } catch (e) {
       console.log(req.url + ' ' + req.body);
       res.status(422).send({ status: 'failed', data: '车牌格式错误' });
@@ -47,11 +47,8 @@ export async function commandRoomList(roomList: Room[], compress: boolean): Prom
   return await drawRoomList(roomList, compress)
 }
 
-function getRoomList(roomList: any) {
-  const result: Room[] = []
-  for (let i = 0; i < roomList.length; i++) {
-    const room = roomList[i];
-
+async function getRoomList(roomList: any) {
+  const promises = roomList.map(async (room: any) => {
     const tempRoom = new Room({
       number: room.number,
       rawMessage: room.rawMessage,
@@ -59,20 +56,25 @@ function getRoomList(roomList: any) {
       userId: room.userId,
       time: room.time,
       avatarUrl: room.avatarUrl,
-      userName: room.userName
-    })
+      userName: room.userName,
+    });
+
     if (room.player?.playerId != undefined) {
-      let server = room.player.server
+      let server = room.player.server;
       if (isServer(server)) {
-        const tempPlayer = new Player(room.player.playerId, server)
-        tempPlayer.initFull(true)
-        tempRoom.setPlayer(tempPlayer)
+        const tempPlayer = new Player(room.player.playerId, server);
+        await tempPlayer.initFull(true); // 假设 initFull 是异步函数
+        tempRoom.setPlayer(tempPlayer);
       }
     }
-    result.push(tempRoom)
-  }
-  return result
+    return tempRoom;
+  });
+
+  // 等待所有并行操作完成
+  const result = await Promise.all(promises);
+  return result;
 }
+
 
 
 
