@@ -40,6 +40,7 @@ class Stack<T> {
     }
 }
 
+
 interface RoomOption {
     number: number;
     rawMessage: string;
@@ -114,6 +115,7 @@ export async function queryAllRoom(): Promise<Room[]> {
             i--
         }
     }
+
     //去重，每个房间号只保留最新的一条
     const finalRoomList: Room[] = []
     const numberList: number[] = []//用于去重
@@ -129,13 +131,14 @@ export async function queryAllRoom(): Promise<Room[]> {
 
 //从BandoriStation获取房间号
 export async function queryRoomNumberFromBandoriStation(): Promise<Room[]> {
+    console.log(`queryRoomNumberFromBandoriStation`)
     const Data = await axios.default.post(BandoriStationurl, { function: 'query_room_number' })
     const response = Data.data?.response
     const roomList: Room[] = []
     for (let i = 0; i < response.length; i++) {
         const roomData = response[i];
         let source = decodeUrl(roomData['source_info']['name'])
-        const room = new Room({
+        const room = new Room({ 
             number: Number(roomData['number']),
             rawMessage: decodeUrl(roomData['raw_message']),
             source: source,
@@ -187,24 +190,22 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
     }
     roomStack.push(room)
 
-    if (process.env.USE_BANDORISTATION == 'true') {
-        if (bandoriStationToken == '' || bandoriStationToken == undefined) {
-            bandoriStationToken = 'ZtV4EX2K9Onb'
-        }
+    if (bandoriStationToken == '' || bandoriStationToken == undefined) {
+        bandoriStationToken = 'ZtV4EX2K9Onb'
+    }
 
-        const url = `${BandoriStationurl}index.php`
-        const data = {
-            function: 'submit_room_number',
-            number: number,
-            user_id: userId,
-            raw_message: rawMessage,
-            source: 'Tsugu',
-            token: bandoriStationToken
-        }
-        try {
-            await axios.default.post(url, data)
-        } catch (e) {
-            console.log('station', `error: ${e}`)
-        }
+    const url = `${BandoriStationurl}index.php`
+    const data = {
+        function: 'submit_room_number',
+        number: number,
+        user_id: userId,
+        raw_message: rawMessage,
+        source: 'Tsugu',
+        token: bandoriStationToken
+    }
+    try {
+        await axios.default.post(url, data)
+    } catch (e) {
+        console.log('station', `error: ${e}`)
     }
 }
