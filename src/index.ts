@@ -1,4 +1,4 @@
-import { Context, Schema, h, Session } from 'koishi'
+import { Context, Schema, h, Session, Command, Logger } from 'koishi'
 import { commandCard } from './commands/searchCard'
 import { commandEvent } from './commands/searchEvent'
 import { commandSong } from './commands/searchSong'
@@ -242,18 +242,18 @@ export function apply(ctx: Context, config: Config) {
     })
     */
   //玩家相关
-  ctx.command('开启车牌转发', '开启车牌转发')
+  ctx.command('开启车牌转发', '开启车牌转发', cmdConfig)
     .userFields(['tsugu'])
     .action(async ({ session }) => {
       return await commandSwitchShareRoomNumberMode(config, session, true)
     })
-  ctx.command('关闭车牌转发', '关闭车牌转发')
+  ctx.command('关闭车牌转发', '关闭车牌转发', cmdConfig)
     .userFields(['tsugu'])
     .action(async ({ session }) => {
       return await commandSwitchShareRoomNumberMode(config, session, false)
     })
 
-  ctx.command('绑定玩家 [serverName:text]', '绑定玩家信息')
+  ctx.command('绑定玩家 [serverName:text]', '绑定玩家信息', cmdConfig)
     .usage('开始玩家数据绑定流程, 请不要在"绑定玩家"指令后添加玩家ID。省略服务器名时, 默认为绑定到你当前的主服务器。请在获得临时验证数字后, 将玩家签名改为该数字, 并回复你的玩家ID')
     .userFields(['tsugu'])
     .action(async ({ session }, serverName) => {
@@ -268,7 +268,7 @@ export function apply(ctx: Context, config: Config) {
       }
       return await commandBindPlayer(config, session, mainServer)
     })
-  ctx.command('解除绑定 [serverName:text]', '解除当前服务器的玩家绑定')
+  ctx.command('解除绑定 [serverName:text]', '解除当前服务器的玩家绑定', cmdConfig)
     .alias('解绑玩家')
     .usage('解除指定服务器的玩家数据绑定。省略服务器名时, 默认为当前的主服务器')
     .userFields(['tsugu'])
@@ -284,7 +284,7 @@ export function apply(ctx: Context, config: Config) {
       }
       return await commandUnbindPlayer(config, session, mainServer)
     })
-  ctx.command('主服务器 <serverName:text>', '设置主服务器')
+  ctx.command('主服务器 <serverName:text>', '设置主服务器', cmdConfig)
     .alias('服务器模式', '切换服务器')
     .usage('将指定的服务器设置为你的主服务器')
     .example('主服务器 cn : 将国服设置为主服务器')
@@ -305,7 +305,7 @@ export function apply(ctx: Context, config: Config) {
       }
       return await commandSwitchServerMode(config, session, mainServer)
     })
-  ctx.command('设置显示服务器 <...serverList>', '设定信息显示中的默认服务器排序')
+  ctx.command('设置显示服务器 <...serverList>', '设定信息显示中的默认服务器排序', cmdConfig)
     .alias('默认服务器', '设置默认服务器')
     .usage('使用空格分隔服务器列表')
     .example('设置默认服务器 国服 日服 : 将国服设置为第一服务器, 日服设置为第二服务器')
@@ -313,19 +313,19 @@ export function apply(ctx: Context, config: Config) {
     .action(async ({ session }, ...serverList) => {
       return await commandSwitchDisplayedServerList(config, session, serverList)
     })
-  ctx.command('玩家状态 [index:integer]', '查询自己的玩家状态')
+  ctx.command('玩家状态 [index:integer]', '查询自己的玩家状态', cmdConfig)
     .shortcut(/^(.+服)玩家状态$/, { args: ['$1'] })
     .userFields(['tsugu'])
     .action(async ({ session }, index) => {
       return await commandPlayerInfo(config, session, index)
     })
-  ctx.command('玩家状态列表', '查询目前已经绑定的所有玩家信息')
+  ctx.command('玩家状态列表', '查询目前已经绑定的所有玩家信息', cmdConfig)
     .alias('玩家列表', '玩家信息列表')
     .userFields(['tsugu'])
     .action(async ({ session }) => {
       return await commandPlayerList(config, session)
     })
-  ctx.command('玩家默认ID <index:integer>', '设置默认显示的玩家ID')
+  ctx.command('玩家默认ID <index:integer>', '设置默认显示的玩家ID', cmdConfig)
     .usage('调整玩家状态指令，和发送车牌时的默认玩家信息。\n规则: \n如果该ID对应的玩家信息在当前默认服务器中, 显示。\n如果不在当前默认服务器中, 显示当前默认服务器的编号最靠前的玩家信息')
     .alias('默认玩家ID', '默认玩家', '玩家ID')
     .userFields(['tsugu'])
@@ -337,7 +337,7 @@ export function apply(ctx: Context, config: Config) {
     })
 
   //其他
-  ctx.command('ycm [keyword:text]', '获取车牌')
+  ctx.command('ycm [keyword:text]', '获取车牌', cmdConfig)
     .alias('有车吗', '车来')
     .usage(`获取所有车牌车牌, 可以通过关键词过滤`)
     .example('ycm : 获取所有车牌')
@@ -346,7 +346,7 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandRoomList(config, keyword)
       return (paresMessageList(list))
     })
-  ctx.command('查玩家 <playerId:integer> [serverName:text]', '查询玩家信息')
+  ctx.command('查玩家 <playerId:integer> [serverName:text]', '查询玩家信息', cmdConfig)
     .alias('查询玩家')
     .usage('查询指定ID玩家的信息。省略服务器名时, 默认从你当前的主服务器查询')
     .example('查玩家 10000000 : 查询你当前默认服务器中, 玩家ID为10000000的玩家信息')
@@ -367,7 +367,8 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandSearchPlayer(config, playerId, mainServer)
       return (paresMessageList(list))
     })
-  ctx.command("查卡 <word:text>", "查卡").alias('查卡牌')
+  ctx.command("查卡 <word:text>", "查卡", cmdConfig)
+    .alias('查卡牌')
     .usage('根据关键词或卡牌ID查询卡片信息, 请使用空格隔开所有参数')
     .example('查卡 1399 :返回1399号卡牌的信息').example('查卡 绿 tsugu :返回所有属性为pure的羽泽鸫的卡牌列表')
     .action(async ({ session }, text) => {
@@ -379,7 +380,8 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandCard(config, displayedServerList, text)
       return (paresMessageList(list))
     })
-  ctx.command('查卡面 <cardId:integer>', '查卡面').alias('查卡插画', '查插画')
+  ctx.command('查卡面 <cardId:integer>', '查卡面', cmdConfig)
+    .alias('查卡插画', '查插画')
     .usage('根据卡片ID查询卡片插画').example('查卡面 1399 :返回1399号卡牌的插画')
     .action(async ({ session }, cardId) => {
       if (cardId == undefined) {
@@ -388,7 +390,8 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandGetCardIllustration(config, cardId)
       return paresMessageList(list)
     })
-  ctx.command('查角色 <word:text>', '查角色').usage('根据关键词或角色ID查询角色信息')
+  ctx.command('查角色 <word:text>', '查角色', cmdConfig)
+    .usage('根据关键词或角色ID查询角色信息')
     .example('查角色 10 :返回10号角色的信息').example('查角色 吉他 :返回所有角色模糊搜索标签中包含吉他的角色列表')
     .action(async ({ session }, text) => {
       if (text == undefined) {
@@ -400,7 +403,8 @@ export function apply(ctx: Context, config: Config) {
       return paresMessageList(list)
     })
 
-  ctx.command("查活动 <word:text>", "查活动").usage('根据关键词或活动ID查询活动信息')
+  ctx.command("查活动 <word:text>", "查活动", cmdConfig)
+    .usage('根据关键词或活动ID查询活动信息')
     .example('查活动 177 :返回177号活动的信息').example('查活动 绿 tsugu :返回所有属性加成为pure, 且活动加成角色中包括羽泽鸫的活动列表')
     .action(async ({ session }, text) => {
       if (text == undefined) {
@@ -411,7 +415,8 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandEvent(config, displayedServerList, text)
       return paresMessageList(list)
     })
-  ctx.command("查曲 <word:text>", "查曲").usage('根据关键词或曲目ID查询曲目信息')
+  ctx.command("查曲 <word:text>", "查曲", cmdConfig)
+    .usage('根据关键词或曲目ID查询曲目信息')
     .example('查曲 1 :返回1号曲的信息').example('查曲 ag lv27 :返回所有难度为27的ag曲列表')
     .action(async ({ session }, text) => {
       if (text == undefined) {
@@ -422,7 +427,8 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandSong(config, displayedServerList, text)
       return paresMessageList(list)
     })
-  ctx.command("查谱面 <songId:integer> [difficultyText:text]", "查谱面").usage('根据曲目ID与难度查询铺面信息')
+  ctx.command("查谱面 <songId:integer> [difficultyText:text]", "查谱面", cmdConfig)
+    .usage('根据曲目ID与难度查询铺面信息')
     .example('查谱面 1 :返回1号曲的所有铺面').example('查谱面 1 expert :返回1号曲的expert难度铺面')
     .action(async ({ session }, songId, difficultyText) => {
       if (songId == undefined) {
@@ -441,7 +447,8 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandSongChart(config, displayedServerList, songId, difficultyId)
       return paresMessageList(list)
     })
-  ctx.command("随机曲 [word:text]", "随机曲").usage('根据关键词或曲目ID查询曲目信息')
+  ctx.command("随机曲 [word:text]", "随机曲", cmdConfig)
+    .usage('根据关键词或曲目ID查询曲目信息')
     .alias('随机')
     .example('随机曲 lv24 :在所有包含24等级难度的曲中, 随机返回其中一个').example('随机曲 lv24 ag :在所有包含24等级难度的afterglow曲中, 随机返回其中一个')
     .action(async ({ session }, text) => {
@@ -450,7 +457,8 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandSongRandom(config, mainServer, text)
       return paresMessageList(list)
     })
-  ctx.command('查询分数表 <serverName:string>', '查询分数表').usage('查询指定服务器的歌曲分数表, 如果没有服务器名的话, 服务器为用户的默认服务器')
+  ctx.command('查询分数表 <serverName:string>', '查询分数表', cmdConfig)
+    .usage('查询指定服务器的歌曲分数表, 如果没有服务器名的话, 服务器为用户的默认服务器')
     .alias('查分数表', '查询分数榜', '查分数榜').example('查询分数表 cn :返回国服的歌曲分数表')
     .action(async ({ session }, serverName) => {
       if (serverName == undefined) {
@@ -471,7 +479,8 @@ export function apply(ctx: Context, config: Config) {
 
     })
 
-  ctx.command("查试炼 [eventId:integer]", "查试炼").usage('查询当前服务器当前活动试炼信息\n可以自定义活动ID\n参数:-m 显示歌曲meta(相对效率)')
+  ctx.command("查试炼 [eventId:integer]", "查试炼", cmdConfig)
+    .usage('查询当前服务器当前活动试炼信息\n可以自定义活动ID\n参数:-m 显示歌曲meta(相对效率)')
     .alias('查stage', '查舞台', '查festival', '查5v5')
     .example('查试炼 157 -m :返回157号活动的试炼信息, 包含歌曲meta')
     .example('查试炼 -m :返回当前活动的试炼信息, 包含歌曲meta')
@@ -484,7 +493,8 @@ export function apply(ctx: Context, config: Config) {
       return paresMessageList(list)
     })
 
-  ctx.command("查卡池 <gachaId:integer>", "查卡池").usage('根据卡池ID查询卡池信息')
+  ctx.command("查卡池 <gachaId:integer>", "查卡池", cmdConfig)
+    .usage('根据卡池ID查询卡池信息')
     .action(async ({ session }, gachaId) => {
       if (gachaId == undefined) {
         return `错误: 指令不完整\n使用以下指令以查看帮助:\n  help 查卡池`
@@ -495,7 +505,8 @@ export function apply(ctx: Context, config: Config) {
       return paresMessageList(list)
     })
 
-  ctx.command("ycx <tier:integer> [eventId:integer] [serverName]", "查询指定档位的预测线").usage(`查询指定档位的预测线, 如果没有服务器名的话, 服务器为用户的默认服务器。如果没有活动ID的话, 活动为当前活动\n可用档线:\n:\n${tierListOfServerToString()}`)
+  ctx.command("ycx <tier:integer> [eventId:integer] [serverName]", "查询指定档位的预测线", cmdConfig)
+    .usage(`查询指定档位的预测线, 如果没有服务器名的话, 服务器为用户的默认服务器。如果没有活动ID的话, 活动为当前活动\n可用档线:\n:\n${tierListOfServerToString()}`)
     .example('ycx 1000 :返回默认服务器当前活动1000档位的档线与预测线').example('ycx 1000 177 jp:返回日服177号活动1000档位的档线与预测线')
     .action(async ({ session }, tier, eventId, serverName) => {
       if (tier == undefined) {
@@ -513,7 +524,8 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandCutoffDetail(config, mainServer, tier, eventId)
       return paresMessageList(list)
     })
-  ctx.command("ycxall [eventId:integer] [serverName]", "查询所有档位的预测线").usage(`查询所有档位的预测线, 如果没有服务器名的话, 服务器为用户的默认服务器。如果没有活动ID的话, 活动为当前活动\n可用档线:\n${tierListOfServerToString()}`)
+  ctx.command("ycxall [eventId:integer] [serverName]", "查询所有档位的预测线", cmdConfig)
+    .usage(`查询所有档位的预测线, 如果没有服务器名的话, 服务器为用户的默认服务器。如果没有活动ID的话, 活动为当前活动\n可用档线:\n${tierListOfServerToString()}`)
     .example('ycxall :返回默认服务器当前活动所有档位的档线与预测线').example('ycxall 177 jp:返回日服177号活动所有档位的档线与预测线')
     .alias('myycx')
     .action(async ({ session }, eventId, serverName) => {
@@ -529,7 +541,8 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandCutoffAll(config, mainServer, eventId)
       return paresMessageList(list)
     })
-  ctx.command("lsycx <tier:integer> [eventId:integer] [serverName]", "查询指定档位的预测线").usage(`查询指定档位的预测线, 与最近的4期活动类型相同的活动的档线数据, 如果没有服务器名的话, 服务器为用户的默认服务器。如果没有活动ID的话, 活动为当前活动\n可用档线:\n${tierListOfServerToString()}`)
+  ctx.command("lsycx <tier:integer> [eventId:integer] [serverName]", "查询指定档位的预测线", cmdConfig)
+    .usage(`查询指定档位的预测线, 与最近的4期活动类型相同的活动的档线数据, 如果没有服务器名的话, 服务器为用户的默认服务器。如果没有活动ID的话, 活动为当前活动\n可用档线:\n${tierListOfServerToString()}`)
     .example('lsycx 1000 :返回默认服务器当前活动的档线与预测线, 与最近的4期活动类型相同的活动的档线数据').example('lsycx 1000 177 jp:返回日服177号活动1000档位档线与最近的4期活动类型相同的活动的档线数据')
     .action(async ({ session }, tier, eventId, serverName) => {
       if (tier == undefined) {
@@ -548,7 +561,8 @@ export function apply(ctx: Context, config: Config) {
       return paresMessageList(list)
     })
 
-  ctx.command('抽卡模拟 [times:integer] [gachaId:integer]').usage('模拟抽卡, 如果没有卡池ID的话, 卡池为当前活动的卡池')
+  ctx.command('抽卡模拟 [times:integer] [gachaId:integer]', cmdConfig)
+    .usage('模拟抽卡, 如果没有卡池ID的话, 卡池为当前活动的卡池')
     .example('抽卡模拟:模拟抽卡10次').example('抽卡模拟 300 922 :模拟抽卡300次, 卡池为922号卡池')
     .channelFields(['tsugu_gacha'])
     .action(async ({ session }, times, gachaId) => {
@@ -601,3 +615,14 @@ ctx.on('command/before-execute', (argv) => {
     }
   })
 }
+
+const CommandLogger = new Logger('tsugu-command');
+
+export const cmdConfig: Command.Config = {
+  checkUnknown: true,
+  checkArgCount: false,
+  handleError: (err, { command }) => {
+    CommandLogger.error(err)
+    return `执行指令 ${command.displayName} 失败`;
+  },
+};
