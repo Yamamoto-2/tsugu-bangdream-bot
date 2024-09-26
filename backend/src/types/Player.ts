@@ -86,64 +86,6 @@ export class Player {
                     rating: number;
                 }>
             };
-            /*
-            userPoppinPartyHighScoreMusicList: {
-                entries: Array<{
-                    musicId: number;
-                    difficulty: string;
-                    rating: number;
-                }>
-            };
-            userAfterglowHighScoreMusicList: {
-                entries: Array<{
-                    musicId: number;
-                    difficulty: string;
-                    rating: number;
-                }>
-            };
-            userPastelPalettesHighScoreMusicList: {
-                entries: Array<{
-                    musicId: number;
-                    difficulty: string;
-                    rating: number;
-                }>
-            };
-            userHelloHappyWorldHighScoreMusicList: {
-                entries: Array<{
-                    musicId: number;
-                    difficulty: string;
-                    rating: number;
-                }>
-            };
-            userRoseliaHighScoreMusicList: {
-                entries: Array<{
-                    musicId: number;
-                    difficulty: string;
-                    rating: number;
-                }>
-            };
-            userOtherHighScoreMusicList: {
-                entries: Array<{
-                    musicId: number;
-                    difficulty: string;
-                    rating: number;
-                }>
-            };
-            userMorfonicaHighScoreMusicList: {
-                entries: Array<{
-                    musicId: number;
-                    difficulty: string;
-                    rating: number;
-                }>
-            };
-            userRaiseASuilenHighScoreMusicList: {
-                entries: Array<{
-                    musicId: number;
-                    difficulty: string;
-                    rating: number;
-                }>
-            };
-            */
         };
         mainUserDeck: {
             deckId: number;
@@ -230,17 +172,18 @@ export class Player {
     server: Server;
 
     isInitfull: boolean = false;
+
     constructor(playerId: number, server: Server) {
         this.playerId = playerId;
         this.server = server;
     }
-    async initFull(cache: boolean = false) {
+    async initFull(cache: boolean = false, mode: 0 | 1 | 2 | 3 = 2) {
         if (this.isInitfull) {
             return
         }
         var cacheTime = cache ? 1 / 0 : 0;
         try {
-            var playerData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/player/${Server[this.server]}/${this.playerId}?mode=2`, cacheTime);
+            var playerData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/player/${Server[this.server]}/${this.playerId}?mode=${mode}`, cacheTime);
         }
         catch {
             this.isExist = false;

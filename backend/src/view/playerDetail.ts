@@ -3,7 +3,7 @@ import { outputFinalBuffer } from '@/image/output'
 import { Server } from '@/types/Server'
 import { Player } from '@/types/Player';
 import { drawPlayerDetailBlockWithIllust } from '@/components/dataBlock/playerDetail'
-import { assetsRootPath } from '@/config'
+import { assetsRootPath, serverNameFullList } from '@/config'
 import * as path from 'path'
 import { drawPlayerCardInList } from '@/components/list/playerCardIconList'
 import { line, drawList, drawTipsInList } from '@/components/list'
@@ -22,9 +22,12 @@ loadImageOnce()
 
 export async function drawPlayerDetail(playerId: number, mainServer: Server, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
     var player = new Player(playerId, mainServer)
-    await player.initFull()
+    await player.initFull(false, 3)
+    if (player.initError) {
+        return [`错误: 查询玩家时发生错误: ${playerId}`]
+    }
     if (!player.isExist) {
-        return ['错误: 玩家不存在，请检查服务器是否正确']
+        return [`错误: 该服务器 (${serverNameFullList[mainServer]}) 不存在该玩家ID: ${playerId}`]
     }/*
     var stat = await player.calcStat()
     console.log(stat)

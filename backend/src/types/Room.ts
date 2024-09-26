@@ -158,7 +158,7 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
     //玩家数据
     if (userpPlayerInList) {
         const player = new Player(userpPlayerInList.playerId, userpPlayerInList.server)
-        await player.initFull()
+        await player.initFull(false, 2)
         room.setPlayer(player)
     }
     roomStack.push(room)

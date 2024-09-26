@@ -8,6 +8,7 @@ import { generateVerifyCode } from '@/routers/utils'
 import { isServer, isServerList } from '@/types/Server';
 import { middleware } from '@/routers/middleware';
 import { logger } from '@/logger';
+import { serverNameFullList } from '@/config';
 
 dotenv.config();
 
@@ -109,12 +110,18 @@ router.post('/bindPlayerVerification',
         }
         //验证验证码
         const player = new Player(parseInt(playerId), server)
-        await player.initFull()
+        await player.initFull(false, 3)
         //判断玩家是否存在
+        if (player.initError) {
+            //删除验证码
+            delete verifyCodeCache[`${platform}:${userId}`]
+            res.status(422).json({ status: 'failed', data: `错误: 查询玩家时发生错误: ${playerId}` });
+            return
+        }
         if (!player.isExist) {
             //删除验证码
             delete verifyCodeCache[`${platform}:${userId}`]
-            res.status(422).json({ status: 'failed', data: `错误: 不存在玩家或服务器错误: ${playerId}` });
+            res.status(422).json({ status: 'failed', data: `错误: 该服务器 (${serverNameFullList[server]}) 不存在该玩家ID: ${playerId}` });
             return
         }
         //判断验证码是否正确
