@@ -186,7 +186,9 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
     if (userpPlayerInList) {
         const player = new Player(userpPlayerInList.playerId, userpPlayerInList.server)
         await player.initFull(false, 2)
-        room.setPlayer(player)
+        if (!player.initError && player.isExist) {
+            room.setPlayer(player)
+        }
     }
 
     roomStack.push(room)

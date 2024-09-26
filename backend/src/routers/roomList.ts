@@ -64,7 +64,9 @@ async function getRoomList(roomList: any) {
       if (isServer(server)) {
         const tempPlayer = new Player(room.player.playerId, server);
         await tempPlayer.initFull(true); // 假设 initFull 是异步函数
-        tempRoom.setPlayer(tempPlayer);
+        if (!tempPlayer.initError && tempPlayer.isExist) {
+          tempRoom.setPlayer(tempPlayer);
+        }
       }
     }
     return tempRoom;

@@ -75,7 +75,7 @@ export async function drawRoonInList(room: Room) {
     if (room.player != undefined) {
         const player = new Player(room.player.playerId, room.player.server)
         await player.initFull(true)
-        if (player.isExist) {
+        if (player.isExist && !player.initError) {
             list.push(line)
             list.push(await drawPlayerDetailInRoomList(player))
         }

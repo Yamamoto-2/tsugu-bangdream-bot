@@ -21,11 +21,21 @@ async function loadImageOnce() {
 loadImageOnce()
 
 export async function drawPlayerDetail(playerId: number, mainServer: Server, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
+    let result = []
     var player = new Player(playerId, mainServer)
+    //不使用缓存查询
     await player.initFull(false, 3)
     if (player.initError) {
-        return [`错误: 查询玩家时发生错误: ${playerId}`]
+        result.push(`错误: 查询玩家时发生错误: ${playerId}, 正在使用可用缓存`)
+        //使用缓存查询，如果失败则返回失败
+        player = new Player(playerId, mainServer)
+        await player.initFull(false, 0)
+        if (player.initError || !player.isExist) {
+            return [`错误: 查询玩家时发生错误: ${playerId}`]
+        }
     }
+
+    //检查玩家信息是否存在
     if (!player.isExist) {
         return [`错误: 该服务器 (${serverNameFullList[mainServer]}) 不存在该玩家ID: ${playerId}`]
     }/*
@@ -103,5 +113,6 @@ export async function drawPlayerDetail(playerId: number, mainServer: Server, use
         BGimage: BGDefaultImage,
         compress: compress,
     })
-    return [buffer]
+    result.push(buffer)
+    return result
 }
