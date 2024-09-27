@@ -104,7 +104,7 @@ export class Card {
         this.skillType = skill.effectTypes[0]
         this.scoreUpMaxValue = skill.scoreUpMaxValue
     }
-    async initFull(update: boolean = true) {
+    async initFull(useCache: boolean = true) {
         if (this.isInitFull) {
             return
         }
@@ -112,11 +112,11 @@ export class Card {
             return
         }
         this.isExist = true;
-        if (cardDataCache[this.cardId.toString()] != undefined && !update) {
+        if (cardDataCache[this.cardId.toString()] != undefined && !useCache) {
             var cardData = cardDataCache[this.cardId.toString()]
         }
         else {
-            var cardData = await this.getData(update)
+            var cardData = await this.getData(useCache)
             cardDataCache[this.cardId.toString()] = cardData
         }
         this.isInitFull = true;

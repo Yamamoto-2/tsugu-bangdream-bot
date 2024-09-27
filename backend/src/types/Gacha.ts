@@ -90,7 +90,7 @@ export class Gacha {
         this.type = gachaData['type']
         this.newCards = gachaData['newCards']
     }
-    async initFull(update: boolean = true) {
+    async initFull(useCache: boolean = true) {
         if (this.isInitFull) {
             return
         }
@@ -98,11 +98,11 @@ export class Gacha {
             return
         }
         let gachaData: object;
-        if (gachaDataCache[this.gachaId.toString()] != undefined && !update) {
+        if (gachaDataCache[this.gachaId.toString()] != undefined && !useCache) {
             gachaData = gachaDataCache[this.gachaId.toString()]
         }
         else {
-            gachaData = await this.getData(update)
+            gachaData = await this.getData(useCache)
             gachaDataCache[this.gachaId.toString()] = gachaData
         }
 

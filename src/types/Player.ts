@@ -174,11 +174,11 @@ export class Player {
         this.playerId = playerId;
         this.server = server;
     }
-    async initFull(cache: boolean = false, mode: 0 | 1 | 2 | 3 = 2) {
+    async initFull(useCache: boolean = false, mode: 0 | 1 | 2 | 3 = 2) {
         if (this.isInitfull) {
             return
         }
-        var cacheTime = cache ? 1 / 0 : 0;
+        var cacheTime = useCache ? 1 / 0 : 0;
         try {
             var playerData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/player/${Server[this.server]}/${this.playerId}?mode=${mode}`, cacheTime);
         }

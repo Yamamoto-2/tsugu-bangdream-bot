@@ -149,7 +149,7 @@ export class Event {
             this.bandId.push(0)
         }
     }
-    async initFull(update: boolean = true) {
+    async initFull(useCache: boolean = true) {
         if (this.isInitFull) {
             return
         }
@@ -157,11 +157,11 @@ export class Event {
         if (this.isExist == false) {
             return
         }
-        if (eventDataCache[this.eventId.toString()] != undefined && !update) {
+        if (eventDataCache[this.eventId.toString()] != undefined && !useCache) {
             var eventData = eventDataCache[this.eventId.toString()]
         }
         else {
-            var eventData = await this.getData(update)
+            var eventData = await this.getData(useCache)
             eventDataCache[this.eventId.toString()] = eventData
         }
         this.isInitFull = true;
