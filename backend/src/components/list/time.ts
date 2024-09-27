@@ -38,8 +38,14 @@ export async function drawTimeInList({
 }
 //获取当前活动与查询活动的大致时间差(国服)
 export function GetProbablyTimeDifference(eventId: number, currentEvent: Event): number {
+    /*
     var diff = eventId - currentEvent.eventId;
     var timeStamp = currentEvent.startAt[3] + 1000 * 60 * 60 * 24 * 9 * diff;
+    */
+    //国服从第253期活动开始，与日服完全同步
+    const tempEvent = new Event(eventId)
+    const tempServer253 = new Event(253)
+    const timeStamp = tempEvent.startAt[Server.jp] + (tempServer253.startAt[Server.cn] - tempServer253.startAt[Server.jp])
     return timeStamp;
 }
 
