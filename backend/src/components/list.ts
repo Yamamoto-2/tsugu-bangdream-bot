@@ -117,45 +117,59 @@ export function drawTipsInList({
     return canvas;
 }
 
-//通过服务器列表获得内容，服务器icon开头，每一行为服务器对应内容，默认仅日服与简中服
 export async function drawListByServerList(content: Array<string | null>, key?: string, serverList: Server[] = globalDefaultServer, maxWidth = 800) {
     var tempcontent: Array<string | Image | Canvas> = []
-    //如果只有2个服务器，且内容相同
-    if (serverList.length == 2) {
-        if (content[serverList[0]] == content[serverList[1]]) {
-            var canvas = drawList({
-                key: key,
-                text: content[serverList[0]],
-                maxWidth
-            })
-            return canvas
-        }
-    }
+    
+    // 获取每个服务器的内容对应关系
+    const contentMap = new Map<string, Server[]>()
 
+    // 分组服务器，根据相同的内容将服务器归类
     for (let i = 0; i < serverList.length; i++) {
         const tempServer = serverList[i];
-        if (content[tempServer] == null) {
-            continue
+        const serverContent = content[tempServer];
+        if (serverContent == null) {
+            continue;
         }
-        tempcontent.push(await getIcon(tempServer))
-        tempcontent.push(content[tempServer])
-        tempcontent.push('\n')
+        
+        if (!contentMap.has(serverContent)) {
+            contentMap.set(serverContent, []);
+        }
+        contentMap.get(serverContent)?.push(tempServer);
+    }
 
+    // 遍历内容分组
+    for (const [serverContent, servers] of contentMap) {
+        if (servers.length > 0) {
+            // 对于同一组内容，只需要绘制一次图标和内容
+            for (let i = 0; i < servers.length; i++) {
+                tempcontent.push(await getIcon(servers[i]));
+            }
+            // 添加对应的内容
+            tempcontent.push(serverContent);
+            tempcontent.push('\n');
+        }
     }
+
+    // 如果所有服务器内容都为空，选择优先级最高的服务器
     if (tempcontent.length == 0) {
-        const tempServer = getServerByPriority(content, serverList)
-        tempcontent.push(await getIcon(tempServer))
-        tempcontent.push(content[tempServer])
-        tempcontent.push('\n')
+        const tempServer = getServerByPriority(content, serverList);
+        tempcontent.push(await getIcon(tempServer));
+        tempcontent.push(content[tempServer]);
+        tempcontent.push('\n');
     }
-    tempcontent.pop()
+
+    // 去掉最后一个换行符
+    tempcontent.pop();
+
     var canvas = drawList({
         key: key,
         content: tempcontent,
         maxWidth
-    })
-    return canvas
+    });
+
+    return canvas;
 }
+
 
 //横向组合较短list，高度为最高的list，宽度平分
 export function drawListMerge(imageList: Array<Canvas | Image>): Canvas {
