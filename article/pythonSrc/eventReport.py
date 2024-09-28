@@ -6,7 +6,16 @@ import base64
 
 # Constants
 url = 'http://tsugubot.com:8080'
-project_root = os.path.dirname(__file__)
+
+def get_project_root():
+    if getattr(sys, 'frozen', False):  # 判断是否为编译后的可执行文件
+        return os.path.dirname(sys.executable)  # 获取.exe文件的目录
+    else:
+        return os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # 脚本执行时获取项目根目录
+
+project_root = get_project_root()
+
+
 
 # Tiers list for 'cn' server
 tier_list_of_server_cn = [50, 100, 300, 500, 1000, 2000]
@@ -43,9 +52,9 @@ async def main(event_id_string):
     async with ClientSession() as session:
         # Process various requests
         await process_request(session, '/eventReport/eventReportTitle', {'eventId': event_id}, f"{output_dir}/0_eventReportTitle_")
-        await process_request(session, '/eventReport/eventReportCutoffListOfEvent', {'eventId': event_id, 'server': 3}, f"{output_dir}/2_ycxAll_")
+        await process_request(session, '/eventReport/eventReportCutoffListOfEvent', {'eventId': event_id, 'server': 3}, f"{output_dir}/2_eventReportCutoffListOfEvent_")
         await process_request(session, '/eventReport/eventReportPlayerNumber', {'eventId': event_id, 'server': 3}, f"{output_dir}/3_eventReportPlayerNumber_")
-        await process_request(session, '/ycx', {'eventId': event_id, 'tier': 10, 'server': 3}, f"{output_dir}/5_eventReportCutoffDetailTop_")
+        await process_request(session, '/cutoffDetail', {'eventId': event_id, 'tier': 10, 'server': 3}, f"{output_dir}/5_eventReportCutoffDetailTop_")
         # Process tier list
         for tier in tier_list_of_server_cn:
             await process_request(session, '/eventReport/eventReportCutoffDetail', {'eventId': event_id, 'tier': tier, 'server': 3}, f"{output_dir}/6_eventReportCutoffDetail{tier}_")

@@ -7,7 +7,15 @@ import sys
 
 # Constants
 url = 'http://tsugubot.com:8080'
-project_root = os.path.dirname(__file__)
+
+def get_project_root():
+    if getattr(sys, 'frozen', False):  # 判断是否为编译后的可执行文件
+        return os.path.dirname(sys.executable)  # 获取.exe文件的目录
+    else:
+        return os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # 脚本执行时获取项目根目录
+
+project_root = get_project_root()
+
 
 # Function to process each request
 async def process_request(session, endpoint, data, file_path):

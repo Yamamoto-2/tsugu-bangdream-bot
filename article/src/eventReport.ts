@@ -11,7 +11,7 @@ async function main(eventIdString: string) {
     const eventId = parseInt(eventIdString);
     const outputDir = `${projectRoot}/output/eventReport/${eventId}`
     await processRequest(await axios.default.post(url + '/eventReport/eventReportTitle', { eventId }), `${outputDir}/0_eventReportTitle_`);
-    await processRequest(await axios.default.post(url + '/eventReport/eventReportCutoffListOfEvent', { eventId, server: 3 }), `${outputDir}/2_ycxAll_`);
+    await processRequest(await axios.default.post(url + '/eventReport/eventReportCutoffListOfEvent', { eventId, server: 3 }), `${outputDir}/2_eventReportCutoffListOfEvent_`);
     await processRequest(await axios.default.post(url + '/eventReport/eventReportPlayerNumber', { eventId, server: 3 }), `${outputDir}/3_eventReportPlayerNumber_`);
     await processRequest(await axios.default.post(url + '/cutoffDetail', { eventId, tier: 10, mainServer: 3, compress: false }), `${outputDir}/5_eventReportCutoffDetailTop_`);
     for (let i = 0, len = tierListOfServer.cn.length; i < len; i++) {
