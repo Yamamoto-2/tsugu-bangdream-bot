@@ -457,13 +457,10 @@ export function apply(ctx: Context, config: Config) {
       const list = await commandSongRandom(config, mainServer, text)
       return paresMessageList(list)
     })
-  ctx.command('查询分数表 <serverName:string>', '查询分数表', cmdConfig)
+  ctx.command('查询分数表 [serverName:string]', '查询分数表', cmdConfig)
     .usage('查询指定服务器的歌曲分数表, 如果没有服务器名的话, 服务器为用户的默认服务器')
     .alias('查分数表', '查询分数榜', '查分数榜').example('查询分数表 cn :返回国服的歌曲分数表')
     .action(async ({ session }, serverName) => {
-      if (serverName == undefined) {
-        return `错误: 指令不完整\n使用以下指令以查看帮助:\n  help 查询分数表`
-      }
       const tsuguUserData = await observeUserTsugu(session)
       const displayedServerList = tsuguUserData.displayedServerList
       let mainServer: Server = tsuguUserData.mainServer
