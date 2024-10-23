@@ -44,8 +44,8 @@ export function GetProbablyTimeDifference(eventId: number, currentEvent: Event):
     */
     //国服从第253期活动开始，与日服完全同步
     const tempEvent = new Event(eventId)
-    const tempServer253 = new Event(253)
-    const timeStamp = tempEvent.startAt[Server.jp] + (tempServer253.startAt[Server.cn] - tempServer253.startAt[Server.jp])
+    const tempServer254 = new Event(254)
+    const timeStamp = tempEvent.startAt[Server.jp] + (tempServer254.startAt[Server.cn] - tempServer254.startAt[Server.jp])
     return timeStamp;
 }
 
