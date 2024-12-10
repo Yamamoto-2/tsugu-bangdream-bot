@@ -93,7 +93,8 @@ const DeckTotalRatingIdList = {
     b: 2,
     a: 3,
     s: 4,
-    ss: 5
+    ss: 5,
+    sss: 6
 }
 
 let rankImage: { [rankImageName: string]: Image } = {}
@@ -119,9 +120,10 @@ export async function drawPlayerDeckTotalRatingInList(player: Player, key?: stri
             const rankName = userDeckTotalRatingMap[i].rank
             let rankId = DeckTotalRatingIdList[rankName]
             const rankImage = await loadRankImage(`rank_${rankId}`)
-            const canvas = new Canvas(100, 100)
+            const widthMax = 150, heightMax = 100
+            const canvas = new Canvas(widthMax, heightMax)
             const ctx = canvas.getContext('2d')
-            ctx.drawImage(rankImage, 0, 0, 100, 100)
+            ctx.drawImage(rankImage, (widthMax - rankImage.width) / 2, 0)
             if (userDeckTotalRatingMap[i].level != 0) {
                 //ss与s字体相同
                 if (rankId > 4) {
@@ -131,7 +133,7 @@ export async function drawPlayerDeckTotalRatingInList(player: Player, key?: stri
                     image: await loadRankImage(`rank_${rankId}_${userDeckTotalRatingMap[i].level}`),
                     heightMax: 50
                 })
-                ctx.drawImage(rankLevelImage, 102 - rankLevelImage.width, 45)
+                ctx.drawImage(rankLevelImage, (widthMax + rankImage.width) / 2 + 2 - rankLevelImage.width, 45)
             }
             BandDetails[i] = [canvas]
         }
