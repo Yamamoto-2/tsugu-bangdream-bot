@@ -187,53 +187,80 @@ export class Card {
     }
 
     //计算综合力函数
-    async calcStat(level?: number, trainingStatus: boolean = false, limitBreakRank: number = 0, episode1: boolean = true, episode2: boolean = true) {
+    // async calcStat(level?: number, trainingStatus: boolean = false, limitBreakRank: number = 0, episode1: boolean = true, episode2: boolean = true, ) {
+    //     if (!this.isInitFull) {
+    //         //如果不是默认情况(带有level以外的参数)，加载完整数据，其中包含完整综合力数据
+    //         /*
+    //         if (trainingStatus != undefined || limitBreakRank != undefined || episode1 != undefined || episode2 != undefined) {
+    //             await this.initFull()
+    //         }
+    //         */
+    //         await this.initFull()
+
+    //     }
+    //     const stat: Stat = {
+    //         performance: 0,
+    //         technique: 0,
+    //         visual: 0
+    //     }
+
+    //     var maxLevel = this.getMaxLevel()
+    //     level ??= maxLevel//如果没有等级参数，则默认为最大等级
+    //     if (level > maxLevel) {//等级超过上限,按上限计算
+    //         level = maxLevel
+    //     }
+    //     if (this.ableToTraining()) {//如果能够进行特训
+    //         if (level > this.levelLimit) {//如果等级超过需要特训等级，则默认已经特训
+    //             trainingStatus = true
+    //         }
+    //     }
+
+    //     addStat(stat, this.stat[level.toString()])//加上等级对应的属性
+
+    //     if (trainingStatus) {//如果已经特训
+    //         addStat(stat, this.stat['training'])
+    //     }
+    //     if (this.stat['episodes'] != undefined) {//如果有剧情
+    //         if (episode1) {//如果已经阅读剧情1
+    //             addStat(stat, this.stat['episodes'][0])
+    //         }
+    //         if (episode2) {//如果已经阅读剧情2
+    //             addStat(stat, this.stat['episodes'][1])
+    //         }
+    //     }
+
+    //     if (limitBreakRank > 0) {
+    //         for (var i = 1; i <= limitBreakRank; i++) {
+    //             addStat(stat, limitBreakRankStat(this.rarity))
+    //         }
+    //     }
+    //     return stat
+    // }
+    async calcStat(cardData?) {
         if (!this.isInitFull) {
-            //如果不是默认情况(带有level以外的参数)，加载完整数据，其中包含完整综合力数据
-            /*
-            if (trainingStatus != undefined || limitBreakRank != undefined || episode1 != undefined || episode2 != undefined) {
-                await this.initFull()
-            }
-            */
             await this.initFull()
-
         }
-        const stat: Stat = {
-            performance: 0,
-            technique: 0,
-            visual: 0
-        }
-
-        var maxLevel = this.getMaxLevel()
-        level ??= maxLevel//如果没有等级参数，则默认为最大等级
-        if (level > maxLevel) {//等级超过上限,按上限计算
-            level = maxLevel
-        }
-        if (this.ableToTraining()) {//如果能够进行特训
-            if (level > this.levelLimit) {//如果等级超过需要特训等级，则默认已经特训
-                trainingStatus = true
+        const level = cardData ? cardData.level : this.getMaxLevel()
+        const stat = this.stat[level.toString()]
+        if (cardData) {
+            console.log(cardData)
+            if (cardData.userAppendParameter) {
+                const userAppend = cardData.userAppendParameter
+                const appendStat: Stat = {
+                    performance: userAppend.performance + userAppend.characterPotentialPerformance,
+                    technique: userAppend.technique + userAppend.characterPotentialTechnique,
+                    visual: userAppend.visual + userAppend.characterPotentialVisual
+                }
+                addStat(stat, appendStat)
             }
+            return stat
         }
-
-        addStat(stat, this.stat[level.toString()])//加上等级对应的属性
-
-        if (trainingStatus) {//如果已经特训
-            addStat(stat, this.stat['training'])
-        }
+        addStat(stat, this.stat['training'])
         if (this.stat['episodes'] != undefined) {//如果有剧情
-            if (episode1) {//如果已经阅读剧情1
-                addStat(stat, this.stat['episodes'][0])
-            }
-            if (episode2) {//如果已经阅读剧情2
-                addStat(stat, this.stat['episodes'][1])
-            }
+            addStat(stat, this.stat['episodes'][0])
+            addStat(stat, this.stat['episodes'][1])
         }
 
-        if (limitBreakRank > 0) {
-            for (var i = 1; i <= limitBreakRank; i++) {
-                addStat(stat, limitBreakRankStat(this.rarity))
-            }
-        }
         return stat
     }
     getSkill(): Skill {
