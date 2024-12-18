@@ -61,6 +61,9 @@ export class Player {
                     characterPotentialPerformance: number;
                     characterPotentialTechnique: number;
                     characterPotentialVisual: number;
+                    characterBonusPerformance?: number;
+                    characterBonusTechnique?: number;
+                    characterBonusVisual?: number
                 };
                 limitBreakRank: number;
             }>

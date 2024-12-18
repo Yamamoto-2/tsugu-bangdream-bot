@@ -243,13 +243,13 @@ export class Card {
         const level = cardData ? cardData.level : this.getMaxLevel()
         const stat = this.stat[level.toString()]
         if (cardData) {
-            console.log(cardData)
+            // console.log(cardData)
             if (cardData.userAppendParameter) {
                 const userAppend = cardData.userAppendParameter
                 const appendStat: Stat = {
-                    performance: userAppend.performance + userAppend.characterPotentialPerformance,
-                    technique: userAppend.technique + userAppend.characterPotentialTechnique,
-                    visual: userAppend.visual + userAppend.characterPotentialVisual
+                    performance: userAppend.performance + (userAppend.characterPotentialPerformance || 0) + (userAppend.characterBonusPerformance || 0),
+                    technique: userAppend.technique + (userAppend.characterPotentialTechnique || 0) + (userAppend.characterBonusTechnique || 0),
+                    visual: userAppend.visual + (userAppend.characterPotentialVisual || 0) + (userAppend.characterBonusVisual || 0)
                 }
                 addStat(stat, appendStat)
             }
