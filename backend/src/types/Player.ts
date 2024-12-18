@@ -61,6 +61,9 @@ export class Player {
                     characterPotentialPerformance: number;
                     characterPotentialTechnique: number;
                     characterPotentialVisual: number;
+                    characterBonusPerformance?: number;
+                    characterBonusTechnique?: number;
+                    characterBonusVisual?: number
                 };
                 limitBreakRank: number;
             }>
@@ -264,7 +267,7 @@ export class Player {
             const cardData = cardDataList[i];
             var card = new Card(cardData.situationId)
             var trainingStatus = cardData.trainingStatus === 'done' ? true : false
-            var tempStat = await card.calcStat(cardData.level, trainingStatus, cardData.limitBreakRank, true, true)
+            var tempStat = await card.calcStat(cardData)
             addStat(cardStat, tempStat)
             cardStatList.push(tempStat)
         }

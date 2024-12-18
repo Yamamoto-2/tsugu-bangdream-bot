@@ -52,9 +52,6 @@ export async function drawPlayerDetail(playerId: number, mainServer: Server, use
     if (player.profile.publishTotalDeckPowerFlg) {
         var stat = await player.calcStat()
         list.push(await drawStatInList(stat))
-        list.push(drawTipsInList({
-            text: '因为无法获得角色等级加成，综合力可能会出现偏差'
-        }))
         list.push(line)
     }
 

@@ -102,7 +102,7 @@ async function drawCardDetail(cardId: number, displayedServerList: Server[] = gl
         var sourceOfServer = source[server]
         for (const i in sourceOfServer) {
             if (Object.prototype.hasOwnProperty.call(sourceOfServer, i)) {
-                if (i == 'gacha' && card.rarity > 2) {
+                if (i == 'gacha' && card.rarity > 2 && card.type != 'kirafes') {
                     //招募语
                     list.push(await drawListByServerList(card.gachaText, '招募语', displayedServerList))
                     list.push(line)
