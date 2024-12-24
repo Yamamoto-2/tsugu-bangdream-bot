@@ -197,7 +197,7 @@ export async function submitRoomNumber({ number, rawMessage, source, userId, tim
             bandoriStationToken = 'ZtV4EX2K9Onb'
         }
 
-        const url = `${BandoriStationurl}index.php`
+        const url = `${BandoriStationurl}`
         const data = {
             function: 'submit_room_number',
             number: number,
