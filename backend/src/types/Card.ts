@@ -255,8 +255,8 @@ export class Card {
             }
             return stat
         }
-        if (this.stat['episodes'] != undefined) {
-            addStat(stat, this.stat['episodes'])
+        if(this.stat['training'] != undefined){//如果可以特训
+            addStat(stat, this.stat['training'])
         }
         if (this.stat['episodes'] != undefined) {//如果有剧情
             addStat(stat, this.stat['episodes'][0])
