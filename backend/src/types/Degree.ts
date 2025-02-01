@@ -4,6 +4,9 @@ import { downloadFile } from '@/api/downloadFile';
 import { Canvas, Image, loadImage } from 'skia-canvas';
 import mainAPI from '@/types/_Main';
 import { Bestdoriurl } from '@/config';
+import { loadImageFromPath } from '@/image/utils';
+import { assetsRootPath } from "@/config";
+import * as path from 'path'
 
 export class Degree {
     degreeId: number;
@@ -30,6 +33,8 @@ export class Degree {
         this.degreeName = degreeData['degreeName'];
     }
     async getDegreeImage(server: Server): Promise<Image> {
+        if (this.baseImageName[server].startsWith('ani'))
+            return loadImageFromPath(path.join(assetsRootPath, `/animedegree/${this.baseImageName[server]}.png`))
         var degreeImageBuffer = await downloadFile(`${Bestdoriurl}/assets/${Server[server]}/thumb/degree_rip/${this.baseImageName[server]}.png`)
         return loadImage(degreeImageBuffer)
     }
