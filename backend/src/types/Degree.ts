@@ -4,6 +4,8 @@ import { downloadFile } from '@/api/downloadFile';
 import { Canvas, Image, loadImage } from 'skia-canvas';
 import mainAPI from '@/types/_Main';
 import { Bestdoriurl } from '@/config';
+import { readJSONFromBuffer } from './utils';
+import { assetsRootPath } from '@/config';
 
 export class Degree {
     degreeId: number;
@@ -29,8 +31,19 @@ export class Degree {
         this.rank = degreeData['rank'];
         this.degreeName = degreeData['degreeName'];
     }
-    async getDegreeImage(server: Server): Promise<Image> {
-        var degreeImageBuffer = await downloadFile(`${Bestdoriurl}/assets/${Server[server]}/thumb/degree_rip/${this.baseImageName[server]}.png`)
+    async getDegreeImage(server: Server): Promise<Image | Canvas> {
+        const temp_baseImageName = this.baseImageName[server]
+        //if start with "ani_"
+        if (temp_baseImageName.startsWith("ani_")) {
+            try {
+                let degreeImageBuffer = await getFrameFromAnimatedDegreeAsset(temp_baseImageName, server)
+                return degreeImageBuffer
+            }
+            catch (e) {
+                console.error(e)
+            }
+        }
+        let degreeImageBuffer = await downloadFile(`${Bestdoriurl}/assets/${Server[server]}/thumb/degree_rip/${this.baseImageName[server]}.png`)
         return loadImage(degreeImageBuffer)
     }
     async getDegreeFrame(server: Server): Promise<Image | Canvas> {
@@ -50,4 +63,48 @@ export class Degree {
         var degreeIconBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/thumb/degree_rip/${iconName}.png`)
         return loadImage(degreeIconBuffer)
     }
+}
+class Frame {
+    name: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    borderLeft: number;
+    borderRight: number;
+    borderTop: number;
+    borderBottom: number;
+    paddingLeft: number;
+    paddingRight: number;
+    paddingTop: number;
+    paddingBottom: number;
+}
+
+export async function getFrameFromAnimatedDegreeAsset(baseImageName: string, server: Server, frame?: number): Promise<Canvas> {
+
+    // script
+    // example https://bestdori.com/assets/cn/ani_degree_bilibili_day1_rip/assets-star-forassetbundle-startapp-thumbnail-animedegree-ani_degree_bilibili_day1-ani_degree_bilibili_day1.asset
+    const scriptUrl = `${Bestdoriurl}/assets/${Server[server]}/${baseImageName}_rip/assets-star-forassetbundle-startapp-thumbnail-animedegree-${baseImageName}-${baseImageName}.asset`
+    const srciptBuffer = await downloadFileCache(scriptUrl)
+    const script = await readJSONFromBuffer(srciptBuffer)
+    const frames: Array<Frame> = script['Base']['mSprites'] as Array<Frame>
+    const framecount = frames.length
+    if (!frame) {
+        //random frame
+        frame = Math.floor(Math.random() * framecount)
+    }
+
+    // texture
+    // example https://bestdori.com/assets/cn/ani_degree_bilibili_day1_rip/ani_degree_bilibili_day1.png
+    const textureUrl = `${Bestdoriurl}/assets/${Server[server]}/${baseImageName}_rip/${baseImageName}.png`
+    const textureBuffer = await downloadFileCache(textureUrl)
+    const texture = await loadImage(textureBuffer)
+
+    //get frame data
+    const frameData = frames[frame]
+    const canvas = new Canvas(frameData.width, frameData.height)
+    const ctx = canvas.getContext('2d')
+    ctx.drawImage(texture, frameData.x, frameData.y, frameData.width, frameData.height, 0, 0, frameData.width, frameData.height)
+    //return frame image
+    return canvas
 }

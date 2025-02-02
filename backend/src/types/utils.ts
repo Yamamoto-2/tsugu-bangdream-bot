@@ -10,6 +10,11 @@ export async function readJSON(filepath: string): Promise<object> {//读取json�
     })
     return promise
 }
+export async function readJSONFromBuffer(buffer: Buffer): Promise<object> {//读取json文件子程序，返回json数据
+    var rawstring = buffer.toString();
+    var data: object = JSON.parse(rawstring);
+    return data;
+}
 
 export async function writeJSON(filepath: string, data: object) {//写入json文件子程序
     var rawdata = JSON.stringify(data);
