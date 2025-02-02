@@ -39,7 +39,7 @@ router.post(
 export async function commandSongChart(displayedServerList: Server[], songId: number, compress: boolean, difficultyId = 3): Promise<Array<Buffer | string>> {
     /*
     text = text.toLowerCase()
-    var fuzzySearchResult = fuzzySearch(text.split(' '))
+    var fuzzySearchResult = fuzzySearch(text)
     console.log(fuzzySearchResult)
     if (fuzzySearchResult.difficulty === undefined) {
         return ['错误: 不正确的难度关键词,可以使用以下关键词:easy,normal,hard,expert,special,EZ,NM,HD,EX,SP']

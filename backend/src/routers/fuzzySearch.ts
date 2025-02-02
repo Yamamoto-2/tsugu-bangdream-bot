@@ -19,7 +19,7 @@ router.post(
         const { text } = req.body;
 
         try {
-            const result = fuzzySearch(text.split(' '));
+            const result = fuzzySearch(text);
             //console.log(result)
             res.send({ status: 'success', data: result });
         } catch (e) {

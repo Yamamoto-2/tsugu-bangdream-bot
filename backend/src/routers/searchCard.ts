@@ -50,7 +50,7 @@ async function commandCard(displayedServerList: Server[], input: string | FuzzyS
         if (isInteger(input)) {
             return await drawCardDetail(parseInt(input), displayedServerList, useEasyBG, compress)
         }
-        fuzzySearchResult = fuzzySearch(input.split(' '))
+        fuzzySearchResult = fuzzySearch(input)
     } else {
         // 使用 fuzzySearch 逻辑
         fuzzySearchResult = input

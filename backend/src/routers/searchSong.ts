@@ -54,7 +54,7 @@ export async function commandSong(displayedServerList: Server[], input: string |
         if (isInteger(input)) {
             return await drawSongDetail(new Song(parseInt(input)), displayedServerList, compress)
         }
-        fuzzySearchResult = fuzzySearch(input.split(' '))
+        fuzzySearchResult = fuzzySearch(input)
     } else {
         // 使用 fuzzySearch 逻辑
         fuzzySearchResult = input

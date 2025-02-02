@@ -51,7 +51,7 @@ export async function commandCharacter(displayedServerList: Server[], input: str
         if (isInteger(input)) {
             return await drawCharacterDetail(parseInt(input), displayedServerList, compress)
         }
-        fuzzySearchResult = fuzzySearch(input.split(' '))
+        fuzzySearchResult = fuzzySearch(input)
     } else {
         // 使用 fuzzySearch 逻辑
         fuzzySearchResult = input

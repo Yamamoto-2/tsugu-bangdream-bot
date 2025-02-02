@@ -54,7 +54,7 @@ export async function commandSongRandom(mainServer: Server, input: string | Fuzz
     let fuzzySearchResult: FuzzySearchResult
     // 根据 input 的类型执行不同的逻辑
     if (typeof input === 'string') {
-        fuzzySearchResult = fuzzySearch(input.split(' '))
+        fuzzySearchResult = fuzzySearch(input)
     } else if (fuzzySearchResult) {
         // 使用 fuzzySearch 逻辑
         fuzzySearchResult = input

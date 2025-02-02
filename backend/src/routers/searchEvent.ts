@@ -53,7 +53,7 @@ export async function commandEvent(displayedServerList: Server[], input: string 
         if (isInteger(input)) {
             return await drawEventDetail(parseInt(input), displayedServerList, useEasyBG, compress)
         }
-        fuzzySearchResult = fuzzySearch(input.split(' '))
+        fuzzySearchResult = fuzzySearch(input)
     } else {
         // 使用 fuzzySearch 逻辑
         fuzzySearchResult = input
