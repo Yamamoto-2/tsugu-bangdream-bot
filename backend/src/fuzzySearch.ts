@@ -14,7 +14,7 @@ function loadConfig(): FuzzySearchConfig {
 }
 
 function extractLvNumber(str: string): number | null {
-  const regex = /^lv(\d+)$/;
+  const regex = /^lv(\d+)$/i;
   const match = str.match(regex);
   if (match && match[1]) {
     return parseInt(match[1], 10);
@@ -135,6 +135,7 @@ export function fuzzySearch(keyword: string): FuzzySearchResult {
       matches['_all'].push(keyword_org);
     }
   }
+
   return matches;
 }
 
@@ -161,16 +162,28 @@ export function match(matches: FuzzySearchResult, target: any, numberTypeKey: st
     if (key === '_number' || key === '_relationStr' || key === '_all') {
       continue;
     }
+
     // 匹配关键词
     if (target[key] !== undefined) {
-      // 如果为Array类型
+      // 处理 Array 类型
       if (Array.isArray(target[key])) {
         let matchArray = false;
         for (let i = 0; i < target[key].length; i++) {
           const element = target[key][i];
+
+          // 对比字符串（忽略大小写）
           if (
             typeof element === 'string' &&
             matches[key].some((m: any) => typeof m === 'string' && m.toLowerCase() === element.toLowerCase())
+          ) {
+            matchArray = true;
+            break;
+          }
+
+          // 对比数字（songLevels 等）
+          if (
+            typeof element === 'number' &&
+            matches[key].some((m: any) => typeof m === 'number' && m === element)
           ) {
             matchArray = true;
             break;
@@ -184,7 +197,7 @@ export function match(matches: FuzzySearchResult, target: any, numberTypeKey: st
           break;
         }
       }
-      // 如果为Object (string, number) 类型
+      // 处理 Object (string, number) 类型
       else {
         if (
           typeof target[key] === 'string' &&
@@ -192,13 +205,22 @@ export function match(matches: FuzzySearchResult, target: any, numberTypeKey: st
         ) {
           match = true;
           continue;
-        } else {
-          match = false;
-          break;
         }
+
+        if (
+          typeof target[key] === 'number' &&
+          matches[key].some((m: any) => typeof m === 'number' && m === target[key])
+        ) {
+          match = true;
+          continue;
+        }
+
+        match = false;
+        break;
       }
     }
-    // 如果为指定的数字类型key，匹配数字
+
+    // 处理指定的数字类型 key，比如 songLevels
     if (numberTypeKey.length > 0 && matches['_number'] !== undefined) {
       if (numberTypeKey.includes(key)) {
         if (matches['_number'].includes(target[key])) {
@@ -242,6 +264,7 @@ export function match(matches: FuzzySearchResult, target: any, numberTypeKey: st
 
   return match;
 }
+
 
 
 
