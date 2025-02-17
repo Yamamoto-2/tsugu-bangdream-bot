@@ -20,7 +20,9 @@
     "assets"
   ],
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start": "ts-node -r tsconfig-paths/register src/app.ts"
+  },
   "keywords": [
     "chatbot",
     "koishi",
@@ -45,6 +47,7 @@
     "skia-canvas": "^1.0.2",
     "sqlite3": "^5.1.7",
     "svg2img": "^1.0.0-beta.2",
+    "ts-node": "^10.9.2",
     "validator": "^13.9.0",
     "xlsx": "^0.18.5"
   },
