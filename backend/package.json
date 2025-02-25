@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-tsugu-bangdream-bot",
-  "description": "BanG Dream！少女乐团派对 多功能bot",
+  "description": "BanG Dream! 少女乐团派对 多功能bot",
   "version": "0.0.4",
   "contributors": [
     "Yamamoto <1810972564qq@gmail.com>",
@@ -36,9 +36,8 @@
   "dependencies": {
     "@types/level": "^6.0.3",
     "axios": "^1.6.8",
-    "chart.js": "^3.9.1",
+    "chart.js": "^4.4.8",
     "chartjs-adapter-moment": "^1.0.1",
-    "chartjs-node-canvas": "^4.1.6",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-validator": "^7.0.1",
@@ -54,7 +53,7 @@
   "koishi": {
     "description": {
       "en": "BanG Dream! girs band party bot, data from https://bestdori.com/",
-      "zh": "BanG Dream！少女乐团派对 多功能bot, 数据来自 https://bestdori.com/"
+      "zh": "BanG Dream! 少女乐团派对 多功能bot, 数据来自 https://bestdori.com/"
     },
     "service": {
       "required": [
