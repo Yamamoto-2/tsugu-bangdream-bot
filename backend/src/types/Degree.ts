@@ -57,7 +57,7 @@ export class Degree {
     }
     async getDegreeIcon(server: Server): Promise<Image | Canvas> {
         var iconName = this.iconImageName[server] + "_" + this.rank[server]
-        if (iconName == "none_none") {//这个为空底图
+        if (this.iconImageName[server] == "none") {//这个为空底图
             return (new Canvas(1, 1))
         }
         var degreeIconBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${Server[server]}/thumb/degree_rip/${iconName}.png`)
