@@ -22,13 +22,13 @@ export async function roomNumber(config: Config, session: Session<'tsugu', never
     let isCar = false
     for (let i = 0; i < carKeywordConfig['car'].length; i++) {
         const element = carKeywordConfig['car'][i];
-        if (raw_message.indexOf(element) != -1) {
+        if (raw_message.indexOf(element.toLowerCase()) != -1) {
             isCar = true
         }
     }
     for (let i = 0; i < carKeywordConfig['fake'].length; i++) {
         const element = carKeywordConfig['fake'][i];
-        if (raw_message.indexOf(element) != -1) {
+        if (raw_message.indexOf(element.toLowerCase()) != -1) {
             isCar = false
         }
     }
