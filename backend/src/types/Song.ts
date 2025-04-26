@@ -18,7 +18,7 @@ export const difficultyName = {//难度名称
 export const tagNameList = {
     'normal': '原创曲',
     'anime': '翻唱曲',
-    'extra': 'EXTRA歌曲',
+    'tie_up': 'EXTRA歌曲',
 }
 
 export const difficultyColorList = [ //画难度时使用的配色
