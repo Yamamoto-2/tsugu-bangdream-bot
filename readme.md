@@ -34,7 +34,7 @@
 
 
 ### **[NoneBot](https://nonebot.dev/)** 
-> NoneBot2 是一个现代、跨平台、可扩展的 Python 聊天机器人框架≠
+> NoneBot2 是一个现代、跨平台、可扩展的 Python 聊天机器人框架
 
 [nonebot-plugin-tsugu](https://github.com/WindowsSov8forUs/nonebot-plugin-tsugu-bangdream-bot) 是由 WindowsSov8 维护的 NoneBot2 前端插件, 旨在于 NoneBot 上还原 Koishi 版本的 Tsugu 的行为.
 基于 [tsugu-api-python](https://github.com/WindowsSov8forUs/tsugu-api-python) 实现后端的连接, 基于 [NoneBot-Plugin-Alconna](https://github.com/nonebot/plugin-alconna) 和 [nonebot-plugin-userinfo](https://github.com/noneplugin/nonebot-plugin-userinfo) 实现跨平台支持。
