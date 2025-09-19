@@ -195,6 +195,7 @@ export class Player {
         }
         if (!playerData["result"] || playerData['data']['profile'] == null) {
             this.isExist = false;
+            this.initError = true;
             return
         }
         this.isExist = true;
