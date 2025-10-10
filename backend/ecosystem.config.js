@@ -2,8 +2,8 @@ module.exports = {
     apps: [
       {
         name: 'tsugu-backend',
-        script: 'ts-node',
-        args: '--transpile-only -r tsconfig-paths/register src/app.ts',
+        script: 'npx',
+        args: 'ts-node --transpile-only -r tsconfig-paths/register src/app.ts',
         interpreter: 'none',
         exec_mode: 'fork',
         instances: 1,
