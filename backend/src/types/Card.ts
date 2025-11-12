@@ -12,8 +12,6 @@ import { globalDefaultServer } from '@/config'
 import { stringToNumberArray, formatNumber } from '@/types/utils'
 import { Bestdoriurl } from "@/config"
 
-var cardDataCache = {}
-
 export interface Stat {//综合力
     performance: number,
     technique: number,
@@ -112,13 +110,7 @@ export class Card {
             return
         }
         this.isExist = true;
-        if (cardDataCache[this.cardId.toString()] != undefined && !useCache) {
-            var cardData = cardDataCache[this.cardId.toString()]
-        }
-        else {
-            var cardData = await this.getData(useCache)
-            cardDataCache[this.cardId.toString()] = cardData
-        }
+        const cardData = await this.getData(!useCache)
         this.isInitFull = true;
         this.data = cardData
         /*
@@ -151,11 +143,6 @@ export class Card {
         this.skillId = cardData['skillId']
         this.stat = cardData['stat']
 
-
-        //缓存数据
-        if (cardDataCache[this.cardId.toString()] == undefined) {
-            cardDataCache[this.cardId.toString()] = cardData
-        }
         this.isInitFull = true;
     }
     async getData(update: boolean = true) {
