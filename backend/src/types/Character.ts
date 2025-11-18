@@ -5,8 +5,6 @@ import { downloadFileCache } from '@/api/downloadFileCache'
 import { formatNumber } from '@/types/utils';
 import { Bestdoriurl } from "@/config"
 
-let characterDataCache = {}
-
 export class Character {
     characterId: number;
     data: object;
@@ -62,13 +60,7 @@ export class Character {
             return
         }
         this.isExist = true;
-        if (characterDataCache[this.characterId.toString()] != undefined && !useCache) {
-            var characterData = characterDataCache[this.characterId.toString()]
-        }
-        else {
-            var characterData = await this.getData(useCache)
-            characterDataCache[this.characterId.toString()] = characterData
-        }
+        const characterData = await this.getData(!useCache)
         this.data = characterData
         this.characterType = characterData["characterType"];
         this.characterName = characterData["characterName"];
@@ -88,10 +80,6 @@ export class Character {
             }
         }
 
-        //缓存数据
-        if (characterDataCache[this.characterId.toString()] == undefined) {
-            characterDataCache[this.characterId.toString()] = characterData
-        }
         this.isInitFull = true;
     }
     async getData(update: boolean = true) {
