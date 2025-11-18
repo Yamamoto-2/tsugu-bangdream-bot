@@ -19,6 +19,8 @@ export async function drawRandomGacha(gacha: Gacha, times: number = 10, compress
         return ['错误: 该卡池不存在']
     }
     await gacha.initFull()
+    // 如果卡池数据没有提供概率数据
+    if (gacha.rates[getServerByPriority(gacha.publishedAt)] == null) return ['错误: 该卡池未提供概率分布数据']
     let gachaImage: Canvas;
     if (times <= 10) {
         const cardImageList: Canvas[] = []
