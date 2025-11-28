@@ -1,0 +1,18 @@
+node_modules/
+dist/
+lib/
+output/
+
+# Build artifacts
+tsconfig.tsbuildinfo
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Local environment files
+.env
+
+# macOS artifacts
+.DS_Store
+
