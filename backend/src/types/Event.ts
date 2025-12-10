@@ -335,7 +335,7 @@ export function getPresentEvent(server: Server, time?: number) {
             }
         }
     }
-
+    let eventEndAtFlags:number = 0
     //如果没有活动进行中，则返回上一个刚结束的活动
     if (eventList.length == 0) {
         for (var key in eventListMain) {
@@ -343,7 +343,10 @@ export function getPresentEvent(server: Server, time?: number) {
             //如果在活动进行时
             if (event.startAt[server] != null && event.endAt[server] != null) {
                 if (event.endAt[server] <= time) {
-                    eventList.push(parseInt(key))
+                    if(event.endAt[server] > eventEndAtFlags){
+                        eventList.push(parseInt(key))
+                        eventEndAtFlags = event.endAt[server]
+                    }
                 }
             }
         }
