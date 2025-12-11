@@ -9,7 +9,7 @@
 
 import { Server, getServerByPriority } from './Server'
 import { Attribute } from './Attribute'
-import { stringToNumberArray } from './utils'
+import { stringToNumberArray } from '@/lib/utils/number'
 
 const typeName: { [key: string]: string } = {
     "story": "一般活动 (协力)",
@@ -280,4 +280,5 @@ export function sortEventList(tempEventList: Event[], displayedServerList: Serve
         return 0
     })
 }
+
 

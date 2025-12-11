@@ -1,4 +1,10 @@
-lib
+# Ignore root-level lib directory (build output)
+/lib
+
+# But include backend/src/lib (source code)
+!backend/src/lib
+!backend/src/lib/**
+
 dist
 
 node_modules

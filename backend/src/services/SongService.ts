@@ -6,10 +6,8 @@
 
 import { Server } from '@/types/Server';
 import { Song, songInRank } from '@/types/Song';
-import { BestdoriClient } from '@/api/BestdoriClient';
-import { fuzzySearch, FuzzySearchResult, match, checkRelationList } from '@/utils/fuzzySearch';
-import { fuzzySearchPath } from '@/config/runtime';
-import * as fs from 'fs';
+import { BestdoriClient } from '@/lib/clients/BestdoriClient';
+import { fuzzySearch, FuzzySearchResult, match, checkRelationList, loadConfig } from '@/lib/fuzzy-search';
 
 export class SongService {
     private bestdoriClient: BestdoriClient;
@@ -68,7 +66,7 @@ export class SongService {
      */
     async searchSongs(keyword: string, displayedServerList: Server[]): Promise<Song[]> {
         try {
-            const fuzzySearchConfig = JSON.parse(fs.readFileSync(fuzzySearchPath, 'utf-8'));
+            const fuzzySearchConfig = loadConfig();
             const fuzzySearchResult = fuzzySearch(keyword, fuzzySearchConfig);
             
             const songsData = await this.loadAllSongs();
@@ -233,4 +231,5 @@ export class SongService {
         }
     }
 }
+
 

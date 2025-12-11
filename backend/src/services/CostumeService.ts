@@ -5,7 +5,7 @@
 
 import { Server } from '@/types/Server';
 import { Costume } from '@/types/Costume';
-import { BestdoriClient } from '@/api/BestdoriClient';
+import { BestdoriClient } from '@/lib/clients/BestdoriClient';
 
 export class CostumeService {
     private bestdoriClient: BestdoriClient;
@@ -93,3 +93,4 @@ export class CostumeService {
         }
     }
 }
+

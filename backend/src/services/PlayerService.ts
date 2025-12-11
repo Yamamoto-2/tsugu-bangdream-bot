@@ -9,7 +9,7 @@ import { Player } from '@/types/Player';
 import { Event } from '@/types/Event';
 import { Card, Stat, addStat } from '@/types/Card';
 import { AreaItem } from '@/types/AreaItem';
-import { BestdoriClient } from '@/api/BestdoriClient';
+import { BestdoriClient } from '@/lib/clients/BestdoriClient';
 
 export class PlayerService {
     private bestdoriClient: BestdoriClient;

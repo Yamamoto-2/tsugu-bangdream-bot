@@ -5,7 +5,7 @@
 
 import { Server } from '@/types/Server';
 import { Item } from '@/types/Item';
-import { BestdoriClient } from '@/api/BestdoriClient';
+import { BestdoriClient } from '@/lib/clients/BestdoriClient';
 
 export class ItemService {
     private bestdoriClient: BestdoriClient;
@@ -102,3 +102,4 @@ export class ItemService {
         return itemIds;
     }
 }
+

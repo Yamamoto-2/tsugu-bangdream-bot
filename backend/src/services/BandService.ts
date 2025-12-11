@@ -6,7 +6,7 @@
 import { Server } from '@/types/Server';
 import { Band } from '@/types/Band';
 import { Character } from '@/types/Character';
-import { BestdoriClient } from '@/api/BestdoriClient';
+import { BestdoriClient } from '@/lib/clients/BestdoriClient';
 import { CharacterService } from './CharacterService';
 
 export class BandService {
@@ -104,3 +104,4 @@ export class BandService {
         }
     }
 }
+

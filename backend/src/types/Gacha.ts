@@ -8,7 +8,7 @@
  */
 
 import { Server, getServerByPriority } from './Server';
-import { stringToNumberArray } from './utils';
+import { stringToNumberArray } from '@/lib/utils/number';
 import { globalDefaultServer } from '@/config/constants';
 
 const typeName: { [key: string]: string } = {

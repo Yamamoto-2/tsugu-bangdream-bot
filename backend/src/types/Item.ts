@@ -8,7 +8,7 @@
  */
 
 import { Server, getServerByPriority } from './Server';
-import { formatNumber } from './utils';
+import { formatNumber } from '@/lib/utils/number';
 import { globalDefaultServer, Bestdoriurl } from '@/config/constants';
 
 const typeNameList: { [key: string]: string } = {
@@ -101,3 +101,4 @@ export class Item {
         return getServerByPriority(this.name, displayedServerList) || Server.jp;
     }
 }
+

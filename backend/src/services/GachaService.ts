@@ -5,7 +5,7 @@
  */
 
 import { Server, getServerByPriority } from '@/types/Server';
-import { BestdoriClient } from '@/api/BestdoriClient';
+import { BestdoriClient } from '@/lib/clients/BestdoriClient';
 import { Gacha } from '@/types/Gacha';
 import { Card } from '@/types/Card';
 
@@ -239,4 +239,5 @@ export class GachaService {
         return Object.keys(rarities)[Object.keys(rarities).length - 1];
     }
 }
+
 

@@ -7,7 +7,7 @@
  */
 
 import { userPlayerInList } from './User';
-import { Stack } from './utils';
+import { Stack } from '@/lib/utils/collections';
 
 export interface RoomOption {
     number: number;

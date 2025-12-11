@@ -8,7 +8,7 @@
  */
 
 import { Server, getServerByPriority } from './Server';
-import { stringToNumberArray } from './utils';
+import { stringToNumberArray } from '@/lib/utils/number';
 import { globalDefaultServer } from '@/config/constants';
 
 export class Costume {
@@ -90,3 +90,4 @@ export class Costume {
         return getServerByPriority(this.publishedAt, displayedServerList) || Server.jp;
     }
 }
+

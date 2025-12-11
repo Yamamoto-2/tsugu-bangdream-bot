@@ -1,10 +1,12 @@
 /**
  * Bestdori API Client
  * Unified client for all Bestdori API calls
+ * Migrated from backend/src/api/BestdoriClient.ts
  */
 
-import { callAPIAndCacheResponse } from './getApi';
+import { downloadJson } from '../download/service';
 import { Bestdoriurl, BestdoriapiPath } from '@/config/constants';
+import { logger } from '../logger';
 
 export class BestdoriClient {
     private baseUrl: string;
@@ -20,7 +22,26 @@ export class BestdoriClient {
      */
     private async callAPI(path: string, cacheTime: number = 0, retryCount: number = 3): Promise<object> {
         const url = `${this.baseUrl}${path}`;
-        return await callAPIAndCacheResponse(url, cacheTime, retryCount, this.cacheRootPath);
+        // cacheTime is in seconds, convert to milliseconds for downloadJson
+        const cacheTimeMs = cacheTime === 0 ? 0 : (cacheTime === Infinity ? Infinity : cacheTime * 1000);
+        
+        for (let attempt = 0; attempt < retryCount; attempt++) {
+            try {
+                const data = await downloadJson(url, {
+                    cacheTime: cacheTimeMs,
+                    retryCount: 1, // We handle retries at this level
+                });
+                return data;
+            } catch (e: any) {
+                logger('API', `Failed to get JSON from "${url}" on attempt ${attempt + 1}. Error: ${e.message}`);
+                if (attempt === retryCount - 1) {
+                    throw e;
+                }
+                // 等待3秒后重试
+                await new Promise(resolve => setTimeout(resolve, 3000));
+            }
+        }
+        throw new Error(`Failed to get JSON from "${url}" after ${retryCount} attempts`);
     }
 
     /**

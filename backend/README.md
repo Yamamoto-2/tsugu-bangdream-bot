@@ -7,13 +7,28 @@ Tsugu v5 后端服务 - Schema 驱动架构（非画图核心部分）
 ```
 backend/
 ├── src/
-│   ├── api/              # API 访问层
-│   │   ├── BestdoriClient.ts    # Bestdori API 统一客户端
-│   │   ├── downloader.ts        # 文件下载工具
-│   │   ├── downloadFile.ts      # 下载封装（带重试）
-│   │   ├── downloadFileCache.ts # 内存缓存下载
-│   │   ├── getApi.ts            # API 调用封装
-│   │   └── utils.ts             # API 工具函数
+│   ├── lib/              # 基础设施库层（可复用、可测试）
+│   │   ├── clients/      # 外部服务客户端
+│   │   │   └── BestdoriClient.ts    # Bestdori API 统一客户端
+│   │   ├── config/       # 配置加载器
+│   │   │   └── runtime-loader.ts    # 统一配置入口
+│   │   ├── download/     # 下载模块
+│   │   │   ├── client.ts            # HTTP 客户端封装
+│   │   │   ├── file-cache.ts        # 文件缓存 + ETag
+│   │   │   ├── memory-cache.ts      # 内存缓存
+│   │   │   └── service.ts           # 下载服务 API
+│   │   ├── fuzzy-search/ # 模糊搜索模块
+│   │   │   ├── parser.ts            # 关键字解析
+│   │   │   ├── matcher.ts           # 匹配逻辑
+│   │   │   ├── relation.ts          # 关系判断
+│   │   │   ├── validator.ts         # 类型验证
+│   │   │   └── index.ts             # 统一导出
+│   │   ├── utils/        # 通用工具
+│   │   │   ├── path-utils.ts        # 路径工具
+│   │   │   ├── url-utils.ts         # URL 工具
+│   │   │   ├── number.ts            # 数字工具
+│   │   │   └── collections.ts      # 数据结构（Stack 等）
+│   │   └── logger.ts     # 日志工具
 │   ├── config/           # 配置层
 │   │   ├── runtime.ts    # 运行时配置（路径、环境变量）
 │   │   └── constants.ts # 业务常量（URL、服务器列表等）
@@ -38,9 +53,6 @@ backend/
 │   │   ├── Event.ts
 │   │   ├── User.ts
 │   │   └── ...
-│   ├── utils/            # 工具层
-│   │   ├── logger.ts
-│   │   └── fuzzySearch.ts
 │   └── app.ts            # 应用入口
 ├── tsconfig.json
 └── package.json
@@ -55,7 +67,13 @@ backend/
 - [x] API 层重组（BestdoriClient）
 - [x] Config 拆分（runtime / constants）
 - [x] 数据库层重构（Repository 模式）
-- [x] 工具层迁移（logger, fuzzySearch）
+- [x] **基础设施库层重构**（`/src/lib`）
+  - [x] 下载模块迁移（`lib/download`）
+  - [x] 日志模块迁移（`lib/logger`）
+  - [x] 模糊搜索模块迁移（`lib/fuzzy-search`）
+  - [x] 通用工具迁移（`lib/utils`）
+  - [x] 外部客户端迁移（`lib/clients`）
+  - [x] 配置加载器（`lib/config`）
 - [x] **Services 层完整实现**（**12个Services**：SongService, EventService, GachaService, PlayerService, CutoffService, RoomService, CostumeService, DegreeService, ItemService, CardService, CharacterService, BandService）
 - [x] Schema 构建层基础结构
 - [x] 路由层基础结构（v5 接口）
@@ -122,10 +140,53 @@ npm run dev
 3. **无画图依赖**：核心逻辑不依赖 skia-canvas 或任何画图库
 4. **Schema 驱动**：未来所有接口返回 Tsugu Schema，由前端/Vue 渲染
 
+## 使用示例
+
+### 下载模块
+```typescript
+import { downloadBinary, downloadJson } from '@/lib/download/service';
+
+// 下载二进制文件
+const buffer = await downloadBinary('https://example.com/image.png', {
+    cacheTime: 3600000, // 1小时缓存
+    retryCount: 3,
+});
+
+// 下载 JSON 数据
+const data = await downloadJson('https://api.example.com/data.json', {
+    cacheTime: Infinity, // 永久缓存
+});
+```
+
+### 模糊搜索
+```typescript
+import { fuzzySearch, match, loadConfig } from '@/lib/fuzzy-search';
+
+const config = loadConfig();
+const result = fuzzySearch('keyword', config);
+const matched = match(result, targetObject, ['id', 'level']);
+```
+
+### 日志
+```typescript
+import { logger } from '@/lib/logger';
+
+logger('moduleName', 'Log message');
+```
+
+### 外部客户端
+```typescript
+import { BestdoriClient } from '@/lib/clients/BestdoriClient';
+
+const client = new BestdoriClient();
+const songs = await client.getAllSongs();
+```
+
 ## 注意事项
 
 - 部分类型构造函数仍依赖 mainAPI，已标记 TODO，未来应通过 BestdoriClient 获取
 - ✅ **Services 层已完成**：所有 Services 已实现完整业务逻辑，包含数据缓存、错误处理等
+- ✅ **基础设施库层已完成**：所有通用工具已迁移到 `/src/lib`，旧文件已删除
 - Schema builders 目前是示例实现，需要根据 Tsugu v5 设计文档完善
 - ✅ **类型错误已修复**：所有 TypeScript strict 模式下的类型错误已修复
 
@@ -136,4 +197,5 @@ npm run dev
 - `模块职责分析.md` - 模块职责边界分析
 - `迁移进度-类型.md` - 类型迁移进度
 - `迁移进度总结.md` - 整体进度总结
+
 

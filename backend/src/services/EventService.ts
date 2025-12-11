@@ -6,11 +6,9 @@
 
 import { Server } from '@/types/Server';
 import { Event } from '@/types/Event';
-import { BestdoriClient } from '@/api/BestdoriClient';
+import { BestdoriClient } from '@/lib/clients/BestdoriClient';
 import { Character } from '@/types/Character';
-import { fuzzySearch, FuzzySearchResult, match } from '@/utils/fuzzySearch';
-import { fuzzySearchPath } from '@/config/runtime';
-import * as fs from 'fs';
+import { fuzzySearch, FuzzySearchResult, match, loadConfig } from '@/lib/fuzzy-search';
 
 export class EventService {
     private bestdoriClient: BestdoriClient;
@@ -76,7 +74,7 @@ export class EventService {
      */
     async searchEvents(keyword: string, displayedServerList: Server[]): Promise<Event[]> {
         try {
-            const fuzzySearchConfig = JSON.parse(fs.readFileSync(fuzzySearchPath, 'utf-8'));
+            const fuzzySearchConfig = loadConfig();
             const fuzzySearchResult = fuzzySearch(keyword, fuzzySearchConfig);
             
             const eventsData = await this.loadAllEvents();
@@ -192,4 +190,5 @@ export class EventService {
         return event.getEventStatus(server, time);
     }
 }
+
 

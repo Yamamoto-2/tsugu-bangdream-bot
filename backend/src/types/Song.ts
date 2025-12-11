@@ -8,7 +8,7 @@
  */
 
 import { Server, getServerByPriority } from './Server'
-import { stringToNumberArray } from './utils'
+import { stringToNumberArray } from '@/lib/utils/number'
 
 export const difficultyName = {
     0: "easy",
@@ -252,4 +252,5 @@ export interface songInRank {
     meta: number,
     rank: number
 }
+
 

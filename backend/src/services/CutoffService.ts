@@ -8,7 +8,7 @@
 import { Server } from '@/types/Server';
 import { Cutoff, CutoffDataPoint } from '@/types/Cutoff';
 import { Event } from '@/types/Event';
-import { BestdoriClient } from '@/api/BestdoriClient';
+import { BestdoriClient } from '@/lib/clients/BestdoriClient';
 import { tierListOfServer } from '@/config/constants';
 
 export interface CutoffDetail {
@@ -241,3 +241,4 @@ export class CutoffService {
         return Math.round((lastEp - secondLastEp) / timeSpan);
     }
 }
+

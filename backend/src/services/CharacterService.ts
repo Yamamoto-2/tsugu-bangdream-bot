@@ -6,10 +6,8 @@
 
 import { Server } from '@/types/Server';
 import { Character } from '@/types/Character';
-import { BestdoriClient } from '@/api/BestdoriClient';
-import { fuzzySearch, FuzzySearchResult, match } from '@/utils/fuzzySearch';
-import { fuzzySearchPath } from '@/config/runtime';
-import * as fs from 'fs';
+import { BestdoriClient } from '@/lib/clients/BestdoriClient';
+import { fuzzySearch, FuzzySearchResult, match, loadConfig } from '@/lib/fuzzy-search';
 
 export class CharacterService {
     private bestdoriClient: BestdoriClient;
@@ -77,7 +75,7 @@ export class CharacterService {
      */
     async searchCharacters(keyword: string, displayedServerList: Server[]): Promise<Character[]> {
         try {
-            const fuzzySearchConfig = JSON.parse(fs.readFileSync(fuzzySearchPath, 'utf-8'));
+            const fuzzySearchConfig = loadConfig();
             const fuzzySearchResult = fuzzySearch(keyword, fuzzySearchConfig);
             
             const charactersData = await this.loadAllCharacters();
@@ -159,3 +157,4 @@ export class CharacterService {
         return bandIdMap;
     }
 }
+

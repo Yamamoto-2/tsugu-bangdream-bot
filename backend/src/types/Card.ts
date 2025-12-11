@@ -8,7 +8,7 @@
  */
 
 import { Server, getServerByPriority, serverList } from './Server'
-import { stringToNumberArray, formatNumber } from './utils'
+import { stringToNumberArray, formatNumber } from '@/lib/utils/number'
 
 export interface Stat {
     performance: number,
@@ -279,4 +279,5 @@ export class Card {
         this.releaseGacha = releaseGacha
     }
 }
+
 

@@ -6,7 +6,7 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
 import { BACKEND_PORT } from './config/runtime';
-import { logger } from './utils/logger';
+import { logger } from './lib/logger';
 import { eventRouter } from './routes/event';
 import { songRouter } from './routes/song';
 
@@ -35,4 +35,5 @@ const port = BACKEND_PORT;
 app.listen(port, () => {
     logger('expressMainThread', `listening on port ${port}`);
 });
+
 

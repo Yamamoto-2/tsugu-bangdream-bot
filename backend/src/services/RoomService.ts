@@ -7,12 +7,17 @@
 
 import { Room, RoomOption, roomStack } from '@/types/Room';
 import { userPlayerInList } from '@/types/User';
-import { logger } from '@/utils/logger';
+import { logger } from '@/lib/logger';
 import { USE_BANDORISTATION } from '@/config/runtime';
-import { BandoriStationurl } from '@/config/constants';
-import axios from 'axios';
+import { BandoriStationClient } from '@/lib/clients/BandoriStationClient';
 
 export class RoomService {
+    private bandoriStationClient: BandoriStationClient;
+
+    constructor(bandoriStationClient?: BandoriStationClient) {
+        this.bandoriStationClient = bandoriStationClient || new BandoriStationClient();
+    }
+
     /**
      * Query all rooms
      * Integrates with BandoriStation API if enabled
@@ -24,7 +29,7 @@ export class RoomService {
         if (USE_BANDORISTATION) {
             const localNumberList = roomList.map((room) => room.number);
             try {
-                const roomListBandoriStation = await this.queryRoomNumberFromBandoriStation();
+                const roomListBandoriStation = await this.bandoriStationClient.queryRoomNumbers();
                 for (let i = 0; i < roomListBandoriStation.length; i++) {
                     const room = roomListBandoriStation[i];
                     if (!localNumberList.includes(room.number)) {
@@ -64,55 +69,6 @@ export class RoomService {
         return finalRoomList;
     }
 
-    /**
-     * Query rooms from BandoriStation API
-     */
-    private async queryRoomNumberFromBandoriStation(): Promise<Room[]> {
-        const Data = await axios.post(BandoriStationurl, { function: 'query_room_number' });
-        const response = Data.data?.response;
-        const roomList: Room[] = [];
-        
-        for (let i = 0; i < response.length; i++) {
-            const roomData = response[i];
-            let source = this.decodeUrl(roomData['source_info']['name']);
-            const room = new Room({
-                number: Number(roomData['number']),
-                rawMessage: this.decodeUrl(roomData['raw_message']),
-                source: source,
-                userName: this.decodeUrl(roomData['user_info']['username']),
-                userId: roomData['user_info']['user_id'],
-                time: roomData['time'],
-                avatarUrl: roomData['user_info']['avatar'] == '' 
-                    ? undefined 
-                    : `https://asset.bandoristation.com/images/user-avatar/${roomData['user_info']['avatar']}`
-            });
-            
-            // Set player if available
-            if (roomData['user_info']?.['bandori_player_brief_info']?.['user_id'] != undefined) {
-                const playerInfo = roomData['user_info']['bandori_player_brief_info'];
-                room.setPlayer({
-                    playerId: playerInfo['user_id'],
-                    server: this.getServerByName(playerInfo['server'])
-                });
-            }
-            roomList.push(room);
-        }
-        return roomList;
-    }
-
-    private decodeUrl(text: string): string {
-        if (text == undefined) {
-            return '';
-        }
-        const { unescape } = require('querystring');
-        return unescape(text.replace(/\%u/g, "%u"));
-    }
-
-    private getServerByName(name: string): any {
-        // TODO: Import from types/Server
-        const { getServerByName } = require('@/types/Server');
-        return getServerByName(name);
-    }
 
     /**
      * Submit room number
@@ -141,18 +97,8 @@ export class RoomService {
         
         // Submit to BandoriStation if enabled
         if (USE_BANDORISTATION && source == 'qq') {
-            const token = bandoriStationToken || 'ZtV4EX2K9Onb';
-            const url = BandoriStationurl;
-            const data = {
-                function: 'submit_room_number',
-                number: roomOption.number,
-                user_id: roomOption.userId,
-                raw_message: roomOption.rawMessage,
-                source: 'Tsugu',
-                token: token
-            };
             try {
-                await axios.post(url, data);
+                await this.bandoriStationClient.submitRoomNumber(roomOption, bandoriStationToken);
             } catch (e: any) {
                 logger('station', `error: ${e.message}`);
             }

@@ -1,6 +1,6 @@
 /**
  * Logger utility
- * Migrated from backend_old/src/logger.ts
+ * Migrated from backend/src/utils/logger.ts
  */
 
 export function logger(type: string, message: any) {

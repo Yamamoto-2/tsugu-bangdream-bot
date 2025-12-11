@@ -5,7 +5,7 @@
 
 import { Server } from '@/types/Server';
 import { Degree } from '@/types/Degree';
-import { BestdoriClient } from '@/api/BestdoriClient';
+import { BestdoriClient } from '@/lib/clients/BestdoriClient';
 
 export class DegreeService {
     private bestdoriClient: BestdoriClient;
@@ -104,3 +104,4 @@ export class DegreeService {
         return degreeIds;
     }
 }
+

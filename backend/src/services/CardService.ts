@@ -6,10 +6,8 @@
 
 import { Server } from '@/types/Server';
 import { Card } from '@/types/Card';
-import { BestdoriClient } from '@/api/BestdoriClient';
-import { fuzzySearch, FuzzySearchResult, match } from '@/utils/fuzzySearch';
-import { fuzzySearchPath } from '@/config/runtime';
-import * as fs from 'fs';
+import { BestdoriClient } from '@/lib/clients/BestdoriClient';
+import { fuzzySearch, FuzzySearchResult, match, loadConfig } from '@/lib/fuzzy-search';
 
 export class CardService {
     private bestdoriClient: BestdoriClient;
@@ -118,7 +116,7 @@ export class CardService {
      */
     async searchCards(keyword: string, displayedServerList: Server[]): Promise<Card[]> {
         try {
-            const fuzzySearchConfig = JSON.parse(fs.readFileSync(fuzzySearchPath, 'utf-8'));
+            const fuzzySearchConfig = loadConfig();
             const fuzzySearchResult = fuzzySearch(keyword, fuzzySearchConfig);
             
             const cardsData = await this.loadAllCards();
@@ -241,3 +239,4 @@ export class CardService {
         return numbers.length > 0 ? Math.max(...numbers) : 0;
     }
 }
+
