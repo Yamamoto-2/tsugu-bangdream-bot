@@ -11,7 +11,9 @@ async function downloadFileCache(url: string,IgnoreErr = true): Promise<Buffer> 
     // 下载文件
     const data = await downloadFile(url,IgnoreErr)
     // 将下载的文件缓存起来
-    cache[url] = data;
+    if (process.env.MEMORY_CACHE == 'true') {
+        cache[url] = data;
+    }
     return data;
 }
 
