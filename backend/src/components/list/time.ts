@@ -49,10 +49,16 @@ export function GetProbablyTimeDifference(eventId: number, currentEvent: Event):
     eventsRecord[currentEvent.eventId] = currentEvent;
     const completedEvent =
         Object.keys(eventsData).map(Number).filter((theEventId) => {
+            // 活动ID层过滤
             if(theEventId <= currentEvent.eventId || theEventId >= eventId) return false;
-            const theEvent = new Event(theEventId)
+            const theEvent = new Event(theEventId);
+            // 防止undefined
+            if (!theEvent.startAt[Server.jp] || !tempEvent.startAt[Server.jp] || !currentEvent.startAt[Server.jp]) return false;
+            // 活动时间层过滤
+            if(theEvent.startAt[Server.jp] <= currentEvent.startAt[Server.jp]
+              || theEvent.startAt[Server.jp] >= tempEvent.startAt[Server.jp]) return false;
             eventsRecord[theEventId] = theEvent;
-            return !!(theEvent.startAt[Server.cn] && theEvent.startAt[Server.jp]);
+            return !!(theEvent.startAt[Server.cn]);
         });
 
     // 已完成活动需要调整的时间偏移（为负数），包括活动时间和活动前的无邦日
