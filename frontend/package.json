@@ -1,0 +1,23 @@
+{
+  "name": "tsugu-renderer",
+  "version": "1.0.0",
+  "description": "Tsugu v5 Schema-driven renderer",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "type-check": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "vue": "^3.4.21",
+    "chart.js": "^4.4.8",
+    "chartjs-adapter-date-fns": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.0",
+    "vue-tsc": "^1.8.27"
+  }
+}
