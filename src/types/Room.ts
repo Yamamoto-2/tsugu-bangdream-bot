@@ -100,7 +100,7 @@ export async function queryAllRoom(): Promise<Room[]> {
                 const time = roomListBandoriStation[i].time
                 const rawMsg = roomListBandoriStation[i].rawMessage
                 for(var index in roomList ){
-                    if(roomList[index].number == room.number){
+                    if(roomList[index].number == room.number && roomList[index].time < time){  // 当本地车牌时间早于车站上传时间
                         roomList[index].time = time
                         roomList[index].rawMessage = rawMsg
                         break
