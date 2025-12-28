@@ -93,8 +93,19 @@ export async function queryAllRoom(): Promise<Room[]> {
         const roomListBandoriStation = await queryRoomNumberFromBandoriStation()
         for (let i = 0; i < roomListBandoriStation.length; i++) {
             const room = roomListBandoriStation[i];
-            if (!localNumberList.includes(room.number)) {
-                roomList.push(room)
+            if (!localNumberList.includes(room.number)) {   // 如果本地不存在房间列表
+                roomList.push(room)             // 如果待添加的车牌在栈中存在有车牌，并且两个车牌之间间隔大于150s，那么这辆车在被删除之前都无法被显示在车牌列表中
+            }
+            else{   // 所以如果存在，则在栈中原有车牌的基础上，更新信息，确保为最新的车牌且source不变，这样不会被因为大于150s而清除掉
+                const time = roomListBandoriStation[i].time
+                const rawMsg = roomListBandoriStation[i].rawMessage
+                for(var index in roomList ){
+                    if(roomList[index].number == room.number && roomList[index].time < time){  // 当本地车牌时间早于车站上传时间
+                        roomList[index].time = time
+                        roomList[index].rawMessage = rawMsg
+                        break
+                    }
+                }  // TODO：合并双重扫描
             }
         }
     }
@@ -107,25 +118,26 @@ export async function queryAllRoom(): Promise<Room[]> {
         return b.time - a.time
     })
     //清除所有150秒以前的车牌
-    const now = Date.now()
+    const now = Date.now();
+    const numberSet = new Set();
+	  const finalRoomList = [];	
     for (let i = 0; i < roomList.length; i++) {
         const room = roomList[i];
         if (now - room.time > 1000 * 150) {
-            roomList.splice(i, 1)
-            i--
+            roomList.splice(i, 1);
+            i--;
         }
     }
-
-    //去重，每个房间号只保留最新的一条
-    const finalRoomList: Room[] = []
-    const numberList: number[] = []//用于去重
-    for (let i = 0; i < roomList.length; i++) {
-        const room = roomList[i];
-        if (!numberList.includes(room.number)) {
-            numberList.push(room.number)
-            finalRoomList.push(room)
-        }
-    }
+    // 去重，每个房间号只保留最新的一条
+    // const numberList = []; //用于去重
+    for (const room of roomList) {
+    // 超过150秒跳过
+		  if (now - room.time > 150 * 1000) continue;
+		    if (!numberSet.has(room.number)) {
+			    numberSet.add(room.number);
+			    finalRoomList.push(room);
+		    }
+	  }
     return finalRoomList
 }
 
