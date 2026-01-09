@@ -1,70 +1,59 @@
-<template>
-  <template v-if="!node">
-    <div class="tsugu-error">Schema node is null or undefined</div>
-  </template>
-  <component
-    v-else-if="component && node.visible !== false"
-    :is="component"
-    :key="node.id || node.componentName"
-    v-bind="mergedProps"
-    :style="cssStyle"
-  >
-    <template v-if="node.children && node.children.length > 0">
-      <SchemaRenderer
-        v-for="(child, index) in node.children"
-        :key="child.id || `${node.id || 'node'}-${index}`"
-        :node="child"
-      />
-    </template>
-  </component>
-  <div v-else-if="!component && node" class="tsugu-error">
-    Unknown component: {{ node.componentName }}
-  </div>
-</template>
-
 <script setup lang="ts">
-import { computed, h } from 'vue';
-import { ComponentRegistry } from './ComponentRegistry';
-import { StyleMapper } from './StyleMapper';
-import { SchemaNode } from './types';
+import { computed } from 'vue'
+import type { SchemaNode } from './types'
+import { componentMap } from '@/components'
 
-interface Props {
-  node: SchemaNode | null | undefined;
-}
+const props = defineProps<{
+  node: SchemaNode
+}>()
 
-const props = defineProps<Props>();
-
-// 获取组件
+// 获取对应的组件
 const component = computed(() => {
-  if (!props.node) return undefined;
-  return ComponentRegistry.get(props.node.componentName);
-});
+  return componentMap[props.node.componentName]
+})
 
 // 合并 props
 const mergedProps = computed(() => {
-  if (!props.node) return {};
   return {
-    ...(props.node.props || {}),
-    // 将 style 也传递给组件（某些组件可能需要访问原始 style）
-    _style: props.node.style,
-  };
-});
+    ...props.node.props,
+    style: props.node.style
+  }
+})
 
-// 转换为 CSS 样式
-const cssStyle = computed(() => {
-  if (!props.node) return {};
-  return StyleMapper.styleToCSS(props.node.style);
-});
+// 是否可见
+const isVisible = computed(() => {
+  return props.node.visible !== false
+})
 </script>
 
+<template>
+  <component
+    v-if="component && isVisible"
+    :is="component"
+    :key="props.node.id || props.node.componentName"
+    v-bind="mergedProps"
+  >
+    <!-- 递归渲染子节点 -->
+    <SchemaRenderer
+      v-for="(child, index) in props.node.children"
+      :key="child.id || `${props.node.id}-${index}`"
+      :node="child"
+    />
+  </component>
+  <template v-else-if="!component && isVisible">
+    <div class="unknown-component">
+      Unknown component: {{ props.node.componentName }}
+    </div>
+  </template>
+</template>
+
 <style scoped>
-.tsugu-error {
-  padding: 8px;
-  background-color: #fee;
-  color: #c00;
-  border: 1px solid #c00;
+.unknown-component {
+  padding: 12px;
+  background-color: #fef0f0;
+  border: 1px solid #fbc4c4;
   border-radius: 4px;
+  color: #f56c6c;
+  font-size: 14px;
 }
 </style>
-
-
