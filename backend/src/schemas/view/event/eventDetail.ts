@@ -4,6 +4,7 @@
  */
 
 import { Event } from '@/types/Event';
+import { Card } from '@/types/Card';
 import { Server } from '@/types/Server';
 import { SchemaNode, DescriptionsItem } from '@/schemas/types';
 import {
@@ -30,12 +31,15 @@ import {
 // 导入组件
 import { EventBanner } from '@/schemas/components/EventBanner';
 import { BonusDisplay } from '@/schemas/components/BonusDisplay';
+import { CardIcon, CardIconList } from '@/schemas/components/CardIcon';
 
 export interface EventDetailOptions {
   imageMode?: 'url' | 'base64';
   displayedServerList?: Server[];
   showGacha?: boolean;
   showSongs?: boolean;
+  // 预获取的卡牌数据
+  rewardCards?: Card[];
 }
 
 /**
@@ -51,21 +55,18 @@ export function buildEventDetailSchema(
 
   const children: SchemaNode[] = [];
 
-  // 1. Banner
-  children.push(EventBanner({ event, server: serverKey }));
+  // 主信息卡片（包含 Banner、基本信息、加成信息）
+  children.push(buildMainInfoCard(event, displayedServerList, serverKey));
 
-  // 2. 基本信息卡片
-  children.push(buildBasicInfoCard(event, displayedServerList));
-
-  // 3. 活动加成卡片
-  children.push(BonusDisplay({ event }));
-
-  // 4. 奖励卡牌卡片
-  if (event.rewardCards && event.rewardCards.length > 0) {
-    children.push(buildRewardCardsCard(event, serverKey));
+  // 奖励卡牌卡片
+  if (options.rewardCards && options.rewardCards.length > 0) {
+    children.push(buildRewardCardsCard(options.rewardCards, serverKey));
+  } else if (event.rewardCards && event.rewardCards.length > 0) {
+    // 如果没有预获取的卡牌数据，显示占位符
+    children.push(buildRewardCardsPlaceholder(event.rewardCards));
   }
 
-  // 5. 活动进度（如果正在进行中）
+  // 活动进度（如果正在进行中）
   const startAt = event.startAt[mainServer];
   const endAt = event.endAt[mainServer];
   if (startAt && endAt) {
@@ -82,74 +83,107 @@ export function buildEventDetailSchema(
 }
 
 /**
- * 基本信息卡片
+ * 主信息卡片（Banner + 基本信息 + 加成）
  */
-function buildBasicInfoCard(
+function buildMainInfoCard(
   event: Event,
-  displayedServerList: Server[]
+  displayedServerList: Server[],
+  serverKey: string
 ): SchemaNode {
+  const cardChildren: SchemaNode[] = [];
+
+  // Banner 图片
+  cardChildren.push(EventBanner({ event, server: serverKey }));
+
   // 活动名称
-  const nameItems: DescriptionsItem[] = [];
   for (const server of displayedServerList) {
-    const serverKey = getServerKey(server);
+    const sKey = getServerKey(server);
     const eventName = event.eventName[server];
     if (eventName) {
-      nameItems.push({
-        label: `${getServerName(serverKey)}名称`,
-        value: eventName
-      });
+      cardChildren.push(divider());
+      cardChildren.push(
+        space([
+          text(`${getServerName(sKey)}名称`, { type: 'info' }),
+          text(eventName)
+        ], { size: 'default' })
+      );
     }
   }
 
-  // 基本信息
-  const basicItems: DescriptionsItem[] = [
-    { label: 'ID', value: event.eventId },
-    { label: '类型', value: getEventTypeName(event.eventType) }
-  ];
+  // 类型和ID
+  cardChildren.push(divider());
+  cardChildren.push(
+    space([
+      space([
+        text('类型', { type: 'info' }),
+        text(getEventTypeName(event.eventType))
+      ], { size: 'small' }),
+      space([
+        text('ID', { type: 'info' }),
+        text(String(event.eventId))
+      ], { size: 'small' })
+    ], { size: 'large' })
+  );
 
   // 开始/结束时间
   for (const server of displayedServerList) {
-    const serverKey = getServerKey(server);
-    const serverName = getServerName(serverKey);
+    const sKey = getServerKey(server);
+    const serverName = getServerName(sKey);
     const startAt = event.startAt[server];
     const endAt = event.endAt[server];
 
     if (startAt) {
-      basicItems.push({
-        label: `${serverName}开始`,
-        value: formatTimestamp(startAt, 'datetime')
-      });
+      cardChildren.push(divider());
+      cardChildren.push(
+        space([
+          text(`${serverName}开始`, { type: 'info' }),
+          text(formatTimestamp(startAt, 'datetime'))
+        ], { size: 'default' })
+      );
     }
     if (endAt) {
-      basicItems.push({
-        label: `${serverName}结束`,
-        value: formatTimestamp(endAt, 'datetime')
-      });
+      cardChildren.push(divider());
+      cardChildren.push(
+        space([
+          text(`${serverName}结束`, { type: 'info' }),
+          text(formatTimestamp(endAt, 'datetime'))
+        ], { size: 'default' })
+      );
     }
   }
 
-  return card({ header: '活动信息' }, [
-    descriptions(nameItems, { column: 1, border: true }),
-    divider(),
-    descriptions(basicItems, { column: 2, border: true, size: 'small' })
+  // 加成信息（属性、角色、偏科）
+  const bonusNodes = BonusDisplay({ event });
+  cardChildren.push(...bonusNodes);
+
+  return card({ shadow: 'hover' }, cardChildren);
+}
+
+/**
+ * 奖励卡牌卡片（使用 CardIcon 渲染）
+ */
+function buildRewardCardsCard(cards: Card[], server: string): SchemaNode {
+  return card({ header: '奖励卡牌' }, [
+    CardIconList(cards, {
+      server,
+      showId: true,
+      showRarity: true,
+      size: 'medium'
+    })
   ]);
 }
 
 /**
- * 奖励卡牌卡片
+ * 奖励卡牌占位符（没有预获取数据时显示）
  */
-function buildRewardCardsCard(event: Event, server: string): SchemaNode {
-  const cardImages: SchemaNode[] = [];
-
-  for (const cardId of event.rewardCards) {
-    cardImages.push(
-      col({ xs: 6, sm: 4, md: 3 }, [
-        space([
-          text(`卡牌 #${cardId}`, { size: 'small', type: 'info' })
-        ], { direction: 'vertical', size: 'small', alignment: 'center' })
-      ])
-    );
-  }
+function buildRewardCardsPlaceholder(cardIds: number[]): SchemaNode {
+  const cardImages: SchemaNode[] = cardIds.map(cardId =>
+    col({ xs: 6, sm: 4, md: 3 }, [
+      space([
+        text(`卡牌 #${cardId}`, { size: 'small', type: 'info' })
+      ], { direction: 'vertical', size: 'small', alignment: 'center' })
+    ])
+  );
 
   return card({ header: '奖励卡牌' }, [
     row({ gutter: 16 }, cardImages)

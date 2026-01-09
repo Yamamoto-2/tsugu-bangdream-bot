@@ -53,18 +53,31 @@ export function AttributeTag(props: AttributeTagProps): SchemaNode {
 
 /**
  * 构建属性加成列表
+ * 每个百分比一行：[图标1][图标2]... +X%
  */
 export function AttributeBonusList(
   attributeList: { [percent: string]: Array<{ name: string }> }
 ): SchemaNode {
-  const children: SchemaNode[] = [];
+  const rows: SchemaNode[] = [];
 
   for (const percent in attributeList) {
     const attributes = attributeList[percent];
+    const rowChildren: SchemaNode[] = [];
+
+    // 先添加所有属性图标
     for (const attr of attributes) {
-      children.push(AttributeTag({ attribute: attr.name, percent: parseInt(percent), showIcon: true }));
+      rowChildren.push(
+        image(getAttributeIconUrl(attr.name), { width: 28, height: 28, fit: 'contain' })
+      );
     }
+
+    // 再添加百分比文字
+    rowChildren.push(
+      tag(`+${percent}%`, { type: 'primary', size: 'default' })
+    );
+
+    rows.push(space(rowChildren, { size: 'small', alignment: 'center' }));
   }
 
-  return space(children, { direction: 'vertical', size: 'small', fill: true });
+  return space(rows, { direction: 'vertical', size: 'small' });
 }

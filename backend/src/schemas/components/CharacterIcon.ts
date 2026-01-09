@@ -38,19 +38,31 @@ export function CharacterIcon(props: CharacterIconProps): SchemaNode {
 
 /**
  * 构建角色加成列表
+ * 每个百分比一行：[头像1][头像2]... +X%
  */
 export function CharacterBonusList(
   characterList: { [percent: string]: number[] }
 ): SchemaNode {
-  const children: SchemaNode[] = [];
+  const rows: SchemaNode[] = [];
 
   for (const percent in characterList) {
     const characterIds = characterList[percent];
-    const rowChildren = characterIds.map(charId =>
-      CharacterIcon({ characterId: charId, percent: parseInt(percent), size: 'medium' })
+    const rowChildren: SchemaNode[] = [];
+
+    // 先添加所有角色头像
+    for (const charId of characterIds) {
+      rowChildren.push(
+        image(getCharacterIconUrl(charId), { width: 40, height: 40, fit: 'cover' })
+      );
+    }
+
+    // 再添加百分比文字
+    rowChildren.push(
+      tag(`+${percent}%`, { type: 'success', size: 'default' })
     );
-    children.push(space(rowChildren, { wrap: true, size: 'default' }));
+
+    rows.push(space(rowChildren, { size: 'small', alignment: 'center' }));
   }
 
-  return space(children, { direction: 'vertical', size: 'small', fill: true });
+  return space(rows, { direction: 'vertical', size: 'small' });
 }

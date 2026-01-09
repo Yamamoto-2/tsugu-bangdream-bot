@@ -16,23 +16,19 @@ export interface EventBannerProps {
 
 /**
  * 构建活动 Banner 组件
+ * 返回纯图片，不包裹卡片
  */
 export function EventBanner(props: EventBannerProps): SchemaNode {
-  const { event, server = 'jp', showShadow = true } = props;
+  const { event, server = 'jp' } = props;
 
   // 使用 assetBundleName 构建正确的 URL
   const bannerUrl = event.assetBundleName
     ? getEventBannerUrl(event.assetBundleName, server)
     : getEventBannerUrlFallback(event.bannerAssetBundleName);
 
-  return card(
-    { shadow: showShadow ? 'hover' : 'never' },
-    [
-      image(bannerUrl, {
-        width: '100%',
-        fit: 'cover',
-        alt: `Event ${event.eventId} Banner`
-      })
-    ]
-  );
+  return image(bannerUrl, {
+    width: '100%',
+    fit: 'cover',
+    alt: `Event ${event.eventId} Banner`
+  });
 }

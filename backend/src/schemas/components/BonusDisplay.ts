@@ -14,25 +14,35 @@ export interface BonusDisplayProps {
 }
 
 /**
- * 构建活动加成显示组件
+ * 构建活动加成显示组件（不包含卡片包装）
+ * 返回一个 SchemaNode 数组，可以嵌入到其他容器中
  */
-export function BonusDisplay(props: BonusDisplayProps): SchemaNode {
+export function BonusDisplay(props: BonusDisplayProps): SchemaNode[] {
   const { event } = props;
   const children: SchemaNode[] = [];
 
   // 属性加成
   const attributeList = event.getAttributeList();
   if (Object.keys(attributeList).length > 0) {
-    children.push(text('属性加成', { type: 'info', size: 'small' }));
-    children.push(AttributeBonusList(attributeList));
     children.push(divider());
+    children.push(
+      space([
+        text('活动加成', { type: 'info' }),
+        AttributeBonusList(attributeList)
+      ], { size: 'default', alignment: 'center' })
+    );
   }
 
   // 角色加成
   const characterList = event.getCharacterList();
   if (Object.keys(characterList).length > 0) {
-    children.push(text('角色加成', { type: 'info', size: 'small' }));
-    children.push(CharacterBonusList(characterList));
+    children.push(divider());
+    children.push(
+      space([
+        text('角色加成', { type: 'info' }),
+        CharacterBonusList(characterList)
+      ], { size: 'default', alignment: 'center' })
+    );
   }
 
   // 偏科加成
@@ -43,23 +53,25 @@ export function BonusDisplay(props: BonusDisplayProps): SchemaNode {
       visual: '形象'
     };
 
-    const statItems: DescriptionsItem[] = [];
+    const statParts: string[] = [];
     for (const stat in event.eventCharacterParameterBonus) {
+      if (stat === 'eventId') continue;
       const value = (event.eventCharacterParameterBonus as any)[stat];
       if (value && value > 0) {
-        statItems.push({ label: statNames[stat] || stat, value: `+${value}%` });
+        statParts.push(`${statNames[stat] || stat} +${value}%`);
       }
     }
 
-    if (statItems.length > 0) {
+    if (statParts.length > 0) {
       children.push(divider());
-      children.push(text('偏科加成', { type: 'info', size: 'small' }));
-      children.push(descriptions(statItems, { column: 3, size: 'small' }));
+      children.push(
+        space([
+          text('偏科加成', { type: 'info' }),
+          text(statParts.join('  '))
+        ], { size: 'default', alignment: 'center' })
+      );
     }
   }
 
-  return card(
-    { header: '活动加成' },
-    [space(children, { direction: 'vertical', size: 'small', fill: true })]
-  );
+  return children;
 }

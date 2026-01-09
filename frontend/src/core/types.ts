@@ -24,7 +24,8 @@ export type ComponentName =
   | 'Statistic'      // 统计数值 (el-statistic)
   | 'Progress'       // 进度条 (el-progress)
   | 'Empty'          // 空状态 (el-empty)
-  | 'Skeleton';      // 骨架屏 (el-skeleton)
+  | 'Skeleton'       // 骨架屏 (el-skeleton)
+  | 'Canvas';        // Canvas 画布 (通用绘图)
 
 // Schema 节点定义
 export interface SchemaNode {
@@ -205,4 +206,17 @@ export interface SkeletonProps {
   rows?: number;
   animated?: boolean;
   loading?: boolean;
+}
+
+// Canvas 指令类型
+export type CanvasCommand =
+  | { type: 'drawImage'; src: string; x: number; y: number; w: number; h: number }
+  | { type: 'fillRect'; color: string; x: number; y: number; w: number; h: number }
+  | { type: 'fillText'; text: string; x: number; y: number; font: string; color: string; align?: CanvasTextAlign; baseline?: CanvasTextBaseline }
+  | { type: 'loop'; count: number; commands: CanvasCommand[]; offsetX?: number; offsetY?: number };
+
+export interface CanvasProps {
+  width: number;
+  height: number;
+  commands: CanvasCommand[];
 }

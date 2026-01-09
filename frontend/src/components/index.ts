@@ -28,6 +28,9 @@ export { default as TsAlert } from './TsAlert.vue'
 export { default as TsEmpty } from './TsEmpty.vue'
 export { default as TsSkeleton } from './TsSkeleton.vue'
 
+// Canvas 组件
+export { default as TsCanvas } from './TsCanvas.vue'
+
 // 组件映射表（用于 Schema 渲染器）
 import type { Component } from 'vue'
 import type { ComponentName } from '@/core/types'
@@ -52,6 +55,7 @@ import TsProgress from './TsProgress.vue'
 import TsAlert from './TsAlert.vue'
 import TsEmpty from './TsEmpty.vue'
 import TsSkeleton from './TsSkeleton.vue'
+import TsCanvas from './TsCanvas.vue'
 
 export const componentMap: Record<ComponentName, Component> = {
   Page: TsPage,
@@ -73,5 +77,6 @@ export const componentMap: Record<ComponentName, Component> = {
   Progress: TsProgress,
   Alert: TsAlert,
   Empty: TsEmpty,
-  Skeleton: TsSkeleton
+  Skeleton: TsSkeleton,
+  Canvas: TsCanvas
 }
