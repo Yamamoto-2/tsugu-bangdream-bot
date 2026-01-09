@@ -11,7 +11,7 @@
 import express from 'express';
 import { body } from 'express-validator';
 import { EventService } from '@/services/EventService';
-import { buildEventPreviewSchema } from '@/schemas/eventPreview';
+import { buildEventPreviewSchema, buildEventDetailSchema } from '@/schemas/view/event';
 import { Server, getServerByServerId, isServer, isServerList } from '@/types/Server';
 import { Request, Response } from 'express';
 
@@ -46,16 +46,17 @@ router.post('/v5/event/preview',
 );
 
 /**
- * GET /v5/event/detail
+ * POST /v5/event/detail
  * Returns Tsugu Schema for event detail
  */
 router.post('/v5/event/detail',
     [
         body('eventId').isInt(),
         body('displayedServerList').optional().custom(isServerList),
+        body('imageMode').optional().isIn(['url', 'base64']),
     ],
     async (req: Request, res: Response) => {
-        const { eventId, displayedServerList } = req.body;
+        const { eventId, displayedServerList, imageMode } = req.body;
 
         try {
             const event = await eventService.getEventById(eventId);
@@ -63,8 +64,11 @@ router.post('/v5/event/detail',
                 return res.status(404).json({ status: 'failed', data: '活动不存在' });
             }
 
-            // TODO: Implement buildEventDetailSchema
-            res.json({ message: 'Not implemented yet' });
+            const schema = buildEventDetailSchema(event, {
+                displayedServerList: displayedServerList || [Server.jp],
+                imageMode: imageMode || 'url'
+            });
+            res.json(schema);
         } catch (e: any) {
             console.error(e);
             res.status(500).json({ status: 'failed', data: '内部错误' });

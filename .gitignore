@@ -23,6 +23,8 @@ tsconfig.tsbuildinfo
 *.sln
 *.env
 *.exe
-cache/*
+cache/
+backend/cache/
+backend/dist/
 article/pythonSrc/eventPreview.exe
 article/pythonSrc/eventReport.exe

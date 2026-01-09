@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
+    "axios": "^1.13.2",
     "chart.js": "^4.4.8",
     "chartjs-adapter-date-fns": "^3.0.0",
     "element-plus": "^2.13.0",
-    "vue": "^3.4.21"
+    "vue": "^3.4.21",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",

@@ -4,6 +4,7 @@
  */
 
 import express from 'express';
+import cors from 'cors';
 import * as dotenv from 'dotenv';
 import { BACKEND_PORT } from './config/runtime';
 import { logger } from './lib/logger';
@@ -14,6 +15,8 @@ dotenv.config();
 
 const app = express();
 
+// Enable CORS for frontend
+app.use(cors());
 app.use(express.json());
 
 // Health check endpoint

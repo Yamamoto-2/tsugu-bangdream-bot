@@ -5,7 +5,7 @@
 import express from 'express';
 import { body } from 'express-validator';
 import { SongService } from '@/services/SongService';
-import { buildSongDetailSchema } from '@/schemas/songDetail';
+import { buildSongDetailSchema } from '@/schemas/view/song';
 import { Server, getServerByServerId, isServer, isServerList } from '@/types/Server';
 import { Request, Response } from 'express';
 
