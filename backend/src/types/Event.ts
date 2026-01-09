@@ -278,9 +278,9 @@ export class Event {
     }
     async getRewardStamp(server:Server): Promise<Image> {
         const allStamps = await callAPIAndCacheResponse(`${Bestdoriurl}/api/stamps/all.2.json`)
-        const rewards = this.pointRewards[0]
+        const rewards = this.pointRewards.filter(Boolean)[0]
         let rewardId = -1
-        for(let i = 0; i < rewards.length; i++){
+        for(let i = 0; i < rewards?.length; i++){
             if(rewards[i].rewardType == 'stamp'){
                 rewardId = rewards[i].rewardId
                 break
