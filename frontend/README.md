@@ -1,168 +1,112 @@
-# Tsugu v5 前端渲染器
+# Tsugu v5 Frontend
 
-基于 Vue 3 + TypeScript 的 Schema 驱动渲染器，用于将 Tsugu Schema 渲染为 Web UI。
+基于 Vue 3 + Element Plus 的通用 Schema 渲染器。
 
-## 功能特性
+## 技术栈
 
-- ✅ Schema 驱动的组件渲染
-- ✅ 完整的样式 token 系统
-- ✅ 14 个基础组件（布局、UI、容器、图表）
-- ✅ 组件注册机制，支持扩展
-- ✅ 类型安全的 TypeScript 支持
+- Vue 3 + TypeScript
+- Element Plus
+- Vite
+- Chart.js
 
-## 已实现的基础组件（17 个）
+## 目录结构
 
-### 布局组件（5 个）
-- ✅ **Page**: 页面根容器，支持背景
-- ✅ **Column**: 纵向堆叠布局
-- ✅ **Row**: 横向排列布局
-- ✅ **Spacer**: 空白间距
-- ✅ **Wrap**: 自动换行的流式布局
+```
+src/
+├── core/
+│   ├── types.ts              # Schema 类型定义
+│   └── SchemaRenderer.vue    # 核心渲染器
+├── components/               # Ts* 组件
+│   ├── TsPage.vue
+│   ├── TsCard.vue
+│   ├── TsCanvas.vue          # 通用画布组件
+│   ├── TsText.vue
+│   ├── TsImage.vue
+│   ├── TsTable.vue
+│   └── index.ts              # 组件注册表
+├── views/                    # 页面视图
+│   └── EventView.vue
+└── App.vue
+```
 
-### 基础 UI 组件（5 个）
-- ✅ **Text**: 自动换行文本
-- ✅ **RichText**: 文字与图片混合显示
-- ✅ **Image**: 图片显示
-- ✅ **Badge**: 圆角标签
-- ✅ **Divider**: 分隔线（虚线/实线）
-
-### 容器组件（2 个）
-- ✅ **Card**: 带圆角背景的容器
-- ✅ **Table**: 键值对列表行
-
-### 图表组件（1 个）
-- ✅ **Chart**: 基于 Chart.js 的图表组件
-
-### 特殊组件（3 个）
-- ✅ **Title**: 页面标题（带背景图片）
-- ✅ **Stack**: 相对定位容器，用于叠加元素
-- ✅ **Absolute**: 绝对定位容器，用于在 Stack 内定位子元素
-
-## 快速开始
-
-### 安装依赖
+## 开发
 
 ```bash
 npm install
+npm run dev    # http://localhost:5173
 ```
 
-### 开发模式
+## 组件列表 (21个)
 
-```bash
-npm run dev
-```
+| 组件 | 说明 | Element Plus |
+|------|------|-------------|
+| TsPage | 页面容器 | - |
+| TsContainer | 响应式容器 | el-container |
+| TsRow | 行布局 | el-row |
+| TsCol | 列布局 | el-col |
+| TsSpace | 间距容器 | el-space |
+| TsCard | 卡片 | el-card |
+| TsText | 文本 | el-text |
+| TsTitle | 标题 | - |
+| TsImage | 图片 | el-image |
+| TsTag | 标签 | el-tag |
+| TsDivider | 分割线 | el-divider |
+| TsTable | 表格 | el-table |
+| TsDescriptions | 描述列表 | el-descriptions |
+| TsChart | 图表 | Chart.js |
+| TsCanvas | **画布** | HTML Canvas |
+| TsAlert | 提示 | el-alert |
+| TsProgress | 进度条 | el-progress |
+| TsStatistic | 统计数值 | el-statistic |
+| TsEmpty | 空状态 | el-empty |
+| TsSkeleton | 骨架屏 | el-skeleton |
+| TsLink | 链接 | el-link |
 
-访问 http://localhost:5173
+## TsCanvas 组件
 
-### 构建
+通用画布组件，执行后端发送的绘图指令。前端不包含业务逻辑，只负责渲染。
 
-```bash
-npm run build
-```
-
-## 使用方式
-
-### 1. 通过 Schema 渲染
+**支持的指令：**
 
 ```typescript
-import SchemaRenderer from '@/core/SchemaRenderer.vue';
-import { SchemaNode } from '@/core/types';
+type CanvasCommand =
+  | { type: 'drawImage'; src: string; x: number; y: number; w: number; h: number }
+  | { type: 'fillRect'; color: string; x: number; y: number; w: number; h: number }
+  | { type: 'fillText'; text: string; x: number; y: number; font: string; color: string; ... }
+  | { type: 'loop'; count: number; commands: CanvasCommand[]; offsetX?: number; offsetY?: number };
+```
 
-const schema: SchemaNode = {
+## Schema 渲染
+
+```vue
+<template>
+  <SchemaRenderer :node="schema" />
+</template>
+
+<script setup>
+import SchemaRenderer from '@/core/SchemaRenderer.vue';
+
+const schema = {
   componentName: 'Page',
-  props: {
-    useEasyBG: true,
-  },
   children: [
     {
-      componentName: 'Column',
+      componentName: 'Card',
+      props: { header: '标题' },
       children: [
-        {
-          componentName: 'Card',
-          children: [
-            {
-              componentName: 'Text',
-              props: {
-                text: 'Hello, Tsugu!',
-                textSize: 40,
-              },
-            },
-          ],
-        },
-      ],
-    },
-  ],
+        { componentName: 'Text', props: { content: '内容' } }
+      ]
+    }
+  ]
 };
+</script>
 ```
 
-### 2. Bot 端注入 Schema（用于截图）
+## 静态资源
 
-```javascript
-// Puppeteer 示例
-await page.goto('http://localhost:5173');
-await page.evaluate((schema, width) => {
-  window.__TSUGU_SCHEMA__ = schema;
-  window.__TSUGU_WIDTH__ = width;
-  window.dispatchEvent(new CustomEvent('tsugu:render', { detail: { schema, width } }));
-}, schema, 800);
-await page.waitForSelector('[data-tsugu-rendered="true"]');
-const screenshot = await page.screenshot({ type: 'png' });
-```
+`public/assets/` 目录包含：
+- `star.png` - 普通星星
+- `star_trained.png` - 特训后星星
 
-### 3. 扩展组件
+## 相关文档
 
-```typescript
-import { ComponentRegistry } from '@/core/ComponentRegistry';
-import MyCustomComponent from './MyCustomComponent.vue';
-
-ComponentRegistry.register('MyCustom', MyCustomComponent);
-```
-
-## 组件 Props 参考
-
-详细的组件 Props 定义请参考 `迁移计划.md` 中的组件清单。
-
-## 样式 Token
-
-- **尺寸**: `sm` (8px), `md` (16px), `lg` (24px), `xl` (32px)
-- **颜色**: `surface`, `primary`, `neutral`, `secondary`
-- **变体**: `primary`, `secondary`, `neutral`, `surface`
-
-## 项目结构
-
-```
-frontend/
-├── src/
-│   ├── core/              # 核心引擎
-│   │   ├── types.ts       # Schema 类型定义
-│   │   ├── ComponentRegistry.ts  # 组件注册表
-│   │   ├── StyleMapper.ts # 样式映射系统
-│   │   └── SchemaRenderer.vue  # 核心渲染器
-│   ├── components/
-│   │   ├── base/          # 基础组件
-│   │   └── index.ts       # 组件导出和注册
-│   ├── App.vue            # 根组件
-│   └── main.ts            # 入口文件
-├── package.json
-└── vite.config.ts
-```
-
-## 迁移指南
-
-从 `backend_old` 迁移到 Schema 渲染的映射关系，请参考 `迁移计划.md` 中的迁移映射表。
-
-## 开发计划
-
-- [x] 实现 Title 组件
-- [x] 实现 Stack/Absolute 组件
-- [ ] 支持 Canvas 命令渲染
-- [ ] 添加更多样式 token
-- [ ] 性能优化
-- [ ] 单元测试
-- [ ] 实现 ListRow 组件（如果需要）
-
-## 许可证
-
-MIT
-
-
+- `../Tsugu-v5-设计文档.md` - 完整架构设计
