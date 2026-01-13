@@ -21,12 +21,15 @@ import {
 } from '@/schemas/core/base';
 import {
   getServerKey,
-  getServerName,
   formatTimestamp,
   formatEventRemaining,
   getEventProgress,
   getEventTypeName
 } from '@/schemas/core/utils';
+import { createTranslator, type Language, type I18nParams, DEFAULT_LANGUAGE } from '@/i18n';
+
+// 翻译函数类型
+type TranslatorFn = (key: string, params?: I18nParams) => string;
 
 // 导入组件
 import { EventBanner } from '@/schemas/components/EventBanner';
@@ -36,6 +39,7 @@ import { CardIcon, CardIconList } from '@/schemas/components/CardIcon';
 export interface EventDetailOptions {
   imageMode?: 'url' | 'base64';
   displayedServerList?: Server[];
+  language?: Language;
   showGacha?: boolean;
   showSongs?: boolean;
   // 预获取的卡牌数据
@@ -50,20 +54,24 @@ export function buildEventDetailSchema(
   options: EventDetailOptions = {}
 ): SchemaNode {
   const displayedServerList = options.displayedServerList || [Server.jp];
+  const language = options.language || DEFAULT_LANGUAGE;
   const mainServer = displayedServerList[0];
   const serverKey = getServerKey(mainServer);
+
+  // 创建绑定语言的翻译函数
+  const $t = createTranslator(language);
 
   const children: SchemaNode[] = [];
 
   // 主信息卡片（包含 Banner、基本信息、加成信息）
-  children.push(buildMainInfoCard(event, displayedServerList, serverKey));
+  children.push(buildMainInfoCard(event, displayedServerList, serverKey, $t));
 
   // 奖励卡牌卡片
   if (options.rewardCards && options.rewardCards.length > 0) {
-    children.push(buildRewardCardsCard(options.rewardCards, serverKey));
+    children.push(buildRewardCardsCard(options.rewardCards, serverKey, $t));
   } else if (event.rewardCards && event.rewardCards.length > 0) {
     // 如果没有预获取的卡牌数据，显示占位符
-    children.push(buildRewardCardsPlaceholder(event.rewardCards));
+    children.push(buildRewardCardsPlaceholder(event.rewardCards, $t));
   }
 
   // 活动进度（如果正在进行中）
@@ -72,12 +80,12 @@ export function buildEventDetailSchema(
   if (startAt && endAt) {
     const status = event.getEventStatus(mainServer);
     if (status === 'in_progress') {
-      children.push(buildProgressCard(startAt, endAt));
+      children.push(buildProgressCard(startAt, endAt, $t));
     }
   }
 
   return page(
-    { title: `活动 ${event.eventId} 详情` },
+    { title: `${$t('event.label.eventId')} ${event.eventId}` },
     [container(children)]
   );
 }
@@ -88,14 +96,15 @@ export function buildEventDetailSchema(
 function buildMainInfoCard(
   event: Event,
   displayedServerList: Server[],
-  serverKey: string
+  serverKey: string,
+  $t: TranslatorFn
 ): SchemaNode {
   const cardChildren: SchemaNode[] = [];
 
   // Banner 图片
   cardChildren.push(EventBanner({ event, server: serverKey }));
 
-  // 活动名称
+  // 活动名称（游戏数据，不经过 i18n，直接用服务器对应的语言）
   for (const server of displayedServerList) {
     const sKey = getServerKey(server);
     const eventName = event.eventName[server];
@@ -103,7 +112,7 @@ function buildMainInfoCard(
       cardChildren.push(divider());
       cardChildren.push(
         space([
-          text(`${getServerName(sKey)}名称`, { type: 'info' }),
+          text(`${$t(`server.${sKey}`)} ${$t('event.label.eventName')}`, { type: 'info' }),
           text(eventName)
         ], { size: 'default' })
       );
@@ -115,11 +124,11 @@ function buildMainInfoCard(
   cardChildren.push(
     space([
       space([
-        text('类型', { type: 'info' }),
+        text($t('common.type'), { type: 'info' }),
         text(getEventTypeName(event.eventType))
       ], { size: 'small' }),
       space([
-        text('ID', { type: 'info' }),
+        text($t('common.id'), { type: 'info' }),
         text(String(event.eventId))
       ], { size: 'small' })
     ], { size: 'large' })
@@ -128,7 +137,7 @@ function buildMainInfoCard(
   // 开始/结束时间
   for (const server of displayedServerList) {
     const sKey = getServerKey(server);
-    const serverName = getServerName(sKey);
+    const serverName = $t(`server.${sKey}`);
     const startAt = event.startAt[server];
     const endAt = event.endAt[server];
 
@@ -136,7 +145,7 @@ function buildMainInfoCard(
       cardChildren.push(divider());
       cardChildren.push(
         space([
-          text(`${serverName}开始`, { type: 'info' }),
+          text(`${serverName} ${$t('event.label.startTime')}`, { type: 'info' }),
           text(formatTimestamp(startAt, 'datetime'))
         ], { size: 'default' })
       );
@@ -145,7 +154,7 @@ function buildMainInfoCard(
       cardChildren.push(divider());
       cardChildren.push(
         space([
-          text(`${serverName}结束`, { type: 'info' }),
+          text(`${serverName} ${$t('event.label.endTime')}`, { type: 'info' }),
           text(formatTimestamp(endAt, 'datetime'))
         ], { size: 'default' })
       );
@@ -162,8 +171,8 @@ function buildMainInfoCard(
 /**
  * 奖励卡牌卡片（使用 CardIcon 渲染）
  */
-function buildRewardCardsCard(cards: Card[], server: string): SchemaNode {
-  return card({ header: '奖励卡牌' }, [
+function buildRewardCardsCard(cards: Card[], server: string, $t: TranslatorFn): SchemaNode {
+  return card({ header: $t('event.label.rewards') }, [
     CardIconList(cards, {
       server,
       showId: true,
@@ -176,16 +185,16 @@ function buildRewardCardsCard(cards: Card[], server: string): SchemaNode {
 /**
  * 奖励卡牌占位符（没有预获取数据时显示）
  */
-function buildRewardCardsPlaceholder(cardIds: number[]): SchemaNode {
+function buildRewardCardsPlaceholder(cardIds: number[], $t: TranslatorFn): SchemaNode {
   const cardImages: SchemaNode[] = cardIds.map(cardId =>
     col({ xs: 6, sm: 4, md: 3 }, [
       space([
-        text(`卡牌 #${cardId}`, { size: 'small', type: 'info' })
+        text(`${$t('card.label.cardId')} #${cardId}`, { size: 'small', type: 'info' })
       ], { direction: 'vertical', size: 'small', alignment: 'center' })
     ])
   );
 
-  return card({ header: '奖励卡牌' }, [
+  return card({ header: $t('event.label.rewards') }, [
     row({ gutter: 16 }, cardImages)
   ]);
 }
@@ -193,11 +202,11 @@ function buildRewardCardsPlaceholder(cardIds: number[]): SchemaNode {
 /**
  * 活动进度卡片
  */
-function buildProgressCard(startAt: number, endAt: number): SchemaNode {
+function buildProgressCard(startAt: number, endAt: number, $t: TranslatorFn): SchemaNode {
   const progressPercent = getEventProgress(startAt, endAt);
   const remaining = formatEventRemaining(endAt);
 
-  return card({ header: '活动进度' }, [
+  return card({ header: $t('event.time.inProgress') }, [
     space([
       progress(progressPercent, {
         strokeWidth: 20,
@@ -205,10 +214,10 @@ function buildProgressCard(startAt: number, endAt: number): SchemaNode {
       }),
       row({ justify: 'space-between' }, [
         col({ span: 12 }, [
-          text(`剩余: ${remaining}`, { size: 'small' })
+          text(`${$t('common.end')}: ${remaining}`, { size: 'small' })
         ]),
         col({ span: 12 }, [
-          text(`进度: ${progressPercent}%`, { size: 'small' })
+          text($t('common.percent', { value: progressPercent }), { size: 'small' })
         ])
       ])
     ], { direction: 'vertical', fill: true })

@@ -28,3 +28,7 @@ backend/cache/
 backend/dist/
 article/pythonSrc/eventPreview.exe
 article/pythonSrc/eventReport.exe
+tmpclaude*
+*.json
+frontend/package-lock.json
+backend/package-lock.json
