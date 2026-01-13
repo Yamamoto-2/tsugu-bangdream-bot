@@ -8,6 +8,7 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import { BACKEND_PORT } from './config/runtime';
 import { logger } from './lib/logger';
+import { requestLogger } from './lib/middleware';
 import { eventRouter } from './routes/event';
 import { songRouter } from './routes/song';
 
@@ -18,6 +19,9 @@ const app = express();
 // Enable CORS for frontend
 app.use(cors());
 app.use(express.json());
+
+// Request/response logging
+app.use(requestLogger);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
