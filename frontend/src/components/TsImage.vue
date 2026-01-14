@@ -1,15 +1,24 @@
 <script setup lang="ts">
+import { computed, type CSSProperties } from 'vue'
 import type { ImageProps } from '@/core/types'
 
-const props = withDefaults(defineProps<ImageProps>(), {
+interface TsImageProps extends ImageProps {
+  css?: CSSProperties;
+}
+
+const props = withDefaults(defineProps<TsImageProps>(), {
   fit: 'contain',
   lazy: true
 })
 
-const imageStyle = {
-  width: typeof props.width === 'number' ? `${props.width}px` : props.width,
-  height: typeof props.height === 'number' ? `${props.height}px` : props.height
-}
+// 合并内部样式和外部 css，css 优先级更高
+const mergedStyle = computed<CSSProperties>(() => {
+  const baseStyle: CSSProperties = {
+    width: typeof props.width === 'number' ? `${props.width}px` : props.width,
+    height: typeof props.height === 'number' ? `${props.height}px` : props.height
+  }
+  return { ...baseStyle, ...props.css }
+})
 </script>
 
 <template>
@@ -19,7 +28,7 @@ const imageStyle = {
     :alt="props.alt"
     :lazy="props.lazy"
     :preview-src-list="props.previewSrcList"
-    :style="imageStyle"
+    :style="mergedStyle"
     class="ts-image"
   >
     <template #error>

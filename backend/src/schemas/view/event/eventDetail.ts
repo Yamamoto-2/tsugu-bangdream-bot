@@ -101,8 +101,8 @@ function buildMainInfoCard(
 ): SchemaNode {
   const cardChildren: SchemaNode[] = [];
 
-  // Banner 图片
-  cardChildren.push(EventBanner({ event, server: serverKey }));
+  // Banner 图片（保持原大小，不随容器缩放）
+  cardChildren.push(EventBanner({ event, server: serverKey, responsive: false }));
 
   // 活动名称（游戏数据，不经过 i18n，直接用服务器对应的语言）
   for (const server of displayedServerList) {

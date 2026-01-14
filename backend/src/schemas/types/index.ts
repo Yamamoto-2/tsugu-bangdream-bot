@@ -48,7 +48,8 @@ export interface SchemaNode {
   componentName: ComponentName;
   id?: string;
   props?: Record<string, any>;
-  style?: Record<string, any>;
+  /** 原生 CSS 样式，优先级高于 props 中的样式属性 */
+  css?: Record<string, any>;
   children?: SchemaNode[];
   visible?: boolean;
 }

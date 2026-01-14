@@ -12,11 +12,11 @@ const component = computed(() => {
   return componentMap[props.node.componentName]
 })
 
-// 合并 props
+// 合并 props，将 css 字段传递给组件
 const mergedProps = computed(() => {
   return {
     ...props.node.props,
-    style: props.node.style
+    css: props.node.css
   }
 })
 
