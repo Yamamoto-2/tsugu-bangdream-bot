@@ -292,8 +292,8 @@ export function getMetaRanking(Fever: boolean, mainServer: Server): songInRank[]
     for (let i = 0; i < songIdList.length; i++) {
         const songId = songIdList[i];
         var song = new Song(parseInt(songId))
-        //如果在所选服务器都没有发布，则跳过
-        if (song.publishedAt[mainServer] == null) {
+        //如果在所选服务器都没有发布，或者难度信息缺失，则跳过
+        if (song.publishedAt[mainServer] == null || Object.keys(song.notes).length == 0 ) {
             continue
         }
         //如果没有meta数据，则跳过
