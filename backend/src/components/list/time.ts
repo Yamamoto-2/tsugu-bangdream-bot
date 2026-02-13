@@ -4,6 +4,7 @@ import { Server, getServerByName } from '@/types/Server';
 import { drawListByServerList } from '@/components/list'
 import { Canvas } from 'skia-canvas'
 import { Event } from '@/types/Event'
+import mainAPI from "@/types/_Main";
 
 interface timeInListOptions {
     key?: string;
@@ -37,15 +38,43 @@ export async function drawTimeInList({
     return canvas
 }
 //获取当前活动与查询活动的大致时间差(国服)
+//注: 返回的并非时间差，而是活动预计开始的时间戳
 export function GetProbablyTimeDifference(eventId: number, currentEvent: Event): number {
-    /*
-    var diff = eventId - currentEvent.eventId;
-    var timeStamp = currentEvent.startAt[3] + 1000 * 60 * 60 * 24 * 9 * diff;
-    */
-    //国服从第253期活动开始，与日服完全同步
+    // 待查的活动
     const tempEvent = new Event(eventId)
-    const tempServer254 = currentEvent  // 从固定的253改为当期活动，临时修复国服311活动之前的预测时间不准确的问题；313之后的预测时间将会在313开始举行的时候恢复正常
-    const timeStamp = tempEvent.startAt[Server.jp] + (tempServer254.startAt[Server.cn] - tempServer254.startAt[Server.jp])
+
+    // 查询已经进行过的活动并加入偏移量
+    const eventsData = mainAPI['events'];
+    const eventsRecord: Record<number,Event> = {};
+    eventsRecord[currentEvent.eventId] = currentEvent;
+    const completedEvent =
+        Object.keys(eventsData).map(Number).filter((theEventId) => {
+            // 活动ID层过滤
+            if(theEventId <= currentEvent.eventId || theEventId >= eventId) return false;
+            const theEvent = new Event(theEventId);
+            // 防止undefined
+            if (!theEvent.startAt[Server.jp] || !tempEvent.startAt[Server.jp] || !currentEvent.startAt[Server.jp]) return false;
+            // 活动时间层过滤
+            if(theEvent.startAt[Server.jp] <= currentEvent.startAt[Server.jp]
+              || theEvent.startAt[Server.jp] >= tempEvent.startAt[Server.jp]) return false;
+            eventsRecord[theEventId] = theEvent;
+            return !!(theEvent.startAt[Server.cn]);
+        });
+
+    // 已完成活动需要调整的时间偏移（为负数），包括活动时间和活动前的无邦日
+    const finishOffset = completedEvent.reduce((acc, cur) => {
+        const theEvent = eventsRecord[cur];
+        const preEvent = eventsRecord[cur-1];
+        return acc + (preEvent.endAt[Server.jp] - theEvent.endAt[Server.jp]);
+    }, 0)
+
+    // 当期时长偏移，使得当期更改活动时长后（如294）对未来活动时间的预测仍准确
+    const eventLengthOffset = (
+        occupiedDays(currentEvent.startAt[Server.cn], currentEvent.endAt[Server.cn])
+        - occupiedDays(currentEvent.startAt[Server.jp], currentEvent.endAt[Server.jp])
+    )*24*3600*1000;
+
+    const timeStamp = tempEvent.startAt[Server.jp] + (currentEvent.startAt[Server.cn] - currentEvent.startAt[Server.jp]) + finishOffset + eventLengthOffset;
     return timeStamp;
 }
 
@@ -162,4 +191,18 @@ export function formatSeconds(value: number) {
         result = "" + parseInt(theTime2.toString()) + "小时" + result;
     }
     return result;
+}
+
+function occupiedDays(startTs: number, endTs: number): number {
+    const start = new Date(startTs);
+    const end = new Date(endTs);
+
+    // 取年月日，忽略时分秒
+    const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+    const endDay = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+
+    const msPerDay = 1000 * 60 * 60 * 24;
+
+    // 计算跨越的天数，再加1包含第一天
+    return Math.floor((endDay.getTime() - startDay.getTime()) / msPerDay) + 1;
 }
