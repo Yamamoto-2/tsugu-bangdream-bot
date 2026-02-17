@@ -158,7 +158,7 @@ async function drawEventInList(event: Event, displayedServerList: Server[] = glo
     const currentEvent = getPresentEvent(getServerByName("cn"));
     for (var i = 0; i < numberOfServer; i++) {
         let server = displayedServerList[i]
-        if (server == getServerByName('cn') && event.startAt[server] == null && event.eventId > currentEvent.eventId) {
+        if (server == getServerByName('cn') && event.startAt[server] == null ) {    // && event.eventId > currentEvent.eventId
             content.push(await getIcon(server), `${changeTimefomant(GetProbablyTimeDifference(event.eventId, currentEvent))} (预计开放时间)\n`)
         }
         else {
