@@ -361,7 +361,7 @@ export function sortEventList(tempEventList: Event[], displayedServerList: Serve
         for (var i = 0; i < displayedServerList.length; i++) {
             var server = displayedServerList[i]
             if (a.startAt[server] == null || b.startAt[server] == null) {
-                if (server == Server.cn){
+                if (displayedServerList[0] == Server.cn){
                     // 再尝试通过预估时间排序
                     let prvEvent = null
                     let nxtEvent = null
