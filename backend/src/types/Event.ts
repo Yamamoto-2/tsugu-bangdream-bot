@@ -356,6 +356,7 @@ export function getPresentEvent(server: Server, time?: number) {
 
 //根据服务器，将活动列表排序
 export function sortEventList(tempEventList: Event[], displayedServerList: Server[] = globalDefaultServer) {
+    let presentEventCN = getPresentEvent(Server.cn)
     tempEventList.sort((a, b) => {
         for (var i = 0; i < displayedServerList.length; i++) {
             var server = displayedServerList[i]
@@ -364,7 +365,6 @@ export function sortEventList(tempEventList: Event[], displayedServerList: Serve
                     // 再尝试通过预估时间排序
                     let prvEvent = null
                     let nxtEvent = null
-                    let presentEventCN = getPresentEvent(server)
                     if (a.startAt[server] == null){
                         prvEvent = GetProbablyTimeDifference(a.eventId,presentEventCN)
                     }else{
