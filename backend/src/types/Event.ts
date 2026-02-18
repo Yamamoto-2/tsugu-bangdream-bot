@@ -7,6 +7,7 @@ import { Attribute } from '@/types/Attribute';
 import { Character } from '@/types/Character';
 import { globalDefaultServer, Bestdoriurl } from '@/config';
 import { stringToNumberArray } from '@/types/utils'
+import { GetProbablyTimeDifference } from '@/components/list/time';
 
 const typeName = {
     "story": "一般活动 (协力)",
@@ -355,10 +356,29 @@ export function getPresentEvent(server: Server, time?: number) {
 
 //根据服务器，将活动列表排序
 export function sortEventList(tempEventList: Event[], displayedServerList: Server[] = globalDefaultServer) {
+    let presentEventCN = getPresentEvent(Server.cn)
     tempEventList.sort((a, b) => {
         for (var i = 0; i < displayedServerList.length; i++) {
             var server = displayedServerList[i]
             if (a.startAt[server] == null || b.startAt[server] == null) {
+                if (displayedServerList[0] == Server.cn){
+                    // 再尝试通过预估时间排序
+                    let prvEvent = null
+                    let nxtEvent = null
+                    if (a.startAt[server] == null){
+                        prvEvent = GetProbablyTimeDifference(a.eventId,presentEventCN)
+                    }else{
+                        prvEvent = a.startAt[server]
+                    }
+                    if (b.startAt[server] == null){
+                        nxtEvent = GetProbablyTimeDifference(b.eventId,presentEventCN)
+                    }else{
+                        nxtEvent = b.startAt[server]
+                    }
+                    if (prvEvent != null || nxtEvent != null){
+                        return prvEvent - nxtEvent
+                    }
+                }
                 continue
             }
             if (a.startAt[server] != b.startAt[server]) {

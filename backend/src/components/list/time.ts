@@ -40,42 +40,39 @@ export async function drawTimeInList({
 //获取当前活动与查询活动的大致时间差(国服)
 //注: 返回的并非时间差，而是活动预计开始的时间戳
 export function GetProbablyTimeDifference(eventId: number, currentEvent: Event): number {
-    // 待查的活动
-    const tempEvent = new Event(eventId)
-
-    // 查询已经进行过的活动并加入偏移量
-    const eventsData = mainAPI['events'];
-    const eventsRecord: Record<number,Event> = {};
-    eventsRecord[currentEvent.eventId] = currentEvent;
-    const completedEvent =
-        Object.keys(eventsData).map(Number).filter((theEventId) => {
-            // 活动ID层过滤
-            if(theEventId <= currentEvent.eventId || theEventId >= eventId) return false;
-            const theEvent = new Event(theEventId);
-            // 防止undefined
-            if (!theEvent.startAt[Server.jp] || !tempEvent.startAt[Server.jp] || !currentEvent.startAt[Server.jp]) return false;
-            // 活动时间层过滤
-            if(theEvent.startAt[Server.jp] <= currentEvent.startAt[Server.jp]
-              || theEvent.startAt[Server.jp] >= tempEvent.startAt[Server.jp]) return false;
-            eventsRecord[theEventId] = theEvent;
-            return !!(theEvent.startAt[Server.cn]);
-        });
-
-    // 已完成活动需要调整的时间偏移（为负数），包括活动时间和活动前的无邦日
-    const finishOffset = completedEvent.reduce((acc, cur) => {
-        const theEvent = eventsRecord[cur];
-        const preEvent = eventsRecord[cur-1];
-        return acc + (preEvent.endAt[Server.jp] - theEvent.endAt[Server.jp]);
-    }, 0)
-
-    // 当期时长偏移，使得当期更改活动时长后（如294）对未来活动时间的预测仍准确
-    const eventLengthOffset = (
-        occupiedDays(currentEvent.startAt[Server.cn], currentEvent.endAt[Server.cn])
-        - occupiedDays(currentEvent.startAt[Server.jp], currentEvent.endAt[Server.jp])
-    )*24*3600*1000;
-
-    const timeStamp = tempEvent.startAt[Server.jp] + (currentEvent.startAt[Server.cn] - currentEvent.startAt[Server.jp]) + finishOffset + eventLengthOffset;
-    return timeStamp;
+    let eventsData = mainAPI['events'];
+    let sureEndEvent = 298  // 确定已经结束的Event，减少循环量
+    let blockEventIdList:number[] = []  // 对于国服而言，涉及预估逻辑之内但不会举办的活动
+    let presentEventJP = getPresentEvent(Server.jp).eventId   // 取得日服最新一期的活动
+    let currentEventWithNoBanGDaysTotalOffset = 0
+    let currentEventId = currentEvent.eventId
+    // 计算当前活动日服与国服的实际持续天数偏移
+    let eventLenOffset = occupiedDays(new Event(currentEventId).startAt[Server.cn],new Event(currentEventId).endAt[Server.cn])
+                        - occupiedDays(new Event(currentEventId).startAt[Server.jp],new Event(currentEventId).endAt[Server.jp])
+    let defaultNoBanGDays = 1   // 对于没有推断无邦日的，默认一天无邦日。
+    // 计算当前正在进行的活动含无邦日当天一共有多少天
+    if (currentEventId < presentEventJP){
+        currentEventWithNoBanGDaysTotalOffset = (occupiedDays(new Event(currentEventId).startAt[Server.jp],new Event(currentEventId+1).startAt[Server.jp])-1+eventLenOffset)*24*3600*1000
+    }
+    else if(currentEventId == presentEventJP){
+        // 如果当前活动与日服并行，则计算无邦日就从上一个endAt到这一个endAt
+        currentEventWithNoBanGDaysTotalOffset = (occupiedDays(new Event(currentEventId-1).endAt[Server.jp],new Event(currentEventId).endAt[Server.jp])-1+eventLenOffset)*24*3600*1000
+    }
+    else{
+        // 预防国服可能出现与台服一样存在自有活动的情形，如台服5001。
+        currentEventWithNoBanGDaysTotalOffset = (occupiedDays(new Event(currentEventId).startAt[Server.cn],new Event(currentEventId).endAt[Server.cn])+defaultNoBanGDays)*24*3600*1000
+    }
+    let ProbablyTimeOffset = currentEvent.startAt[Server.cn]    // 等于正在举办活动的StartAt
+    for(var i = sureEndEvent ;i<presentEventJP;i++){
+        if (!eventsData[i.toString()]["startAt"][Server.cn]){   // 对于国服来说当前活动未举办
+            // 计算活动相对于日服（含无邦日）的时长。
+            ProbablyTimeOffset +=(occupiedDays(new Event(i).startAt[Server.jp],new Event(i+1).startAt[Server.jp]) -1 )*24*3600*1000
+        }
+        if (i + 1 == eventId) return (ProbablyTimeOffset + currentEventWithNoBanGDaysTotalOffset) //如果下一个循环是要获取的时间
+        if (blockEventIdList.includes(i+1)) continue    // 对于国服而言不会举办的活动，跳过
+    }
+    let presentEventJPLen=(occupiedDays(new Event(presentEventJP).startAt[Server.jp],new Event(presentEventJP).endAt[Server.jp])+defaultNoBanGDays)*24*3600*1000
+    return ProbablyTimeOffset + currentEventWithNoBanGDaysTotalOffset + presentEventJPLen  // 日服321，预测322+
 }
 
 export function changeTimefomant(timeStamp: number | null) {//时间戳到年月日 精确到分钟
