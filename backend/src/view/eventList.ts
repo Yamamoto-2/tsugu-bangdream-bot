@@ -70,7 +70,7 @@ export async function drawEventList(matches: FuzzySearchResult, displayedServerL
     }
 
     // 按照开始时间排序
-    sortEventList(tempEventList)
+    sortEventList(tempEventList,displayedServerList)
 
     var eventPromises: Promise<{ index: number, image: Canvas }>[] = [];
     var tempH = 0;
