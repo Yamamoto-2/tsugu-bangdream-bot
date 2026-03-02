@@ -1,3 +1,6 @@
+/**
+ * 中文翻译 (默认语言)
+ */
 import type { I18nDictionary } from '../types';
 
 export const zh: I18nDictionary = {
@@ -19,34 +22,44 @@ export const zh: I18nDictionary = {
       live_try: 'Live Try',
       challenge: '挑战Live',
       mission_live: 'Mission Live',
-      festival: '团队Festival',
-      medley: 'Medley Live',
+      festival: '团队Live',
+      medley: '组曲Live',
     },
     // 标签文本
     label: {
-      server: '服务器',
-      eventType: '活动类型',
-      eventId: '活动ID',
-      eventName: '活动名称',
-      startTime: '开始时间',
-      endTime: '结束时间',
+      name: '名称',
+      type: '类型',
+      id: 'ID',
+      start: '开始',
+      end: '结束',
       bonus: '活动加成',
-      rewards: '奖励卡牌',
-      attribute: '属性加成',
-      character: '角色加成',
+      rewardCards: '奖励卡牌',
+      progress: '活动进度',
+      remaining: '剩余',
+      progressPercent: '进度',
     },
-    // 时间相关
-    time: {
+    // 时间状态
+    status: {
       notStarted: '未开始',
       inProgress: '进行中',
       ended: '已结束',
-      remaining: '剩余 {days} 天 {hours} 小时',
-      minutesRemaining: '{minutes} 分钟后',
+    },
+    // 页面标题
+    title: {
+      detail: '活动 {eventId} 详情',
     },
   },
 
   // 卡牌相关
   card: {
+    label: {
+      card: '卡牌',
+      cardId: '卡牌ID',
+      character: '角色',
+      attribute: '属性',
+      rarity: '稀有度',
+      skill: '技能',
+    },
     rarity: {
       1: '★',
       2: '★★',
@@ -54,13 +67,23 @@ export const zh: I18nDictionary = {
       4: '★★★★',
       5: '★★★★★',
     },
-    label: {
-      cardId: '卡牌ID',
-      character: '角色',
-      attribute: '属性',
-      rarity: '稀有度',
-      skill: '技能',
-      releaseDate: '发布日期',
+  },
+
+  // 时间格式化
+  time: {
+    justNow: '刚刚',
+    minutesAgo: '{minutes} 分钟前',
+    hoursAgo: '{hours} 小时前',
+    daysAgo: '{days} 天前',
+    aboutToStart: '即将开始',
+    minutesLater: '{minutes} 分钟后',
+    hoursLater: '{hours} 小时后',
+    daysLater: '{days} 天后',
+    remaining: {
+      ended: '已结束',
+      daysHours: '{days}天{hours}小时',
+      hoursMinutes: '{hours}小时{minutes}分钟',
+      minutes: '{minutes}分钟',
     },
   },
 
@@ -85,17 +108,32 @@ export const zh: I18nDictionary = {
     46: 'Ave Mujica',
   },
 
+  // 数字格式化
+  number: {
+    percent: '{value}%',
+    billion: '{value}亿',
+    tenThousand: '{value}万',
+  },
+
   // 通用
   common: {
     loading: '加载中...',
     error: '加载失败',
     noData: '暂无数据',
-    percent: '{value}%',
-    name: '名称',
-    id: 'ID',
-    type: '类型',
-    start: '开始',
-    end: '结束',
+    notFound: '不存在',
+  },
+
+  // 加成相关
+  bonus: {
+    attribute: '属性加成',
+    character: '角色加成',
+    allFit: '偏科加成',
+    percent: '+{value}%',
+    stat: {
+      performance: '演奏',
+      technique: '技巧',
+      visual: '形象',
+    },
   },
 
   // 歌曲相关

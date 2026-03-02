@@ -1,49 +1,65 @@
+/**
+ * English translations
+ */
 import type { I18nDictionary } from '../types';
 
 export const en: I18nDictionary = {
-  // 服务器名称
+  // Server names
   server: {
-    jp: 'Japanese',
-    en: 'Global',
-    tw: 'Taiwan',
-    cn: 'Chinese',
-    kr: 'Korean',
+    jp: 'JP',
+    en: 'EN',
+    tw: 'TW',
+    cn: 'CN',
+    kr: 'KR',
   },
 
-  // 活动相关
+  // Event related
   event: {
+    // Event types
     type: {
       story: 'Story Event',
       versus: 'VS Live',
       live_try: 'Live Try',
       challenge: 'Challenge Live',
       mission_live: 'Mission Live',
-      festival: 'Team Festival',
+      festival: 'Team Live',
       medley: 'Medley Live',
     },
+    // Labels
     label: {
-      server: 'Server',
-      eventType: 'Event Type',
-      eventId: 'Event ID',
-      eventName: 'Event Name',
-      startTime: 'Start Time',
-      endTime: 'End Time',
+      name: 'Name',
+      type: 'Type',
+      id: 'ID',
+      start: 'Start',
+      end: 'End',
       bonus: 'Event Bonus',
-      rewards: 'Reward Cards',
-      attribute: 'Attribute Bonus',
-      character: 'Character Bonus',
+      rewardCards: 'Reward Cards',
+      progress: 'Event Progress',
+      remaining: 'Remaining',
+      progressPercent: 'Progress',
     },
-    time: {
+    // Time status
+    status: {
       notStarted: 'Not Started',
       inProgress: 'In Progress',
       ended: 'Ended',
-      remaining: '{days}d {hours}h remaining',
-      minutesRemaining: 'in {minutes} minutes',
+    },
+    // Page title
+    title: {
+      detail: 'Event {eventId} Details',
     },
   },
 
-  // 卡牌相关
+  // Card related
   card: {
+    label: {
+      card: 'Card',
+      cardId: 'Card ID',
+      character: 'Character',
+      attribute: 'Attribute',
+      rarity: 'Rarity',
+      skill: 'Skill',
+    },
     rarity: {
       1: '★',
       2: '★★',
@@ -51,17 +67,27 @@ export const en: I18nDictionary = {
       4: '★★★★',
       5: '★★★★★',
     },
-    label: {
-      cardId: 'Card ID',
-      character: 'Character',
-      attribute: 'Attribute',
-      rarity: 'Rarity',
-      skill: 'Skill',
-      releaseDate: 'Release Date',
+  },
+
+  // Time formatting
+  time: {
+    justNow: 'Just now',
+    minutesAgo: '{minutes} min ago',
+    hoursAgo: '{hours} hr ago',
+    daysAgo: '{days} days ago',
+    aboutToStart: 'Starting soon',
+    minutesLater: 'in {minutes} min',
+    hoursLater: 'in {hours} hr',
+    daysLater: 'in {days} days',
+    remaining: {
+      ended: 'Ended',
+      daysHours: '{days}d {hours}h',
+      hoursMinutes: '{hours}h {minutes}m',
+      minutes: '{minutes}m',
     },
   },
 
-  // 属性
+  // Attribute
   attribute: {
     powerful: 'Powerful',
     cool: 'Cool',
@@ -69,7 +95,7 @@ export const en: I18nDictionary = {
     happy: 'Happy',
   },
 
-  // 乐队
+  // Band
   band: {
     1: "Poppin'Party",
     2: 'Afterglow',
@@ -82,20 +108,35 @@ export const en: I18nDictionary = {
     46: 'Ave Mujica',
   },
 
-  // 通用
+  // Number formatting
+  number: {
+    percent: '{value}%',
+    billion: '{value}B',
+    tenThousand: '{value}K',
+  },
+
+  // Common
   common: {
     loading: 'Loading...',
     error: 'Failed to load',
     noData: 'No data',
-    percent: '{value}%',
-    name: 'Name',
-    id: 'ID',
-    type: 'Type',
-    start: 'Start',
-    end: 'End',
+    notFound: 'Not found',
   },
 
-  // 歌曲相关
+  // Bonus related
+  bonus: {
+    attribute: 'Attribute Bonus',
+    character: 'Character Bonus',
+    allFit: 'All Fit Bonus',
+    percent: '+{value}%',
+    stat: {
+      performance: 'Performance',
+      technique: 'Technique',
+      visual: 'Visual',
+    },
+  },
+
+  // Song related
   song: {
     label: {
       songId: 'Song ID',
@@ -116,7 +157,7 @@ export const en: I18nDictionary = {
     },
   },
 
-  // 角色相关
+  // Character related
   character: {
     label: {
       characterId: 'Character ID',
@@ -125,7 +166,7 @@ export const en: I18nDictionary = {
     },
   },
 
-  // 抽卡相关
+  // Gacha related
   gacha: {
     label: {
       gachaId: 'Gacha ID',

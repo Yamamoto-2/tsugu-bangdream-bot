@@ -1,3 +1,6 @@
+/**
+ * 核心翻译器
+ */
 import type { Language, I18nParams, I18nDictionary } from './types';
 import { DEFAULT_LANGUAGE } from './types';
 import { locales } from './locales';
@@ -72,4 +75,16 @@ export function t(key: string, language: Language, params?: I18nParams): string 
  */
 export function createTranslator(language: Language) {
   return (key: string, params?: I18nParams) => t(key, language, params);
+}
+
+/**
+ * 根据语言获取本地化的时间格式化选项
+ */
+export function getDateLocale(language: Language): string {
+  const localeMap: Record<Language, string> = {
+    zh: 'zh-CN',
+    en: 'en-US',
+    ja: 'ja-JP',
+  };
+  return localeMap[language];
 }

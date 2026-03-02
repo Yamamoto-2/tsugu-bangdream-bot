@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npx ts-node-dev:*)",
+      "Bash(curl:*)",
+      "Bash(timeout 5 npm run dev:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(npx vue-tsc:*)",
+      "Bash(timeout:*)",
+      "Bash(ping:*)",
+      "WebFetch(domain:bestdori.com)",
+      "Bash(SRC=\"C:\\\\Project\\\\shadcn-vue\\\\apps\\\\v4\\\\registry\\\\new-york-v4\\\\ui\")",
+      "Bash(DST=\"c:\\\\Project\\\\tsugu-bangdream-bot\\\\frontend\\\\src\\\\components\\\\ui\")",
+      "Bash(for dir in card alert table badge progress skeleton separator empty)",
+      "Bash(do cp -r \"$SRC/$dir/\"* \"$DST/$dir/\")",
+      "Bash(done)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm run build:*)"
+    ]
+  }
+}

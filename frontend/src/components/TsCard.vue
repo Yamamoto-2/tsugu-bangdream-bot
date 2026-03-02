@@ -1,43 +1,29 @@
 <script setup lang="ts">
 import type { CardProps } from '@/core/types'
+import { cn } from '@/lib/utils'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 
-const props = withDefaults(defineProps<CardProps>(), {
+const props = withDefaults(defineProps<CardProps & { css?: Record<string, any> }>(), {
   shadow: 'hover'
 })
+
+const shadowClass: Record<string, string> = {
+  always: 'shadow-md',
+  hover: 'shadow-sm hover:shadow-md transition-shadow',
+  never: 'shadow-none'
+}
 </script>
 
 <template>
-  <el-card
-    :shadow="props.shadow"
-    :body-style="props.bodyStyle"
-    class="ts-card"
+  <Card
+    :class="cn('mb-3 md:mb-5', shadowClass[props.shadow ?? 'hover'])"
+    :style="props.css"
   >
-    <template v-if="props.header" #header>
-      <div class="card-header">
-        {{ props.header }}
-      </div>
-    </template>
-    <slot />
-  </el-card>
+    <CardHeader v-if="props.header">
+      <CardTitle class="text-base font-semibold">{{ props.header }}</CardTitle>
+    </CardHeader>
+    <CardContent :style="props.bodyStyle">
+      <slot />
+    </CardContent>
+  </Card>
 </template>
-
-<style scoped>
-.ts-card {
-  margin-bottom: 20px;
-}
-
-.card-header {
-  font-weight: 600;
-  font-size: 16px;
-}
-
-@media (max-width: 768px) {
-  .ts-card {
-    margin-bottom: 12px;
-  }
-
-  .ts-card :deep(.el-card__body) {
-    padding: 12px;
-  }
-}
-</style>

@@ -6,7 +6,7 @@ import { ref } from 'vue'
 import SchemaRenderer from '@/core/SchemaRenderer.vue'
 import type { SchemaNode } from '@/core/types'
 
-// 默认演示 Schema - 展示所有 Element Plus 组件
+// 默认演示 Schema - 展示所有组件
 const demoSchema: SchemaNode = {
   componentName: 'Page',
   props: {
@@ -26,7 +26,7 @@ const demoSchema: SchemaNode = {
         {
           componentName: 'Alert',
           props: {
-            title: '基于 Element Plus 重构',
+            title: '基于 shadcn-vue 重构',
             description: '使用 Schema 驱动的方式渲染 UI 组件，支持响应式布局',
             type: 'success',
             showIcon: true,

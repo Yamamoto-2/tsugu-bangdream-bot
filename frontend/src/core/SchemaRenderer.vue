@@ -41,19 +41,8 @@ const isVisible = computed(() => {
     />
   </component>
   <template v-else-if="!component && isVisible">
-    <div class="unknown-component">
+    <div class="p-3 bg-red-50 border border-red-300 rounded text-red-500 text-sm">
       Unknown component: {{ props.node.componentName }}
     </div>
   </template>
 </template>
-
-<style scoped>
-.unknown-component {
-  padding: 12px;
-  background-color: #fef0f0;
-  border: 1px solid #fbc4c4;
-  border-radius: 4px;
-  color: #f56c6c;
-  font-size: 14px;
-}
-</style>

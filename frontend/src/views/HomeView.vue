@@ -4,6 +4,10 @@
  */
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { Separator } from '@/components/ui/separator'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import { ArrowRight } from 'lucide-vue-next'
 
 const router = useRouter()
 const eventId = ref('')
@@ -17,57 +21,7 @@ function goToEventDetail() {
 function goToDemo() {
   router.push('/demo')
 }
-</script>
 
-<template>
-  <div class="home-view">
-    <div class="home-container">
-      <h1 class="title">Tsugu v5 渲染器</h1>
-      <p class="subtitle">Schema 驱动的 BangDream 数据展示</p>
-
-      <el-divider />
-
-      <div class="quick-access">
-        <h3>快速访问</h3>
-
-        <el-card class="access-card">
-          <template #header>活动详情</template>
-          <el-input
-            v-model="eventId"
-            placeholder="输入活动 ID"
-            @keyup.enter="goToEventDetail"
-          >
-            <template #append>
-              <el-button @click="goToEventDetail">
-                <el-icon><Right /></el-icon>
-              </el-button>
-            </template>
-          </el-input>
-        </el-card>
-
-        <el-card class="access-card">
-          <template #header>示例页面</template>
-          <el-button type="primary" @click="goToDemo" style="width: 100%">
-            查看组件演示
-          </el-button>
-        </el-card>
-      </div>
-
-      <el-divider />
-
-      <div class="api-docs">
-        <h3>API 路由</h3>
-        <el-table :data="routes" stripe>
-          <el-table-column prop="path" label="路径" width="200" />
-          <el-table-column prop="description" label="说明" />
-          <el-table-column prop="example" label="示例" width="200" />
-        </el-table>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script lang="ts">
 const routes = [
   { path: '/event/:eventId', description: '活动详情', example: '/event/123' },
   { path: '/event/:eventId/preview', description: '活动预览', example: '/event/123/preview' },
@@ -75,54 +29,75 @@ const routes = [
 ]
 </script>
 
-<style scoped>
-.home-view {
-  min-height: 100vh;
-  background: var(--el-bg-color-page);
-  padding: 40px 20px;
-}
+<template>
+  <div class="min-h-screen bg-muted px-5 py-10">
+    <div class="mx-auto max-w-[800px]">
+      <h1 class="text-4xl font-bold text-foreground mb-2">Tsugu v5 渲染器</h1>
+      <p class="text-lg text-muted-foreground">Schema 驱动的 BangDream 数据展示</p>
 
-.home-container {
-  max-width: 800px;
-  margin: 0 auto;
-}
+      <Separator class="my-6" />
 
-.title {
-  font-size: 2.5em;
-  margin-bottom: 0.5em;
-  color: var(--el-text-color-primary);
-}
+      <div class="flex flex-col md:flex-row gap-4">
+        <h3 class="text-lg font-semibold w-full md:hidden">快速访问</h3>
 
-.subtitle {
-  font-size: 1.2em;
-  color: var(--el-text-color-secondary);
-}
+        <Card class="flex-1">
+          <CardHeader>
+            <CardTitle class="text-base">活动详情</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div class="flex gap-2">
+              <input
+                v-model="eventId"
+                placeholder="输入活动 ID"
+                class="flex-1 h-9 rounded-md border border-input bg-background px-3 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                @keyup.enter="goToEventDetail"
+              />
+              <button
+                class="inline-flex items-center justify-center h-9 px-3 rounded-md border border-input bg-background text-sm shadow-xs hover:bg-accent transition-colors"
+                @click="goToEventDetail"
+              >
+                <ArrowRight class="size-4" />
+              </button>
+            </div>
+          </CardContent>
+        </Card>
 
-.quick-access {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+        <Card class="flex-1">
+          <CardHeader>
+            <CardTitle class="text-base">示例页面</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <button
+              class="w-full h-9 rounded-md bg-primary text-primary-foreground text-sm font-medium shadow-xs hover:bg-primary/90 transition-colors"
+              @click="goToDemo"
+            >
+              查看组件演示
+            </button>
+          </CardContent>
+        </Card>
+      </div>
 
-.quick-access h3 {
-  margin-bottom: 8px;
-}
+      <Separator class="my-6" />
 
-.access-card {
-  width: 100%;
-}
-
-.api-docs h3 {
-  margin-bottom: 16px;
-}
-
-@media (min-width: 768px) {
-  .quick-access {
-    flex-direction: row;
-  }
-
-  .access-card {
-    flex: 1;
-  }
-}
-</style>
+      <div>
+        <h3 class="text-lg font-semibold mb-4">API 路由</h3>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead class="w-[200px]">路径</TableHead>
+              <TableHead>说明</TableHead>
+              <TableHead class="w-[200px]">示例</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="(route, i) in routes" :key="i" :class="i % 2 === 1 ? 'bg-muted/50' : ''">
+              <TableCell>{{ route.path }}</TableCell>
+              <TableCell>{{ route.description }}</TableCell>
+              <TableCell>{{ route.example }}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  </div>
+</template>

@@ -1,31 +1,31 @@
 /**
  * Tsugu Schema 类型定义
- * v2 - 基于 Element Plus 重构
+ * v2 - 基于 shadcn-vue + Tailwind CSS
  */
 
 // 组件名称类型
 export type ComponentName =
   | 'Page'           // 页面容器
   | 'Container'      // 响应式容器
-  | 'Row'            // 行布局 (el-row)
-  | 'Col'            // 列布局 (el-col)
-  | 'Card'           // 卡片容器 (el-card)
+  | 'Row'            // 行布局
+  | 'Col'            // 列布局
+  | 'Card'           // 卡片容器
   | 'Text'           // 文本显示
   | 'Title'          // 标题
   | 'Image'          // 图片
-  | 'Tag'            // 标签 (el-tag)
-  | 'Divider'        // 分割线 (el-divider)
-  | 'Table'          // 表格 (el-table)
-  | 'Descriptions'   // 描述列表 (el-descriptions)
+  | 'Tag'            // 标签
+  | 'Divider'        // 分割线
+  | 'Table'          // 表格
+  | 'Descriptions'   // 描述列表
   | 'Chart'          // 图表
-  | 'Space'          // 间距容器 (el-space)
-  | 'Link'           // 链接 (el-link)
-  | 'Alert'          // 提示 (el-alert)
-  | 'Statistic'      // 统计数值 (el-statistic)
-  | 'Progress'       // 进度条 (el-progress)
-  | 'Empty'          // 空状态 (el-empty)
-  | 'Skeleton'       // 骨架屏 (el-skeleton)
-  | 'Canvas';        // Canvas 画布 (通用绘图)
+  | 'Space'          // 间距容器
+  | 'Link'           // 链接
+  | 'Alert'          // 提示
+  | 'Statistic'      // 统计数值
+  | 'Progress'       // 进度条
+  | 'Empty'          // 空状态
+  | 'Skeleton'       // 骨架屏
+  | 'Canvas';        // Canvas 画布
 
 // Schema 节点定义
 export interface SchemaNode {
@@ -46,7 +46,7 @@ export interface PageProps {
 }
 
 export interface ContainerProps {
-  // 无特殊 props，使用 el-container 默认行为
+  // 无特殊 props
 }
 
 export interface RowProps {

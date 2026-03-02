@@ -1,27 +1,14 @@
 <script setup lang="ts">
-// 响应式容器
+import type { ContainerProps } from '@/core/types'
+
+defineProps<ContainerProps & { css?: Record<string, any> }>()
 </script>
 
 <template>
-  <div class="ts-container">
+  <div
+    class="mx-auto max-w-[1200px] flex flex-col gap-3 px-3 md:gap-5 md:px-5"
+    :style="css"
+  >
     <slot />
   </div>
 </template>
-
-<style scoped>
-.ts-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-@media (max-width: 768px) {
-  .ts-container {
-    padding: 0 12px;
-    gap: 12px;
-  }
-}
-</style>

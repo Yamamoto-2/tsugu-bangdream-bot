@@ -1,49 +1,65 @@
+/**
+ * 日本語翻訳
+ */
 import type { I18nDictionary } from '../types';
 
 export const ja: I18nDictionary = {
-  // 服务器名称
+  // サーバー名
   server: {
-    jp: '日本版',
-    en: 'グローバル版',
-    tw: '台湾版',
-    cn: '中国版',
-    kr: '韓国版',
+    jp: '日本',
+    en: '海外',
+    tw: '台湾',
+    cn: '中国',
+    kr: '韓国',
   },
 
-  // 活动相关
+  // イベント関連
   event: {
+    // イベントタイプ
     type: {
-      story: 'ストーリーイベント',
+      story: '通常イベント',
       versus: 'VSライブ',
       live_try: 'ライブトライ',
       challenge: 'チャレンジライブ',
       mission_live: 'ミッションライブ',
-      festival: 'チームフェスティバル',
+      festival: 'チームライブ',
       medley: 'メドレーライブ',
     },
+    // ラベル
     label: {
-      server: 'サーバー',
-      eventType: 'イベントタイプ',
-      eventId: 'イベントID',
-      eventName: 'イベント名',
-      startTime: '開始時間',
-      endTime: '終了時間',
+      name: '名前',
+      type: 'タイプ',
+      id: 'ID',
+      start: '開始',
+      end: '終了',
       bonus: 'イベントボーナス',
-      rewards: '報酬カード',
-      attribute: '属性ボーナス',
-      character: 'キャラボーナス',
+      rewardCards: '報酬カード',
+      progress: 'イベント進捗',
+      remaining: '残り',
+      progressPercent: '進捗',
     },
-    time: {
+    // 時間ステータス
+    status: {
       notStarted: '未開始',
       inProgress: '開催中',
       ended: '終了',
-      remaining: '残り {days}日 {hours}時間',
-      minutesRemaining: 'あと {minutes}分',
+    },
+    // ページタイトル
+    title: {
+      detail: 'イベント {eventId} 詳細',
     },
   },
 
-  // 卡牌相关
+  // カード関連
   card: {
+    label: {
+      card: 'カード',
+      cardId: 'カードID',
+      character: 'キャラクター',
+      attribute: '属性',
+      rarity: 'レアリティ',
+      skill: 'スキル',
+    },
     rarity: {
       1: '★',
       2: '★★',
@@ -51,13 +67,23 @@ export const ja: I18nDictionary = {
       4: '★★★★',
       5: '★★★★★',
     },
-    label: {
-      cardId: 'カードID',
-      character: 'キャラクター',
-      attribute: '属性',
-      rarity: 'レアリティ',
-      skill: 'スキル',
-      releaseDate: '実装日',
+  },
+
+  // 時間フォーマット
+  time: {
+    justNow: 'たった今',
+    minutesAgo: '{minutes}分前',
+    hoursAgo: '{hours}時間前',
+    daysAgo: '{days}日前',
+    aboutToStart: 'まもなく開始',
+    minutesLater: '{minutes}分後',
+    hoursLater: '{hours}時間後',
+    daysLater: '{days}日後',
+    remaining: {
+      ended: '終了',
+      daysHours: '{days}日{hours}時間',
+      hoursMinutes: '{hours}時間{minutes}分',
+      minutes: '{minutes}分',
     },
   },
 
@@ -69,7 +95,7 @@ export const ja: I18nDictionary = {
     happy: 'ハッピー',
   },
 
-  // 乐队
+  // バンド
   band: {
     1: "Poppin'Party",
     2: 'Afterglow',
@@ -82,20 +108,35 @@ export const ja: I18nDictionary = {
     46: 'Ave Mujica',
   },
 
-  // 通用
+  // 数字フォーマット
+  number: {
+    percent: '{value}%',
+    billion: '{value}億',
+    tenThousand: '{value}万',
+  },
+
+  // 共通
   common: {
     loading: '読み込み中...',
     error: '読み込み失敗',
     noData: 'データなし',
-    percent: '{value}%',
-    name: '名前',
-    id: 'ID',
-    type: 'タイプ',
-    start: '開始',
-    end: '終了',
+    notFound: '存在しません',
   },
 
-  // 歌曲相关
+  // ボーナス関連
+  bonus: {
+    attribute: '属性ボーナス',
+    character: 'キャラボーナス',
+    allFit: '編成ボーナス',
+    percent: '+{value}%',
+    stat: {
+      performance: '演奏',
+      technique: 'テクニック',
+      visual: 'ビジュアル',
+    },
+  },
+
+  // 楽曲関連
   song: {
     label: {
       songId: '楽曲ID',
@@ -116,7 +157,7 @@ export const ja: I18nDictionary = {
     },
   },
 
-  // 角色相关
+  // キャラクター関連
   character: {
     label: {
       characterId: 'キャラクターID',
@@ -125,7 +166,7 @@ export const ja: I18nDictionary = {
     },
   },
 
-  // 抽卡相关
+  // ガチャ関連
   gacha: {
     label: {
       gachaId: 'ガチャID',

@@ -1,3 +1,6 @@
+/**
+ * 语言包汇总导出
+ */
 import type { I18nDictionary, Language } from '../types';
 import { zh } from './zh';
 import { en } from './en';

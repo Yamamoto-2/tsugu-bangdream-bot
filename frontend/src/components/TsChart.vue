@@ -21,7 +21,6 @@ import {
 } from 'chart.js'
 import type { ChartProps } from '@/core/types'
 
-// 注册 Chart.js 组件
 Chart.register(
   CategoryScale,
   LinearScale,
@@ -41,7 +40,7 @@ Chart.register(
   Filler
 )
 
-const props = withDefaults(defineProps<ChartProps>(), {
+const props = withDefaults(defineProps<ChartProps & { css?: Record<string, any> }>(), {
   type: 'line',
   width: '100%',
   height: 300
@@ -85,23 +84,13 @@ watch(() => [props.data, props.options, props.type], () => {
 
 <template>
   <div
-    class="ts-chart"
+    class="relative [&>canvas]:w-full [&>canvas]:h-full"
     :style="{
       width: typeof props.width === 'number' ? `${props.width}px` : props.width,
-      height: typeof props.height === 'number' ? `${props.height}px` : props.height
+      height: typeof props.height === 'number' ? `${props.height}px` : props.height,
+      ...props.css
     }"
   >
     <canvas ref="canvasRef" />
   </div>
 </template>
-
-<style scoped>
-.ts-chart {
-  position: relative;
-}
-
-.ts-chart canvas {
-  width: 100% !important;
-  height: 100% !important;
-}
-</style>

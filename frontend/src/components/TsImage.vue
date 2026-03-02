@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, type CSSProperties } from 'vue'
+import { ref, computed, type CSSProperties } from 'vue'
 import type { ImageProps } from '@/core/types'
+import { ImageOff, Loader2 } from 'lucide-vue-next'
 
 interface TsImageProps extends ImageProps {
-  css?: CSSProperties;
+  css?: CSSProperties
 }
 
 const props = withDefaults(defineProps<TsImageProps>(), {
@@ -11,54 +12,41 @@ const props = withDefaults(defineProps<TsImageProps>(), {
   lazy: true
 })
 
-// 合并内部样式和外部 css，css 优先级更高
-const mergedStyle = computed<CSSProperties>(() => {
-  const baseStyle: CSSProperties = {
-    width: typeof props.width === 'number' ? `${props.width}px` : props.width,
-    height: typeof props.height === 'number' ? `${props.height}px` : props.height
-  }
-  return { ...baseStyle, ...props.css }
-})
+const loaded = ref(false)
+const errored = ref(false)
+
+const mergedStyle = computed<CSSProperties>(() => ({
+  width: typeof props.width === 'number' ? `${props.width}px` : props.width,
+  height: typeof props.height === 'number' ? `${props.height}px` : props.height,
+  objectFit: props.fit,
+  ...props.css
+}))
 </script>
 
 <template>
-  <el-image
-    :src="props.src"
-    :fit="props.fit"
-    :alt="props.alt"
-    :lazy="props.lazy"
-    :preview-src-list="props.previewSrcList"
-    :style="mergedStyle"
-    class="ts-image"
-  >
-    <template #error>
-      <div class="image-error">
-        <el-icon><Picture /></el-icon>
-      </div>
-    </template>
-    <template #placeholder>
-      <div class="image-placeholder">
-        <el-icon class="is-loading"><Loading /></el-icon>
-      </div>
-    </template>
-  </el-image>
+  <div class="relative block max-w-full" :style="{ width: mergedStyle.width, height: mergedStyle.height }">
+    <img
+      v-if="!errored"
+      :src="props.src"
+      :alt="props.alt"
+      :loading="props.lazy ? 'lazy' : 'eager'"
+      class="block max-w-full"
+      :style="mergedStyle"
+      @load="loaded = true"
+      @error="errored = true"
+    />
+    <div
+      v-if="!loaded && !errored"
+      class="absolute inset-0 flex items-center justify-center bg-muted text-muted-foreground"
+    >
+      <Loader2 class="size-6 animate-spin" />
+    </div>
+    <div
+      v-if="errored"
+      class="flex items-center justify-center bg-muted text-muted-foreground"
+      :style="{ width: mergedStyle.width, height: mergedStyle.height }"
+    >
+      <ImageOff class="size-6" />
+    </div>
+  </div>
 </template>
-
-<style scoped>
-.ts-image {
-  display: block;
-  max-width: 100%;
-}
-
-.image-error,
-.image-placeholder {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background: var(--el-fill-color-light);
-  color: var(--el-text-color-secondary);
-  font-size: 24px;
-}
-</style>

@@ -10,6 +10,7 @@ import { buildEventPreviewSchema, buildEventDetailSchema } from '@/schemas/view/
 import { Server, isServerList } from '@/types/Server';
 import { Card } from '@/types/Card';
 import { Request, Response } from 'express';
+import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE, Language } from '@/i18n';
 
 const router = express.Router();
 const eventService = new EventService();
@@ -23,9 +24,10 @@ router.post('/v5/event/preview',
     [
         body('eventId').isInt(),
         body('displayedServerList').optional().custom(isServerList),
+        body('language').optional().isIn(SUPPORTED_LANGUAGES),
     ],
     async (req: Request, res: Response) => {
-        const { eventId, displayedServerList } = req.body;
+        const { eventId, displayedServerList, language } = req.body;
 
         try {
             const event = await eventService.getEventById(eventId);
@@ -51,9 +53,10 @@ router.post('/v5/event/detail',
         body('eventId').isInt(),
         body('displayedServerList').optional().custom(isServerList),
         body('imageMode').optional().isIn(['url', 'base64']),
+        body('language').optional().isIn(SUPPORTED_LANGUAGES),
     ],
     async (req: Request, res: Response) => {
-        const { eventId, displayedServerList, imageMode } = req.body;
+        const { eventId, displayedServerList, imageMode, language } = req.body;
 
         try {
             const event = await eventService.getEventById(eventId);
@@ -75,6 +78,7 @@ router.post('/v5/event/detail',
             const schema = buildEventDetailSchema(event, {
                 displayedServerList: displayedServerList || [Server.jp],
                 imageMode: imageMode || 'url',
+                language: (language as Language) || DEFAULT_LANGUAGE,
                 rewardCards
             });
             res.json(schema);

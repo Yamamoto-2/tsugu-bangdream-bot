@@ -7,6 +7,7 @@ import SchemaRenderer from '@/core/SchemaRenderer.vue'
 import type { SchemaNode } from '@/core/types'
 import { getEventDetail, getEventPreview } from '@/api/schema'
 import type { EventDetailParams, EventPreviewParams } from '@/api/schema'
+import { Loader2, AlertCircle } from 'lucide-vue-next'
 
 const props = defineProps<{
   schemaType: 'eventDetail' | 'eventPreview';
@@ -45,49 +46,32 @@ onMounted(() => {
   fetchSchema()
 })
 
-// 监听 params 变化重新获取
 watch(() => props.params, () => {
   fetchSchema()
 }, { deep: true })
 </script>
 
 <template>
-  <div class="schema-view">
+  <div class="w-full min-h-screen">
     <!-- 加载中 -->
-    <div v-if="loading" class="loading-container">
-      <el-icon class="is-loading" :size="32"><Loading /></el-icon>
+    <div v-if="loading" class="flex flex-col items-center justify-center h-screen gap-3 text-muted-foreground">
+      <Loader2 class="size-8 animate-spin" />
       <span>加载中...</span>
     </div>
 
     <!-- 错误状态 -->
-    <div v-else-if="error" class="error-container">
-      <el-empty :description="error">
-        <template #image>
-          <el-icon :size="64" color="var(--el-color-danger)"><WarningFilled /></el-icon>
-        </template>
-        <el-button type="primary" @click="fetchSchema">重试</el-button>
-      </el-empty>
+    <div v-else-if="error" class="flex flex-col items-center justify-center h-screen gap-3">
+      <AlertCircle class="size-16 text-destructive" />
+      <p class="text-muted-foreground">{{ error }}</p>
+      <button
+        class="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 transition-colors"
+        @click="fetchSchema"
+      >
+        重试
+      </button>
     </div>
 
     <!-- Schema 渲染 -->
     <SchemaRenderer v-else-if="schema" :node="schema" />
   </div>
 </template>
-
-<style scoped>
-.schema-view {
-  width: 100%;
-  min-height: 100vh;
-}
-
-.loading-container,
-.error-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  gap: 12px;
-  color: var(--el-text-color-secondary);
-}
-</style>

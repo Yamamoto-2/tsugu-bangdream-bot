@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { AlertTriangle } from 'lucide-vue-next'
 
 const router = useRouter()
 
@@ -9,21 +10,14 @@ function goHome() {
 </script>
 
 <template>
-  <div class="not-found">
-    <el-empty description="页面不存在">
-      <template #image>
-        <el-icon :size="100" color="var(--el-color-info)"><Warning /></el-icon>
-      </template>
-      <el-button type="primary" @click="goHome">返回首页</el-button>
-    </el-empty>
+  <div class="flex flex-col items-center justify-center h-screen gap-4">
+    <AlertTriangle class="size-24 text-muted-foreground" />
+    <p class="text-muted-foreground text-lg">页面不存在</p>
+    <button
+      class="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
+      @click="goHome"
+    >
+      返回首页
+    </button>
   </div>
 </template>
-
-<style scoped>
-.not-found {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-</style>

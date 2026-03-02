@@ -1,4 +1,8 @@
 /**
+ * i18n 类型定义
+ */
+
+/**
  * 支持的语言列表
  */
 export type Language = 'zh' | 'en' | 'ja';

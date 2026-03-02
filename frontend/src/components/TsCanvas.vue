@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import type { CanvasProps, CanvasCommand } from '@/core/types'
+import { Loader2 } from 'lucide-vue-next'
 
-const props = defineProps<CanvasProps>()
+const props = defineProps<CanvasProps & { css?: Record<string, any> }>()
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const loading = ref(true)
 const error = ref(false)
 
-// 加载图片（不设置 crossOrigin 以避免 CORS 问题）
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -18,7 +18,6 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   })
 }
 
-// 执行单条绘图指令
 async function executeCommand(
   ctx: CanvasRenderingContext2D,
   cmd: CanvasCommand,
@@ -31,7 +30,6 @@ async function executeCommand(
         const img = await loadImage(cmd.src)
         ctx.drawImage(img, cmd.x + offsetX, cmd.y + offsetY, cmd.w, cmd.h)
       } catch {
-        // 图片加载失败，绘制占位符
         ctx.fillStyle = '#f0f0f0'
         ctx.fillRect(cmd.x + offsetX, cmd.y + offsetY, cmd.w, cmd.h)
       }
@@ -63,7 +61,6 @@ async function executeCommand(
   }
 }
 
-// 渲染 Canvas
 async function render() {
   if (!canvasRef.value) return
 
@@ -71,18 +68,14 @@ async function render() {
   const ctx = canvas.getContext('2d')
   if (!ctx) return
 
-  // 设置 canvas 尺寸
   canvas.width = props.width
   canvas.height = props.height
-
-  // 清空画布
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
   loading.value = true
   error.value = false
 
   try {
-    // 执行所有绘图指令
     for (const cmd of props.commands) {
       await executeCommand(ctx, cmd)
     }
@@ -94,7 +87,6 @@ async function render() {
   }
 }
 
-// 监听 props 变化重新渲染
 watch(
   () => [props.width, props.height, props.commands],
   () => render(),
@@ -107,35 +99,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="ts-canvas" :style="{ width: `${props.width}px`, height: `${props.height}px` }">
-    <canvas ref="canvasRef" class="canvas-element" />
-    <div v-if="loading" class="loading-overlay">
-      <el-icon class="is-loading"><Loading /></el-icon>
+  <div class="relative inline-block" :style="{ width: `${props.width}px`, height: `${props.height}px`, ...props.css }">
+    <canvas ref="canvasRef" class="block" />
+    <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-white/80">
+      <Loader2 class="size-6 animate-spin text-primary" />
     </div>
   </div>
 </template>
-
-<style scoped>
-.ts-canvas {
-  position: relative;
-  display: inline-block;
-}
-
-.canvas-element {
-  display: block;
-}
-
-.loading-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.8);
-  font-size: 24px;
-  color: var(--el-color-primary);
-}
-</style>

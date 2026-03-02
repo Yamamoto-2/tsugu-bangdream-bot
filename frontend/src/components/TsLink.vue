@@ -1,22 +1,33 @@
 <script setup lang="ts">
 import type { LinkProps } from '@/core/types'
+import { cn } from '@/lib/utils'
 
-const props = withDefaults(defineProps<LinkProps>(), {
+const props = withDefaults(defineProps<LinkProps & { css?: Record<string, any> }>(), {
   type: 'primary',
   underline: true
 })
+
+const typeColorMap: Record<string, string> = {
+  primary: 'text-primary',
+  success: 'text-green-600',
+  warning: 'text-yellow-600',
+  danger: 'text-red-600',
+  info: 'text-muted-foreground',
+  default: 'text-foreground'
+}
 </script>
 
 <template>
-  <el-link
-    :type="props.type"
-    :underline="props.underline"
+  <a
     :href="props.href"
+    :class="cn(
+      'inline-flex items-center gap-1 transition-colors',
+      typeColorMap[props.type ?? 'primary'],
+      props.underline ? 'hover:underline' : 'no-underline'
+    )"
+    :style="props.css"
   >
-    <el-icon v-if="props.icon">
-      <component :is="props.icon" />
-    </el-icon>
     {{ props.content }}
     <slot />
-  </el-link>
+  </a>
 </template>
