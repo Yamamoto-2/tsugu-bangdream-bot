@@ -16,24 +16,35 @@ const apiClient = axios.create({
   }
 });
 
-// ========== 模糊搜索 API (返回多类型 ID 字典) ==========
+// ========== 模糊搜索配置 ==========
 
-export interface FuzzySearchResult {
-  [key: string]: (string | number)[];
-}
+import type { FuzzySearchConfig, FuzzySearchResult } from '@/lib/fuzzy-search';
+export type { FuzzySearchConfig, FuzzySearchResult };
 
-export interface FuzzySearchResponse {
-  status: string;
-  data: FuzzySearchResult;
-}
+let cachedConfig: FuzzySearchConfig | null = null;
+let cachedETag: string | null = null;
 
 /**
- * 模糊搜索，返回多类型 ID 字典
- * e.g. { event: [200, 150], character: [5], _number: [200] }
+ * 获取 fuzzySearch 配置 (支持 ETag 304 缓存)
+ * 首次调用从后端拉取，后续使用缓存 + 条件请求
  */
-export async function fuzzySearch(text: string): Promise<FuzzySearchResult> {
-  const response = await apiClient.post<FuzzySearchResponse>('/v1/fuzzySearch', { text });
-  return response.data.data;
+export async function getFuzzySearchConfig(): Promise<FuzzySearchConfig> {
+  const headers: Record<string, string> = {};
+  if (cachedETag) {
+    headers['If-None-Match'] = cachedETag;
+  }
+
+  try {
+    const response = await apiClient.get('/v1/fuzzySearch/config', { headers });
+    cachedConfig = response.data;
+    cachedETag = response.headers['etag'] || null;
+    return cachedConfig!;
+  } catch (e: any) {
+    if (e.response?.status === 304 && cachedConfig) {
+      return cachedConfig;
+    }
+    throw e;
+  }
 }
 
 // ========== Schema API (返回 SchemaNode) ==========

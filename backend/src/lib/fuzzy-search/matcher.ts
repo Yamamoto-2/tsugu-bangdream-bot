@@ -20,17 +20,26 @@ export function fuzzySearch(keyword: string, config: FuzzySearchConfig): FuzzySe
     const keywordList = parseKeywords(keyword);
     const matches: { [key: string]: (string | number)[] } = {};
 
-    for (const keyword_org of keywordList) {
+    for (const { text: keyword_org, quoted } of keywordList) {
         let matched = false;
         let keyword_normalized = normalizeKeyword(keyword_org);
 
         // Check if it's a pure integer
         if (isInteger(keyword_normalized)) {
-            const num = parseInt(keyword_normalized, 10);
-            if (!matches['_number']) {
-                matches['_number'] = [];
+            if (quoted) {
+                // 引号包裹的数字 → 作为文本子串搜索，放入 _all
+                if (!matches['_all']) {
+                    matches['_all'] = [];
+                }
+                matches['_all'].push(keyword_org);
+            } else {
+                // 裸数字 → 放入 _number
+                const num = parseInt(keyword_normalized, 10);
+                if (!matches['_number']) {
+                    matches['_number'] = [];
+                }
+                matches['_number'].push(num);
             }
-            matches['_number'].push(num);
             continue;
         }
 

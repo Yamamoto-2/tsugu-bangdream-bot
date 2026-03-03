@@ -36,15 +36,26 @@ export function normalizeKeyword(keyword: string): string {
     return normalized;
 }
 
+export interface ParsedKeyword {
+    text: string;
+    quoted: boolean;
+}
+
 /**
  * Parse keyword string into keyword list
  * Supports quoted strings and space-separated keywords
+ * Returns { text, quoted } so caller knows if token was quoted
  */
-export function parseKeywords(keyword: string): string[] {
-    // Match quoted strings or space-separated words
-    const keywordList = (keyword.match(/["""『』「」]([^"""『』「」]+)["""『』「」]|\S+/g) || []).map(item =>
-        item.replace(/^[\"""『』「」]|[\"""『』「」]$/g, '')
-    );
-    return keywordList;
+export function parseKeywords(keyword: string): ParsedKeyword[] {
+    const quoteChars = '"""『』「」';
+    const regex = new RegExp(`[${quoteChars}]([^${quoteChars}]+)[${quoteChars}]|\\S+`, 'g');
+    const raw = keyword.match(regex) || [];
+
+    return raw.map(item => {
+        const stripRegex = new RegExp(`^[${quoteChars}]|[${quoteChars}]$`, 'g');
+        const stripped = item.replace(stripRegex, '');
+        const quoted = stripped !== item; // had quotes removed
+        return { text: stripped, quoted };
+    });
 }
 

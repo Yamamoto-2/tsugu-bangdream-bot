@@ -1,14 +1,15 @@
 <script setup lang="ts">
 /**
  * 搜索列表视图
- * 流程: 搜索关键词 → /v1/fuzzySearch 拿到字典 → Schema API 传 fuzzySearchResult 渲染列表
+ * 流程: 本地 fuzzySearch(keyword, config) → Schema API 传 fuzzySearchResult 渲染列表
  */
 import { ref, computed, onMounted, watch } from 'vue'
 import SchemaRenderer from '@/core/SchemaRenderer.vue'
 import type { SchemaNode } from '@/core/types'
 import ContentToolbar from '@/layouts/ContentToolbar.vue'
-import { fuzzySearch, getEventList } from '@/api/schema'
-import type { FuzzySearchResult } from '@/api/schema'
+import { getFuzzySearchConfig, getEventList } from '@/api/schema'
+import { fuzzySearch } from '@/lib/fuzzy-search'
+import type { FuzzySearchConfig, FuzzySearchResult } from '@/lib/fuzzy-search'
 import { navigationGroups } from '@/config/navigation'
 import { Loader2, Construction } from 'lucide-vue-next'
 
@@ -27,9 +28,13 @@ const categoryInfo = computed(() => {
   return null
 })
 
-// 列表 Schema API 映射: fuzzySearchResult → SchemaNode
-const listApiFns: Record<string, (fsr?: FuzzySearchResult) => Promise<SchemaNode>> = {
-  event: (fsr) => getEventList(fsr ? { fuzzySearchResult: fsr } : {}),
+// 列表 Schema API 映射
+const listApiFns: Record<string, (params?: { fuzzySearchResult?: FuzzySearchResult, ids?: number[] }) => Promise<SchemaNode>> = {
+  event: (p) => getEventList(
+    p?.ids ? { eventId: p.ids }
+    : p?.fuzzySearchResult ? { fuzzySearchResult: p.fuzzySearchResult }
+    : {}
+  ),
 }
 
 const hasApi = computed(() => props.category in listApiFns)
@@ -39,6 +44,7 @@ const displayMode = ref<'grid' | 'list' | 'large'>('list')
 const schema = ref<SchemaNode | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
+const fsConfig = ref<FuzzySearchConfig | null>(null)
 
 // 从 schema 中提取结果项列表 (Page > Container > [items])
 const resultItems = computed<SchemaNode[]>(() => {
@@ -67,11 +73,19 @@ async function fetchResults(keyword?: string) {
   try {
     const listFn = listApiFns[props.category]
 
-    if (keyword && keyword.trim()) {
-      // 第一步: 统一模糊搜索拿到多类型 ID 字典
-      const result = await fuzzySearch(keyword.trim())
-      // 第二步: 把整个字典传给 Schema API，由后端过滤
-      schema.value = await listFn(result)
+    if (keyword && keyword.trim() && fsConfig.value) {
+      // 第一步: 本地 fuzzySearch
+      const result = fuzzySearch(keyword.trim(), fsConfig.value)
+      // 第二步: 判断结果类型
+      const keys = Object.keys(result)
+      if (keys.length === 1 && keys[0] === '_number') {
+        // 纯数字 → 直接用 ID 查询对应活动
+        const ids = result['_number'].filter((v): v is number => typeof v === 'number')
+        schema.value = await listFn({ ids })
+      } else {
+        // 有属性匹配 → 传 fuzzySearchResult 让后端过滤
+        schema.value = await listFn({ fuzzySearchResult: result })
+      }
     } else {
       // 无关键词: 直接请求默认列表
       schema.value = await listFn()
@@ -85,8 +99,14 @@ async function fetchResults(keyword?: string) {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   if (hasApi.value) {
+    // 拉取 fuzzySearch 配置（支持 304 缓存）
+    try {
+      fsConfig.value = await getFuzzySearchConfig()
+    } catch (e) {
+      console.warn('Failed to load fuzzySearch config:', e)
+    }
     fetchResults()
   }
 })
