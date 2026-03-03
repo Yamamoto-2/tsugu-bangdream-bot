@@ -53,6 +53,7 @@ export interface EventListParams {
   eventId?: number[];
   fuzzySearchResult?: FuzzySearchResult;
   displayedServerList?: number[];
+  mode?: 'card' | 'table';
 }
 
 export interface EventDetailParams {

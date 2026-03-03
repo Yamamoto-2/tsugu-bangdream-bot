@@ -11,7 +11,6 @@ export { default as TsTitle } from './TsTitle.vue'
 export { default as TsImage } from './TsImage.vue'
 export { default as TsTag } from './TsTag.vue'
 export { default as TsDivider } from './TsDivider.vue'
-export { default as TsLink } from './TsLink.vue'
 
 // 容器组件
 export { default as TsCard } from './TsCard.vue'
@@ -45,7 +44,6 @@ import TsTitle from './TsTitle.vue'
 import TsImage from './TsImage.vue'
 import TsTag from './TsTag.vue'
 import TsDivider from './TsDivider.vue'
-import TsLink from './TsLink.vue'
 import TsCard from './TsCard.vue'
 import TsTable from './TsTable.vue'
 import TsDescriptions from './TsDescriptions.vue'
@@ -68,7 +66,6 @@ export const componentMap: Record<ComponentName, Component> = {
   Image: TsImage,
   Tag: TsTag,
   Divider: TsDivider,
-  Link: TsLink,
   Card: TsCard,
   Table: TsTable,
   Descriptions: TsDescriptions,

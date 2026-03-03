@@ -24,16 +24,55 @@ const mergedProps = computed(() => {
 const isVisible = computed(() => {
   return props.node.visible !== false
 })
+
+// href 相关
+const href = computed(() => props.node.href)
+const isInternal = computed(() => href.value?.startsWith('/'))
 </script>
 
 <template>
+  <!-- 有 href: 用 router-link 或 a 包裹 -->
+  <router-link
+    v-if="component && isVisible && href && isInternal"
+    :to="href"
+    class="contents"
+  >
+    <component
+      :is="component"
+      :key="props.node.id || props.node.componentName"
+      v-bind="mergedProps"
+    >
+      <SchemaRenderer
+        v-for="(child, index) in props.node.children"
+        :key="child.id || `${props.node.id}-${index}`"
+        :node="child"
+      />
+    </component>
+  </router-link>
+  <a
+    v-else-if="component && isVisible && href"
+    :href="href"
+    class="contents"
+  >
+    <component
+      :is="component"
+      :key="props.node.id || props.node.componentName"
+      v-bind="mergedProps"
+    >
+      <SchemaRenderer
+        v-for="(child, index) in props.node.children"
+        :key="child.id || `${props.node.id}-${index}`"
+        :node="child"
+      />
+    </component>
+  </a>
+  <!-- 无 href: 正常渲染 -->
   <component
-    v-if="component && isVisible"
+    v-else-if="component && isVisible"
     :is="component"
     :key="props.node.id || props.node.componentName"
     v-bind="mergedProps"
   >
-    <!-- 递归渲染子节点 -->
     <SchemaRenderer
       v-for="(child, index) in props.node.children"
       :key="child.id || `${props.node.id}-${index}`"

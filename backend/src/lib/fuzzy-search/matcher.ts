@@ -3,7 +3,7 @@
  */
 
 import { isInteger, extractLvNumber, normalizeKeyword, parseKeywords } from './parser';
-import { isValidRelationStr } from './relation';
+import { isValidRelationStr, checkRelationList } from './relation';
 
 export interface FuzzySearchConfig {
     [type: string]: { [key: string]: (string | number)[] };
@@ -188,17 +188,38 @@ export function match(matches: FuzzySearchResult, target: any, numberTypeKey: st
             }
         }
 
-        // Handle _number matches for numberTypeKey fields
-        if (numberTypeKey.length > 0 && matches['_number'] !== undefined) {
-            if (numberTypeKey.includes(key)) {
-                if (matches['_number'].includes(target[key])) {
-                    match = true;
-                    continue;
-                } else {
-                    match = false;
+    }
+
+    // Handle _number matches for numberTypeKey fields
+    if (matches['_number'] && numberTypeKey.length > 0) {
+        let numberMatch = false;
+        for (const nKey of numberTypeKey) {
+            if (typeof target[nKey] === 'number' && matches['_number'].includes(target[nKey])) {
+                numberMatch = true;
+                break;
+            }
+        }
+        if (!numberMatch) {
+            return false;
+        }
+        match = true;
+    }
+
+    // Handle _relationStr matches for numberTypeKey fields
+    if (matches['_relationStr'] && numberTypeKey.length > 0) {
+        const relationStrs = matches['_relationStr'].filter((v): v is string => typeof v === 'string');
+        if (relationStrs.length > 0) {
+            let relationMatch = false;
+            for (const nKey of numberTypeKey) {
+                if (typeof target[nKey] === 'number' && checkRelationList(target[nKey], relationStrs)) {
+                    relationMatch = true;
                     break;
                 }
             }
+            if (!relationMatch) {
+                return false;
+            }
+            match = true;
         }
     }
 

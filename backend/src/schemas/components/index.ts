@@ -8,3 +8,4 @@ export * from './AttributeTag';
 export * from './CharacterIcon';
 export * from './EventBanner';
 export * from './BonusDisplay';
+export * from './EventCard';

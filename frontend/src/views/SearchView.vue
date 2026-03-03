@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * 搜索列表视图
- * 流程: 本地 fuzzySearch(keyword, config) → Schema API 传 fuzzySearchResult 渲染列表
+ * 流程: 本地 fuzzySearch(keyword, config) → Schema API 传 fuzzySearchResult + mode 渲染列表
  */
 import { ref, computed, onMounted, watch } from 'vue'
 import SchemaRenderer from '@/core/SchemaRenderer.vue'
@@ -28,38 +28,34 @@ const categoryInfo = computed(() => {
   return null
 })
 
+type DisplayMode = 'card' | 'table'
+
 // 列表 Schema API 映射
-const listApiFns: Record<string, (params?: { fuzzySearchResult?: FuzzySearchResult, ids?: number[] }) => Promise<SchemaNode>> = {
-  event: (p) => getEventList(
-    p?.ids ? { eventId: p.ids }
-    : p?.fuzzySearchResult ? { fuzzySearchResult: p.fuzzySearchResult }
-    : {}
-  ),
+const listApiFns: Record<string, (params?: { fuzzySearchResult?: FuzzySearchResult, ids?: number[], mode?: DisplayMode }) => Promise<SchemaNode>> = {
+  event: (p) => getEventList({
+    ...(p?.ids ? { eventId: p.ids } : {}),
+    ...(p?.fuzzySearchResult ? { fuzzySearchResult: p.fuzzySearchResult } : {}),
+    mode: p?.mode || 'card',
+  }),
 }
 
 const hasApi = computed(() => props.category in listApiFns)
 
 const searchQuery = ref('')
-const displayMode = ref<'grid' | 'list' | 'large'>('list')
+const displayMode = ref<DisplayMode>('card')
 const schema = ref<SchemaNode | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
 const fsConfig = ref<FuzzySearchConfig | null>(null)
 
-// 从 schema 中提取结果项列表 (Page > Container > [items])
-const resultItems = computed<SchemaNode[]>(() => {
-  if (!schema.value) return []
-  const container = schema.value.children?.[0]
-  if (!container?.children) return []
-  return container.children
+// 提取 container 节点 (Page > Container)，保留 container 自身的 CSS 控制布局
+const resultContainer = computed<SchemaNode | null>(() => {
+  if (!schema.value) return null
+  return schema.value.children?.[0] || null
 })
 
-const gridClasses = computed(() => {
-  switch (displayMode.value) {
-    case 'grid': return 'grid gap-4 md:grid-cols-2 lg:grid-cols-3'
-    case 'large': return 'grid gap-6 md:grid-cols-2'
-    case 'list': default: return 'flex flex-col gap-4'
-  }
+const hasResults = computed(() => {
+  return resultContainer.value?.children && resultContainer.value.children.length > 0
 })
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
@@ -72,6 +68,7 @@ async function fetchResults(keyword?: string) {
 
   try {
     const listFn = listApiFns[props.category]
+    const mode = displayMode.value
 
     if (keyword && keyword.trim() && fsConfig.value) {
       // 第一步: 本地 fuzzySearch
@@ -81,14 +78,14 @@ async function fetchResults(keyword?: string) {
       if (keys.length === 1 && keys[0] === '_number') {
         // 纯数字 → 直接用 ID 查询对应活动
         const ids = result['_number'].filter((v): v is number => typeof v === 'number')
-        schema.value = await listFn({ ids })
+        schema.value = await listFn({ ids, mode })
       } else {
         // 有属性匹配 → 传 fuzzySearchResult 让后端过滤
-        schema.value = await listFn({ fuzzySearchResult: result })
+        schema.value = await listFn({ fuzzySearchResult: result, mode })
       }
     } else {
       // 无关键词: 直接请求默认列表
-      schema.value = await listFn()
+      schema.value = await listFn({ mode })
     }
   } catch (e: any) {
     console.error('Failed to fetch results:', e)
@@ -117,6 +114,11 @@ watch(searchQuery, (val) => {
   debounceTimer = setTimeout(() => {
     fetchResults(val)
   }, 300)
+})
+
+// 切换显示模式时重新请求（后端生成不同的 schema）
+watch(displayMode, () => {
+  fetchResults(searchQuery.value)
 })
 
 watch(() => props.category, () => {
@@ -172,14 +174,8 @@ watch(() => props.category, () => {
         </button>
       </div>
 
-      <!-- 结果列表 -->
-      <div v-else-if="resultItems.length > 0" :class="gridClasses">
-        <SchemaRenderer
-          v-for="(child, index) in resultItems"
-          :key="index"
-          :node="child"
-        />
-      </div>
+      <!-- 结果列表 (布局完全由后端 schema CSS 控制) -->
+      <SchemaRenderer v-else-if="hasResults" :node="resultContainer!" />
 
       <!-- 空结果 -->
       <div v-else-if="schema" class="text-center text-muted-foreground py-12">

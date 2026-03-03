@@ -123,6 +123,15 @@ export function getCharacterIllustrationUrl(characterId: number): string {
   return `${BESTDORI_URL}/assets/jp/ui/character_kv_image/${formatNumber(characterId, 3)}_rip/image.png`;
 }
 
+// ========== 服务器图标 URL ==========
+
+/**
+ * 获取服务器图标 URL (SVG)
+ */
+export function getServerIconUrl(serverKey: string): string {
+  return `${BESTDORI_URL}/res/icon/${serverKey}.svg`;
+}
+
 // ========== 属性图片 URL ==========
 
 /**

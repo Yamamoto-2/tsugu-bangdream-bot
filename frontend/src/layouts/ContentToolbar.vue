@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { LayoutGrid, List, GalleryHorizontalEnd } from 'lucide-vue-next'
+import { LayoutGrid, List } from 'lucide-vue-next'
 
 const searchQuery = defineModel<string>('search', { default: '' })
 
-type DisplayMode = 'grid' | 'list' | 'large'
-const displayMode = defineModel<DisplayMode>('displayMode', { default: 'grid' })
+type DisplayMode = 'card' | 'table'
+const displayMode = defineModel<DisplayMode>('displayMode', { default: 'card' })
 </script>
 
 <template>
@@ -20,26 +20,18 @@ const displayMode = defineModel<DisplayMode>('displayMode', { default: 'grid' })
       <Button
         variant="ghost"
         size="sm"
-        :class="displayMode === 'grid' ? 'bg-accent' : ''"
-        @click="displayMode = 'grid'"
+        :class="displayMode === 'card' ? 'bg-accent' : ''"
+        @click="displayMode = 'card'"
       >
         <LayoutGrid class="size-4" />
       </Button>
       <Button
         variant="ghost"
         size="sm"
-        :class="displayMode === 'list' ? 'bg-accent' : ''"
-        @click="displayMode = 'list'"
+        :class="displayMode === 'table' ? 'bg-accent' : ''"
+        @click="displayMode = 'table'"
       >
         <List class="size-4" />
-      </Button>
-      <Button
-        variant="ghost"
-        size="sm"
-        :class="displayMode === 'large' ? 'bg-accent' : ''"
-        @click="displayMode = 'large'"
-      >
-        <GalleryHorizontalEnd class="size-4" />
       </Button>
     </div>
   </div>

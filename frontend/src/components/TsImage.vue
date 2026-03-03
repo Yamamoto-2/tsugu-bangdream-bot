@@ -18,6 +18,7 @@ const errored = ref(false)
 const mergedStyle = computed<CSSProperties>(() => ({
   width: typeof props.width === 'number' ? `${props.width}px` : props.width,
   height: typeof props.height === 'number' ? `${props.height}px` : props.height,
+  maxHeight: typeof props.maxHeight === 'number' ? `${props.maxHeight}px` : props.maxHeight,
   objectFit: props.fit,
   ...props.css
 }))

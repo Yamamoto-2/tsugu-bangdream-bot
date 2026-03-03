@@ -80,6 +80,7 @@ export function title(content: string, level: 1 | 2 | 3 | 4 | 5 | 6 = 2, css?: R
 export function image(src: string, props: {
   width?: string | number;
   height?: string | number;
+  maxHeight?: string | number;
   fit?: 'fill' | 'contain' | 'cover' | 'none' | 'scale-down';
   alt?: string;
   lazy?: boolean;
@@ -184,14 +185,4 @@ export function skeleton(props: {
   loading?: boolean;
 } = {}, css?: Record<string, any>): SchemaNode {
   return { componentName: 'Skeleton', props, ...(css && { css }) };
-}
-
-// ========== 链接 ==========
-
-export function link(content: string, href: string, props: {
-  type?: 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'default';
-  underline?: boolean;
-  icon?: string;
-} = {}, css?: Record<string, any>): SchemaNode {
-  return { componentName: 'Link', props: { content, href, ...props }, ...(css && { css }) };
 }

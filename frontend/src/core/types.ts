@@ -19,7 +19,6 @@ export type ComponentName =
   | 'Descriptions'   // 描述列表
   | 'Chart'          // 图表
   | 'Space'          // 间距容器
-  | 'Link'           // 链接
   | 'Alert'          // 提示
   | 'Statistic'      // 统计数值
   | 'Progress'       // 进度条
@@ -36,6 +35,8 @@ export interface SchemaNode {
   css?: Record<string, any>;
   children?: SchemaNode[];
   visible?: boolean;
+  /** 使节点可点击，内部路径(/)使用 SPA 导航 */
+  href?: string;
 }
 
 // 各组件 Props 类型定义
@@ -91,6 +92,7 @@ export interface ImageProps {
   src?: string;
   width?: string | number;
   height?: string | number;
+  maxHeight?: string | number;
   fit?: 'fill' | 'contain' | 'cover' | 'none' | 'scale-down';
   alt?: string;
   lazy?: boolean;
@@ -159,14 +161,6 @@ export interface SpaceProps {
   wrap?: boolean;
   fill?: boolean;
   alignment?: 'center' | 'start' | 'end' | 'baseline' | 'stretch';
-}
-
-export interface LinkProps {
-  content?: string;
-  href?: string;
-  type?: 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'default';
-  underline?: boolean;
-  icon?: string;
 }
 
 export interface AlertProps {

@@ -20,7 +20,6 @@ export type ComponentName =
   | 'Descriptions'
   | 'Chart'
   | 'Space'
-  | 'Link'
   | 'Alert'
   | 'Statistic'
   | 'Progress'
@@ -52,6 +51,8 @@ export interface SchemaNode {
   css?: Record<string, any>;
   children?: SchemaNode[];
   visible?: boolean;
+  /** 使节点可点击，内部路径(/)使用 SPA 导航 */
+  href?: string;
 }
 
 // ========== 构建器配置 ==========

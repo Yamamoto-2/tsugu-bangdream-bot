@@ -32,10 +32,11 @@ router.post('/v1/event/list',
         body('eventId.*').optional().isInt(),
         body('fuzzySearchResult').optional().custom(isFuzzySearchResult),
         body('displayedServerList').optional().custom(isServerList),
+        body('mode').optional().isIn(['card', 'table']),
         body('language').optional().isIn(SUPPORTED_LANGUAGES),
     ],
     async (req: Request, res: Response) => {
-        const { eventId, fuzzySearchResult, displayedServerList, language } = req.body;
+        const { eventId, fuzzySearchResult, displayedServerList, mode, language } = req.body;
         const servers = displayedServerList || [Server.jp];
 
         try {
@@ -57,6 +58,7 @@ router.post('/v1/event/list',
 
             const schema = buildEventListSchema(events, {
                 displayedServerList: servers,
+                mode: mode || 'card',
                 language: (language as Language) || DEFAULT_LANGUAGE,
             });
             res.json(schema);
