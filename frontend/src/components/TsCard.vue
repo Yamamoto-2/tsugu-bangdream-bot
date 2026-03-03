@@ -16,7 +16,7 @@ const shadowClass: Record<string, string> = {
 
 <template>
   <Card
-    :class="cn('mb-3 md:mb-5', shadowClass[props.shadow ?? 'hover'])"
+    :class="cn(shadowClass[props.shadow ?? 'hover'])"
     :style="props.css"
   >
     <CardHeader v-if="props.header">

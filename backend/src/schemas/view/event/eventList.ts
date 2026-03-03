@@ -80,7 +80,8 @@ export function buildEventListSchema(
       display: 'flex',
       flexWrap: 'wrap',
       justifyContent: 'center',
-      gap:'50px'
+      rowGap:'25px',
+      columnGap:'25px'
     })
   ]);
 }

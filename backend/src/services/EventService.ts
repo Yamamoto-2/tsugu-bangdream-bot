@@ -185,7 +185,7 @@ export class EventService {
      * Get recent events available in displayed servers
      * Returns up to `limit` events sorted by eventId descending (newest first)
      */
-    async getRecentEvents(displayedServerList: Server[], limit: number = 50): Promise<Event[]> {
+    async getRecentEvents(displayedServerList: Server[]): Promise<Event[]> {
         try {
             const eventsData = await this.loadAllEvents();
             const characterBandIdMap = await this.loadCharacterBandIdMap();
@@ -204,7 +204,7 @@ export class EventService {
             }
 
             events.sort((a, b) => b.eventId - a.eventId);
-            return events.slice(0, limit);
+            return events;
         } catch (e) {
             console.error('Failed to get recent events:', e);
             return [];

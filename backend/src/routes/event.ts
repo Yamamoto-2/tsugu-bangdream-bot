@@ -53,7 +53,7 @@ router.post('/v1/event/list',
                 events.sort((a, b) => b.eventId - a.eventId);
             } else {
                 // 默认返回最近活动
-                events = await eventService.getRecentEvents(servers, 50);
+                events = await eventService.getRecentEvents(servers);
             }
 
             const schema = buildEventListSchema(events, {

@@ -42,7 +42,7 @@ export function EventCard(props: EventCardProps): SchemaNode {
   const endAt = event.endAt[server];
   let dateText = '';
   if (startAt && endAt) {
-    dateText = `${formatTimestamp(startAt, 'date')} ~ ${formatTimestamp(endAt, 'date')}`;
+    dateText = `${formatTimestamp(startAt,'datetime')} ~ ${formatTimestamp(endAt, 'datetime')}`;
   }
 
   return card({ shadow: 'hover' }, [
