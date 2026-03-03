@@ -47,6 +47,12 @@ export const ja: I18nDictionary = {
     // ページタイトル
     title: {
       detail: 'イベント {eventId} 詳細',
+      list: 'イベント一覧',
+    },
+    // リスト
+    list: {
+      noResults: '一致するイベントが見つかりません',
+      count: '{count} 件のイベントが見つかりました',
     },
   },
 

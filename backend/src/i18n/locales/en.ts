@@ -47,6 +47,12 @@ export const en: I18nDictionary = {
     // Page title
     title: {
       detail: 'Event {eventId} Details',
+      list: 'Event List',
+    },
+    // List
+    list: {
+      noResults: 'No matching events found',
+      count: 'Found {count} events',
     },
   },
 

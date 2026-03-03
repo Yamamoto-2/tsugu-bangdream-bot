@@ -47,6 +47,12 @@ export const zh: I18nDictionary = {
     // 页面标题
     title: {
       detail: '活动 {eventId} 详情',
+      list: '活动列表',
+    },
+    // 列表
+    list: {
+      noResults: '没有找到匹配的活动',
+      count: '找到 {count} 个活动',
     },
   },
 

@@ -4,3 +4,4 @@
 
 export * from './eventDetail';
 export * from './eventPreview';
+export * from './eventList';

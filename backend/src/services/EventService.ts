@@ -8,7 +8,7 @@ import { Server } from '@/types/Server';
 import { Event } from '@/types/Event';
 import { BestdoriClient } from '@/lib/clients/BestdoriClient';
 import { Character } from '@/types/Character';
-import { fuzzySearch, FuzzySearchResult, match, loadConfig } from '@/lib/fuzzy-search';
+import { FuzzySearchResult, match } from '@/lib/fuzzy-search';
 
 export class EventService {
     private bestdoriClient: BestdoriClient;
@@ -70,13 +70,11 @@ export class EventService {
     }
 
     /**
-     * Search events by keyword using fuzzy search
+     * Search events by FuzzySearchResult
+     * Accepts a pre-computed FuzzySearchResult (from /v1/fuzzySearch or bot-local search)
      */
-    async searchEvents(keyword: string, displayedServerList: Server[]): Promise<Event[]> {
+    async searchEvents(fuzzySearchResult: FuzzySearchResult, displayedServerList: Server[]): Promise<Event[]> {
         try {
-            const fuzzySearchConfig = loadConfig();
-            const fuzzySearchResult = fuzzySearch(keyword, fuzzySearchConfig);
-            
             const eventsData = await this.loadAllEvents();
             const characterBandIdMap = await this.loadCharacterBandIdMap();
             const matchedEvents: Event[] = [];
@@ -180,6 +178,36 @@ export class EventService {
         } catch (e) {
             console.error('Failed to get present event:', e);
             return null;
+        }
+    }
+
+    /**
+     * Get recent events available in displayed servers
+     * Returns up to `limit` events sorted by eventId descending (newest first)
+     */
+    async getRecentEvents(displayedServerList: Server[], limit: number = 50): Promise<Event[]> {
+        try {
+            const eventsData = await this.loadAllEvents();
+            const characterBandIdMap = await this.loadCharacterBandIdMap();
+            const events: Event[] = [];
+
+            for (const eventId in eventsData) {
+                const event = new Event(parseInt(eventId), eventsData[eventId], characterBandIdMap);
+                if (!event.isExist) continue;
+
+                const isAvailable = displayedServerList.some(server =>
+                    event.startAt[server] != null && event.endAt[server] != null
+                );
+                if (isAvailable) {
+                    events.push(event);
+                }
+            }
+
+            events.sort((a, b) => b.eventId - a.eventId);
+            return events.slice(0, limit);
+        } catch (e) {
+            console.error('Failed to get recent events:', e);
+            return [];
         }
     }
 

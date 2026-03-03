@@ -14,7 +14,7 @@ const eventId = ref('')
 
 function goToEventDetail() {
   if (eventId.value) {
-    router.push(`/event/${eventId.value}`)
+    router.push(`/info/event/${eventId.value}`)
   }
 }
 
@@ -23,8 +23,10 @@ function goToDemo() {
 }
 
 const routes = [
-  { path: '/event/:eventId', description: '活动详情', example: '/event/123' },
-  { path: '/event/:eventId/preview', description: '活动预览', example: '/event/123/preview' },
+  { path: '/info/event', description: '活动列表', example: '/info/event' },
+  { path: '/info/event/:eventId', description: '活动详情', example: '/info/event/123' },
+  { path: '/info/song/:songId', description: '歌曲详情', example: '/info/song/1' },
+  { path: '/room', description: '房间列表', example: '/room' },
   { path: '/demo', description: '组件演示', example: '/demo' },
 ]
 </script>
@@ -32,7 +34,7 @@ const routes = [
 <template>
   <div class="min-h-screen bg-muted px-5 py-10">
     <div class="mx-auto max-w-[800px]">
-      <h1 class="text-4xl font-bold text-foreground mb-2">Tsugu v5 渲染器</h1>
+      <h1 class="text-4xl font-bold text-foreground mb-2">Tsugu 渲染器</h1>
       <p class="text-lg text-muted-foreground">Schema 驱动的 BangDream 数据展示</p>
 
       <Separator class="my-6" />
@@ -80,7 +82,7 @@ const routes = [
       <Separator class="my-6" />
 
       <div>
-        <h3 class="text-lg font-semibold mb-4">API 路由</h3>
+        <h3 class="text-lg font-semibold mb-4">页面路由</h3>
         <Table>
           <TableHeader>
             <TableRow>

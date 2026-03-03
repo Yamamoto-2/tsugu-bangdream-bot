@@ -1,5 +1,5 @@
 /**
- * Song routes (v5 - returns Tsugu Schema)
+ * Song routes (returns Tsugu Schema)
  */
 
 import express from 'express';
@@ -13,10 +13,10 @@ const router = express.Router();
 const songService = new SongService();
 
 /**
- * POST /v5/song/detail
+ * POST /v1/song/detail
  * Returns Tsugu Schema for song detail
  */
-router.post('/v5/song/detail',
+router.post('/v1/song/detail',
     [
         body('songId').isInt(),
         body('displayedServerList').optional().custom(isServerList),
@@ -40,4 +40,3 @@ router.post('/v5/song/detail',
 );
 
 export { router as songRouter };
-

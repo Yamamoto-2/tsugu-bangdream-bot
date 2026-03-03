@@ -11,6 +11,7 @@ import { logger } from './lib/logger';
 import { requestLogger } from './lib/middleware';
 import { eventRouter } from './routes/event';
 import { songRouter } from './routes/song';
+import { fuzzySearchRouter } from './routes/fuzzySearch';
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.get('/health', (req, res) => {
 });
 
 // V5 routes (return Tsugu Schema)
+app.use(fuzzySearchRouter);
 app.use(eventRouter);
 app.use(songRouter);
 

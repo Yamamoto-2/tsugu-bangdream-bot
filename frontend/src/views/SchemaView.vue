@@ -5,13 +5,13 @@
 import { ref, onMounted, watch } from 'vue'
 import SchemaRenderer from '@/core/SchemaRenderer.vue'
 import type { SchemaNode } from '@/core/types'
-import { getEventDetail, getEventPreview } from '@/api/schema'
-import type { EventDetailParams, EventPreviewParams } from '@/api/schema'
+import { getEventDetail, getSongDetail } from '@/api/schema'
+import type { EventDetailParams, SongDetailParams } from '@/api/schema'
 import { Loader2, AlertCircle } from 'lucide-vue-next'
 
 const props = defineProps<{
-  schemaType: 'eventDetail' | 'eventPreview';
-  params: EventDetailParams | EventPreviewParams;
+  schemaType: 'eventDetail' | 'songDetail';
+  params: EventDetailParams | SongDetailParams;
 }>()
 
 const schema = ref<SchemaNode | null>(null)
@@ -28,8 +28,8 @@ async function fetchSchema() {
       case 'eventDetail':
         schema.value = await getEventDetail(props.params as EventDetailParams)
         break
-      case 'eventPreview':
-        schema.value = await getEventPreview(props.params as EventPreviewParams)
+      case 'songDetail':
+        schema.value = await getSongDetail(props.params as SongDetailParams)
         break
       default:
         throw new Error(`Unknown schema type: ${props.schemaType}`)

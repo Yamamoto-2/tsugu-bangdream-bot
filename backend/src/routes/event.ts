@@ -1,26 +1,77 @@
 /**
- * Event routes (v5 - returns Tsugu Schema)
+ * Event routes (returns Tsugu Schema)
  */
 
 import express from 'express';
 import { body } from 'express-validator';
 import { EventService } from '@/services/EventService';
 import { CardService } from '@/services/CardService';
-import { buildEventPreviewSchema, buildEventDetailSchema } from '@/schemas/view/event';
+import { buildEventPreviewSchema, buildEventDetailSchema, buildEventListSchema } from '@/schemas/view/event';
 import { Server, isServerList } from '@/types/Server';
 import { Card } from '@/types/Card';
+import { Event } from '@/types/Event';
 import { Request, Response } from 'express';
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE, Language } from '@/i18n';
+import { isFuzzySearchResult } from '@/lib/fuzzy-search';
+import type { FuzzySearchResult } from '@/lib/fuzzy-search';
 
 const router = express.Router();
 const eventService = new EventService();
 const cardService = new CardService();
 
 /**
- * GET /v5/event/preview
+ * POST /v1/event/list
+ * 返回活动列表 Tsugu Schema
+ * - 传 eventId: 渲染指定活动 (number[])
+ * - 传 fuzzySearchResult: 用模糊搜索结果过滤活动
+ * - 都不传: 返回最近 50 个活动
+ */
+router.post('/v1/event/list',
+    [
+        body('eventId').optional().isArray(),
+        body('eventId.*').optional().isInt(),
+        body('fuzzySearchResult').optional().custom(isFuzzySearchResult),
+        body('displayedServerList').optional().custom(isServerList),
+        body('language').optional().isIn(SUPPORTED_LANGUAGES),
+    ],
+    async (req: Request, res: Response) => {
+        const { eventId, fuzzySearchResult, displayedServerList, language } = req.body;
+        const servers = displayedServerList || [Server.jp];
+
+        try {
+            let events: Event[];
+            if (eventId && eventId.length > 0) {
+                // 根据指定 ID 获取活动
+                const results = await Promise.all(
+                    eventId.map((id: number) => eventService.getEventById(id))
+                );
+                events = results.filter((e): e is Event => e !== null);
+            } else if (fuzzySearchResult) {
+                // 用模糊搜索结果过滤活动
+                events = await eventService.searchEvents(fuzzySearchResult, servers);
+                events.sort((a, b) => b.eventId - a.eventId);
+            } else {
+                // 默认返回最近活动
+                events = await eventService.getRecentEvents(servers, 50);
+            }
+
+            const schema = buildEventListSchema(events, {
+                displayedServerList: servers,
+                language: (language as Language) || DEFAULT_LANGUAGE,
+            });
+            res.json(schema);
+        } catch (e: any) {
+            console.error(e);
+            res.status(500).json({ status: 'failed', data: '内部错误' });
+        }
+    }
+);
+
+/**
+ * POST /v1/event/preview
  * Returns Tsugu Schema for event preview
  */
-router.post('/v5/event/preview',
+router.post('/v1/event/preview',
     [
         body('eventId').isInt(),
         body('displayedServerList').optional().custom(isServerList),
@@ -45,10 +96,10 @@ router.post('/v5/event/preview',
 );
 
 /**
- * POST /v5/event/detail
+ * POST /v1/event/detail
  * Returns Tsugu Schema for event detail
  */
-router.post('/v5/event/detail',
+router.post('/v1/event/detail',
     [
         body('eventId').isInt(),
         body('displayedServerList').optional().custom(isServerList),
