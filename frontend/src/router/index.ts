@@ -103,6 +103,13 @@ const routes: RouteRecordRaw[] = [
         props: { category: 'room' },
         meta: { breadcrumb: '房间' }
       },
+      // 设置
+      {
+        path: 'settings',
+        name: 'Settings',
+        component: () => import('@/views/SettingsView.vue'),
+        meta: { breadcrumb: '设置' }
+      },
       // 演示
       {
         path: 'demo',

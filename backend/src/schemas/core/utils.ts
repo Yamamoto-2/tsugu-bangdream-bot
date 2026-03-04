@@ -126,9 +126,13 @@ export function getCharacterIllustrationUrl(characterId: number): string {
 // ========== 服务器图标 URL ==========
 
 /**
- * 获取服务器图标 URL (SVG)
+ * 获取服务器图标 URL
+ * 台服使用本地 PNG (Bestdori 无台服图标)
  */
 export function getServerIconUrl(serverKey: string): string {
+  if (serverKey === 'tw') {
+    return '/assets/tw.png';
+  }
   return `${BESTDORI_URL}/res/icon/${serverKey}.svg`;
 }
 

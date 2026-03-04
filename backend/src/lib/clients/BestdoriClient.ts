@@ -19,16 +19,20 @@ export class BestdoriClient {
 
     /**
      * Call API with caching
+     * cacheTime: 0 = force fresh (overwrite cache), Infinity = use cache forever, N = cache for N seconds
      */
     private async callAPI(path: string, cacheTime: number = 0, retryCount: number = 3): Promise<object> {
         const url = `${this.baseUrl}${path}`;
-        // cacheTime is in seconds, convert to milliseconds for downloadJson
-        const cacheTimeMs = cacheTime === 0 ? 0 : (cacheTime === Infinity ? Infinity : cacheTime * 1000);
-        
+        // downloadJson convention: cacheTime=0 means "cache forever", overwrite=true bypasses cache
+        const overwrite = cacheTime === 0;
+        // Map: Infinity → 0 (forever in downloadJson), N → N (downloadJson does *1000 internally)
+        const dlCacheTime = cacheTime === Infinity ? 0 : cacheTime;
+
         for (let attempt = 0; attempt < retryCount; attempt++) {
             try {
                 const data = await downloadJson(url, {
-                    cacheTime: cacheTimeMs,
+                    cacheTime: dlCacheTime,
+                    overwrite,
                     retryCount: 1, // We handle retries at this level
                 });
                 return data;

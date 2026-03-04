@@ -1,47 +1,24 @@
 /**
  * Event Service
  * Business logic for event-related operations
- * Extracted from backend_old routers and types
  */
 
 import { Server } from '@/types/Server';
 import { Event } from '@/types/Event';
-import { BestdoriClient } from '@/lib/clients/BestdoriClient';
-import { Character } from '@/types/Character';
 import { FuzzySearchResult, match } from '@/lib/fuzzy-search';
+import { getEvents, getCharacters } from '@/lib/data-manager';
 
 export class EventService {
-    private bestdoriClient: BestdoriClient;
-    private eventsCache: { [eventId: string]: any } | null = null;
-    private charactersCache: { [characterId: string]: any } | null = null;
 
-    constructor(bestdoriClient?: BestdoriClient) {
-        this.bestdoriClient = bestdoriClient || new BestdoriClient();
-    }
-
-    /**
-     * Load all events data (cached)
-     */
     private async loadAllEvents(): Promise<{ [eventId: string]: any }> {
-        if (!this.eventsCache) {
-            const eventsData = await this.bestdoriClient.getAllEvents();
-            this.eventsCache = eventsData as { [eventId: string]: any };
-        }
-        return this.eventsCache;
+        return getEvents();
     }
 
-    /**
-     * Load all characters data and build bandId map (cached)
-     */
     private async loadCharacterBandIdMap(): Promise<Map<number, number>> {
-        if (!this.charactersCache) {
-            const charactersData = await this.bestdoriClient.getAllCharacters();
-            this.charactersCache = charactersData as { [characterId: string]: any };
-        }
-
+        const charactersData = await getCharacters();
         const bandIdMap = new Map<number, number>();
-        for (const characterId in this.charactersCache) {
-            const characterData = this.charactersCache[characterId];
+        for (const characterId in charactersData) {
+            const characterData = charactersData[characterId];
             if (characterData && characterData['bandId'] != null) {
                 bandIdMap.set(parseInt(characterId), characterData['bandId']);
             }
@@ -71,7 +48,6 @@ export class EventService {
 
     /**
      * Search events by FuzzySearchResult
-     * Accepts a pre-computed FuzzySearchResult (from /v1/fuzzySearch or bot-local search)
      */
     async searchEvents(fuzzySearchResult: FuzzySearchResult, displayedServerList: Server[]): Promise<Event[]> {
         try {
@@ -82,12 +58,11 @@ export class EventService {
             for (const eventId in eventsData) {
                 const eventData = eventsData[eventId];
                 const event = new Event(parseInt(eventId), eventData, characterBandIdMap);
-                
+
                 if (!event.isExist) {
                     continue;
                 }
 
-                // Check if event matches fuzzy search criteria
                 if (this.matchesFuzzySearch(event, fuzzySearchResult, displayedServerList)) {
                     matchedEvents.push(event);
                 }
@@ -104,13 +79,11 @@ export class EventService {
      * Check if event matches fuzzy search criteria
      */
     private matchesFuzzySearch(event: Event, fuzzyResult: FuzzySearchResult, displayedServerList: Server[]): boolean {
-        // Basic match using fuzzy search utils
         const numberTypeKeys = ['eventId', 'bandId', 'characterId'];
         let basicMatch = match(fuzzyResult, event, numberTypeKeys);
 
-        // Check if event is available in displayed servers
         if (displayedServerList && displayedServerList.length > 0) {
-            const isAvailable = displayedServerList.some(server => 
+            const isAvailable = displayedServerList.some(server =>
                 event.startAt[server] != null && event.endAt[server] != null
             );
             if (!isAvailable) {
@@ -123,7 +96,6 @@ export class EventService {
 
     /**
      * Get present event for a server
-     * Returns the currently active event, or the most recently ended event if none is active
      */
     async getPresentEvent(server: Server, time?: number): Promise<Event | null> {
         if (!time) {
@@ -136,11 +108,10 @@ export class EventService {
             const activeEventIds: number[] = [];
             const endedEventIds: number[] = [];
 
-            // Find active events (started within 24 hours before time, and not ended)
             for (const eventId in eventsData) {
                 const eventData = eventsData[eventId];
                 const event = new Event(parseInt(eventId), eventData, characterBandIdMap);
-                
+
                 if (!event.isExist) {
                     continue;
                 }
@@ -148,13 +119,11 @@ export class EventService {
                 if (event.startAt[server] != null && event.endAt[server] != null) {
                     const startAt = event.startAt[server];
                     const endAt = event.endAt[server];
-                    
+
                     if (startAt != null && endAt != null) {
-                        // Active: started within 24 hours before time, and not ended yet
                         if (startAt - 1000 * 60 * 60 * 24 <= time && endAt >= time) {
                             activeEventIds.push(parseInt(eventId));
                         }
-                        // Ended: ended before time
                         else if (endAt <= time) {
                             endedEventIds.push(parseInt(eventId));
                         }
@@ -162,13 +131,11 @@ export class EventService {
                 }
             }
 
-            // If there are active events, return the last one
             if (activeEventIds.length > 0) {
                 const lastActiveId = activeEventIds[activeEventIds.length - 1];
                 return await this.getEventById(lastActiveId);
             }
 
-            // Otherwise, return the most recently ended event
             if (endedEventIds.length > 0) {
                 const lastEndedId = endedEventIds[endedEventIds.length - 1];
                 return await this.getEventById(lastEndedId);
@@ -182,8 +149,7 @@ export class EventService {
     }
 
     /**
-     * Get recent events available in displayed servers
-     * Returns up to `limit` events sorted by eventId descending (newest first)
+     * Get all events available in displayed servers, sorted by eventId desc
      */
     async getRecentEvents(displayedServerList: Server[]): Promise<Event[]> {
         try {
@@ -211,12 +177,7 @@ export class EventService {
         }
     }
 
-    /**
-     * Get event status
-     */
     getEventStatus(event: Event, server: Server, time?: number): 'not_start' | 'in_progress' | 'ended' {
         return event.getEventStatus(server, time);
     }
 }
-
-

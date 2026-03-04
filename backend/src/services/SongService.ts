@@ -6,37 +6,17 @@
 
 import { Server } from '@/types/Server';
 import { Song, songInRank } from '@/types/Song';
-import { BestdoriClient } from '@/lib/clients/BestdoriClient';
 import { fuzzySearch, FuzzySearchResult, match, checkRelationList, loadConfig } from '@/lib/fuzzy-search';
+import { getSongs, getMeta } from '@/lib/data-manager';
 
 export class SongService {
-    private bestdoriClient: BestdoriClient;
-    private songsCache: { [songId: string]: any } | null = null;
-    private metaCache: any | null = null;
 
-    constructor(bestdoriClient?: BestdoriClient) {
-        this.bestdoriClient = bestdoriClient || new BestdoriClient();
-    }
-
-    /**
-     * Load all songs data (cached)
-     */
     private async loadAllSongs(): Promise<{ [songId: string]: any }> {
-        if (!this.songsCache) {
-            const songsData = await this.bestdoriClient.getAllSongs();
-            this.songsCache = songsData as { [songId: string]: any };
-        }
-        return this.songsCache;
+        return getSongs();
     }
 
-    /**
-     * Load meta data (cached)
-     */
     private async loadMeta(): Promise<any> {
-        if (!this.metaCache) {
-            this.metaCache = await this.bestdoriClient.getAllMeta();
-        }
-        return this.metaCache;
+        return getMeta();
     }
 
     /**

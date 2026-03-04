@@ -9,6 +9,7 @@ import * as dotenv from 'dotenv';
 import { BACKEND_PORT } from './config/runtime';
 import { logger } from './lib/logger';
 import { requestLogger } from './lib/middleware';
+import { initDataManager } from './lib/data-manager';
 import { eventRouter } from './routes/event';
 import { songRouter } from './routes/song';
 import { fuzzySearchRouter } from './routes/fuzzySearch';
@@ -41,8 +42,16 @@ app.use((req, res) => {
 
 const port = BACKEND_PORT;
 
-app.listen(port, () => {
-    logger('expressMainThread', `listening on port ${port}`);
+// Initialize data manager then start server
+initDataManager().then(() => {
+    app.listen(port, () => {
+        logger('expressMainThread', `listening on port ${port}`);
+    });
+}).catch((e) => {
+    logger('expressMainThread', `Data manager init failed, starting anyway: ${e}`);
+    app.listen(port, () => {
+        logger('expressMainThread', `listening on port ${port}`);
+    });
 });
 
 

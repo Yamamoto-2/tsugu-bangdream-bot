@@ -4,9 +4,10 @@
 
 import axios from 'axios';
 import type { SchemaNode } from '@/core/types';
+import { useSettings } from '@/composables/useSettings';
 
 // API 基础 URL - 可通过环境变量配置
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -72,6 +73,16 @@ export interface SongDetailParams {
   displayedServerList?: number[];
 }
 
+/** 注入用户设置到请求参数 */
+function withSettings(params: Record<string, any>): Record<string, any> {
+  const settings = useSettings();
+  return {
+    displayedServerList: settings.displayedServerList,
+    language: settings.language,
+    ...params,
+  };
+}
+
 /**
  * 获取活动列表 Schema
  * - 传 eventId: 渲染指定活动 (number[])
@@ -79,7 +90,7 @@ export interface SongDetailParams {
  * - 都不传: 返回最近活动
  */
 export async function getEventList(params: EventListParams = {}): Promise<SchemaNode> {
-  const response = await apiClient.post('/v1/event/list', params);
+  const response = await apiClient.post('/v1/event/list', withSettings(params));
   return response.data;
 }
 
@@ -87,7 +98,7 @@ export async function getEventList(params: EventListParams = {}): Promise<Schema
  * 获取活动详情 Schema
  */
 export async function getEventDetail(params: EventDetailParams): Promise<SchemaNode> {
-  const response = await apiClient.post('/v1/event/detail', params);
+  const response = await apiClient.post('/v1/event/detail', withSettings(params));
   return response.data;
 }
 
@@ -95,7 +106,7 @@ export async function getEventDetail(params: EventDetailParams): Promise<SchemaN
  * 获取活动预览 Schema
  */
 export async function getEventPreview(params: EventPreviewParams): Promise<SchemaNode> {
-  const response = await apiClient.post('/v1/event/preview', params);
+  const response = await apiClient.post('/v1/event/preview', withSettings(params));
   return response.data;
 }
 
@@ -103,7 +114,7 @@ export async function getEventPreview(params: EventPreviewParams): Promise<Schem
  * 获取歌曲详情 Schema
  */
 export async function getSongDetail(params: SongDetailParams): Promise<SchemaNode> {
-  const response = await apiClient.post('/v1/song/detail', params);
+  const response = await apiClient.post('/v1/song/detail', withSettings(params));
   return response.data;
 }
 

@@ -45,7 +45,6 @@ export function buildEventListSchema(
   options: EventListOptions = {}
 ): SchemaNode {
   const displayedServerList = options.displayedServerList || [Server.jp];
-  const mainServer = displayedServerList[0];
   const language = options.language || DEFAULT_LANGUAGE;
   const mode = options.mode || 'card';
   const $t = createTranslator(language);
@@ -72,7 +71,7 @@ export function buildEventListSchema(
   // Card 模式: EventCard 自带宽度约束，container 用 flex-wrap 排列
   const items = events.map(event => EventCard({
     event,
-    server: mainServer,
+    displayedServerList,
     language,
   }));
   return page({ title: $t('event.title.list') }, [
@@ -87,8 +86,6 @@ export function buildEventListSchema(
 }
 
 // ========== Table 模式 ==========
-// 参考旧版 eventList 布局: banner 缩略图(左) + 详细信息(右)
-// 信息包含: ID/类型/状态, 服务器时间, 属性加成, 角色加成, 偏科加成
 
 function buildTableRow(event: Event, displayedServerList: Server[], language: Language): SchemaNode {
   const mainServer = displayedServerList[0];
@@ -100,27 +97,23 @@ function buildTableRow(event: Event, displayedServerList: Server[], language: La
     || event.eventName.find(n => n != null)
     || `Event #${event.eventId}`;
   const eventTypeName = $t(`event.type.${event.eventType}`);
-  const status = event.getEventStatus(mainServer);
-  const statusText = $t(`event.status.${status === 'not_start' ? 'notStarted' : status === 'in_progress' ? 'inProgress' : 'ended'}`);
-  const statusTagType = status === 'in_progress' ? 'success' : status === 'ended' ? 'info' : 'warning';
 
   // 右侧信息区域
   const infoChildren: SchemaNode[] = [];
 
-  // 名称 + ID + 类型 + 状态
+  // 名称 + ID + 类型 (不再显示状态 tag)
   infoChildren.push(
     space([
       { ...text(eventName, { type: 'primary' }), href: detailHref },
       tag(`#${event.eventId}`, { effect: 'plain', size: 'small' }),
       tag(eventTypeName, { type: 'info', size: 'small' }),
-      tag(statusText, { type: statusTagType as any, size: 'small' }),
     ], { size: 'small', wrap: true })
   );
 
-  // 服务器时间 (最多2个)
-  const serverCount = Math.min(displayedServerList.length, 2);
-  for (let i = 0; i < serverCount; i++) {
-    const server = displayedServerList[i];
+  // 服务器时间: 按 displayedServerList 顺序，显示有时间数据的服务器(最多2个)
+  let timeCount = 0;
+  for (const server of displayedServerList) {
+    if (timeCount >= 2) break;
     const serverKey = getServerKey(server);
     const startAt = event.startAt[server];
     const endAt = event.endAt[server];
@@ -128,9 +121,10 @@ function buildTableRow(event: Event, displayedServerList: Server[], language: La
       infoChildren.push(
         space([
           image(getServerIconUrl(serverKey), { width: 18, height: 18, fit: 'contain' }),
-          text(`${formatTimestamp(startAt, 'date')} ~ ${formatTimestamp(endAt, 'date')}`, { size: 'small', type: 'info' }),
+          text(`${formatTimestamp(startAt, 'datetime')} ~ ${formatTimestamp(endAt, 'datetime')}`, { size: 'small', type: 'info' }),
         ], { size: 'small', alignment: 'center' })
       );
+      timeCount++;
     }
   }
 

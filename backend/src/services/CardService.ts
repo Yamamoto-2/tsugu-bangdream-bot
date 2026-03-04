@@ -8,40 +8,24 @@ import { Server } from '@/types/Server';
 import { Card } from '@/types/Card';
 import { BestdoriClient } from '@/lib/clients/BestdoriClient';
 import { fuzzySearch, FuzzySearchResult, match, loadConfig } from '@/lib/fuzzy-search';
+import { getCards, getCharacters, getSkills } from '@/lib/data-manager';
 
 export class CardService {
     private bestdoriClient: BestdoriClient;
-    private cardsCache: { [cardId: string]: any } | null = null;
-    private charactersCache: { [characterId: string]: any } | null = null;
-    private skillsCache: { [skillId: string]: any } | null = null;
 
     constructor(bestdoriClient?: BestdoriClient) {
         this.bestdoriClient = bestdoriClient || new BestdoriClient();
     }
 
-    /**
-     * Load all cards data (cached)
-     */
     private async loadAllCards(): Promise<{ [cardId: string]: any }> {
-        if (!this.cardsCache) {
-            const cardsData = await this.bestdoriClient.getAllCards();
-            this.cardsCache = cardsData as { [cardId: string]: any };
-        }
-        return this.cardsCache;
+        return getCards();
     }
 
-    /**
-     * Load all characters data and build bandId map (cached)
-     */
     private async loadCharacterBandIdMap(): Promise<Map<number, number>> {
-        if (!this.charactersCache) {
-            const charactersData = await this.bestdoriClient.getAllCharacters();
-            this.charactersCache = charactersData as { [characterId: string]: any };
-        }
-
+        const charactersData = await getCharacters();
         const bandIdMap = new Map<number, number>();
-        for (const characterId in this.charactersCache) {
-            const characterData = this.charactersCache[characterId];
+        for (const characterId in charactersData) {
+            const characterData = charactersData[characterId];
             if (characterData && characterData['bandId'] != null) {
                 bandIdMap.set(parseInt(characterId), characterData['bandId']);
             }
@@ -49,15 +33,8 @@ export class CardService {
         return bandIdMap;
     }
 
-    /**
-     * Load all skills data (cached)
-     */
     private async loadAllSkills(): Promise<{ [skillId: string]: any }> {
-        if (!this.skillsCache) {
-            const skillsData = await this.bestdoriClient.getAllSkills();
-            this.skillsCache = skillsData as { [skillId: string]: any };
-        }
-        return this.skillsCache;
+        return getSkills();
     }
 
     /**

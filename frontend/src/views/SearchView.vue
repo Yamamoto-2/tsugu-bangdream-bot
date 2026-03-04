@@ -11,11 +11,14 @@ import { getFuzzySearchConfig, getEventList } from '@/api/schema'
 import { fuzzySearch } from '@/lib/fuzzy-search'
 import type { FuzzySearchConfig, FuzzySearchResult } from '@/lib/fuzzy-search'
 import { navigationGroups } from '@/config/navigation'
+import { useI18n } from '@/composables/useI18n'
 import { Loader2, Construction } from 'lucide-vue-next'
 
 const props = defineProps<{
   category: string
 }>()
+
+const { $t } = useI18n()
 
 // 查找当前分类信息
 const categoryInfo = computed(() => {
@@ -137,16 +140,15 @@ watch(() => props.category, () => {
     <div class="mb-6" v-if="categoryInfo">
       <h1 class="text-2xl font-bold flex items-center gap-3">
         <component :is="categoryInfo.icon" class="size-7" />
-        {{ categoryInfo.title }}
+        {{ $t(categoryInfo.titleKey) }}
       </h1>
-      <p v-if="categoryInfo.description" class="text-muted-foreground mt-1">{{ categoryInfo.description }}</p>
     </div>
 
     <!-- 未实现的功能占位 -->
     <template v-if="!hasApi">
       <div class="flex flex-col items-center justify-center py-24 gap-4 text-muted-foreground">
         <Construction class="size-16" />
-        <p class="text-lg">此功能即将上线</p>
+        <p class="text-lg">{{ $t('search.comingSoon') }}</p>
       </div>
     </template>
 
@@ -170,7 +172,7 @@ watch(() => props.category, () => {
           class="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 transition-colors"
           @click="fetchResults(searchQuery)"
         >
-          重试
+          {{ $t('search.retry') }}
         </button>
       </div>
 
@@ -179,7 +181,7 @@ watch(() => props.category, () => {
 
       <!-- 空结果 -->
       <div v-else-if="schema" class="text-center text-muted-foreground py-12">
-        <p>没有匹配的结果</p>
+        <p>{{ $t('search.noResults') }}</p>
       </div>
     </template>
   </div>

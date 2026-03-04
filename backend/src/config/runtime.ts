@@ -41,7 +41,7 @@ export const cacheRootPath: string = path.join(projectRoot, '/cache');
 /**
  * Backend server port (from environment variable)
  */
-export const BACKEND_PORT: number = parseInt(process.env.BACKEND_PORT || '3000', 10);
+export const BACKEND_PORT: number = parseInt(process.env.BACKEND_PORT || '3001', 10);
 
 /**
  * MongoDB connection URI (from environment variable)
