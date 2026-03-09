@@ -26,7 +26,7 @@ import {
   getCharacterIconUrl,
   formatTimestamp,
 } from '@/schemas/core/utils';
-import { EventCard } from '@/schemas/components/EventCard';
+import { EventCard } from '@/schemas/components/event/EventCard';
 import { createTranslator, Language, DEFAULT_LANGUAGE } from '@/i18n';
 
 export type EventListMode = 'card' | 'table';

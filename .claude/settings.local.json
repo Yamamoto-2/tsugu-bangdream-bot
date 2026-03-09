@@ -21,7 +21,9 @@
       "Bash(do cp -r \"$SRC/$dir/\"* \"$DST/$dir/\")",
       "Bash(done)",
       "Bash(npm uninstall:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(mv:*)",
+      "Bash(ls:*)"
     ]
   }
 }

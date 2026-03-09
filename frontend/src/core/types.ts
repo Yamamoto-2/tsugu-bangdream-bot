@@ -130,6 +130,10 @@ export interface TableProps {
   size?: 'large' | 'default' | 'small';
   showHeader?: boolean;
   maxHeight?: string | number;
+  /** 启用行折叠展开，data 中的行可包含 _expandContent: SchemaNode[] */
+  expandable?: boolean;
+  /** 默认展开所有行 */
+  defaultExpandAll?: boolean;
 }
 
 export interface DescriptionsItem {

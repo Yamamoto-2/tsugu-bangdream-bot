@@ -3,9 +3,7 @@
  * 类似 Vue 组件，可以在多个页面中复用
  */
 
-export * from './CardIcon';
-export * from './AttributeTag';
-export * from './CharacterIcon';
-export * from './EventBanner';
-export * from './BonusDisplay';
-export * from './EventCard';
+export * from './common';
+export * from './card';
+export * from './character';
+export * from './event';

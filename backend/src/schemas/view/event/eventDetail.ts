@@ -23,9 +23,9 @@ import { getServerKey } from '@/schemas/core/utils';
 import { createTranslator, getDateLocale, Language, DEFAULT_LANGUAGE } from '@/i18n';
 
 // 导入组件
-import { EventBanner } from '@/schemas/components/EventBanner';
-import { BonusDisplay } from '@/schemas/components/BonusDisplay';
-import { CardIcon, CardIconList } from '@/schemas/components/CardIcon';
+import { EventBanner } from '@/schemas/components/event/EventBanner';
+import { BonusDisplay } from '@/schemas/components/event/BonusDisplay';
+import { CardIcon, CardIconList } from '@/schemas/components/card/CardIcon';
 
 export interface EventDetailOptions {
   imageMode?: 'url' | 'base64';

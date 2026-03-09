@@ -5,8 +5,8 @@
 
 import { SchemaNode, DescriptionsItem } from '@/schemas/types';
 import { card, space, text, divider, descriptions } from '@/schemas/core/base';
-import { AttributeBonusList } from '@/schemas/components/AttributeTag';
-import { CharacterBonusList } from '@/schemas/components/CharacterIcon';
+import { AttributeBonusList } from '../common/AttributeTag';
+import { CharacterBonusList } from '../character/CharacterIcon';
 import { Event } from '@/types/Event';
 import { createTranslator, Language, DEFAULT_LANGUAGE } from '@/i18n';
 
