@@ -29,6 +29,7 @@
     "bangdream"
   ],
   "devDependencies": {
+    "@types/node": "^25.5.0",
     "tsconfig-paths": "^4.2.0"
   },
   "dependencies": {

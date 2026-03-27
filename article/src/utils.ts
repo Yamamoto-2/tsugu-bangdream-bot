@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-export async function processRequest(postPromise, filePath) {
+export async function processRequest(postPromise: any, filePath: string) {
     try {
         const response = await postPromise;
         base64ToFile(response.data, filePath);
