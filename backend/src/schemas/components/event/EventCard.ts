@@ -18,17 +18,18 @@ export interface EventCardProps {
 }
 
 /**
- * 从 displayedServerList 中找到第一个有时间数据的服务器
+ * 从 displayedServerList 中找到所有有时间数据的服务器
  */
-function findServerWithTime(event: Event, serverList: Server[]): { server: Server, startAt: number, endAt: number } | null {
+function findServersWithTime(event: Event, serverList: Server[]): { server: Server, startAt: number, endAt: number }[] {
+  const results: { server: Server, startAt: number, endAt: number }[] = [];
   for (const server of serverList) {
     const startAt = event.startAt[server];
     const endAt = event.endAt[server];
     if (startAt && endAt) {
-      return { server, startAt, endAt };
+      results.push({ server, startAt, endAt });
     }
   }
-  return null;
+  return results;
 }
 
 /**
@@ -59,21 +60,18 @@ export function EventCard(props: EventCardProps): SchemaNode {
     tag(`#${event.eventId}`, { effect: 'plain', size: 'small' }),
   ];
 
-  // 时间行: 按 displayedServerList 顺序找第一个有时间的服务器
-  const timeInfo = findServerWithTime(event, displayedServerList);
-  const timeChildren: SchemaNode[] = [];
-  if (timeInfo) {
-    const serverKey = getServerKey(timeInfo.server);
-    timeChildren.push(
-      space([
-        image(getServerIconUrl(serverKey), { width: 16, height: 16, fit: 'contain' }),
-        text(
-          `${formatTimestamp(timeInfo.startAt, 'datetime')} ~ ${formatTimestamp(timeInfo.endAt, 'datetime')}`,
-          { size: 'small', type: 'info' }
-        ),
-      ], { size: 'small', alignment: 'center' })
-    );
-  }
+  // 时间行: 显示所有选中服务器的时间
+  const timeEntries = findServersWithTime(event, displayedServerList);
+  const timeChildren: SchemaNode[] = timeEntries.map(info => {
+    const serverKey = getServerKey(info.server);
+    return space([
+      image(getServerIconUrl(serverKey), { width: 16, height: 16, fit: 'contain' }),
+      text(
+        `${formatTimestamp(info.startAt, 'datetime')} ~ ${formatTimestamp(info.endAt, 'datetime')}`,
+        { size: 'small', type: 'info' }
+      ),
+    ], { size: 'small', alignment: 'center' });
+  });
 
   return card({ shadow: 'hover' }, [
     space([

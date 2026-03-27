@@ -70,6 +70,8 @@ export interface TableColumn {
   label: string;
   width?: string | number;
   minWidth?: string | number;
+  /** 弹性比例，所有列的 flex 值按比例分配宽度（如 1:1:2:1 → 20%:20%:40%:20%） */
+  flex?: number;
   align?: 'left' | 'center' | 'right';
   fixed?: boolean | 'left' | 'right';
 }

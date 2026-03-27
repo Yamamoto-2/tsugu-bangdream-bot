@@ -118,6 +118,8 @@ export function table(data: any[], columns: TableColumn[], props: {
   size?: 'large' | 'default' | 'small';
   showHeader?: boolean;
   maxHeight?: string | number;
+  expandable?: boolean;
+  defaultExpandAll?: boolean;
 } = {}, css?: Record<string, any>): SchemaNode {
   return { componentName: 'Table', props: { data, columns, ...props }, ...(css && { css }) };
 }

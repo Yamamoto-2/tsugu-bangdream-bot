@@ -52,16 +52,16 @@ export function CharacterBonusList(
     // 先添加所有角色头像
     for (const charId of characterIds) {
       rowChildren.push(
-        image(getCharacterIconUrl(charId), { width: 40, height: 40, fit: 'cover' })
+        image(getCharacterIconUrl(charId), { width: 28, height: 28, fit: 'cover' })
       );
     }
 
     // 再添加百分比文字
     rowChildren.push(
-      tag(`+${percent}%`, { type: 'success', size: 'default' })
+      tag(`+${percent}%`, { type: 'success', size: 'small' })
     );
 
-    rows.push(space(rowChildren, { size: 'small', alignment: 'center' }));
+    rows.push(space(rowChildren, { size: 'small', alignment: 'center', wrap: true }));
   }
 
   return space(rows, { direction: 'vertical', size: 'small' });

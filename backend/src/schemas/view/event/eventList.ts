@@ -12,22 +12,21 @@ import {
   text,
   tag,
   space,
-  row,
-  col,
   image,
   empty,
-  divider,
+  table,
 } from '@/schemas/core/base';
 import {
   getEventBannerUrlFallback,
   getServerIconUrl,
   getServerKey,
-  getAttributeIconUrl,
-  getCharacterIconUrl,
   formatTimestamp,
 } from '@/schemas/core/utils';
 import { EventCard } from '@/schemas/components/event/EventCard';
 import { createTranslator, Language, DEFAULT_LANGUAGE } from '@/i18n';
+import { TableColumn } from '@/schemas/types';
+import { AttributeBonusList } from '@/schemas/components/common/AttributeTag';
+import { CharacterBonusList } from '@/schemas/components/character/CharacterIcon';
 
 export type EventListMode = 'card' | 'table';
 
@@ -56,15 +55,8 @@ export function buildEventListSchema(
   }
 
   if (mode === 'table') {
-    const items: SchemaNode[] = [];
-    for (let i = 0; i < events.length; i++) {
-      items.push(buildTableRow(events[i], displayedServerList, language));
-      if (i < events.length - 1) {
-        items.push(divider());
-      }
-    }
     return page({ title: $t('event.title.list') }, [
-      container(items)
+      container([buildEventTable(events, displayedServerList, language)], { maxWidth: 'none' })
     ]);
   }
 
@@ -87,94 +79,92 @@ export function buildEventListSchema(
 
 // ========== Table 模式 ==========
 
-function buildTableRow(event: Event, displayedServerList: Server[], language: Language): SchemaNode {
+function buildEventTable(events: Event[], displayedServerList: Server[], language: Language): SchemaNode {
   const mainServer = displayedServerList[0];
   const $t = createTranslator(language);
-  const detailHref = `/info/event/${event.eventId}`;
 
-  const bannerUrl = getEventBannerUrlFallback(event.bannerAssetBundleName);
-  const eventName = event.eventName[mainServer]
-    || event.eventName.find(n => n != null)
-    || `Event #${event.eventId}`;
-  const eventTypeName = $t(`event.type.${event.eventType}`);
+  const columns: TableColumn[] = [
+    { prop: 'id', label: 'ID', flex: 1, align: 'center' },
+    { prop: 'banner', label: 'Banner', flex: 3 },
+    { prop: 'name', label: $t('event.label.name'), flex: 4 },
+    { prop: 'type', label: $t('event.label.type'), flex: 2, align: 'center' },
+    { prop: 'time', label: $t('event.label.start'), flex: 3 },
+    { prop: 'bonus', label: $t('bonus.attribute'), flex: 3 },
+    { prop: 'character', label: $t('bonus.character'), flex: 3 },
+  ];
 
-  // 右侧信息区域
-  const infoChildren: SchemaNode[] = [];
+  const data = events.map(event => {
+    const detailHref = `/info/event/${event.eventId}`;
+    const bannerUrl = getEventBannerUrlFallback(event.bannerAssetBundleName);
+    const eventTypeName = $t(`event.type.${event.eventType}`);
 
-  // 名称 + ID + 类型 (不再显示状态 tag)
-  infoChildren.push(
-    space([
-      { ...text(eventName, { type: 'primary' }), href: detailHref },
-      tag(`#${event.eventId}`, { effect: 'plain', size: 'small' }),
-      tag(eventTypeName, { type: 'info', size: 'small' }),
-    ], { size: 'small', wrap: true })
-  );
-
-  // 服务器时间: 按 displayedServerList 顺序，显示有时间数据的服务器(最多2个)
-  let timeCount = 0;
-  for (const server of displayedServerList) {
-    if (timeCount >= 2) break;
-    const serverKey = getServerKey(server);
-    const startAt = event.startAt[server];
-    const endAt = event.endAt[server];
-    if (startAt && endAt) {
-      infoChildren.push(
-        space([
-          image(getServerIconUrl(serverKey), { width: 18, height: 18, fit: 'contain' }),
-          text(`${formatTimestamp(startAt, 'datetime')} ~ ${formatTimestamp(endAt, 'datetime')}`, { size: 'small', type: 'info' }),
-        ], { size: 'small', alignment: 'center' })
-      );
-      timeCount++;
-    }
-  }
-
-  // 属性加成
-  const attributeList = event.getAttributeList();
-  if (Object.keys(attributeList).length > 0) {
-    const attrParts: SchemaNode[] = [];
-    for (const percent in attributeList) {
-      for (const attr of attributeList[percent]) {
-        attrParts.push(image(getAttributeIconUrl(attr.name), { width: 20, height: 20, fit: 'contain' }));
-      }
-      attrParts.push(tag(`+${percent}%`, { type: 'primary', size: 'small' }));
-    }
-    infoChildren.push(space(attrParts, { size: 'small', alignment: 'center', wrap: true }));
-  }
-
-  // 角色加成
-  const characterList = event.getCharacterList();
-  if (Object.keys(characterList).length > 0) {
-    const charParts: SchemaNode[] = [];
-    for (const percent in characterList) {
-      for (const charId of characterList[percent]) {
-        charParts.push(image(getCharacterIconUrl(charId), { width: 24, height: 24, fit: 'cover' }));
-      }
-      charParts.push(tag(`+${percent}%`, { type: 'success', size: 'small' }));
-    }
-    infoChildren.push(space(charParts, { size: 'small', alignment: 'center', wrap: true }));
-  }
-
-  // 偏科加成
-  if (event.eventCharacterParameterBonus && Object.keys(event.eventCharacterParameterBonus).length > 0) {
-    const statParts: string[] = [];
-    for (const stat in event.eventCharacterParameterBonus) {
-      if (stat === 'eventId') continue;
-      const value = (event.eventCharacterParameterBonus as any)[stat];
-      if (value && value > 0) {
-        statParts.push(`${$t(`bonus.stat.${stat}`)} +${value}%`);
+    // 名称列: 显示所有选中服务器的名称
+    const nameNodes: SchemaNode[] = [];
+    for (const server of displayedServerList) {
+      const serverKey = getServerKey(server);
+      const name = event.eventName[server];
+      if (name) {
+        nameNodes.push(
+          space([
+            image(getServerIconUrl(serverKey), { width: 14, height: 14, fit: 'contain' }),
+            text(name, { size: 'small' }),
+          ], { size: 'small', alignment: 'center' })
+        );
       }
     }
-    if (statParts.length > 0) {
-      infoChildren.push(text(statParts.join('  '), { size: 'small', type: 'info' }));
+    // fallback: 没有任何名称时显示 Event #ID
+    if (nameNodes.length === 0) {
+      nameNodes.push(text(`Event #${event.eventId}`, { size: 'small' }));
     }
-  }
+    const nameCell: SchemaNode = {
+      ...space(nameNodes, { direction: 'vertical', size: 'small' }),
+      href: detailHref,
+    };
 
-  return row({ gutter: 12, align: 'top' }, [
-    col({ xs: 10, sm: 8, md: 6 }, [
-      { ...image(bannerUrl, { width: '100%', fit: 'cover', alt: eventName, lazy: true }), href: detailHref }
-    ]),
-    col({ xs: 14, sm: 16, md: 18 }, [
-      space(infoChildren, { direction: 'vertical', size: 'small' })
-    ])
-  ]);
+    // 时间列: 显示所有选中服务器的时间
+    const timeNodes: SchemaNode[] = [];
+    for (const server of displayedServerList) {
+      const serverKey = getServerKey(server);
+      const startAt = event.startAt[server];
+      const endAt = event.endAt[server];
+      if (startAt && endAt) {
+        timeNodes.push(
+          space([
+            image(getServerIconUrl(serverKey), { width: 14, height: 14, fit: 'contain' }),
+            text(
+              `${formatTimestamp(startAt, 'date')} ~ ${formatTimestamp(endAt, 'date')}`,
+              { size: 'small' }
+            ),
+          ], { size: 'small', alignment: 'center' })
+        );
+      }
+    }
+    const timeCell = timeNodes.length > 0
+      ? space(timeNodes, { direction: 'vertical', size: 'small' })
+      : '';
+
+    // 属性加成列
+    const attributeList = event.getAttributeList();
+    const bonusCell = Object.keys(attributeList).length > 0
+      ? AttributeBonusList(attributeList)
+      : '';
+
+    // 角色加成列
+    const characterList = event.getCharacterList();
+    const characterCell = Object.keys(characterList).length > 0
+      ? CharacterBonusList(characterList)
+      : '';
+
+    return {
+      id: { ...text(`#${event.eventId}`, { size: 'small' }), href: detailHref },
+      banner: { ...image(bannerUrl, { width: 160, fit: 'cover', alt: nameNodes[0] ? '' : `Event ${event.eventId}`, lazy: true }), href: detailHref },
+      name: nameCell,
+      type: tag(eventTypeName, { type: 'info', size: 'small' }),
+      time: timeCell,
+      bonus: bonusCell,
+      character: characterCell,
+    };
+  });
+
+  return table(data, columns, { stripe: true });
 }
