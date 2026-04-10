@@ -122,10 +122,25 @@ export async function drawEventDetail(eventId: number, displayedServerList: Serv
         }))
         list.push(line)
     }
+    // 活动装饰
+    const decoImage = await event.getRewardDeco(displayedServerList[0])
+    if(decoImage){
+        list.push(
+            await drawList({
+                key: '活动装饰',
+                content: [decoImage],
+                textSize: 64,
+                lineHeight: 64
+            })
+        )
+        list.push(line)
+    }
 
     //牌子
     list.push(await drawDegreeListOfEvent(event, displayedServerList))
     list.push(line)
+
+
 
     //有歌榜活动的歌榜歌曲
     const eventTypes: string[] = ['versus', 'challenge', 'medley']
