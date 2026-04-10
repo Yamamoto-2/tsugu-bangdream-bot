@@ -310,6 +310,9 @@ export class Event {
     }
     async getRewardDeco(server:Server): Promise<Image> {
         const allDeco = mainAPI['deco']
+        if(!this.rankingRewards[server]){   // Undefined处理
+            return undefined
+        }
         const rewards = this.rankingRewards[server].filter(Boolean)
         let rewardId = -1
         for(let i = 0; i < rewards?.length; i++){
