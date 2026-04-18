@@ -96,8 +96,19 @@ export async function getFrameFromAnimatedDegreeAsset(baseImageName: string, ser
 
     // texture
     // example https://bestdori.com/assets/cn/ani_degree_bilibili_day1_rip/ani_degree_bilibili_day1.png
-    const textureUrl = `${Bestdoriurl}/assets/${Server[server]}/${baseImageName}_rip/${baseImageName}.png`
-    const textureBuffer = await downloadFileCache(textureUrl)
+    // example https://bestdori.com/assets/cn/ani_degree_election_5th_rip/assets-star-forassetbundle-startapp-thumbnail-animedegree-ani_degree_election_5th-ani_degree_election_5th.png
+    const textureUrlOld = `${Bestdoriurl}/assets/${Server[server]}/${baseImageName}_rip/${baseImageName}.png`
+    const textureUrlNew = `${Bestdoriurl}/assets/${Server[server]}/${baseImageName}_rip/assets-star-forassetbundle-startapp-thumbnail-animedegree-${baseImageName}-${baseImageName}.png`
+    // 后期使用了统一的资源路径
+    const useTextureUrlOldAssetWhitelist = ['ani_degree_bilibili_day1','ani_degree_bilibili_092701','ani_degree_bilibili_collabo','ani_degree_bilibili_6years']
+    var useTextureUrlOld = false
+    for(var l of useTextureUrlOldAssetWhitelist){
+        if (baseImageName == l){
+            useTextureUrlOld = true
+            break
+        }
+    }
+    const textureBuffer = await downloadFileCache(useTextureUrlOld?textureUrlOld:textureUrlNew)
     const texture = await loadImage(textureBuffer)
 
     //get frame data

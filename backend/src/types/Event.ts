@@ -308,6 +308,41 @@ export class Event {
             return undefined
         }
     }
+    async getRewardDeco(server:Server): Promise<Image> {
+        const allDeco = mainAPI['deco']
+        if(!this.rankingRewards[server]){   // Undefined处理
+            return undefined
+        }
+        const rewards = this.rankingRewards[server].filter(Boolean)
+        let rewardId = -1
+        for(let i = 0; i < rewards?.length; i++){
+            if(rewards[i].rewardType == 'deco_pins'){
+                rewardId = rewards[i].rewardId
+                break
+            }
+        }
+        if (rewardId == -1) return undefined
+        let decoAssentName = ''
+        for(const i in allDeco){
+            if(i == rewardId.toString()){
+                decoAssentName = allDeco[i]['assetBundleName']
+            }
+        }
+        if(decoAssentName == ''){
+            return undefined
+        }
+        let serverName = 'cn'
+        if(this.startAt[server] && this.startAt[server] < Date.now()){
+            serverName = Server[server]
+        }
+        try {
+            const decoBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${serverName}/deco/pins_rip/${decoAssentName}.png`)
+            return await loadImage(decoBuffer)
+        }
+        catch{
+            return undefined
+        }
+    }
 
 }
 
