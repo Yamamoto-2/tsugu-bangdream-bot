@@ -18,7 +18,7 @@ export async function drawSongRandom(matches: FuzzySearchResult, displayedServer
     }
 
     //在搜索结果中随机选择一首歌曲
-    const randomIndex = getRandomInt(tempSongList.length - 1)
+    const randomIndex = getRandomInt(tempSongList.length)
     const song = tempSongList[randomIndex]
 
     var all = []
