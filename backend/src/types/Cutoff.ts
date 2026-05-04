@@ -125,6 +125,32 @@ export class Cutoff {
         this.predictEP = Math.floor(result.ep)
         return this.predictEP
     }
+    getPredictionHistory(): { time: number, ep: number }[] {
+        if (this.isExist == false || !this.cutoffs) {
+            return []
+        }
+        const event = new Event(this.eventId)
+        const start_ts = Math.floor(event.startAt[this.server] / 1000)
+        const end_ts = Math.floor(event.endAt[this.server] / 1000)
+        const cutoff_ts: { time: number, ep: number }[] = []
+        for (let i = 0; i < this.cutoffs.length; i++) {
+            const element = this.cutoffs[i]
+            cutoff_ts.push({ time: Math.floor(element.time / 1000), ep: element.ep })
+        }
+        const history: { time: number, ep: number }[] = []
+        for (let i = 0; i < cutoff_ts.length; i++) {
+            let result
+            try {
+                result = predict(cutoff_ts.slice(0, i + 1), start_ts, end_ts, this.rate)
+            } catch (e) {
+                continue
+            }
+            if (result && result.ep && !isNaN(result.ep) && result.ep !== 0) {
+                history.push({ time: this.cutoffs[i].time, ep: Math.floor(result.ep) })
+            }
+        }
+        return history
+    }
     getChartData(setStartToZero = false): { x: Date, y: number }[] {
         if (this.isExist == false) {
             return [];

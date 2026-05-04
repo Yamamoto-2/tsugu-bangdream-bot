@@ -54,11 +54,28 @@ export async function drawCutoffChart(cutoffList: Cutoff[], setStartToZero = fal
         if (cutoff.status == 'in_progress') {
             if (cutoff.predictEP != null && cutoff.predictEP != 0) {
                 let data = []
-                if (setStartToZero) {
-                    data = [{ x: new Date(0), y: cutoff.predictEP }, { x: new Date(cutoff.endAt - cutoff.startAt), y: cutoff.predictEP }]
+                const history = cutoff.getPredictionHistory()
+                if (history.length > 0) {
+                    if (setStartToZero) {
+                        for (const p of history) {
+                            data.push({ x: new Date(p.time - cutoff.startAt), y: p.ep })
+                        }
+                        data.push({ x: new Date(cutoff.endAt - cutoff.startAt), y: history[history.length - 1].ep })
+                    }
+                    else {
+                        for (const p of history) {
+                            data.push({ x: new Date(p.time), y: p.ep })
+                        }
+                        data.push({ x: new Date(cutoff.endAt), y: history[history.length - 1].ep })
+                    }
                 }
                 else {
-                    data = [{ x: new Date(cutoff.startAt), y: cutoff.predictEP }, { x: new Date(cutoff.endAt), y: cutoff.predictEP }]
+                    if (setStartToZero) {
+                        data = [{ x: new Date(0), y: cutoff.predictEP }, { x: new Date(cutoff.endAt - cutoff.startAt), y: cutoff.predictEP }]
+                    }
+                    else {
+                        data = [{ x: new Date(cutoff.startAt), y: cutoff.predictEP }, { x: new Date(cutoff.endAt), y: cutoff.predictEP }]
+                    }
                 }
                 const tempColor = getPresetColor(i)
                 datasets.push({
