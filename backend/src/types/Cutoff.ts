@@ -72,7 +72,7 @@ export class Cutoff {
             }
             catch{
                 //this.useHHWX = this.useHHWX?false:true
-                reportDataSourceProblem()
+                if (this.server ==  Server.cn)reportDataSourceProblem()
                 return await callAPIAndCacheResponse(`${this.getFinalApiUrl(true)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,0,3)
             }
         }else{
@@ -81,7 +81,7 @@ export class Cutoff {
                 return await callAPIAndCacheResponse(`${this.getFinalApiUrl(false)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,1/0,3)
             }
             catch{
-                reportDataSourceProblem()
+                if (this.server ==  Server.cn)reportDataSourceProblem()
                 return await callAPIAndCacheResponse(`${this.getFinalApiUrl(true)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,1/0,3)
             }
         }
