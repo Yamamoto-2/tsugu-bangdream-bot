@@ -279,7 +279,7 @@ export class Cutoff {
             }
             dailyIncrement.push(Math.round(((this.cutoffs[this.cutoffs.length-1].ep - score[score.length - 1])/10000) / ratio * ( Math.ceil(ratio) - ratio )) + '!')
         }else{
-            dailyIncrement.push(Math.round(((this.cutoffs[this.cutoffs.length-1].ep - score[score.length - 1])/10000)) + '!')
+            dailyIncrement.push(Math.round(((this.cutoffs[this.cutoffs.length-1].ep - score[score.length - 1])/10000)))
         }
         this.dailyIncrement = dailyIncrement
     }
