@@ -5,7 +5,7 @@ import { logger } from '@/logger';
 async function callAPIAndCacheResponse(url: string, cacheTime: number = 0, retryCount: number = 3): Promise<object> {
   const cacheDir = getCacheDirectory(url);
   const fileName = getFileNameFromUrl(url);
-
+  //console.log('callAPIAndCacheResponse:',url,' cacheTime:',cacheTime)
   for (let attempt = 0; attempt < retryCount; attempt++) {
     try {
       const data = await getJsonAndSave(url, cacheDir, fileName, cacheTime);
