@@ -164,7 +164,7 @@ export async function queryRoomNumberFromBandoriStation(): Promise<Room[]> {
                 roomData['user_info']['bandori_player_brief_info']['user_id'],
                 getServerByName(roomData['user_info']['bandori_player_brief_info']['server'])
             )
-            await player.initFull()
+            // await player.initFull()  // 前端不再需要init，由后端init一次，缩短IO上的等待
             room.setPlayer(player)
         }
         roomList.push(room)

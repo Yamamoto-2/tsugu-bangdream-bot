@@ -8,6 +8,7 @@ import express from 'express';
 import { body } from 'express-validator';
 import { middleware } from '@/routers/middleware';
 import { Request, Response } from 'express';
+import { getUserIcon } from '@/api/userIcon';
 
 const router = express.Router();
 
@@ -63,18 +64,23 @@ async function getRoomList(roomList: any) {
       let server = room.player.server;
       if (isServer(server)) {
         const tempPlayer = new Player(room.player.playerId, server);
-        await tempPlayer.initFull(true); // 假设 initFull 是异步函数
+        /*
         if (!tempPlayer.initError && tempPlayer.isExist) {
-          tempRoom.setPlayer(tempPlayer);
+          tempRoom.setPlayer(tempPlayer); 
         }
+        */
+        tempRoom.setPlayer(tempPlayer); // 不加载Player，加快出图速度
       }
     }
     return tempRoom;
   });
-
+  const preCacheAvatar = roomList.map(async (room:any)=>{  // 预先缓存BandoriStation的头像，加快出图速度
+    return getUserIcon(room.avatarUrl)
+  })
   // 等待所有并行操作完成
-  const result = await Promise.all(promises);
-  return result;
+  const result = await Promise.all([Promise.all(promises),Promise.all(preCacheAvatar)]);
+  //console.log(result)
+  return result[0];
 }
 
 

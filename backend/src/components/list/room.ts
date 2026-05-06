@@ -74,7 +74,7 @@ export async function drawRoonInList(room: Room) {
     let list = [canvasUp]
     if (room.player != undefined) {
         const player = new Player(room.player.playerId, room.player.server)
-        await player.initFull(true)
+        await player.initFull(true,1)   // ycm的玩家数据对实时性要求不高，使用缓存的同时通知Bestdori更新数据，这样下一次获取到的玩家数据就是正常的，加速ycm出图速度
         if (player.isExist && !player.initError) {
             list.push(line)
             list.push(await drawPlayerDetailInRoomList(player))

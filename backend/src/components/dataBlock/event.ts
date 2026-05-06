@@ -10,7 +10,7 @@ import { Server } from '@/types/Server';
 import { globalDefaultServer } from '@/config'
 
 export async function drawEventDatablock(event: Event, displayedServerList: Server[] = globalDefaultServer, topLeftText?: string) {
-    await event.initFull()
+    // await event.initFull()  // 这里会返回硬盘的缓存数据，但是所需数据在MainAPI中亦有提供。
     var list = []
     var eventBannerImage = await event.getBannerImage()
     var eventBannerImageCanvas = drawBannerImageCanvas(eventBannerImage)
