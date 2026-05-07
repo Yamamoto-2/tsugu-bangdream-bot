@@ -5,6 +5,7 @@ import { Server } from '@/types/Server';
 import { Event } from '@/types/Event';
 import { predict } from '@/api/cutoff.cjs'
 import { logger } from '@/logger';
+import { normalizeTimestamp, getDateByServerTimezone } from '@/components/list/time';
 
 export class Cutoff {
     eventId: number;
@@ -208,78 +209,92 @@ export class Cutoff {
         }
         return history
     }
-    getDailyIncrement(){
+    getDaysOfEvent(ts: number){
         let eventStartAtTime = this.startAt
-        let eventEndAtTime = this.endAt
+        var startDate = new Date(eventStartAtTime)
+        var firstDayEndTime = eventStartAtTime + ((86400000 + 1000*60*60*4) - startDate.getHours() * 3600000 - startDate.getMinutes() * 60000 - startDate.getSeconds() * 1000)
+        // 以凌晨四点作为一天的分界线。
+        if (ts < firstDayEndTime){
+            return 0
+        }
+        else{
+            return Math.ceil((ts - firstDayEndTime) / 86400000)
+        }
+    }
+    getDailyIncrement(){
         let score:number[] = []
         let time:number[] = []
-
-        for (var c of this.cutoffs){
-            let timeStampStr = c.time
-            var date = new Date(timeStampStr)
-            if (date.getHours() == 3 && date.getMinutes() == 45){
+        if (!this.cutoffs || this.cutoffs.length === 0){
+            return
+        }
+        for (const c of this.cutoffs) {
+            const timestamp = normalizeTimestamp(c.time)
+            const date = getDateByServerTimezone(timestamp, this.server)
+            if ((this.server == Server.cn || this.server == Server.tw || this.server == Server.jp) && date.getUTCHours() === 3 && date.getUTCMinutes() === 45) {
                 score.push(c.ep)
-                time.push(timeStampStr)
+                time.push(timestamp)
             }
         }
-
         let dailyIncrement = []
-        if (score.length < 2) {
-            if (score.length == 0){
-                dailyIncrement.push(Math.round((this.cutoffs[this.cutoffs.length-1].ep)/10000))
-            }
-            else if (score.length == 1 && (time[0] - eventStartAtTime) <(86400000 + (86400000 * 0.7))){
-                dailyIncrement.push(Math.round((score[0])/10000))
-                dailyIncrement.push(Math.round((this.cutoffs[this.cutoffs.length-1].ep - score[0])/10000) )
-            }
-            else{
-                dailyIncrement.push(0)
-            }
-            this.dailyIncrement = dailyIncrement
-            return  
-        }
-        if ((time[0] - eventStartAtTime) < (86400000 * 0.7)){
-            dailyIncrement.push(Math.round(score[0] / 10000))
-
-        }else{
-            // 假设第一天为13小时：13/24
-            let t = time[0] - eventStartAtTime 
-            let total_days =  t / 86400000
-            let first_days_ratio =  (13/24)
-            let first_day_ep = Math.round((score[0] / total_days * first_days_ratio) / 10000)
-            dailyIncrement.push(first_day_ep + '!')
-            for(var i = 0;i< Math.floor(total_days - first_days_ratio);i++){   // 假如第一天没数据，第二天没数据，第三天有数据，这里只算第二天
-                dailyIncrement.push(Math.round(((score[0] - first_day_ep) / total_days) / 10000) + '!')
-            }
-        }
-        for(let i = 0;i<score.length-1;i++){
-            if (time[i+1] - time[i] > 86520000){
-                let zeroPaddingCount = Math.round((time[i+1] - time[i]) / 86280000)   // 两分钟误差，用于计算中间究竟空了多少天。最终结果返回两天，那么中间就空了两天，那么就计算平均值
-                for(var zpc = 0;zpc<zeroPaddingCount;zpc++){
-                    let avgIncrementValue = Math.round(((score[i+1] - score[i])/10000)/zeroPaddingCount)
-                    dailyIncrement.push(avgIncrementValue + '!')
+        let dailyIncrementInvaildDays:number[]  = []
+        let scoreFinal:number[] = []
+        var j = 0   // 临时天数存放
+        var cutoffLastDataDays = this.getDaysOfEvent(this.cutoffs[this.cutoffs.length-1].time)   // 最后一个数据的天数
+        // 头处理
+        if (score.length == 0){
+            for (var i = 0;i<=this.getDaysOfEvent(this.cutoffs[this.cutoffs.length-1].time);i++){
+                if (this.getDaysOfEvent(this.cutoffs[this.cutoffs.length-1].time) == 0){
+                    scoreFinal.push(this.cutoffs[this.cutoffs.length-1].ep)
+                    break
                 }
-            }   // 两分钟容错,如果大于两分钟，就表明数据不可信
-            else{
-                dailyIncrement.push(Math.round((score[i+1] - score[i])/10000))
+                let avgIncrementValue = Math.round(((this.cutoffs[this.cutoffs.length-1].ep)/(this.getDaysOfEvent(this.cutoffs[this.cutoffs.length-1].time))))    // 计算丢失的天数的平均增量
+                scoreFinal.push(Math.round(avgIncrementValue * (i+1)))  // 把丢失的天数的数据补全
+                dailyIncrementInvaildDays.push(scoreFinal.length-1)  // 记录增量数据不完整的天数位置
+                j++ // 增加一天
             }
         }
-        // 最后再加入最后一刻的增速，这里同样要计算是否大于一天
-        // 假如3/14有数据，3/15没数据，3/16没数据，3/17有数据，并且是最后一天
-        // 3/14 3:45 ~ 3/17 7:15    此时ratio将会是3.2~3.3左右。
-        if (this.status == "ended") this.currentGetDataTime = this.endAt
-        let ratio = (this.currentGetDataTime - time[time.length-1]) / 86400000
-        if (ratio > 1.2){   // 预留
-            let totalLostDays = Math.floor(ratio)    // 向下取整
-            if (ratio - totalLostDays > 0.8) totalLostDays++
-            let zeroPaddingCount = Math.round(ratio)
-            for (var zpc = 0;zpc < Math.floor(ratio);zpc++){
-                var data = Math.round(((this.cutoffs[this.cutoffs.length-1].ep - score[score.length - 1])/10000)/ratio)
-                dailyIncrement.push(data + '!')
+        
+        for (var i = 0;i<score.length;i++){
+            if (score.length == 0) break
+            if (this.getDaysOfEvent(time[i]) == j){ // 如果当天相对于活动而言天数是i，说明数据完整
+                if (this.getDaysOfEvent(time[i]) == 0){ // 如果是第0天，且有数据，说明第一天虽然不满24小时，但有数据了，就直接把第一天增量设为当天的ep
+                    scoreFinal.push(score[i])
+                    j++
+                }
+                else{       // 如果是第i天，且有数据，说明当天数据完整，直接用当天的ep减去前一天的ep就是当天的增量
+                    scoreFinal.push(score[i])
+                    j++
+                }
+            }else{  // i跟相对于getDaysOfEvent的结果不一致，说明当天数据不完整，进行插值计算
+                // 当i = 0时，就说明要从0开始而不是score[i-1]开始插值
+                if (this.getDaysOfEvent(time[i]) > j){  // 如果这个数据是大于标记天数的，则说明需要进行插值计算
+                    let lostDays = this.getDaysOfEvent(time[i]) - j +1
+                    let avgIncrementValue = Math.round((i==0?(score[i] - 0):(score[i] - score[i-1]))/lostDays)    // 计算丢失的天数的平均增量
+                    for (var ld = 0;ld<lostDays;ld++){
+                        scoreFinal.push(Math.round(i==0?0+ avgIncrementValue * (ld+1):score[i-1] + avgIncrementValue * (ld+1)))  // 把丢失的天数的数据补全
+                        dailyIncrementInvaildDays.push(scoreFinal.length-1)  // 记录增量数据不完整的天数位置
+                        j++ // 增加一天
+                    }
+                }
             }
-            dailyIncrement.push(Math.round(((this.cutoffs[this.cutoffs.length-1].ep - score[score.length - 1])/10000) / ratio * ( ratio - Math.floor(ratio) )) + '!')
-        }else{
-            dailyIncrement.push(Math.round(((this.cutoffs[this.cutoffs.length-1].ep - score[score.length - 1])/10000)))
+        }
+        // 尾处理 。当尾巴 this.getDaysOfEvent(time[time.length-1])不为1的时候，就说明尾是有多项数据缺失
+        if (score.length != 0){
+            for(var i = 0;i<cutoffLastDataDays - this.getDaysOfEvent(time[time.length-1]);i++){   // 如果tracker最后一个数据日期跟score最后一个数据的日期有差异，说名是尾巴，要处理
+                if (score.length == 0) break
+                let avgIncrementValue = Math.round(((this.cutoffs[this.cutoffs.length-1].ep - score[score.length-1]))/(cutoffLastDataDays - this.getDaysOfEvent(time[time.length-1])))    // 计算丢失的天数的平均增量
+                scoreFinal.push(Math.round(score[score.length-1] + avgIncrementValue * (i+1)))  // 把丢失的天数的数据补全
+                if(cutoffLastDataDays - this.getDaysOfEvent(time[time.length-1]) > 1)dailyIncrementInvaildDays.push(scoreFinal.length-1)
+                j++ // 因该是没什么用的了，还是加一下吧
+            }
+        }
+        for (var i = 0;i<scoreFinal.length;i++){   // 计算增量
+            if (i == 0){
+                dailyIncrement.push(`${Math.round(scoreFinal[i]/10000)}${dailyIncrementInvaildDays.includes(i) ? '!' : ''}`) 
+            }
+            else{
+                dailyIncrement.push(`${Math.round((scoreFinal[i] - scoreFinal[i-1])/10000)}${dailyIncrementInvaildDays.includes(i) ? '!' : ''}` )
+            }
         }
         this.dailyIncrement = dailyIncrement
     }
