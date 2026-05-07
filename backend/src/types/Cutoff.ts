@@ -99,7 +99,7 @@ export class Cutoff {
         if (time < this.endAt + 1000 * 60 * 60 * 24 * 2) {
             cutoffData = await this.getFinalCutoffsData()
             // var dateNow = Date.now()
-            if (this.server == Server.cn && time - cutoffData["cutoffs"][cutoffData["cutoffs"].length-1].time >= 2700000){   // 对数据进行实时性检查，如果不通过则使用另一个数据源数据.确保服务器时间对齐东八区
+            if (this.server == Server.cn && cutoffData["cutoffs"].length!=0 && time - cutoffData["cutoffs"][cutoffData["cutoffs"].length-1].time >= 2700000){   // 对数据进行实时性检查，如果不通过则使用另一个数据源数据.确保服务器时间对齐东八区
                 this.useHHWX = !this.useHHWX
                 logger('Cutoff.ts/initFull',`数据实时性校验不通过，切换数据源至${this.useHHWX?"HHWX":"Bestdori"} `)
                 reportDataSourceProblem()
@@ -107,7 +107,7 @@ export class Cutoff {
                 if (cutoffData["cutoffs"][cutoffData["cutoffs"].length-1].time < cutoffData2["cutoffs"][cutoffData2["cutoffs"].length-1].time){ // 对比两个数据源的数据哪个更加实时
                     cutoffData = cutoffData2
                 }
-            }else if(this.server == Server.cn){ // 正在进行的活动，数据源数据无问题，清空计数器
+            }else if(this.server == Server.cn && cutoffData["cutoffs"].length!=0){ // 正在进行的活动，数据源数据无问题，清空计数器.
                 clearDataSourceProblem()
             }
         }
@@ -247,7 +247,7 @@ export class Cutoff {
             let total_days =  t / 86400000
             let first_days_ratio =  (13/24)
             let first_day_ep = Math.round((score[0] / total_days * first_days_ratio) / 10000)
-            dailyIncrement.push(first_day_ep)
+            dailyIncrement.push(first_day_ep + '!')
             for(var i = 0;i< Math.floor(total_days - first_days_ratio);i++){   // 假如第一天没数据，第二天没数据，第三天有数据，这里只算第二天
                 dailyIncrement.push(Math.round(((score[0] - first_day_ep) / total_days) / 10000) + '!')
             }
@@ -277,7 +277,7 @@ export class Cutoff {
                 var data = Math.round(((this.cutoffs[this.cutoffs.length-1].ep - score[score.length - 1])/10000)/ratio)
                 dailyIncrement.push(data + '!')
             }
-            dailyIncrement.push(Math.round(((this.cutoffs[this.cutoffs.length-1].ep - score[score.length - 1])/10000) / ratio * ( Math.ceil(ratio) - ratio )) + '!')
+            dailyIncrement.push(Math.round(((this.cutoffs[this.cutoffs.length-1].ep - score[score.length - 1])/10000) / ratio * ( ratio - Math.floor(ratio) )) + '!')
         }else{
             dailyIncrement.push(Math.round(((this.cutoffs[this.cutoffs.length-1].ep - score[score.length - 1])/10000)))
         }
