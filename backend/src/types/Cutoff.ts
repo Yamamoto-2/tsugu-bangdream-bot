@@ -99,7 +99,7 @@ export class Cutoff {
         if (time < this.endAt + 1000 * 60 * 60 * 24 * 2) {
             cutoffData = await this.getFinalCutoffsData()
             // var dateNow = Date.now()
-            if (this.server == Server.cn && cutoffData["cutoffs"].length!=0 && time - cutoffData["cutoffs"][cutoffData["cutoffs"].length-1].time >= 2700000){   // 对数据进行实时性检查，如果不通过则使用另一个数据源数据.确保服务器时间对齐东八区
+            if (this.server == Server.cn &&cutoffData["cutoffs"] && cutoffData["cutoffs"].length!=0 && time - cutoffData["cutoffs"][cutoffData["cutoffs"].length-1].time >= 2700000){   // 对数据进行实时性检查，如果不通过则使用另一个数据源数据.确保服务器时间对齐东八区
                 this.useHHWX = !this.useHHWX
                 logger('Cutoff.ts/initFull',`数据实时性校验不通过，切换数据源至${this.useHHWX?"HHWX":"Bestdori"} `)
                 reportDataSourceProblem()
@@ -107,7 +107,7 @@ export class Cutoff {
                 if (cutoffData["cutoffs"][cutoffData["cutoffs"].length-1].time < cutoffData2["cutoffs"][cutoffData2["cutoffs"].length-1].time){ // 对比两个数据源的数据哪个更加实时
                     cutoffData = cutoffData2
                 }
-            }else if(this.server == Server.cn && cutoffData["cutoffs"].length!=0){ // 正在进行的活动，数据源数据无问题，清空计数器.
+            }else if(this.server == Server.cn && cutoffData["cutoffs"] && cutoffData["cutoffs"].length!=0){ // 正在进行的活动，数据源数据无问题，清空计数器.
                 clearDataSourceProblem()
             }
         }
