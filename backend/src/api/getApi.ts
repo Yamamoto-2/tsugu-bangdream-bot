@@ -3,6 +3,9 @@ import { getCacheDirectory, getFileNameFromUrl } from '@/api/utils';
 import { logger } from '@/logger';
 
 async function callAPIAndCacheResponse(url: string, cacheTime: number = 0, retryCount: number = 3): Promise<object> {
+  if (url.includes('hhwx.org/api/tracker/data')) {
+    url = url.replace('hhwx.org/api/tracker/data', 'hhwx.org/api/bandori/tracker/data');  // HHWX数据源修复
+  }
   const cacheDir = getCacheDirectory(url);
   const fileName = getFileNameFromUrl(url);
   //console.log('callAPIAndCacheResponse:',url,' cacheTime:',cacheTime)
