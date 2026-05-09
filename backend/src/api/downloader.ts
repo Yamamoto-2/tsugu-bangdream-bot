@@ -127,6 +127,7 @@ export async function getJsonAndSave(url: string, directory?: string, fileName?:
     //console.log(`Downloaded JSON data from "${url}"`);
     return jsonObject;
   } catch (e) {
-    throw new Error(`Failed to download JSON data from "${url}". Error: ${e.message}`);
+    throw e
+    //throw new Error(`Failed to download JSON data from "${url}". Error: ${e.message}`);
   }
 }
