@@ -35,7 +35,7 @@ export const Bestdoriurl: string = 'https://bestdori.com'; //Bestdori网站的ur
 export const BandoriStationurl: string = 'https://api.bandoristation.com/'; //BandoriStation网站的url
 
 export const HHWX_Url: string = 'https://hhwx.org'; //HHWX网站的url
-export var USE_HHWX_SOURCE_PREFER = true;   // 是否优先使用HHWX的Tracker数据
+export var USE_HHWX_SOURCE_PREFER = false;   // 是否优先使用HHWX的Tracker数据
 
 const enableAutoTrackerDataSourceSwitch = true  // 是否开启数据源优先自动切换
 const trackerAutoSwitchThreshold:number = 5     // 设定数据源自动切换门限，当存在5次数据源更新不及时的情况，自动切换数据源，加快访问速度
