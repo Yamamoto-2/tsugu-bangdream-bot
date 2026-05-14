@@ -43,8 +43,8 @@ var trackerAutoSwitchFlags:number = 0
 export function reportDataSourceProblem(){
     if(enableAutoTrackerDataSourceSwitch){
         if(++trackerAutoSwitchFlags > trackerAutoSwitchThreshold-1){
-            logger('config.ts/reportDataSourceProblem',`Tracker数据源多次出现问题，将数据源优先切换至${USE_HHWX_SOURCE_PREFER?"HHWX":"Bestdori"}`)
             USE_HHWX_SOURCE_PREFER = !USE_HHWX_SOURCE_PREFER
+            logger('config.ts/reportDataSourceProblem',`Tracker数据源多次出现问题，将数据源优先切换至${USE_HHWX_SOURCE_PREFER?"HHWX":"Bestdori"}`)
             trackerAutoSwitchFlags = 0
         }
     }

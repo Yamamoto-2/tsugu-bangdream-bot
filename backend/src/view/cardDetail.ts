@@ -164,7 +164,7 @@ async function drawCardDetail(cardId: number, displayedServerList: Server[] = gl
             gachaIdList.sort((a, b) => {
                 const gachaA = new Gacha(a);
                 const gachaB = new Gacha(b);
-                if (gachaA.publishedAt[server] != gachaB.publishedAt[server]) {
+                if (server != Server.jp && gachaA.publishedAt[server] != gachaB.publishedAt[server]) {
                     return gachaA.publishedAt[server] - gachaB.publishedAt[server];
                 }
                 else {
