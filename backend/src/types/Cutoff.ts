@@ -2,10 +2,10 @@ import { callAPIAndCacheResponse } from '@/api/getApi';
 import mainAPI from '@/types/_Main';
 import { Bestdoriurl, HHWX_Url, USE_HHWX_SOURCE_PREFER, reportDataSourceProblem, clearDataSourceProblem,tierListOfServer } from '@/config';
 import { Server } from '@/types/Server';
-import { Event } from '@/types/Event';
+import { Event, getPresentEvent } from '@/types/Event';
 import { predict } from '@/api/cutoff.cjs'
 import { logger } from '@/logger';
-import { normalizeTimestamp, getDateByServerTimezone, getServerUtcOffset } from '@/components/list/time';
+import { normalizeTimestamp, getDateByServerTimezone, getServerUtcOffset, GetProbablyTimeDifference } from '@/components/list/time';
 
 export class Cutoff {
     eventId: number;
@@ -41,8 +41,11 @@ export class Cutoff {
         }
         this.tier = tier
         this.isExist = true;
-        this.startAt = event.startAt[server]
-        this.endAt = event.endAt[server]
+        // this.startAt = event.startAt[server]
+        // this.endAt = event.endAt[server]
+        // 当该活动在服务器上尚未存在时，使用预测的时间去推断startAt以及endAt，以解决部分情况下卡死及档线状态不对的问题
+        this.startAt = event.startAt[server] || server!=Server.cn?event.startAt[server]:GetProbablyTimeDifference(this.eventId,getPresentEvent(this.server))
+        this.endAt = event.endAt[server] || server!=Server.cn?event.endAt[server]:GetProbablyTimeDifference(this.eventId,getPresentEvent(this.server)) + (event.endAt[Server.jp] - event.startAt[Server.jp])
         const tempEvent = new Event(this.eventId)
         this.currentGetDataTime = new Date().getTime()
         //状态
@@ -209,8 +212,8 @@ export class Cutoff {
         return history
     }
     getDaysOfEvent(ts: number) {
+        if (!this.startAt) return 0
         const offsetMs = getServerUtcOffset(this.server) * 60 * 60 * 1000
-
         const eventStartAtTime = normalizeTimestamp(this.startAt)
         const timestamp = normalizeTimestamp(ts)
 

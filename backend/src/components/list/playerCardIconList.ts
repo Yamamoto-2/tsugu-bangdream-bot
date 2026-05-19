@@ -7,6 +7,7 @@ import {drawList} from '@/components/list'
 export async function drawPlayerCardInList(player: Player,key?:string,cardIdVisible = false,lineHeight = 184): Promise<Canvas> {
     let textSize = lineHeight / 200 * 180
     let spacing = lineHeight / 200 * 13
+    const promiseList: Promise<Canvas>[] = []; 
     if (cardIdVisible) {
         textSize / 180 * 30
         lineHeight / 200 * 230
@@ -22,7 +23,7 @@ export async function drawPlayerCardInList(player: Player,key?:string,cardIdVisi
     const cardIconList: Array<Canvas> = []
     for (let i in cardDataList) {
         const tempCardData = cardDataList[i]
-        cardIconList.push(await drawCardIcon({
+        promiseList.push(drawCardIcon({
             card: new Card(tempCardData.situationId),
             trainingStatus: tempCardData.trainingStatus == 'done',
             illustTrainingStatus: tempCardData.illust == 'after_training',
@@ -33,6 +34,11 @@ export async function drawPlayerCardInList(player: Player,key?:string,cardIdVisi
             skillLevel: tempCardData.skillLevel,
         }))
     }
+    var result = await Promise.all(promiseList)
+    for(var r of result){
+        cardIconList.push(r)
+    }
+
     return drawList({
         key: key,
         content: cardIconList,

@@ -38,10 +38,17 @@ export async function drawRoomListTitle() {
 
 const maxWidthText = 580
 export async function drawRoonInList(room: Room) {
+    // 玩家状态与车站头像并行获取
+    const workgroup = []
+    let player:Player = null;
+    workgroup.push(getUserIcon(room.avatarUrl))
     const timeNow = new Date().getTime()
-
+    if (room.player != undefined) {
+        player = new Player(room.player.playerId, room.player.server)
+        workgroup.push(player.initFull(true,1))
+    }
     //头像
-    const Icon = await getUserIcon(room.avatarUrl)
+    const Icon = (await Promise.all(workgroup))[0]
 
     //文本
     const textList: Canvas[] = []
@@ -72,13 +79,9 @@ export async function drawRoonInList(room: Room) {
     ctxUp.fillStyle = '#a8a8a8'
     ctxUp.fillRect(200, 0, 5, height)
     let list = [canvasUp]
-    if (room.player != undefined) {
-        const player = new Player(room.player.playerId, room.player.server)
-        await player.initFull(true,1)   // ycm的玩家数据对实时性要求不高，使用缓存的同时通知Bestdori更新数据，这样下一次获取到的玩家数据就是正常的，加速ycm出图速度
-        if (player.isExist && !player.initError) {
-            list.push(line)
-            list.push(await drawPlayerDetailInRoomList(player))
-        }
+    if (player && player.isExist && !player.initError) {
+        list.push(line)
+        list.push(await drawPlayerDetailInRoomList(player))
     }
     return (drawDatablock({ list: list }))
 }
@@ -109,11 +112,17 @@ async function drawPlayerDetailInRoomList(player: Player) {
     //画牌子
     var degreeImageList: Array<Canvas | Image> = []
     var userProfileDegreeMap = player.profile.userProfileDegreeMap.entries
-    for (var i in userProfileDegreeMap) {
-        var tempDegree = userProfileDegreeMap[i]
-        var tempDegreeImage = await drawDegree(new Degree(tempDegree.degreeId), player.server)
+    const promises: Promise<Canvas | Image>[] = []
+    for (const key in userProfileDegreeMap) {
+        const tempDegree = userProfileDegreeMap[key]
+    
+        const p = drawDegree(new Degree(tempDegree.degreeId), player.server)
+        promises.push(p)
+    }
+    const images = await Promise.all(promises)
+    for (const img of images) {
         degreeImageList.push(resizeImage({
-            image: tempDegreeImage,
+            image: img,
             heightMax: 35
         }))
         degreeImageList.push(new Canvas(10, 35))

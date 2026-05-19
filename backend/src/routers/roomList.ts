@@ -74,13 +74,15 @@ async function getRoomList(roomList: any) {
     }
     return tempRoom;
   });
+  /*
   const preCacheAvatar = roomList.map(async (room:any)=>{  // 预先缓存BandoriStation的头像，加快出图速度
     return getUserIcon(room.avatarUrl)
   })
+    */
   // 等待所有并行操作完成
-  const result = await Promise.all([Promise.all(promises),Promise.all(preCacheAvatar)]);
+  const result = await Promise.all(promises)
   //console.log(result)
-  return result[0];
+  return result;
 }
 
 
