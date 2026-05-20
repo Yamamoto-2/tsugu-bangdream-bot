@@ -74,16 +74,16 @@ export class Cutoff {
             try{    // 当数据源获取出现网络问题时切换到另一数据源获取数据
                 return await callAPIAndCacheResponse(`${this.getFinalApiUrl(false)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,0,3)
             }
-            catch{
-                if (this.server ==  Server.cn)reportDataSourceProblem()
+            catch (e){
+                if (e.response.status != 404 && this.server ==  Server.cn)reportDataSourceProblem()
                 return await callAPIAndCacheResponse(`${this.getFinalApiUrl(true)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,0,3)
             }
         }else{
             try{
                 return await callAPIAndCacheResponse(`${this.getFinalApiUrl(false)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,1/0,3)
             }
-            catch{
-                if (this.server ==  Server.cn)reportDataSourceProblem()
+            catch(e){
+                if (e.response.status != 404 && this.server ==  Server.cn)reportDataSourceProblem()
                 return await callAPIAndCacheResponse(`${this.getFinalApiUrl(true)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,1/0,3)
             }
         }
