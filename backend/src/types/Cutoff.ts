@@ -118,7 +118,7 @@ export class Cutoff {
             var useCache = true
             cutoffData = await this.getFinalCutoffsData(useCache)
             // 检查缓存是否合法
-            if (cutoffData["cutoffs"].length==0|| (cutoffData["cutoffs"].length!=0 && this.endAt - cutoffData["cutoffs"][cutoffData["cutoffs"].length-1].time >410000) ){
+            if (cutoffData["cutoffs"] && (cutoffData["cutoffs"].length==0|| (cutoffData["cutoffs"].length!=0 && this.endAt - cutoffData["cutoffs"][cutoffData["cutoffs"].length-1].time >410000) )){
                 cutoffData = await this.getFinalCutoffsData()
             } //如果最后一个记录的时间减去endAt，校验如果差距太大就要更新
         }

@@ -22,6 +22,7 @@ export async function drawCutoffDetail(eventId: number, tier: number, mainServer
         return [`错误: ${serverNameFullList[mainServer]} 活动或档线不存在`]
     }
     await cutoff.initFull()
+    if(!cutoff.latestCutoff) return [`错误: ${serverNameFullList[mainServer]} 活动或档线暂不存在`]
     /*
     if (cutoff.isExist == false) {
         return '错误: 活动或档线数据错误'
