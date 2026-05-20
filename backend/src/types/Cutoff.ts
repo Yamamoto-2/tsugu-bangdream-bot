@@ -76,7 +76,12 @@ export class Cutoff {
             }
             catch (e){
                 if (e.response.status != 404 && this.server ==  Server.cn)reportDataSourceProblem()
-                return await callAPIAndCacheResponse(`${this.getFinalApiUrl(true)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,0,3)
+                try{
+                    return await callAPIAndCacheResponse(`${this.getFinalApiUrl(true)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,0,3)
+                }
+                catch{
+                    return null
+                }
             }
         }else{
             try{
@@ -84,7 +89,12 @@ export class Cutoff {
             }
             catch(e){
                 if (e.response.status != 404 && this.server ==  Server.cn)reportDataSourceProblem()
-                return await callAPIAndCacheResponse(`${this.getFinalApiUrl(true)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,1/0,3)
+                try{
+                    return await callAPIAndCacheResponse(`${this.getFinalApiUrl(true)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,1/0,3)
+                }
+                catch{
+                    return null;
+                }
             }
         }
     }
@@ -101,6 +111,10 @@ export class Cutoff {
         if (time < this.endAt + 1000 * 60 * 60 * 24 * 2) {
             var oldDataSourceFlags = this.useHHWX
             cutoffData = await this.getFinalCutoffsData()
+            if (!cutoffData){
+                this.isExist = false;
+                return
+            }
             // var dateNow = Date.now()
             if (this.server == Server.cn &&cutoffData["cutoffs"] && cutoffData["cutoffs"].length!=0 && time - cutoffData["cutoffs"][cutoffData["cutoffs"].length-1].time >= 2700000){   // 对数据进行实时性检查，如果不通过则使用另一个数据源数据.确保服务器时间对齐东八区
                 this.useHHWX = !this.useHHWX
