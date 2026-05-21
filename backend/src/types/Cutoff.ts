@@ -333,6 +333,58 @@ export class Cutoff {
         }
         this.dailyIncrement = dailyIncrement
     }
+    getYesterdayIncrementRate(){
+        if (!this.cutoffs || this.cutoffs.length === 0){
+            return '无数据'
+        }
+        let lastCutoffTime = this.cutoffs[this.cutoffs.length-1].time
+        // HHWX数据源会在快要结活的时候改为每15分钟抓取一次，因此需要主动规避
+        let usePrevPoint = false
+        let UTCMin =  getDateByServerTimezone(lastCutoffTime, this.server).getUTCMinutes()
+        if (UTCMin < 3 || (UTCMin >= 25 && UTCMin <= 35)){
+            lastCutoffTime = this.cutoffs[this.cutoffs.length-2].time
+            usePrevPoint = true
+        }
+        let curEventDays = this.getDaysOfEvent(lastCutoffTime)
+        let lastCutoffEp = this.cutoffs[this.cutoffs.length-(usePrevPoint?2:1)].ep
+        //console.log(curEventDays)
+        let score:number[] = []
+        let time:number[] = []
+        let scoreCur:number[] = []
+        let timeCur:number[] = []
+        const dateNow = getDateByServerTimezone(lastCutoffTime, this.server)
+        const lastestUtcHour = dateNow.getUTCHours()
+        const lastestUtcMinutes = dateNow.getUTCMinutes()
+
+        for (const c of this.cutoffs) {
+            let allowPushFlag = false
+            const timestamp = normalizeTimestamp(c.time)
+            const d = this.getDaysOfEvent(timestamp)
+            if (d < (curEventDays-2)){
+                continue
+            }
+            if (d > (curEventDays-2) ){
+                allowPushFlag = true
+            }
+            const date = getDateByServerTimezone(timestamp, this.server)
+            if ((this.server == Server.cn || this.server == Server.tw || this.server == Server.jp) && date.getUTCHours() === 3 && date.getUTCMinutes() === 45) {
+                score.push(c.ep)
+                time.push(timestamp)
+            }
+            if (allowPushFlag && (this.server == Server.cn || this.server == Server.tw || this.server == Server.jp) && date.getUTCHours() === lastestUtcHour && date.getUTCMinutes() === lastestUtcMinutes) {
+                scoreCur.push(c.ep)
+                timeCur.push(timestamp)
+            }
+        }
+        if (score.length !=2 || scoreCur.length!=2) return '数据缺失' 
+        // 此时score里边应该会有两个数据，一个是昨日3:45，一个是今日3:45的数据
+        let TodaysIncrement = (lastCutoffEp - score[1])
+        let YesterdaysIncrement = ( scoreCur[0] - score[0] )
+        let rate:number = YesterdaysIncrement!=0?TodaysIncrement / YesterdaysIncrement:1
+        let result =  `昨天同时刻日增${Math.round((YesterdaysIncrement)/10000)} 现在是昨天的${Math.round(rate * 100)}%${rate*100>=100?'↑':'↓'}`
+        //console.log(result)
+        return result
+    }
     getChartData(setStartToZero = false): { x: Date, y: number }[] {
         if (this.isExist == false) {
             return [];
