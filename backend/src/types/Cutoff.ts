@@ -341,10 +341,13 @@ export class Cutoff {
         // HHWX数据源会在快要结活的时候改为每15分钟抓取一次，因此需要主动规避
         let usePrevPoint = false
         let UTCMin =  getDateByServerTimezone(lastCutoffTime, this.server).getUTCMinutes()
+        let UTCHour = getDateByServerTimezone(lastCutoffTime,this.server).getHours()
+        let lengthLimit =2
         if (UTCMin < 3 || (UTCMin >= 25 && UTCMin <= 35)){
             lastCutoffTime = this.cutoffs[this.cutoffs.length-2].time
             usePrevPoint = true
         }
+        if (UTCMin == 45 && UTCHour == 3) lengthLimit++
         let curEventDays = this.getDaysOfEvent(lastCutoffTime)
         let lastCutoffEp = this.cutoffs[this.cutoffs.length-(usePrevPoint?2:1)].ep
         //console.log(curEventDays)
@@ -376,7 +379,7 @@ export class Cutoff {
                 timeCur.push(timestamp)
             }
         }
-        if (score.length !=2 || scoreCur.length!=2) return '数据缺失' 
+        if (score.length !=lengthLimit || scoreCur.length!=2) return '数据缺失' 
         // 此时score里边应该会有两个数据，一个是昨日3:45，一个是今日3:45的数据
         let TodaysIncrement = (lastCutoffEp - score[1])
         let YesterdaysIncrement = ( scoreCur[0] - score[0] )
