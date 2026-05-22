@@ -2,10 +2,10 @@ import { callAPIAndCacheResponse } from '@/api/getApi';
 import mainAPI from '@/types/_Main';
 import { Bestdoriurl, HHWX_Url, USE_HHWX_SOURCE_PREFER, reportDataSourceProblem, clearDataSourceProblem,tierListOfServer } from '@/config';
 import { Server } from '@/types/Server';
-import { Event } from '@/types/Event';
+import { Event, getPresentEvent } from '@/types/Event';
 import { predict } from '@/api/cutoff.cjs'
 import { logger } from '@/logger';
-import { normalizeTimestamp, getDateByServerTimezone, getServerUtcOffset } from '@/components/list/time';
+import { normalizeTimestamp, getDateByServerTimezone, getServerUtcOffset, GetProbablyTimeDifference } from '@/components/list/time';
 
 export class Cutoff {
     eventId: number;
@@ -41,8 +41,11 @@ export class Cutoff {
         }
         this.tier = tier
         this.isExist = true;
-        this.startAt = event.startAt[server]
-        this.endAt = event.endAt[server]
+        // this.startAt = event.startAt[server]
+        // this.endAt = event.endAt[server]
+        // 当该活动在服务器上尚未存在时，使用预测的时间去推断startAt以及endAt，以解决部分情况下卡死及档线状态不对的问题
+        this.startAt = event.startAt[server] || server!=Server.cn?event.startAt[server]:GetProbablyTimeDifference(this.eventId,getPresentEvent(this.server))
+        this.endAt = event.endAt[server] || server!=Server.cn?event.endAt[server]:GetProbablyTimeDifference(this.eventId,getPresentEvent(this.server)) + (event.endAt[Server.jp] - event.startAt[Server.jp])
         const tempEvent = new Event(this.eventId)
         this.currentGetDataTime = new Date().getTime()
         //状态
@@ -71,17 +74,27 @@ export class Cutoff {
             try{    // 当数据源获取出现网络问题时切换到另一数据源获取数据
                 return await callAPIAndCacheResponse(`${this.getFinalApiUrl(false)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,0,3)
             }
-            catch{
-                if (this.server ==  Server.cn)reportDataSourceProblem()
-                return await callAPIAndCacheResponse(`${this.getFinalApiUrl(true)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,0,3)
+            catch (e){
+                if (e.response.status != 404 && this.server ==  Server.cn)reportDataSourceProblem()
+                try{
+                    return await callAPIAndCacheResponse(`${this.getFinalApiUrl(true)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,0,3)
+                }
+                catch{
+                    return null
+                }
             }
         }else{
             try{
                 return await callAPIAndCacheResponse(`${this.getFinalApiUrl(false)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,1/0,3)
             }
-            catch{
-                if (this.server ==  Server.cn)reportDataSourceProblem()
-                return await callAPIAndCacheResponse(`${this.getFinalApiUrl(true)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,1/0,3)
+            catch(e){
+                if (e.response.status != 404 && this.server ==  Server.cn)reportDataSourceProblem()
+                try{
+                    return await callAPIAndCacheResponse(`${this.getFinalApiUrl(true)}/api/tracker/data?server=${<number>this.server}&event=${this.eventId}&tier=${this.tier}`,1/0,3)
+                }
+                catch{
+                    return null;
+                }
             }
         }
     }
@@ -98,6 +111,10 @@ export class Cutoff {
         if (time < this.endAt + 1000 * 60 * 60 * 24 * 2) {
             var oldDataSourceFlags = this.useHHWX
             cutoffData = await this.getFinalCutoffsData()
+            if (!cutoffData){
+                this.isExist = false;
+                return
+            }
             // var dateNow = Date.now()
             if (this.server == Server.cn &&cutoffData["cutoffs"] && cutoffData["cutoffs"].length!=0 && time - cutoffData["cutoffs"][cutoffData["cutoffs"].length-1].time >= 2700000){   // 对数据进行实时性检查，如果不通过则使用另一个数据源数据.确保服务器时间对齐东八区
                 this.useHHWX = !this.useHHWX
@@ -115,7 +132,7 @@ export class Cutoff {
             var useCache = true
             cutoffData = await this.getFinalCutoffsData(useCache)
             // 检查缓存是否合法
-            if (cutoffData["cutoffs"].length==0|| (cutoffData["cutoffs"].length!=0 && this.endAt - cutoffData["cutoffs"][cutoffData["cutoffs"].length-1].time >410000) ){
+            if (cutoffData["cutoffs"] && (cutoffData["cutoffs"].length==0|| (cutoffData["cutoffs"].length!=0 && this.endAt - cutoffData["cutoffs"][cutoffData["cutoffs"].length-1].time >410000) )){
                 cutoffData = await this.getFinalCutoffsData()
             } //如果最后一个记录的时间减去endAt，校验如果差距太大就要更新
         }
@@ -209,8 +226,8 @@ export class Cutoff {
         return history
     }
     getDaysOfEvent(ts: number) {
+        if (!this.startAt) return 0
         const offsetMs = getServerUtcOffset(this.server) * 60 * 60 * 1000
-
         const eventStartAtTime = normalizeTimestamp(this.startAt)
         const timestamp = normalizeTimestamp(ts)
 
@@ -315,6 +332,61 @@ export class Cutoff {
             }
         }
         this.dailyIncrement = dailyIncrement
+    }
+    getYesterdayIncrementRate(){
+        if (!this.cutoffs || this.cutoffs.length === 0){
+            return '无数据'
+        }
+        let lastCutoffTime = this.cutoffs[this.cutoffs.length-1].time
+        // HHWX数据源会在快要结活的时候改为每15分钟抓取一次，因此需要主动规避
+        let usePrevPoint = false
+        let UTCMin =  getDateByServerTimezone(lastCutoffTime, this.server).getUTCMinutes()
+        let UTCHour = getDateByServerTimezone(lastCutoffTime,this.server).getHours()
+        let lengthLimit =2
+        if (UTCMin < 3 || (UTCMin >= 25 && UTCMin <= 35)){
+            lastCutoffTime = this.cutoffs[this.cutoffs.length-2].time
+            usePrevPoint = true
+        }
+        if (UTCMin == 45 && UTCHour == 3) lengthLimit++
+        let curEventDays = this.getDaysOfEvent(lastCutoffTime)
+        let lastCutoffEp = this.cutoffs[this.cutoffs.length-(usePrevPoint?2:1)].ep
+        //console.log(curEventDays)
+        let score:number[] = []
+        let time:number[] = []
+        let scoreCur:number[] = []
+        let timeCur:number[] = []
+        const dateNow = getDateByServerTimezone(lastCutoffTime, this.server)
+        const lastestUtcHour = dateNow.getUTCHours()
+        const lastestUtcMinutes = dateNow.getUTCMinutes()
+
+        for (const c of this.cutoffs) {
+            let allowPushFlag = false
+            const timestamp = normalizeTimestamp(c.time)
+            const d = this.getDaysOfEvent(timestamp)
+            if (d < (curEventDays-2)){
+                continue
+            }
+            if (d > (curEventDays-2) ){
+                allowPushFlag = true
+            }
+            const date = getDateByServerTimezone(timestamp, this.server)
+            if ((this.server == Server.cn || this.server == Server.tw || this.server == Server.jp) && date.getUTCHours() === 3 && date.getUTCMinutes() === 45) {
+                score.push(c.ep)
+                time.push(timestamp)
+            }
+            if (allowPushFlag && (this.server == Server.cn || this.server == Server.tw || this.server == Server.jp) && date.getUTCHours() === lastestUtcHour && date.getUTCMinutes() === lastestUtcMinutes) {
+                scoreCur.push(c.ep)
+                timeCur.push(timestamp)
+            }
+        }
+        if (score.length !=lengthLimit || scoreCur.length!=2) return '数据缺失' 
+        // 此时score里边应该会有两个数据，一个是昨日3:45，一个是今日3:45的数据
+        let TodaysIncrement = (lastCutoffEp - score[1])
+        let YesterdaysIncrement = ( scoreCur[0] - score[0] )
+        let rate:number = YesterdaysIncrement!=0?TodaysIncrement / YesterdaysIncrement:1
+        let result =  `昨天同时刻日增${Math.round((YesterdaysIncrement)/10000)} 现在是昨天的${Math.round(rate * 100)}%${rate*100>=100?'↑':'↓'}`
+        //console.log(result)
+        return result
     }
     getChartData(setStartToZero = false): { x: Date, y: number }[] {
         if (this.isExist == false) {

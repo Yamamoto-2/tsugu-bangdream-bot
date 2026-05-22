@@ -5,6 +5,7 @@ import { Card, addStat, Stat } from '@/types/Card'
 import { AreaItem } from '@/types/AreaItem';
 import { Event } from '@/types/Event';
 import { difficultyNameList } from "@/types/Song"
+import { logger } from '@/logger';
 
 /*
 - mode=0 只从缓存取，无需等待队列立即返回缓存数据
@@ -185,8 +186,14 @@ export class Player {
             return
         }
         var cacheTime = useCache ? 1 / 0 : 0;
+
         try {
             var playerData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/player/${Server[this.server]}/${this.playerId}?mode=${mode}`, cacheTime, 1);
+            if (mode == 1 && !isFinite(cacheTime)){ // 后台更新玩家信息，确保下一次用最新的缓存去显示
+                callAPIAndCacheResponse(`${Bestdoriurl}/api/player/${Server[this.server]}/${this.playerId}?mode=${mode}`, 300, 1).catch(err => {
+                    logger('InitPlayer',err);
+                });;
+            }
         }
         catch {
             this.isExist = false;

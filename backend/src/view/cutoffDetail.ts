@@ -22,6 +22,7 @@ export async function drawCutoffDetail(eventId: number, tier: number, mainServer
         return [`错误: ${serverNameFullList[mainServer]} 活动或档线不存在`]
     }
     await cutoff.initFull()
+    if(!cutoff.latestCutoff) return [`错误: ${serverNameFullList[mainServer]} 活动或档线暂不存在`]
     /*
     if (cutoff.isExist == false) {
         return '错误: 活动或档线数据错误'
@@ -97,7 +98,7 @@ export async function drawCutoffDetail(eventId: number, tier: number, mainServer
         list.push(line)
         list.push(drawList({
             key: '日增速',
-            text: `${cutoff.dailyIncrement.join('/')}`
+            text: `${cutoff.dailyIncrement.join('/')}\n${cutoff.getYesterdayIncrementRate()}`
         }))
         list.push(line) // 下面有一个pop
     }

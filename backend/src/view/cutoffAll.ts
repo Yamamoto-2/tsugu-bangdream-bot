@@ -48,6 +48,7 @@ export async function drawCutoffAll(eventId: number, mainServer: Server, compres
     //每个档线详细数据
     for (var i in cutoffList) {
         const cutoff = cutoffList[i]
+        if (!cutoff.latestCutoff) continue
         let cutoffContent: string[] = []
         if (cutoff.status == 'in_progress') {
             let predictText: string

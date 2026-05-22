@@ -46,6 +46,7 @@ export async function drawCutoffListOfRecentEvent(eventId: number, tier: number,
     //每个档线详细数据
     for (let i in cutoffList) {
         const cutoff = cutoffList[i]
+        if (!cutoff.latestCutoff) continue
         const tempEvent = new Event(cutoff.eventId)
         list.push(drawList({
             key: `ID:${cutoff.eventId} ${tempEvent.eventName[mainServer]}`,
