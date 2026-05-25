@@ -341,7 +341,7 @@ export class Cutoff {
         // HHWX数据源会在快要结活的时候改为每15分钟抓取一次，因此需要主动规避
         let usePrevPoint = false
         let UTCMin =  getDateByServerTimezone(lastCutoffTime, this.server).getUTCMinutes()
-        let UTCHour = getDateByServerTimezone(lastCutoffTime,this.server).getHours()
+        let UTCHour = getDateByServerTimezone(lastCutoffTime,this.server).getUTCHours()
         let lengthLimit =2
         if (UTCMin < 3 || (UTCMin >= 25 && UTCMin <= 35)){
             lastCutoffTime = this.cutoffs[this.cutoffs.length-2].time
