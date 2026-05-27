@@ -163,9 +163,10 @@ export async function drawEventDetail(eventId: number, displayedServerList: Serv
         list.push(
             await drawList({
                 key: '活动表情',
-                content: [stampImage],
+                content: stampImage,
                 textSize: 160,
-                lineHeight: 160
+                lineHeight: 160,
+                spacing:7
             })
         )
         list.push(line)

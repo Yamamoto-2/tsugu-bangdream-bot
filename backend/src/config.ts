@@ -27,7 +27,8 @@ export const BestdoriapiPath = { //Bestdori网站的列表api路径
     'areaItems': '/api/areaItems/main.5.json',
     'rates': '/api/tracker/rates.json',
     'items': '/api/misc/itemtexts.2.json',
-    'deco': '/api/deco/pins.all.3.json'
+    'deco': '/api/deco/pins.all.3.json',
+    'stamps': '/api/stamps/all.2.json'
 }
 export const bindingPlayerPromptWaitingTime: number = 5 * 60 * 10000
 
