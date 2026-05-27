@@ -295,6 +295,7 @@ export class Event {
                 //break
             }
         }
+        
         for(let i = 0; i < rankingRewards?.length; i++){
             if(rankingRewards[i].rewardType == 'voice_stamp'){
                 if (!stampReardsId.includes(rankingRewards[i].rewardId)){
@@ -306,7 +307,11 @@ export class Event {
         for(const i in allStamps){
             for(const j of stampReardsId){
                 if (j.toString() == i){
-                    if(allStamps[i]['imageName'][server])stampAssetName.push(allStamps[i]['imageName'][server])
+                    if(allStamps[i]['imageName'][server]){
+                        stampAssetName.push(allStamps[i]['imageName'][server])
+                    }else if(allStamps[i]['imageName'][0]){
+                        stampAssetName.push(allStamps[i]['imageName'][0])
+                    }
                 }
             }
         }
