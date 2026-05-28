@@ -282,8 +282,8 @@ export class Event {
         const stampReardsId:number[] = []   // 贴纸合集
         //const allStamps = await callAPIAndCacheResponse(`${Bestdoriurl}/api/stamps/all.2.json`)
         const allStamps = mainAPI['stamps']
-        const rewards = this.pointRewards[0].concat(server==Server.jp?[]:this.pointRewards[server]).filter(Boolean)
-        const rankingRewards = this.rankingRewards[0].concat(server==Server.jp?[]:this.rankingRewards[server]).filter(Boolean)
+        const rewards = this.pointRewards[0]?this.pointRewards[0].concat(server==Server.jp?[]:this.pointRewards[server]).filter(Boolean):[]
+        const rankingRewards = this.rankingRewards[0]?this.rankingRewards[0].concat(server==Server.jp?[]:this.rankingRewards[server]).filter(Boolean):[]
         //let rewardId = -1
         for(let i = 0; i < rewards?.length; i++){
             if(rewards[i].rewardType == 'stamp'){
