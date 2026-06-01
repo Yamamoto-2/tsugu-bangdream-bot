@@ -10,7 +10,8 @@ interface warpTextOptions {
     maxWidth: number,
     lineHeight?: number
     color?: string,
-    font?: "FangZhengHeiTi" | "old" | "default"
+    font?: "FangZhengHeiTi" | "old" | "default",
+    forceSingleLine?:boolean
 }
 
 //画文字,自动换行
@@ -20,8 +21,21 @@ export function drawText({
     maxWidth,
     lineHeight = textSize * 4 / 3,
     color = "#505050",
-    font = "old"
+    font = "old",
+    forceSingleLine=false
 }: warpTextOptions): Canvas {
+    if (forceSingleLine) {
+        var canvas: Canvas = new Canvas(1, 1);
+        var ctx = canvas.getContext('2d');
+        setFontStyle(ctx, textSize, font);
+        var width = maxWidth = ctx.measureText(text).width
+        var canvas: Canvas = new Canvas(width, lineHeight);
+        var ctx = canvas.getContext('2d');
+        setFontStyle(ctx, textSize, font);
+        ctx.fillStyle = color;
+        ctx.fillText(text, 0, lineHeight / 2 + textSize / 3);
+        return canvas;  
+    }
     var wrappedTextData = wrapText({ text, maxWidth, lineHeight, textSize });
     if (wrappedTextData.numberOfLines == 0) {
         var canvas: Canvas = new Canvas(1, lineHeight);
@@ -48,6 +62,7 @@ export function drawText({
     }
     return canvas;
 }
+
 
 export function wrapText({
     text,

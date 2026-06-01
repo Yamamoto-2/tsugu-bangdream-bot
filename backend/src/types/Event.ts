@@ -18,7 +18,17 @@ const typeName = {
     "festival": "团队LIVE FES (5v5)",
     "medley": "组曲LIVE (3组曲)"
 }
+export interface EventTeamListEntry {
+    eventId: number;
+    teamId: number;
+    teamName: string;
+    iconFileName: string;
+    themeTitle: string;
+}
 
+export interface EventTeamList {
+    entries: EventTeamListEntry[];
+}
 export class Event {
     eventId: number;
     isExist: boolean = false;
@@ -55,7 +65,7 @@ export class Event {
         >
         | null>
     rewardCards: Array<number>
-
+    teamList: EventTeamList = { entries: [] };
     //other
     //enableFlag: Array<null>;
     assetBundleName: string;
@@ -122,6 +132,7 @@ export class Event {
         this.attributes = eventData['attributes'];
         this.characters = eventData['characters'];
         this.rewardCards = eventData['rewardCards'];
+        this.teamList = eventData['teamList'] ?? { entries: [] };
         //用于模糊搜索
         this.characterId = []
         for (let i = 0; i < this.characters.length; i++) {
@@ -176,6 +187,7 @@ export class Event {
         this.publicEndAt = stringToNumberArray(eventData['publicEndAt']);
         this.pointRewards = eventData['pointRewards'];
         this.rankingRewards = eventData['rankingRewards'];
+        this.teamList = eventData['teamList'] ?? { entries: [] };
         /*
         this.distributionStartAt = eventData['distributionStartAt'];
         this.distributionEndAt = eventData['distributionEndAt'];
@@ -374,7 +386,32 @@ export class Event {
             return undefined
         }
     }
-
+    async getTeamIcon(server:Server): Promise<Image[]>{
+        let teamIconAssetName  = []
+        if ((this.teamList.entries.length!=0)){
+            teamIconAssetName.push(this.teamList.entries[0].iconFileName)
+            teamIconAssetName.push(this.teamList.entries[1].iconFileName)
+        }
+        
+        else return undefined
+        if (teamIconAssetName.length<2) return undefined
+        try {
+            const ImageListPromise:Promise<Buffer>[] = []
+            for(const assetName of teamIconAssetName){
+                ImageListPromise.push(downloadFileCache(`${Bestdoriurl}/assets/jp/event/${this.assetBundleName}/images_rip/${assetName}.png`,false).catch(() => undefined))
+            }
+            const ImageBufferList = await Promise.all(ImageListPromise)
+            let ImageList:Image[] = []
+            for(const ImageBuffer of ImageBufferList){
+                if(ImageBuffer) ImageList.push(await loadImage(ImageBuffer))
+            }
+            if (ImageList.length == 0) return undefined
+            return ImageList
+        }
+        catch{
+            return undefined
+        }
+    }
 }
 
 //获取当前进行中的活动,如果期间没有活动，则返回上一个刚结束的活动
