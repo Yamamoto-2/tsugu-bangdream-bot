@@ -127,8 +127,9 @@ export async function drawEventDetail(eventId: number, displayedServerList: Serv
         var teamIconResult = await event.getTeamIcon(displayedServerList[0])
     }
     if (event.eventType == 'festival' && teamIconResult.length >= 2 && event.teamList.entries.length >= 2) {
-
-        const teamIconCanvas = drawEventTeamIconBlock(teamIconResult, [event.teamList.entries[0].teamName, event.teamList.entries[1].teamName],event.teamList.entries[0].themeTitle);
+        
+        const themeTitle = event.themeTitle[displayedServerList[0]]?event.themeTitle[displayedServerList[0]]:event.themeTitle[0]
+        const teamIconCanvas = drawEventTeamIconBlock(teamIconResult, [event.teamList.entries[0].teamName, event.teamList.entries[1].teamName],themeTitle);
         //console.log(teamIconCanvas)
         list.push(
             await drawList({

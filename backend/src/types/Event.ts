@@ -8,6 +8,7 @@ import { Character } from '@/types/Character';
 import { globalDefaultServer, Bestdoriurl } from '@/config';
 import { stringToNumberArray } from '@/types/utils'
 import { GetProbablyTimeDifference } from '@/components/list/time';
+import { arraysEqual } from '@/api/utils';
 
 const typeName = {
     "story": "一般活动 (协力)",
@@ -107,7 +108,7 @@ export class Event {
         technique?: number,
         visual?: number
     } = {}
-
+    themeTitle:string[]
     //以下用于模糊搜索
     characterId: number[]
     attribute: string[]
@@ -188,6 +189,7 @@ export class Event {
         this.pointRewards = eventData['pointRewards'];
         this.rankingRewards = eventData['rankingRewards'];
         this.teamList = eventData['teamList'] ?? { entries: [] };
+        this.themeTitle = eventData['themeTitle']??[];
         /*
         this.distributionStartAt = eventData['distributionStartAt'];
         this.distributionEndAt = eventData['distributionEndAt'];
@@ -205,6 +207,9 @@ export class Event {
     async getData(update: boolean = true) {
         var time = update ? 0 : 1 / 0
         var eventData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/events/${this.eventId}.json`, time);
+        if (!update && !arraysEqual(eventData['startAt'],mainAPI['events'][this.eventId.toString()]['startAt'])){
+            eventData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/events/${this.eventId}.json`, 0)
+        }
         return eventData
     }
     async getBannerImage(displayedServerList: Server[] = globalDefaultServer): Promise<Image> {
