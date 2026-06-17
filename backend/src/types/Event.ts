@@ -8,6 +8,7 @@ import { Character } from '@/types/Character';
 import { globalDefaultServer, Bestdoriurl } from '@/config';
 import { stringToNumberArray } from '@/types/utils'
 import { GetProbablyTimeDifference } from '@/components/list/time';
+import { arraysEqual } from '@/api/utils';
 
 const typeName = {
     "story": "一般活动 (协力)",
@@ -18,7 +19,17 @@ const typeName = {
     "festival": "团队LIVE FES (5v5)",
     "medley": "组曲LIVE (3组曲)"
 }
+export interface EventTeamListEntry {
+    eventId: number;
+    teamId: number;
+    teamName: string;
+    iconFileName: string;
+    themeTitle: string;
+}
 
+export interface EventTeamList {
+    entries: EventTeamListEntry[];
+}
 export class Event {
     eventId: number;
     isExist: boolean = false;
@@ -55,7 +66,7 @@ export class Event {
         >
         | null>
     rewardCards: Array<number>
-
+    teamList: EventTeamList = { entries: [] };
     //other
     //enableFlag: Array<null>;
     assetBundleName: string;
@@ -97,7 +108,7 @@ export class Event {
         technique?: number,
         visual?: number
     } = {}
-
+    themeTitle:string[]
     //以下用于模糊搜索
     characterId: number[]
     attribute: string[]
@@ -122,6 +133,7 @@ export class Event {
         this.attributes = eventData['attributes'];
         this.characters = eventData['characters'];
         this.rewardCards = eventData['rewardCards'];
+        this.teamList = eventData['teamList'] ?? { entries: [] };
         //用于模糊搜索
         this.characterId = []
         for (let i = 0; i < this.characters.length; i++) {
@@ -176,6 +188,8 @@ export class Event {
         this.publicEndAt = stringToNumberArray(eventData['publicEndAt']);
         this.pointRewards = eventData['pointRewards'];
         this.rankingRewards = eventData['rankingRewards'];
+        this.teamList = eventData['teamList'] ?? { entries: [] };
+        this.themeTitle = eventData['themeTitle']??[];
         /*
         this.distributionStartAt = eventData['distributionStartAt'];
         this.distributionEndAt = eventData['distributionEndAt'];
@@ -193,6 +207,9 @@ export class Event {
     async getData(update: boolean = true) {
         var time = update ? 0 : 1 / 0
         var eventData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/events/${this.eventId}.json`, time);
+        if (!update && !arraysEqual(eventData['startAt'],mainAPI['events'][this.eventId.toString()]['startAt'])){
+            eventData = await callAPIAndCacheResponse(`${Bestdoriurl}/api/events/${this.eventId}.json`, 0)
+        }
         return eventData
     }
     async getBannerImage(displayedServerList: Server[] = globalDefaultServer): Promise<Image> {
@@ -278,23 +295,44 @@ export class Event {
         }
         return (characterList)
     }
-    async getRewardStamp(server:Server): Promise<Image> {
-        const allStamps = await callAPIAndCacheResponse(`${Bestdoriurl}/api/stamps/all.2.json`)
-        const rewards = this.pointRewards.filter(Boolean)[0]
-        let rewardId = -1
+    async getRewardStamp(server:Server): Promise<Image[]> {
+        const stampReardsId:number[] = []   // 贴纸合集
+        //const allStamps = await callAPIAndCacheResponse(`${Bestdoriurl}/api/stamps/all.2.json`)
+        const allStamps = mainAPI['stamps']
+        const rewards = this.pointRewards[0]?this.pointRewards[0].concat(server==Server.jp?[]:this.pointRewards[server]).filter(Boolean):[]
+        const rankingRewards = this.rankingRewards[0]?this.rankingRewards[0].concat(server==Server.jp?[]:this.rankingRewards[server]).filter(Boolean):[]
+        //let rewardId = -1
         for(let i = 0; i < rewards?.length; i++){
             if(rewards[i].rewardType == 'stamp'){
-                rewardId = rewards[i].rewardId
-                break
+                if (!stampReardsId.includes(rewards[i].rewardId)){
+                    stampReardsId.push(rewards[i].rewardId)
+                }
+                //rewardId = rewards[i].rewardId
+                //stampReardsId.push(rewards[i].rewardId)
+                //break
             }
         }
-        let stampAssentName = ''
+        
+        for(let i = 0; i < rankingRewards?.length; i++){
+            if(rankingRewards[i].rewardType == 'voice_stamp'){
+                if (!stampReardsId.includes(rankingRewards[i].rewardId)){
+                    stampReardsId.push(rankingRewards[i].rewardId)
+                }
+            }
+        }
+        const stampAssetName:string[] = []
         for(const i in allStamps){
-            if(i == rewardId.toString()){
-                stampAssentName = allStamps[i]['imageName']
+            for(const j of stampReardsId){
+                if (j.toString() == i){
+                    if(allStamps[i]['imageName'][server]){
+                        stampAssetName.push(allStamps[i]['imageName'][server])
+                    }else if(allStamps[i]['imageName'][0]){
+                        stampAssetName.push(allStamps[i]['imageName'][0])
+                    }
+                }
             }
         }
-        if(stampAssentName == ''){
+        if(stampAssetName.length == 0){
             return undefined
         }
         let serverName = 'jp'
@@ -302,8 +340,17 @@ export class Event {
             serverName = Server[server]
         }
         try {
-            const stampBuffer = await downloadFileCache(`${Bestdoriurl}/assets/${serverName}/stamp/01_rip/${stampAssentName}.png`)
-            return await loadImage(stampBuffer)
+            const ImageListPromise:Promise<Buffer>[] = []
+            for(const assetName of stampAssetName){
+                ImageListPromise.push(downloadFileCache(`${Bestdoriurl}/assets/${serverName}/stamp/01_rip/${assetName}.png`,false).catch(() => undefined))
+            }
+            const ImageBufferList = await Promise.all(ImageListPromise)
+            let ImageList:Image[] = []
+            for(const ImageBuffer of ImageBufferList){
+                if(ImageBuffer) ImageList.push(await loadImage(ImageBuffer))
+            }
+            if (ImageList.length == 0) return undefined
+            return ImageList
         }
         catch{
             return undefined
@@ -344,7 +391,32 @@ export class Event {
             return undefined
         }
     }
-
+    async getTeamIcon(server:Server): Promise<Image[]>{
+        let teamIconAssetName  = []
+        if ((this.teamList.entries.length!=0)){
+            teamIconAssetName.push(this.teamList.entries[0].iconFileName)
+            teamIconAssetName.push(this.teamList.entries[1].iconFileName)
+        }
+        
+        else return undefined
+        if (teamIconAssetName.length<2) return undefined
+        try {
+            const ImageListPromise:Promise<Buffer>[] = []
+            for(const assetName of teamIconAssetName){
+                ImageListPromise.push(downloadFileCache(`${Bestdoriurl}/assets/jp/event/${this.assetBundleName}/images_rip/${assetName}.png`,false).catch(() => undefined))
+            }
+            const ImageBufferList = await Promise.all(ImageListPromise)
+            let ImageList:Image[] = []
+            for(const ImageBuffer of ImageBufferList){
+                if(ImageBuffer) ImageList.push(await loadImage(ImageBuffer))
+            }
+            if (ImageList.length == 0) return undefined
+            return ImageList
+        }
+        catch{
+            return undefined
+        }
+    }
 }
 
 //获取当前进行中的活动,如果期间没有活动，则返回上一个刚结束的活动

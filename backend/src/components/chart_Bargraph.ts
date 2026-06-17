@@ -5,6 +5,7 @@ import { Chart as ChartJSNode } from 'chart.js/auto';
 import { Canvas, FontLibrary, loadImage } from 'skia-canvas';
 import { assetsRootPath } from '@/config';
 import { assetErrorImageBuffer } from '@/image/utils';
+import { disposeChartButKeepingCanvas } from './utils';
 
 // 1. 注册 Chart.js 组件
 Chart.register(...registerables);
@@ -47,6 +48,7 @@ export async function drawLinegraphChart(data: any) {
         const chart = new Chart(ctx as any, config as any);
 
         // 7. 返回 skia-canvas 的 Image 对象
+        disposeChartButKeepingCanvas(chart)
         return canvas;
     } catch (e) {
         console.log(e);

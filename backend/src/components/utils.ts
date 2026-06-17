@@ -1,3 +1,4 @@
+import { Chart } from 'chart.js';
 import { Canvas, Image } from 'skia-canvas';
 
 export function stackImage(list: Array<Image | Canvas>) {
@@ -63,4 +64,18 @@ export function resizeImage({
     var ctx = canvas.getContext('2d')
     ctx.drawImage(image, 0, 0, width, height)
     return canvas
+}
+export function disposeChartButKeepingCanvas(chart: any) {     // chart.js 的destroy() 6420行，仿照着写但是不销毁Canvas
+  chart.notifyPlugins?.('beforeDestroy');
+
+  chart._stop?.();
+  chart.config?.clearCache?.();
+  chart.unbindEvents?.();
+
+  delete Chart.instances[chart.id];
+
+  chart.canvas = null;
+  chart.ctx = null;
+
+  chart.notifyPlugins?.('afterDestroy');
 }

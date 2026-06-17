@@ -20,6 +20,7 @@ import { drawSongListDataBlock } from '@/components/dataBlock/songList';
 import { globalDefaultServer, serverNameFullList } from '@/config';
 import { drawSongInList, drawSongListInList } from '@/components/list/song';
 import { resizeImage } from '@/components/utils';
+import { drawEventTeamIconBlock } from '@/components/dataBlock/eventTeams';
 
 export async function drawEventDetail(eventId: number, displayedServerList: Server[] = globalDefaultServer, useEasyBG: boolean, compress: boolean): Promise<Array<Buffer | string>> {
     const event = new Event(eventId)
@@ -122,6 +123,25 @@ export async function drawEventDetail(eventId: number, displayedServerList: Serv
         }))
         list.push(line)
     }
+    if (event.eventType == 'festival'){
+        var teamIconResult = await event.getTeamIcon(displayedServerList[0])
+    }
+    if (event.eventType == 'festival' && teamIconResult.length >= 2 && event.teamList.entries.length >= 2) {
+        
+        const themeTitle = event.themeTitle[displayedServerList[0]]?event.themeTitle[displayedServerList[0]]:event.themeTitle[0]
+        const teamIconCanvas = drawEventTeamIconBlock(teamIconResult, [event.teamList.entries[0].teamName, event.teamList.entries[1].teamName],themeTitle);
+        //console.log(teamIconCanvas)
+        list.push(
+            await drawList({
+                key: '队伍',
+                content: [teamIconCanvas],
+                textSize: teamIconCanvas.height,
+                lineHeight: teamIconCanvas.height,
+                spacing: 7
+            })
+        );
+        list.push(line);
+    }
     // 活动装饰
     const decoImage = await event.getRewardDeco(displayedServerList[0])
     if(decoImage){
@@ -163,9 +183,10 @@ export async function drawEventDetail(eventId: number, displayedServerList: Serv
         list.push(
             await drawList({
                 key: '活动表情',
-                content: [stampImage],
+                content: stampImage,
                 textSize: 160,
-                lineHeight: 160
+                lineHeight: 160,
+                spacing:7
             })
         )
         list.push(line)
