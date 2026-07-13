@@ -149,7 +149,14 @@ function decodeUrl(text: string): string {
     if (text == undefined) {
         return ''
     }
-    return unescape(text.replace(/\%u/g, "%u"))
+    let testStr = text.replace(/\%u/g, "%u")
+    try{
+        return decodeURIComponent(testStr)   // 当车包含诸如150%之类的字符是会导致decodeURIComponent失败。根据node文档，unescape会回退到utf16处理。
+    }
+    catch{
+        return testStr                       // 回退
+    }
+    //return unescape(text.replace(/\%u/g, "%u"))   // 不用这个了
 }
 
 //提交房间号
