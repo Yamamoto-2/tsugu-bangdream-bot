@@ -6,6 +6,7 @@ npm-debug.log
 yarn-debug.log
 yarn-error.log
 tsconfig.tsbuildinfo
+tsconfig_test.tsbuildinfo
 
 .eslintcache
 .DS_Store

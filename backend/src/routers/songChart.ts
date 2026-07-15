@@ -18,15 +18,16 @@ router.post(
         body('songId').isInt(),
         body('difficultyId').isInt().optional(),
         body('compress').optional().isBoolean(),
+        body('mirror').optional().isBoolean()
     ],
     middleware,
     async (req: Request, res: Response) => {
 
 
-        const { displayedServerList, songId, difficultyId, compress } = req.body;
+        const { displayedServerList, songId, difficultyId, compress,mirror } = req.body;
 
         try {
-            const result = await commandSongChart(displayedServerList, songId, compress, difficultyId);
+            const result = await commandSongChart(displayedServerList, songId, compress, difficultyId,mirror);
             res.send(listToBase64(result));
         } catch (e) {
             console.log(e);
@@ -36,7 +37,7 @@ router.post(
 );
 
 
-export async function commandSongChart(displayedServerList: Server[], songId: number, compress: boolean, difficultyId = 3): Promise<Array<Buffer | string>> {
+export async function commandSongChart(displayedServerList: Server[], songId: number, compress: boolean, difficultyId = 3,mirror:boolean): Promise<Array<Buffer | string>> {
     /*
     text = text.toLowerCase()
     var fuzzySearchResult = fuzzySearch(text)
@@ -46,7 +47,7 @@ export async function commandSongChart(displayedServerList: Server[], songId: nu
     }
     */
 
-    return await drawSongChart(songId, difficultyId, displayedServerList, compress)
+    return await drawSongChart(songId, difficultyId, displayedServerList, compress,mirror)
 }
 
 export { router as songChartRouter }

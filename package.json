@@ -21,7 +21,9 @@
     "assets"
   ],
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build-test": "tsc -b tsconfig_test.json --force"
+  },
   "keywords": [
     "chatbot",
     "koishi",
