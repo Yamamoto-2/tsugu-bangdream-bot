@@ -23,7 +23,7 @@ export class UserDB {
   }
 
   private getKey(platform: string, userId: string): string {
-    if (platform == 'onebot' || platform == 'chronocat') {
+    if (platform == 'onebot' || platform == 'chronocat' || platform == 'llonebot' || platform == 'Napcat') {
       platform = 'red';
     }
     return `${platform}:${userId}`;
