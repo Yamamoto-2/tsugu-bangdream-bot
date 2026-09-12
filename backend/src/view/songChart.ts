@@ -5,7 +5,7 @@ import { getServerByPriority } from '@/types/Server'
 import { Server } from '@/types/Server'
 import { globalDefaultServer, serverNameFullList } from '@/config';
 
-export async function drawSongChart(songId: number, difficultyId: number, displayedServerList: Server[] = globalDefaultServer, compress: boolean): Promise<Array<Buffer | string>> {
+export async function drawSongChart(songId: number, difficultyId: number, displayedServerList: Server[] = globalDefaultServer, compress: boolean,mirror:boolean): Promise<Array<Buffer | string>> {
     const song = new Song(songId)
     if (!song.isExist) {
         return ['歌曲不存在']
@@ -17,8 +17,11 @@ export async function drawSongChart(songId: number, difficultyId: number, displa
     const server = getServerByPriority(song.publishedAt, displayedServerList)
     const band = new Band(song.bandId)
     const bandName = band.bandName[server]
-    const songChart = await song.getSongChart(difficultyId)
-
+    let songChartData = await song.getSongChart(difficultyId)
+    var songChart = cloneChartData(songChartData as any);
+    if (mirror){
+        mirrorCharts(songChart)
+    }
     const tempcanv = await BestdoriPreview.DrawPreview({
         id: song.songId,
         title: song.musicTitle[server],
@@ -38,4 +41,31 @@ export async function drawSongChart(songId: number, difficultyId: number, displa
     }
 
     return [buffer]
+}
+const totalCountsLane =  7 - 1
+function cloneChartData(chartData){
+    return JSON.parse(JSON.stringify(chartData))
+}
+function mirrorCharts(chartData){
+    function mirrorLane(data){
+        if (!data || typeof data !== 'object') {
+            return;
+        }
+        if (data.lane!== undefined) {
+            data.lane = totalCountsLane - data.lane
+            if (data.direction === 'Left') data.direction = 'Right'
+            else if (data.direction === 'Right') data.direction = 'Left'
+        }
+        else{
+            for(let key of (Object.keys(data))){
+                mirrorCharts(data[key])
+            }
+        }
+    }
+    if (!chartData || typeof chartData !== 'object') {
+        return;
+    }
+    for(let obj of chartData){
+        mirrorLane(obj)
+    }
 }

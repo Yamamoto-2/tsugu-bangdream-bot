@@ -428,15 +428,23 @@ export function apply(ctx: Context, config: Config) {
       return paresMessageList(list)
     })
   ctx.command("查谱面 <songId:integer> [difficultyText:text]", "查谱面", cmdConfig)
+    .option('mirror', '-m 镜像谱面')
     .usage('根据曲目ID与难度查询铺面信息')
-    .example('查谱面 1 :返回1号曲的所有铺面').example('查谱面 1 expert :返回1号曲的expert难度铺面')
-    .action(async ({ session }, songId, difficultyText) => {
+    .example('查谱面 1 :返回1号曲的所有铺面').example('查谱面 1 expert :返回1号曲的expert难度铺面').example('查谱面 1 expert -m :返回1号曲expert难度的镜像谱面').example('查谱面 1 expert 镜像 :返回1号曲expert难度的镜像谱面')
+    .action(async ({ session,options }, songId, difficultyText) => {
       if (songId == undefined) {
         return `错误: 指令不完整\n使用以下指令以查看帮助:\n  help 查谱面`
       }
       const tsuguUserData = await observeUserTsugu(session)
       const displayedServerList = tsuguUserData.displayedServerList
       let difficultyId: number
+      let mirror = !!options.mirror;
+      if (difficultyText) {
+        const difficultyParts = difficultyText.split(/\s+/).filter(Boolean);
+        const mirrorKeywords = new Set(['mirror', 'mirrored', '镜像', '反转']);
+        mirror = mirror || difficultyParts.some((part) => mirrorKeywords.has(part.toLowerCase()));
+        difficultyText = difficultyParts.filter((part) => !mirrorKeywords.has(part.toLowerCase())).join(' ');
+      }
       if (difficultyText) {
         const fuzzySearchResult = await getFuzzySearchResult(config, difficultyText)
         if (!fuzzySearchResult['difficulty']) {
@@ -444,7 +452,7 @@ export function apply(ctx: Context, config: Config) {
         }
         difficultyId = fuzzySearchResult['difficulty'][0]
       }
-      const list = await commandSongChart(config, displayedServerList, songId, difficultyId)
+      const list = await commandSongChart(config, displayedServerList, songId, difficultyId,mirror)
       return paresMessageList(list)
     })
   ctx.command("随机曲 [word:text]", "随机曲", cmdConfig)
