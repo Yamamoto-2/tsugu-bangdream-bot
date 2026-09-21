@@ -1,3 +1,4 @@
+import { logger } from '@/logger';
 import { Chart } from 'chart.js';
 import { Canvas, Image } from 'skia-canvas';
 
@@ -65,17 +66,34 @@ export function resizeImage({
     ctx.drawImage(image, 0, 0, width, height)
     return canvas
 }
-export function disposeChartButKeepingCanvas(chart: any) {     // chart.js 的destroy() 6420行，仿照着写但是不销毁Canvas
-  chart.notifyPlugins?.('beforeDestroy');
 
-  chart._stop?.();
-  chart.config?.clearCache?.();
-  chart.unbindEvents?.();
-
-  delete Chart.instances[chart.id];
-
-  chart.canvas = null;
-  chart.ctx = null;
-
-  chart.notifyPlugins?.('afterDestroy');
+export function detachCanvasForChartDestroy(chart: any) {
+    try{
+        if (chart.canvas){
+            chart.unbindEvents?.();
+        }
+        chart.canvas = null;
+        chart.ctx = null;
+    }
+    catch(e){
+        logger('detachCanvasForChartDestroy',`Failed to detach canvas from charts: ${e}`)
+    }
+    /*  
+    Origin code:
+        destroy() {
+            this.notifyPlugins('beforeDestroy');
+            const { canvas , ctx  } = this;
+            this._stop();
+            this.config.clearCache();
+            if (canvas) {
+                this.unbindEvents();
+                helpers_segment.clearCanvas(canvas, ctx);
+                this.platform.releaseContext(ctx);
+                this.canvas = null;
+                this.ctx = null;
+            }
+            delete instances[this.id];
+            this.notifyPlugins('afterDestroy');
+        }
+    */
 }
